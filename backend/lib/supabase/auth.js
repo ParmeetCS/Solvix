@@ -1,6 +1,6 @@
 // Auth helper: resolve the authenticated Supabase user from an incoming
 // Next.js request. Returns { user, error }.
-import { createClientFromToken } from './client';
+import { createClientFromToken } from './client.js';
 export { createClientFromToken };
 
 export async function getUserFromRequest(request) {
