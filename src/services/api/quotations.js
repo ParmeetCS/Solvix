@@ -50,6 +50,8 @@ export const quotationsApi = {
   addMyComment: async (id, data) => unwrap(await apiClient.post(`/customer/quotations/${id}/comments`, data)),
   getMyOrders: async (params = {}) => unwrap(await apiClient.get('/customer/orders', { params })),
   getMyOrder: async (id) => unwrap(await apiClient.get(`/customer/orders/${id}`)),
+  createPaymentOrder: async (id, data) => unwrap(await apiClient.post(`/customer/orders/${id}/pay/order`, data)),
+  verifyPayment: async (id, data) => unwrap(await apiClient.post(`/customer/orders/${id}/pay/verify`, data)),
 
   // Admin catalogue management
   getAdminCategories: async () => unwrap(await apiClient.get('/admin/catalogue/categories')),

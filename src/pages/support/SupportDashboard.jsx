@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import PortalLayout from '@/components/PortalLayout';
+import { ChartCard, StripedBars, TickDonut, AreaLine } from '@/components/charts';
 import { supportApi } from '@/services/api';
 import {
   LifeBuoy,
@@ -143,6 +144,17 @@ export default function SupportDashboard() {
                 <span className="support-metric-label">Warranty Claims</span>
               </div>
             </div>
+          </div>
+
+          <div className="sx-grid cols-32">
+            <ChartCard title="Tickets by status" note={`${summary.totalTickets || 0} total`}>
+              <StripedBars data={[['open', 'Open'], ['assigned', 'Assigned'], ['in_progress', 'In progress'], ['waiting_for_parts', 'Parts'], ['resolved', 'Resolved'], ['closed', 'Closed']]
+                .map(([k, l]) => ({ label: l, value: statuses[k] || 0 }))} />
+            </ChartCard>
+            <ChartCard title="Priority mix">
+              <TickDonut centerLabel="Tickets" centerValue={summary.totalTickets || 0}
+                items={['critical', 'high', 'medium', 'low'].map((p) => ({ label: p[0].toUpperCase() + p.slice(1), value: priorities[p] || 0 }))} />
+            </ChartCard>
           </div>
 
           {/* Breakdown Section: Priority & Statuses */}

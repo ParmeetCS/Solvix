@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import PortalLayout from '@/components/PortalLayout';
+import PaymentCard from '@/components/PaymentCard';
 import { quotationsApi } from '@/services/api';
 import { ArrowLeft, FileText, AlertTriangle, Package } from 'lucide-react';
 import {
@@ -105,6 +106,9 @@ export default function CustomerOrderDetail() {
 
           <div className="q-builder-grid">
             <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
+              {Number(order.balance_due) > 0 && !['cancelled', 'refunded'].includes(order.status) && (
+                <PaymentCard orderId={order.id} total={order.total_amount} balance={order.balance_due} onPaid={load} onError={setError} />
+              )}
               <section className="q-panel">
                 <div className="q-panel-header">
                   <span className="q-panel-title">

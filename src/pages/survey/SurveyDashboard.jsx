@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import PortalLayout from '@/components/PortalLayout';
+import { ChartCard, StripedBars, TickDonut, AreaLine } from '@/components/charts';
 import { surveyApi } from '@/services/api';
 import {
   ClipboardList,
@@ -148,6 +149,16 @@ export default function SurveyDashboard() {
               <span className="survey-stat-value" style={{ color: 'var(--c-amber)' }}>{kpis.revisitRequired}</span>
               <span className="survey-stat-meta">Access or meter re-check</span>
             </div>
+          </div>
+
+          <div className="sx-grid cols-32">
+            <ChartCard title="Survey requests" note={`${kpis.totalRequests} total`}>
+              <StripedBars data={statusDistribution.map((s) => ({ label: s.name, value: s.count }))} />
+            </ChartCard>
+            <ChartCard title="Outcome">
+              <TickDonut centerLabel="Surveys" centerValue={kpis.totalRequests}
+                items={[{ label: 'Approved', value: kpis.approved }, { label: 'Submitted', value: kpis.submitted }, { label: 'Rejected', value: kpis.rejected }, { label: 'Revisit', value: kpis.revisitRequired }]} />
+            </ChartCard>
           </div>
 
           {/* Charts & Breakdown Grid */}

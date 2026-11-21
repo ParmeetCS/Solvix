@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import PortalLayout from '@/components/PortalLayout';
+import { ChartCard, StripedBars, TickDonut, AreaLine } from '@/components/charts';
 import { salesApi } from '@/services/api';
 import {
   Users,
@@ -142,6 +143,20 @@ export default function SalesDashboard() {
               <span className="crm-stat-value" style={{ color: 'var(--c-red)' }}>{summary.lostLeads}</span>
               <span className="crm-stat-meta">Closed unfulfilled</span>
             </div>
+          </div>
+
+          <div className="sx-grid cols-32">
+            <ChartCard title="Lead pipeline" note="Leads per stage">
+              <StripedBars data={[
+                { label: 'New', value: pipeline.new || 0 }, { label: 'Contacted', value: pipeline.contacted || 0 },
+                { label: 'Follow-up', value: pipeline.follow_up_required || 0 }, { label: 'Qualified', value: pipeline.qualified || 0 },
+                { label: 'Survey', value: pipeline.survey_requested || 0 }, { label: 'Quoted', value: pipeline.quotation_sent || 0 },
+              ]} />
+            </ChartCard>
+            <ChartCard title="Lead sources" note={`${summary.totalLeads} leads`}>
+              <TickDonut centerLabel="Leads" centerValue={summary.totalLeads}
+                items={Object.entries(sources).map(([k, v]) => ({ label: k.replace(/_/g, ' '), value: v }))} />
+            </ChartCard>
           </div>
 
           {/* Pipeline Visual Funnel */}
@@ -294,7 +309,7 @@ export default function SalesDashboard() {
                           <span style={{ color: 'var(--text-muted)' }}>{count} ({pct}%)</span>
                         </div>
                         <div style={{ height: '6px', background: 'rgba(var(--ink-rgb), 0.08)', borderRadius: '999px', overflow: 'hidden' }}>
-                          <div style={{ width: `${pct}%`, height: '100%', background: '#d8ee8e' }} />
+                          <div style={{ width: `${pct}%`, height: '100%', background: 'var(--chart-1)' }} />
                         </div>
                       </div>
                     );

@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { AlertTriangle, ArrowRight, UserCheck, Inbox } from 'lucide-react';
+import { AlertTriangle, ArrowRight, UserCheck, Inbox, BarChart3, Wallet } from 'lucide-react';
+import { ChartCard, StripedBars, TickDonut } from '@/components/charts';
 import PortalLayout from '@/components/PortalLayout';
 import { adminApi } from '@/services/api';
 import { formatCurrency, formatDateTime, titleCase } from '@/lib/quotation';
@@ -39,7 +40,7 @@ export default function AdminOverview() {
 
   useEffect(() => { load(); }, [load]);
 
-  const people = data?.people;
+  const people = data?.people || {};
 
   return (
     <PortalLayout
@@ -67,7 +68,7 @@ export default function AdminOverview() {
               {PIPELINE.map((s, i) => (
                 <Link key={s.key} to={s.to} className="crm-stat-box" style={{ textDecoration: 'none' }}>
                   <div className="crm-stat-label">{i + 1}. {s.label}</div>
-                  <div className="crm-stat-value">{data.pipeline[s.key] ?? 0}</div>
+                  <div className="crm-stat-value">{data.pipeline?.[s.key] ?? 0}</div>
                   <div className="crm-stat-meta">{s.hint}</div>
                 </Link>
               ))}
@@ -75,10 +76,26 @@ export default function AdminOverview() {
           </div>
 
           <div className="crm-stats-grid" style={{ marginBottom: 20 }}>
-            <div className="crm-stat-box"><div className="crm-stat-label">Order value</div><div className="crm-stat-value">{formatCurrency(data.money.order_value)}</div><div className="crm-stat-meta">Active and completed orders</div></div>
-            <div className="crm-stat-box"><div className="crm-stat-label">Collected</div><div className="crm-stat-value" style={{ color: 'var(--c-green-soft)' }}>{formatCurrency(data.money.collected)}</div><div className="crm-stat-meta">Payments recorded on orders</div></div>
-            <div className="crm-stat-box"><div className="crm-stat-label">Outstanding</div><div className="crm-stat-value" style={{ color: 'var(--c-amber-soft)' }}>{formatCurrency(data.money.outstanding)}</div><div className="crm-stat-meta">Balance still due</div></div>
+            <div className="crm-stat-box"><div className="crm-stat-label">Order value</div><div className="crm-stat-value">{formatCurrency(data.money?.order_value)}</div><div className="crm-stat-meta">Active and completed orders</div></div>
+            <div className="crm-stat-box"><div className="crm-stat-label">Collected</div><div className="crm-stat-value" style={{ color: 'var(--c-green-soft)' }}>{formatCurrency(data.money?.collected)}</div><div className="crm-stat-meta">Payments recorded on orders</div></div>
+            <div className="crm-stat-box"><div className="crm-stat-label">Outstanding</div><div className="crm-stat-value" style={{ color: 'var(--c-amber-soft)' }}>{formatCurrency(data.money?.outstanding)}</div><div className="crm-stat-meta">Balance still due</div></div>
             <div className="crm-stat-box"><div className="crm-stat-label">Customers</div><div className="crm-stat-value">{people.customers}</div><div className="crm-stat-meta">{people.active_employees} active employees</div></div>
+          </div>
+
+          <div className="sx-grid cols-32" style={{ marginBottom: 20 }}>
+            <ChartCard title="Workflow pipeline" icon={BarChart3} note="Items per stage">
+              <StripedBars data={PIPELINE.map((s) => ({ label: s.label, value: data.pipeline?.[s.key] ?? 0 }))} />
+            </ChartCard>
+            <ChartCard title="Revenue position" icon={Wallet} note="Collected vs due">
+              <TickDonut
+                centerLabel="Order value"
+                centerValue={formatCurrency(data.money?.order_value)}
+                items={[
+                  { label: 'Collected', value: data.money?.collected, display: formatCurrency(data.money?.collected) },
+                  { label: 'Outstanding', value: data.money?.outstanding, display: formatCurrency(data.money?.outstanding) },
+                ]}
+              />
+            </ChartCard>
           </div>
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: 20 }}>

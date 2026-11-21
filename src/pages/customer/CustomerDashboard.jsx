@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { AlertTriangle, ShoppingCart, FileText, MapPin, ShieldCheck, Hammer, ArrowRight } from 'lucide-react';
 import PortalLayout from '@/components/PortalLayout';
+import { ChartCard, StripedBars, TickDonut } from '@/components/charts';
 import { customerApi } from '@/services/api';
 import { useAuth } from '@/context/auth';
 import { formatCurrency, formatDate, statusClass, statusLabel, titleCase } from '@/lib/quotation';
@@ -88,6 +89,18 @@ export default function CustomerDashboard() {
               </Link>
             ))}
           </div>
+
+          {orders.length > 0 && (
+            <div className="sx-grid cols-32" style={{ marginTop: 20 }}>
+              <ChartCard title="Your orders" note="Order value">
+                <StripedBars data={orders.slice(0, 8).map((o) => ({ label: o.order_code?.slice(-5) || '', value: Number(o.total_amount) || 0, value2: Number(o.advance_paid) || 0 }))} />
+              </ChartCard>
+              <ChartCard title="Payment progress">
+                <TickDonut centerLabel="Order value" centerValue={formatCurrency(orderValue)}
+                  items={[{ label: 'Paid', value: paid, display: formatCurrency(paid) }, { label: 'Balance', value: balance, display: formatCurrency(balance) }]} />
+              </ChartCard>
+            </div>
+          )}
 
           {orders.length > 0 && (
             <div className="crm-card" style={{ marginTop: 20 }}>

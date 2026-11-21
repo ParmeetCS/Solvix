@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import PortalLayout from '@/components/PortalLayout';
+import QrScannerModal from '@/components/QrScannerModal';
 import { warehouseApi } from '@/services/api/warehouse';
 import {
   QrCode,
@@ -9,7 +10,8 @@ import {
   FileText,
   AlertTriangle,
   CheckCircle,
-  Plus
+  Plus,
+  ScanLine
 } from 'lucide-react';
 
 export default function SerialRegistration() {
@@ -20,6 +22,7 @@ export default function SerialRegistration() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
+  const [scanTarget, setScanTarget] = useState(null); // null | 'single' | 'batch'
 
   // Single form
   const [singleForm, setSingleForm] = useState({
@@ -60,6 +63,20 @@ export default function SerialRegistration() {
     }
     init();
   }, []);
+
+  const handleScanned = (text) => {
+    const code = String(text || '').trim();
+    if (!code) return;
+    if (scanTarget === 'single') {
+      setSingleForm((prev) => ({ ...prev, serial_number: code }));
+    } else {
+      // batch: one serial per line, skipping codes already in the box
+      setBatchText((prev) => {
+        const lines = prev.split(String.fromCharCode(10)).map((l) => l.trim()).filter(Boolean);
+        return lines.includes(code) ? prev : [...lines, code].join(String.fromCharCode(10));
+      });
+    }
+  };
 
   const handleSingleSubmit = async (e) => {
     e.preventDefault();
@@ -139,6 +156,14 @@ export default function SerialRegistration() {
         </Link>
       }
     >
+      <QrScannerModal
+        open={scanTarget !== null}
+        continuous={scanTarget === 'batch'}
+        title={scanTarget === 'batch' ? 'Scan components one by one' : 'Scan serial number'}
+        onScan={handleScanned}
+        onClose={() => setScanTarget(null)}
+      />
+
       {error && (
         <div className="wh-alert wh-alert-danger">
           <AlertTriangle size={18} />
@@ -212,14 +237,20 @@ export default function SerialRegistration() {
 
               <div className="wh-form-group span-2">
                 <label>Serial Number (Barcode Value) *</label>
-                <input
-                  type="text"
-                  className="wh-input"
-                  placeholder="e.g. SN-WAA-545-2026-00481"
-                  value={singleForm.serial_number}
-                  onChange={(e) => setSingleForm({ ...singleForm, serial_number: e.target.value })}
-                  required
-                />
+                <div style={{ display: 'flex', gap: 8 }}>
+                  <input
+                    type="text"
+                    className="wh-input"
+                    style={{ flex: 1 }}
+                    placeholder="e.g. SN-WAA-545-2026-00481"
+                    value={singleForm.serial_number}
+                    onChange={(e) => setSingleForm({ ...singleForm, serial_number: e.target.value })}
+                    required
+                  />
+                  <button type="button" className="btn-wh-secondary" onClick={() => setScanTarget('single')}>
+                    <ScanLine size={16} /> <span>Scan QR</span>
+                  </button>
+                </div>
               </div>
 
               <div className="wh-form-group">
@@ -306,7 +337,12 @@ export default function SerialRegistration() {
               </div>
 
               <div className="wh-form-group span-2">
-                <label>Serial Numbers List (One per line) *</label>
+                <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8 }}>
+                  <span>Serial Numbers List (One per line) *</span>
+                  <button type="button" className="btn-wh-secondary" style={{ padding: '4px 10px', fontSize: '0.8rem' }} onClick={() => setScanTarget('batch')}>
+                    <ScanLine size={14} /> <span>Scan components</span>
+                  </button>
+                </label>
                 <textarea
                   className="wh-textarea"
                   rows="8"

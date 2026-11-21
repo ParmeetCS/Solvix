@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import PortalLayout from '@/components/PortalLayout';
+import QrScannerModal from '@/components/QrScannerModal';
 import { warehouseApi } from '@/services/api/warehouse';
 import {
   QrCode,
@@ -26,6 +27,7 @@ export default function SerialNumbersList() {
   const [lookupResult, setLookupResult] = useState(null);
   const [lookupLoading, setLookupLoading] = useState(false);
   const [lookupError, setLookupError] = useState(null);
+  const [scanning, setScanning] = useState(false);
 
   const loadSerials = async () => {
     try {
@@ -48,16 +50,20 @@ export default function SerialNumbersList() {
     loadSerials();
   }, [statusFilter]);
 
-  const handleLookupSubmit = async (e) => {
+  const handleLookupSubmit = (e) => {
     e.preventDefault();
-    if (!lookupQuery.trim()) return;
+    runLookup(lookupQuery);
+  };
+
+  const runLookup = async (query) => {
+    if (!query || !query.trim()) return;
 
     try {
       setLookupLoading(true);
       setLookupError(null);
       setLookupResult(null);
 
-      const res = await warehouseApi.lookupSerialNumber(lookupQuery.trim());
+      const res = await warehouseApi.lookupSerialNumber(query.trim());
       if (res && res.success) {
         setLookupResult(res.data);
       } else {
@@ -68,6 +74,12 @@ export default function SerialNumbersList() {
     } finally {
       setLookupLoading(false);
     }
+  };
+
+  const handleScanned = (text) => {
+    const code = String(text || '').trim();
+    setLookupQuery(code);
+    runLookup(code);
   };
 
   return (
@@ -87,6 +99,8 @@ export default function SerialNumbersList() {
         </div>
       }
     >
+      <QrScannerModal open={scanning} title="Scan serial / QR code" onScan={handleScanned} onClose={() => setScanning(false)} />
+
       <div className="wh-filter-bar">
         <form onSubmit={(e) => { e.preventDefault(); loadSerials(); }} className="wh-search-box">
           <Search size={16} style={{ color: 'var(--text-muted)' }} />
@@ -212,6 +226,9 @@ export default function SerialNumbersList() {
                       onChange={(e) => setLookupQuery(e.target.value)}
                       autoFocus
                     />
+                    <button type="button" className="btn-wh-secondary" onClick={() => setScanning(true)}>
+                      <Scan size={15} /> <span>Scan</span>
+                    </button>
                     <button type="submit" className="btn-wh-primary" disabled={lookupLoading}>
                       {lookupLoading ? 'Verifying...' : 'Search'}
                     </button>

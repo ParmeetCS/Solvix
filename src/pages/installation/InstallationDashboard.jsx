@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import PortalLayout from '@/components/PortalLayout';
+import { ChartCard, StripedBars, TickDonut, AreaLine } from '@/components/charts';
 import { installationApi } from '@/services/api';
 import {
   Wrench,
@@ -199,6 +200,19 @@ export default function InstallationDashboard() {
           <div className="inst-kpi-value" style={{ color: 'var(--c-amber)' }}>{kpis.delayed}</div>
           <div className="inst-kpi-meta">Hold or past expected date</div>
         </div>
+      </div>
+
+      <div className="sx-grid cols-32" style={{ marginBottom: 24 }}>
+        <ChartCard title="Installation jobs" note={`${kpis.totalProjects} total`}>
+          <StripedBars data={[
+            { label: 'Pending', value: kpis.pending }, { label: 'Scheduled', value: kpis.scheduled },
+            { label: 'In progress', value: kpis.inProgress }, { label: 'Completed', value: kpis.completed }, { label: 'Delayed', value: kpis.delayed },
+          ]} />
+        </ChartCard>
+        <ChartCard title="Completion">
+          <TickDonut centerLabel="Jobs" centerValue={kpis.totalProjects}
+            items={[{ label: 'Completed', value: kpis.completed }, { label: 'Active', value: (kpis.inProgress || 0) + (kpis.scheduled || 0) }, { label: 'Pending', value: kpis.pending }, { label: 'Delayed', value: kpis.delayed }]} />
+        </ChartCard>
       </div>
 
       {/* Two Column Layout: Pipeline & Technician Workload */}

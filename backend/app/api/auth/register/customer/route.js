@@ -66,6 +66,13 @@ export async function POST(request) {
       return jsonError('Signup succeeded but no user returned', 500);
     }
 
+    // For an email that is already registered, Supabase answers with a made-up user
+    // (no identities) instead of an error, so inserting a profile for it would fail
+    // with a foreign-key error. Report the real problem instead.
+    if (Array.isArray(authData.user.identities) && authData.user.identities.length === 0) {
+      return jsonError('An account with this email already exists. Try signing in instead.', 409);
+    }
+
     // Create profile linked to auth user
     const { data: profileData, error: profileError } = await adminSupa
       .from('profiles')

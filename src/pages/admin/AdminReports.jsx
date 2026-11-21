@@ -14,7 +14,7 @@ function Breakdown({ title, counts }) {
         <div key={label} style={{ margin: '8px 0' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 13 }}><span>{titleCase(label.replace(/_/g, ' '))}</span><b>{n}</b></div>
           <div style={{ height: 6, borderRadius: 3, background: 'rgba(var(--ink-rgb), 0.08)' }}>
-            <div style={{ height: 6, borderRadius: 3, width: `${(n / total) * 100}%`, background: '#d8ee8e' }} />
+            <div style={{ height: 6, borderRadius: 3, width: `${(n / total) * 100}%`, background: 'var(--chart-1)' }} />
           </div>
         </div>
       ))}
@@ -63,9 +63,9 @@ export default function AdminReports() {
       {loading && !data ? <div className="q-loading">Building report…</div> : data && (
         <>
           <div className="crm-stats-grid" style={{ margin: '16px 0' }}>
-            <div className="crm-stat-box"><div className="crm-stat-label">Order value</div><div className="crm-stat-value">{formatCurrency(data.money.order_value)}</div></div>
-            <div className="crm-stat-box"><div className="crm-stat-label">Collected on orders</div><div className="crm-stat-value" style={{ color: 'var(--c-green-soft)' }}>{formatCurrency(data.money.collected)}</div></div>
-            <div className="crm-stat-box"><div className="crm-stat-label">Outstanding</div><div className="crm-stat-value" style={{ color: 'var(--c-amber-soft)' }}>{formatCurrency(data.money.outstanding)}</div></div>
+            <div className="crm-stat-box"><div className="crm-stat-label">Order value</div><div className="crm-stat-value">{formatCurrency(data.money?.order_value)}</div></div>
+            <div className="crm-stat-box"><div className="crm-stat-label">Collected on orders</div><div className="crm-stat-value" style={{ color: 'var(--c-green-soft)' }}>{formatCurrency(data.money?.collected)}</div></div>
+            <div className="crm-stat-box"><div className="crm-stat-label">Outstanding</div><div className="crm-stat-value" style={{ color: 'var(--c-amber-soft)' }}>{formatCurrency(data.money?.outstanding)}</div></div>
             <div className="crm-stat-box"><div className="crm-stat-label">Invoiced</div><div className="crm-stat-value">{formatCurrency(data.invoiced)}</div><div className="crm-stat-meta">Issued invoices</div></div>
             <div className="crm-stat-box"><div className="crm-stat-label">Approved expenses</div><div className="crm-stat-value">{formatCurrency(data.expenses_approved)}</div></div>
             <div className="crm-stat-box"><div className="crm-stat-label">Lead conversion</div><div className="crm-stat-value">{conversion.toFixed(1)}%</div><div className="crm-stat-meta">{leads.converted || 0} of {leadTotal} leads</div></div>

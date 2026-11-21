@@ -1,5 +1,6 @@
 import { lazy, Suspense } from 'react';
-import { Routes, Route, useNavigate } from 'react-router-dom';
+import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
+import ErrorBoundary from '@/components/ErrorBoundary';
 import './App.css';
 import RoleLogin, { EmployeePortalChooser } from './pages/auth/RoleLogin';
 import { RequireAuth, PublicOnly, PendingOnly } from './components/route-guards';
@@ -94,9 +95,11 @@ const AdminReports = lazy(() => import('./pages/admin/AdminReports'));
 
 export default function App() {
   const navigate = useNavigate();
+  const location = useLocation();
 
   return (
     <>
+      <ErrorBoundary key={location.pathname}>
       <Suspense fallback={<div style={{ minHeight: '100vh', display: 'grid', placeItems: 'center', background: 'var(--app-bg)', color: 'var(--text-muted)' }}>Loading…</div>}>
       <Routes>
         <Route path="/" element={<PublicOnly><Landing /></PublicOnly>} />
@@ -206,6 +209,7 @@ export default function App() {
         <Route path="*" element={<NotFound />} />
       </Routes>
       </Suspense>
+      </ErrorBoundary>
       <ThemeToggle floating />
     </>
   );

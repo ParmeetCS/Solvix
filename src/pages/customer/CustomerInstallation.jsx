@@ -43,7 +43,7 @@ export default function CustomerInstallation() {
                 <div style={{ display: 'flex', gap: 8, margin: '12px 0 18px' }}>
                   {STEPS.map((s, n) => (
                     <div key={s} style={{ flex: 1 }}>
-                      <div style={{ height: 6, borderRadius: 3, background: n <= idx ? '#d8ee8e' : 'rgba(var(--ink-rgb), 0.1)' }} />
+                      <div style={{ height: 6, borderRadius: 3, background: n <= idx ? 'var(--chart-1)' : 'rgba(var(--ink-rgb), 0.1)' }} />
                       <div style={{ fontSize: 12, marginTop: 6, color: n <= idx ? 'var(--accent-text)' : 'var(--text-dim)' }}>{titleCase(s.replace('_', ' '))}</div>
                     </div>
                   ))}

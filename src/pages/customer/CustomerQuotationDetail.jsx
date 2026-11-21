@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import PortalLayout from '@/components/PortalLayout';
+import PaymentCard from '@/components/PaymentCard';
 import QuotationPreview from '@/components/quotation/QuotationPreview';
 import { quotationsApi } from '@/services/api';
 import {
@@ -68,6 +69,17 @@ export default function CustomerQuotationDetail() {
     } finally {
       setBusy(false);
     }
+  };
+
+  // "Accept & pay": accepting creates the order, then the payment window opens for it.
+  const acceptThenGetOrderId = async () => {
+    setError(null);
+    setNotice(null);
+    const res = await quotationsApi.acceptMyQuotation(id, { comment: acceptComment || undefined });
+    const orderId = res.data?.conversion?.order?.id || res.data?.order?.id;
+    await load();
+    if (!orderId) throw new Error('Quotation accepted, but your order is still being created. Please try paying again in a moment.');
+    return orderId;
   };
 
   const handleReject = async () => {
@@ -220,6 +232,27 @@ export default function CustomerQuotationDetail() {
                   </p>
                 </div>
               </section>
+            )}
+
+            {canRespond && !order && (
+              <PaymentCard
+                title="Accept & pay online"
+                ensureOrder={acceptThenGetOrderId}
+                total={quotation.total_amount}
+                balance={quotation.total_amount}
+                onPaid={load}
+                onError={setError}
+              />
+            )}
+
+            {order && Number(order.balance_due) > 0 && !['cancelled', 'refunded'].includes(order.status) && (
+              <PaymentCard
+                orderId={order.id}
+                total={order.total_amount}
+                balance={order.balance_due}
+                onPaid={load}
+                onError={setError}
+              />
             )}
 
             {quotation.status === 'rejected' && quotation.rejection_reason && (

@@ -15,6 +15,7 @@ import '@/pages/installation/installation.css';
 import '@/pages/warehouse/warehouse.css';
 import '@/pages/support/support.css';
 import './portal-layout.css';
+import '@/theme/dashboard-ui.css';
 
 export default function PortalLayout({ children, title, subtitle, actions }) {
   const { user, navItems, handleLogout } = useShell();

@@ -33,19 +33,31 @@ export async function GET(request) {
           const totalStock = (invRes.data || []).reduce((acc, i) => acc + Number(i.quantity_on_hand), 0);
           const lowStock = (invRes.data || []).filter(i => (Number(i.quantity_on_hand) - Number(i.quantity_reserved)) <= 5).length;
 
+          const outOfStock = (invRes.data || []).filter(i => Number(i.quantity_on_hand) === 0).length;
+
           return jsonResponse({
             kpis: {
               totalProducts: prodRes.count || 0,
+              total_products: prodRes.count || 0,
               totalStockQuantity: totalStock,
+              total_stock_quantity: totalStock,
               lowStockProducts: lowStock,
-              outOfStockProducts: (invRes.data || []).filter(i => Number(i.quantity_on_hand) === 0).length,
+              low_stock_products: lowStock,
+              outOfStockProducts: outOfStock,
+              out_of_stock_products: outOfStock,
               pendingPacking: 2,
+              pending_packing: 2,
               pendingDispatches: (dispRes.data || []).length,
+              pending_dispatches: (dispRes.data || []).length,
               totalSerialNumbers: snRes.count || 0,
-              recentMovementsCount: 15
+              registered_serials: snRes.count || 0,
+              recentMovementsCount: 15,
+              recent_movements_count: 15
             },
             lowStockAlerts: [],
+            low_stock_alerts: [],
             recentMovements: [],
+            recent_movements: [],
             warehouses: []
           });
         }

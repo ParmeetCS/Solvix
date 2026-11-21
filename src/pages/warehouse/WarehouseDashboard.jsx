@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import PortalLayout from '@/components/PortalLayout';
+import { ChartCard, StripedBars, TickDonut, AreaLine } from '@/components/charts';
 import { warehouseApi } from '@/services/api/warehouse';
 import {
   Package,
@@ -46,16 +47,20 @@ export default function WarehouseDashboard() {
     loadDashboard();
   }, []);
 
-  const stats = data?.kpis || {
-    total_products: 0,
-    total_stock_quantity: 0,
-    low_stock_products: 0,
-    out_of_stock_products: 0,
-    pending_packing: 0,
-    pending_dispatches: 0,
-    registered_serials: 0,
-    recent_movements_count: 0
+  // Accept snake_case or camelCase figures and never leave one undefined.
+  const k = data?.kpis || {};
+  const pick = (snake, camel) => Number(k[snake] ?? k[camel] ?? 0) || 0;
+  const stats = {
+    total_products: pick('total_products', 'totalProducts'),
+    total_stock_quantity: pick('total_stock_quantity', 'totalStockQuantity'),
+    low_stock_products: pick('low_stock_products', 'lowStockProducts'),
+    out_of_stock_products: pick('out_of_stock_products', 'outOfStockProducts'),
+    pending_packing: pick('pending_packing', 'pendingPacking'),
+    pending_dispatches: pick('pending_dispatches', 'pendingDispatches'),
+    registered_serials: pick('registered_serials', 'totalSerialNumbers'),
+    recent_movements_count: pick('recent_movements_count', 'recentMovementsCount'),
   };
+
 
   return (
     <PortalLayout
@@ -219,6 +224,23 @@ export default function WarehouseDashboard() {
           </div>
         </div>
       )}
+
+      <div className="sx-grid cols-32" style={{ marginBottom: 20 }}>
+        <ChartCard title="Work in progress" note="Open items">
+          <StripedBars data={[
+            { label: 'Packing', value: stats.pending_packing }, { label: 'Dispatch', value: stats.pending_dispatches },
+            { label: 'Low stock', value: stats.low_stock_products }, { label: 'Out', value: stats.out_of_stock_products },
+            { label: 'Moves', value: stats.recent_movements_count }, { label: 'Serials', value: stats.registered_serials },
+          ]} />
+        </ChartCard>
+        <ChartCard title="Stock health" note={`${stats.total_products} products`}>
+          <TickDonut centerLabel="Products" centerValue={stats.total_products}
+            items={[
+              { label: 'Healthy', value: Math.max(stats.total_products - stats.low_stock_products - stats.out_of_stock_products, 0) },
+              { label: 'Low stock', value: stats.low_stock_products }, { label: 'Out of stock', value: stats.out_of_stock_products },
+            ]} />
+        </ChartCard>
+      </div>
 
       {/* Regional Warehouses Breakdown */}
       <div className="wh-card">

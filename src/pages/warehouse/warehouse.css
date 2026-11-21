@@ -7,15 +7,15 @@
   display: flex;
   min-height: 100vh;
   background-color: #ffffff;
-  color: #f1f5f9;
+  color: var(--text);
   font-family: "Instrument Sans", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
 
 /* Sidebar */
 .warehouse-sidebar {
   width: 260px;
-  background: rgba(0, 0, 0, 0.96);
-  border-right: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(var(--panel-rgb), 0.96);
+  border-right: 1px solid rgba(var(--ink-rgb), 0.08);
   display: flex;
   flex-direction: column;
   position: sticky;
@@ -41,12 +41,12 @@
   width: 36px;
   height: 36px;
   border-radius: 9px;
-  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+  background: linear-gradient(135deg, var(--brand-strong) 0%, var(--brand-strong) 100%);
   display: flex;
   align-items: center;
   justify-content: center;
   color: #ffffff;
-  box-shadow: 0 0 16px rgba(59, 130, 246, 0.35);
+  box-shadow: 0 0 16px rgba(var(--brand-rgb), 0.35);
 }
 
 .warehouse-nav {
@@ -76,9 +76,9 @@
 }
 
 .warehouse-nav-item.active {
-  background: rgba(59, 130, 246, 0.15);
-  color: #60a5fa;
-  border-left: 3px solid #3b82f6;
+  background: rgba(var(--brand-rgb), 0.15);
+  color: var(--brand);
+  border-left: 3px solid var(--brand-strong);
   font-weight: 600;
 }
 
@@ -108,7 +108,7 @@
   align-items: center;
   justify-content: center;
   font-weight: 600;
-  color: #60a5fa;
+  color: var(--brand);
   font-size: 0.85rem;
 }
 
@@ -124,8 +124,8 @@
 .warehouse-header {
   height: 64px;
   padding: 0 32px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  background: rgba(0, 0, 0, 0.7);
+  border-bottom: 1px solid rgba(var(--ink-rgb), 0.08);
+  background: rgba(var(--panel-rgb), 0.7);
   backdrop-filter: blur(8px);
   display: flex;
   align-items: center;
@@ -164,7 +164,7 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+  background: linear-gradient(135deg, var(--brand-strong) 0%, var(--brand-strong) 100%);
   color: #ffffff;
   font-weight: 600;
   padding: 8px 16px;
@@ -178,7 +178,7 @@
 
 .btn-wh-primary:hover {
   filter: brightness(1.1);
-  box-shadow: 0 0 15px rgba(59, 130, 246, 0.4);
+  box-shadow: 0 0 15px rgba(var(--brand-rgb), 0.4);
 }
 
 .btn-wh-secondary {
@@ -206,7 +206,7 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  background: linear-gradient(135deg, #60a5fa 0%, #2563eb 100%);
+  background: linear-gradient(135deg, var(--brand) 0%, var(--brand-strong) 100%);
   color: #ffffff;
   font-weight: 600;
   padding: 8px 16px;
@@ -227,8 +227,8 @@
 }
 
 .wh-kpi-card {
-  background: rgba(0, 0, 0, 0.6);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(var(--panel-rgb), 0.6);
+  border: 1px solid rgba(var(--ink-rgb), 0.08);
   border-radius: 12px;
   padding: 18px;
   position: relative;
@@ -285,17 +285,17 @@
   letter-spacing: 0.04em;
 }
 
-.wh-badge-green { background: rgba(59, 130, 246, 0.15); color: #60a5fa; border: 1px solid rgba(16, 185, 129, 0.3); }
+.wh-badge-green { background: rgba(var(--brand-rgb), 0.15); color: var(--brand); border: 1px solid rgba(16, 185, 129, 0.3); }
 .wh-badge-yellow { background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.3); }
 .wh-badge-red { background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); }
-.wh-badge-blue { background: rgba(56, 189, 248, 0.15); color: #60a5fa; border: 1px solid rgba(56, 189, 248, 0.3); }
+.wh-badge-blue { background: rgba(56, 189, 248, 0.15); color: var(--brand); border: 1px solid rgba(56, 189, 248, 0.3); }
 .wh-badge-purple { background: rgba(168, 85, 247, 0.15); color: #c084fc; border: 1px solid rgba(168, 85, 247, 0.3); }
 .wh-badge-gray { background: rgba(148, 163, 184, 0.15); color: #cbd5e1; border: 1px solid rgba(148, 163, 184, 0.3); }
 
 /* Card Containers & Tables */
 .wh-card {
-  background: rgba(0, 0, 0, 0.7);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(var(--panel-rgb), 0.7);
+  border: 1px solid rgba(var(--ink-rgb), 0.08);
   border-radius: 14px;
   padding: 20px;
   margin-bottom: 24px;
@@ -406,16 +406,16 @@
 }
 
 .wh-tab.active {
-  background: rgba(59, 130, 246, 0.15);
-  color: #60a5fa;
-  border-color: rgba(59, 130, 246, 0.3);
+  background: rgba(var(--brand-rgb), 0.15);
+  color: var(--brand);
+  border-color: rgba(var(--brand-rgb), 0.3);
 }
 
 /* Modals */
 .wh-modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.75);
+  background: rgba(var(--panel-rgb), 0.75);
   backdrop-filter: blur(4px);
   display: flex;
   align-items: center;
@@ -432,7 +432,7 @@
   max-width: 600px;
   max-height: 90vh;
   overflow-y: auto;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+  box-shadow: 0 20px 40px rgba(var(--panel-rgb), 0.6);
 }
 
 .wh-modal-header {
@@ -498,7 +498,7 @@
 }
 
 .wh-input:focus, .wh-select:focus, .wh-textarea:focus {
-  border-color: #60a5fa;
+  border-color: var(--brand);
 }
 
 /* Alert Boxes */
@@ -525,7 +525,7 @@
 }
 
 .wh-alert-success {
-  background: rgba(59, 130, 246, 0.15);
+  background: rgba(var(--brand-rgb), 0.15);
   border: 1px solid rgba(16, 185, 129, 0.3);
   color: var(--c-green);
 }
@@ -543,8 +543,8 @@
 }
 
 .packing-item-card.packed {
-  border-color: rgba(59, 130, 246, 0.4);
-  background: rgba(59, 130, 246, 0.05);
+  border-color: rgba(var(--brand-rgb), 0.4);
+  background: rgba(var(--brand-rgb), 0.05);
 }
 
 /* QR Code & Barcode Simulator Box */
@@ -564,7 +564,7 @@
 @media print {
   body {
     background: var(--surface-solid) !important;
-    color: #000000 !important;
+    color: var(--panel) !important;
   }
   .warehouse-sidebar, .warehouse-header, .no-print {
     display: none !important;
@@ -576,7 +576,7 @@
   .wh-card {
     border: 1px solid #ccc !important;
     background: var(--surface-solid) !important;
-    color: #000 !important;
+    color: var(--panel) !important;
     box-shadow: none !important;
   }
 }

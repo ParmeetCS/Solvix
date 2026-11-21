@@ -1,5 +1,14 @@
 import { apiClient } from './client';
 
+// The API wraps lists as { data: { products: [...] } }; the pages expect data to be
+// the array itself. Accept both so a list never reaches .map() as an object.
+function unwrapList(body, key) {
+  if (body && body.data && !Array.isArray(body.data) && Array.isArray(body.data[key])) {
+    return { ...body, data: body.data[key] };
+  }
+  return body;
+}
+
 export const warehouseApi = {
   // 1. Dashboard KPIs & Activity
   getDashboard: async () => {
@@ -10,7 +19,7 @@ export const warehouseApi = {
   // 2. Products Catalog
   getProducts: async (params = {}) => {
     const res = await apiClient.get('/warehouse/products', { params });
-    return res.data;
+    return unwrapList(res.data, 'products');
   },
 
   getProductById: async (id) => {
@@ -36,7 +45,7 @@ export const warehouseApi = {
   // 3. Inventory & Stock Operations
   getInventory: async (params = {}) => {
     const res = await apiClient.get('/warehouse/inventory', { params });
-    return res.data;
+    return unwrapList(res.data, 'inventory');
   },
 
   getInventoryById: async (id) => {
@@ -53,7 +62,7 @@ export const warehouseApi = {
   // 4. Purchase Orders & Goods Receiving
   getPurchaseOrders: async (params = {}) => {
     const res = await apiClient.get('/warehouse/purchase-orders', { params });
-    return res.data;
+    return unwrapList(res.data, 'purchaseOrders');
   },
 
   createPurchaseOrder: async (poData) => {
@@ -70,7 +79,7 @@ export const warehouseApi = {
   // 5. Packing & Order Preparation
   getPackingQueue: async () => {
     const res = await apiClient.get('/warehouse/packing');
-    return res.data;
+    return unwrapList(res.data, 'packingQueue');
   },
 
   getOrderPackingDetails: async (orderId) => {
@@ -87,7 +96,7 @@ export const warehouseApi = {
   // 6. Serial Numbers & QR Lookup
   getSerialNumbers: async (params = {}) => {
     const res = await apiClient.get('/warehouse/serial-numbers', { params });
-    return res.data;
+    return unwrapList(res.data, 'serialNumbers');
   },
 
   registerSerialNumbers: async (payload) => {
@@ -107,7 +116,7 @@ export const warehouseApi = {
   // 7. Dispatch Management & Delivery Confirmation
   getDispatches: async (params = {}) => {
     const res = await apiClient.get('/warehouse/dispatches', { params });
-    return res.data;
+    return unwrapList(res.data, 'dispatches');
   },
 
   getDispatchById: async (id) => {

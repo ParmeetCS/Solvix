@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { AlertTriangle } from 'lucide-react';
 import PortalLayout from '@/components/PortalLayout';
+import { ChartCard, StripedBars, TickDonut, AreaLine } from '@/components/charts';
 import { apiClient } from '@/services/api';
 import { formatCurrency, formatDate, titleCase } from '@/lib/quotation';
 
@@ -49,6 +50,16 @@ export default function FinanceDashboard() {
                 <div className="crm-stat-meta">{meta}</div>
               </div>
             ))}
+          </div>
+
+          <div className="sx-grid cols-32" style={{ marginTop: 20 }}>
+            <ChartCard title="Money overview" note="All figures in INR">
+              <StripedBars data={tiles.map(([label, value]) => ({ label: label.split(' ')[0], value }))} />
+            </ChartCard>
+            <ChartCard title="Collections">
+              <TickDonut centerLabel="Invoiced" centerValue={formatCurrency(m.totalInvoicedAmount)}
+                items={[{ label: 'Collected', value: m.totalCollectedPayments, display: formatCurrency(m.totalCollectedPayments) }, { label: 'Outstanding', value: m.outstandingInvoices, display: formatCurrency(m.outstandingInvoices) }]} />
+            </ChartCard>
           </div>
 
           <div className="crm-card" style={{ marginTop: 20 }}>
