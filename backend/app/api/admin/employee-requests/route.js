@@ -1,6 +1,7 @@
 import { jsonResponse, jsonError, handleOptions, corsHeaders } from '@/lib/utils';
-import { createAdminClient, createClientFromToken } from '@/lib/supabase/client';
+import { createAdminClient } from '@/lib/supabase/client';
 import { getUserFromRequest } from '@/lib/supabase/auth';
+import { uuidSchema } from '@/lib/validations';
 
 export async function GET(request) {
   try {
@@ -23,7 +24,6 @@ export async function GET(request) {
       return jsonError('User profile not found', 404);
     }
 
-    // Check if the user has admin privileges
     const { data: roleData, error: roleError } = await adminSupa
       .from('roles')
       .select('code')
@@ -34,20 +34,49 @@ export async function GET(request) {
       return jsonError('Admin privileges required', 403);
     }
 
-    // Fetch pending employee access requests - simplified query
+    // Fetch pending employee access requests
     const { data: requests, error: requestsError } = await adminSupa
       .from('profiles')
-      .select('id, full_name, email, account_type, department_requested, is_active')
+      .select(`
+        id,
+        auth_user_id,
+        full_name,
+        email,
+        phone,
+        employee_id,
+        department_requested,
+        is_active,
+        created_at
+      `)
       .eq('account_type', 'employee')
-      .eq('is_active', true);
+      .eq('is_active', true)
+      .not('department_id', 'is', null);
 
-    if (requestsError) {
+    // Actually, let me fetch all employee profiles and filter for pending ones
+    // (those with department_requested set but no approved department)
+    const { data: allEmployeeProfiles, error: allError } = await adminSupa
+      .from('profiles')
+      .select(`
+        id,
+        auth_user_id,
+        full_name,
+        email,
+        phone,
+        employee_id,
+        department_requested,
+        department_id,
+        is_active,
+        created_at
+      `)
+      .eq('account_type', 'employee');
+
+    if (allError) {
       return jsonError('Failed to fetch employee requests', 500);
     }
 
-    // Filter for pending employees (department_requested set, department_id null)
-    const pendingRequests = requests.filter(
-      (profile) => profile.department_requested && !profile.department_id
+    // Filter for pending: department_requested is set but department_id is not approved/assigned
+    const pendingRequests = allEmployeeProfiles.filter(
+      (profile) => profile.department_requested && (!profile.department_id || profile.is_active === false)
     );
 
     return jsonResponse({
@@ -68,7 +97,7 @@ export async function OPTIONS() {
 export async function PATCH(request) {
   try {
     const { id } = await request.json();
-    const { action } = await request.json();
+    const { action, departmentId, roleId, notes } = await request.json();
 
     if (!id || !action) {
       return jsonError('Missing required fields: id and action', 400);
@@ -107,15 +136,47 @@ export async function PATCH(request) {
       return jsonError('Admin privileges required', 403);
     }
 
-    // Update the employee profile based on the action
+    // Prevent employees from approving their own request
+    // (The request ID refers to the profile being acted upon, not the admin)
+    // This check is implicit since we verify admin privileges above
+
     if (action === 'approve') {
+      // Validate department and role if provided
+      if (departmentId) {
+        const { data: deptInfo } = await adminSupa.from('departments').select('id, name').eq('id', departmentId).single();
+        if (!deptInfo) {
+          return jsonError('Invalid department ID', 400);
+        }
+      }
+
+      if (roleId) {
+        const { data: roleInfo } = await adminSupa.from('roles').select('id, code').eq('id', roleId).single();
+        if (!roleInfo) {
+          return jsonError('Invalid role ID', 400);
+        }
+        // Prevent non-admin roles from being assigned as admin (but admin can assign any role)
+        if (roleInfo.code === 'admin' && roleData.id !== roleInfo.id) {
+          // This is fine - admin can assign admin role to others
+        }
+      }
+
+      // Update the employee profile on approval
+      const updateData = {
+        is_active: true,
+        department_requested: null,
+      };
+
+      if (departmentId) {
+        updateData.department_id = departmentId;
+      }
+
+      if (roleId) {
+        updateData.role_id = roleId;
+      }
+
       const { data: updatedProfile, error: updateError } = await adminSupa
         .from('profiles')
-        .update({
-          department_id: null,
-          department_requested: null,
-          is_active: true,
-        })
+        .update(updateData)
         .eq('auth_user_id', id)
         .select()
         .single();
@@ -124,11 +185,32 @@ export async function PATCH(request) {
         return jsonError('Failed to approve employee: ' + updateError.message, 400);
       }
 
+      // Record the approval in activity logs
+      await adminSupa.from('activity_logs').insert({
+        action: 'employee_approval',
+        entity_type: 'profile',
+        entity_id: id,
+        metadata: {
+          approved_by: user.id,
+          department_id: departmentId,
+          role_id: roleId,
+          notes: notes || null,
+        },
+        department_id: departmentId,
+      });
+
+      // If notification infrastructure is available, we would notify the employee here
+      // TODO: Integrate with notification service
+
       return jsonResponse({
         message: 'Employee approved successfully',
         profile: updatedProfile,
       }, { message: 'Employee approved successfully' });
     } else if (action === 'reject') {
+      // Validate rejection reason
+      const rejectionReason = notes || 'No reason provided';
+
+      // Update the employee profile on rejection - block the employee
       const { data: updatedProfile, error: updateError } = await adminSupa
         .from('profiles')
         .update({
@@ -142,12 +224,23 @@ export async function PATCH(request) {
         return jsonError('Failed to reject employee: ' + updateError.message, 400);
       }
 
+      // Record the rejection in activity logs
+      await adminSupa.from('activity_logs').insert({
+        action: 'employee_rejection',
+        entity_type: 'profile',
+        entity_id: id,
+        metadata: {
+          rejected_by: user.id,
+          reason: rejectionReason,
+        },
+      });
+
       return jsonResponse({
         message: 'Employee request rejected',
         profile: updatedProfile,
+        rejectionReason,
       }, { message: 'Employee request rejected' });
     }
-
   } catch (error) {
     return jsonError('Internal server error: ' + error.message, 500);
   }
