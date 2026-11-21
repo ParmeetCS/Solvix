@@ -37,6 +37,31 @@ import CustomerOrderDetail from './pages/customer/CustomerOrderDetail';
 // Admin Catalogue
 import AdminCatalogue from './pages/admin/catalogue';
 
+// Site Survey & Solar Feasibility Module Pages
+import SurveyDashboard from './pages/survey/SurveyDashboard';
+import SurveyRequestsList from './pages/survey/SurveyRequestsList';
+import SurveyDetail from './pages/survey/SurveyDetail';
+import SurveyAssignments from './pages/survey/SurveyAssignments';
+import SurveySchedule from './pages/survey/SurveySchedule';
+import SurveyInspectionForm from './pages/survey/SurveyInspectionForm';
+import SurveyApprovals from './pages/survey/SurveyApprovals';
+
+// Warehouse & Inventory Management Module Pages
+import WarehouseDashboard from './pages/warehouse/WarehouseDashboard';
+import ProductsList from './pages/warehouse/ProductsList';
+import ProductForm from './pages/warehouse/ProductForm';
+import InventoryList from './pages/warehouse/InventoryList';
+import InventoryDetail from './pages/warehouse/InventoryDetail';
+import PurchaseOrdersList from './pages/warehouse/PurchaseOrdersList';
+import NewPurchaseOrder from './pages/warehouse/NewPurchaseOrder';
+import PackingQueue from './pages/warehouse/PackingQueue';
+import OrderPacking from './pages/warehouse/OrderPacking';
+import SerialNumbersList from './pages/warehouse/SerialNumbersList';
+import SerialRegistration from './pages/warehouse/SerialRegistration';
+import DispatchesList from './pages/warehouse/DispatchesList';
+import NewDispatch from './pages/warehouse/NewDispatch';
+import DispatchDetail from './pages/warehouse/DispatchDetail';
+
 export default function App() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const navigate = useNavigate();
@@ -1198,6 +1223,32 @@ void main(){
 
         {/* Admin Catalogue Routes */}
         <Route path="/admin/catalogue" element={<AdminCatalogue />} />
+
+        {/* Site Survey & Solar Feasibility Routes */}
+        <Route path="/survey/dashboard" element={<SurveyDashboard />} />
+        <Route path="/survey/requests" element={<SurveyRequestsList />} />
+        <Route path="/survey/requests/:id" element={<SurveyDetail />} />
+        <Route path="/survey/requests/:id/inspection" element={<SurveyInspectionForm />} />
+        <Route path="/survey/assignments" element={<SurveyAssignments />} />
+        <Route path="/survey/schedule" element={<SurveySchedule />} />
+        <Route path="/survey/approvals" element={<SurveyApprovals />} />
+
+        {/* Warehouse, Inventory, Serials & Dispatch Routes */}
+        <Route path="/warehouse/dashboard" element={<WarehouseDashboard />} />
+        <Route path="/warehouse/products" element={<ProductsList />} />
+        <Route path="/warehouse/products/new" element={<ProductForm />} />
+        <Route path="/warehouse/products/:id" element={<ProductForm />} />
+        <Route path="/warehouse/inventory" element={<InventoryList />} />
+        <Route path="/warehouse/inventory/:id" element={<InventoryDetail />} />
+        <Route path="/warehouse/purchase-orders" element={<PurchaseOrdersList />} />
+        <Route path="/warehouse/purchase-orders/new" element={<NewPurchaseOrder />} />
+        <Route path="/warehouse/packing" element={<PackingQueue />} />
+        <Route path="/warehouse/packing/:orderId" element={<OrderPacking />} />
+        <Route path="/warehouse/serial-numbers" element={<SerialNumbersList />} />
+        <Route path="/warehouse/serial-numbers/register" element={<SerialRegistration />} />
+        <Route path="/warehouse/dispatches" element={<DispatchesList />} />
+        <Route path="/warehouse/dispatches/new" element={<NewDispatch />} />
+        <Route path="/warehouse/dispatches/:id" element={<DispatchDetail />} />
 
         <Route path="*" element={<NotFound />} />
       </Routes>
