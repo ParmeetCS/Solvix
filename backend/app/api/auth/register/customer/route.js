@@ -54,7 +54,10 @@ export async function POST(request) {
     });
 
     if (authError) {
-      return jsonError(authError.message || 'Signup failed', 400, { authError });
+      if (authError.code === 'over_email_send_rate_limit') {
+        return jsonError('Too many sign-up emails have been sent recently. Please try again in about an hour.', 429);
+      }
+      return jsonError(authError.message || 'Signup failed', 400);
     }
 
     if (!authData.user) {

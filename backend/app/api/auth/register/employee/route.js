@@ -41,22 +41,24 @@ export async function POST(request) {
 
     // Create user in Supabase Auth
     const adminSupa = createAdminClient();
-    const { data: authData, error: authError } = await adminSupa.auth.signUp({
+    // Created directly (no confirmation email): employees cannot do anything until an
+    // Administrator approves their department, and Supabase's built-in email sender is
+    // limited to a few emails per hour, which used to block registrations.
+    const { data: authData, error: authError } = await adminSupa.auth.admin.createUser({
       email: body.email,
       password: body.password,
-      options: {
-        data: {
-          full_name: body.full_name,
-          phone: body.phone || '',
-          employee_id: body.employee_id || '',
-          account_type: 'employee',
-          department_requested: body.requested_department,
-        },
+      email_confirm: true,
+      user_metadata: {
+        full_name: body.full_name,
+        phone: body.phone || '',
+        employee_id: body.employee_id || '',
+        account_type: 'employee',
+        department_requested: body.requested_department,
       },
     });
 
     if (authError) {
-      return jsonError(authError.message || 'Signup failed', 400, { authError });
+      return jsonError(/already|registered|exists/i.test(authError.message || '') ? 'An account with this email already exists. Try signing in instead.' : (authError.message || 'Signup failed'), 400);
     }
 
     if (!authData.user) {
