@@ -2,22 +2,22 @@ import { useState } from 'react';
 import { postJson } from '../api';
 import AuthLayout from '../pages/auth/AuthLayout';
 
-/* ─── Design tokens matching the landing page night theme ──────────────── */
+/* ─── Design tokens matching the light theme ──────────────── */
 const T = {
-  bg:       'var(--app-bg)',
-  card:     'rgba(var(--surface-rgb), 0.8)',
-  line:     'rgba(var(--ink-rgb), 0.12)',
-  ink:      'var(--text-strong)',
-  muted:    'var(--text-muted)',
-  accent:   'var(--auth-btn-bg)',      // dark button in light mode, lime in dark mode
-  accentDk: 'var(--text-strong)',
-  input:    'var(--auth-field-bg)',
-  inputBd:  'var(--auth-field-line)',
-  focus:    'var(--text-strong)',
-  err:      'var(--c-red)',
-  errBg:    'rgba(248, 113, 113, 0.10)',
-  ok:       'var(--c-green)',
-  okBg:     'rgba(74, 222, 128, 0.10)',
+  bg:       '#ffffff',
+  card:     '#ffffff',
+  line:     'rgba(0, 0, 0, 0.12)',
+  ink:      '#0a0a0a',
+  muted:    '#71717a',
+  accent:   '#0a0a0a',
+  accentDk: '#0a0a0a',
+  input:    '#ffffff',
+  inputBd:  'rgba(0, 0, 0, 0.14)',
+  focus:    '#0a0a0a',
+  err:      '#ef4444',
+  errBg:    'rgba(239, 68, 68, 0.08)',
+  ok:       '#16a34a',
+  okBg:     'rgba(22, 163, 74, 0.08)',
 };
 
 // Same names as the departments in the database, so an administrator can approve
@@ -311,7 +311,7 @@ export default function SignUp({ navigate, initialRole = 'customer', initialMode
             display: 'flex', alignItems: 'center', justifyContent: 'center',
           }}>
             <svg width="16" height="16" viewBox="0 0 17 17" fill="none">
-              <path d="M9.5 2L4 9.5H8.5L7.5 15L13 7.5H8.5L9.5 2Z" fill="var(--auth-btn-fg)"/>
+              <path d="M9.5 2L4 9.5H8.5L7.5 15L13 7.5H8.5L9.5 2Z" fill="#ffffff"/>
             </svg>
           </span>
           <span style={{ fontWeight: 700, fontSize: '14px', letterSpacing: '0.12em', color: T.ink }}>SOLVIX</span>
@@ -327,7 +327,7 @@ export default function SignUp({ navigate, initialRole = 'customer', initialMode
           color: T.ink,
           margin: '0 0 6px',
         }}>
-          {isSignUp ? <>Create your <em style={{ fontStyle: 'italic', color: T.accent }}>Solvix</em> account</> : 'Welcome back to Solvix'}
+          {isSignUp ? <>Create your <em style={{ fontStyle: 'italic', color: '#1d4ed8' }}>Solvix</em> account</> : 'Welcome back to Solvix'}
         </h1>
         <p className="su-sub" style={{ fontSize: '13px', color: T.muted, marginBottom: 'clamp(8px, 1.8vh, 16px)', lineHeight: 1.5, textAlign: 'center' }}>
           {subtitle}
@@ -380,7 +380,7 @@ export default function SignUp({ navigate, initialRole = 'customer', initialMode
                 fontFamily: 'inherit',
                 transition: 'all 0.2s',
                 ...(role === tab.value
-                  ? { background: T.accent, color: 'var(--auth-btn-fg)', boxShadow: '0 2px 10px rgba(0,0,0,0.18)' }
+                  ? { background: '#0a0a0a', color: '#ffffff', boxShadow: '0 2px 10px rgba(0,0,0,0.14)' }
                   : { background: 'transparent', color: T.muted }),
               }}
             >
@@ -417,8 +417,8 @@ export default function SignUp({ navigate, initialRole = 'customer', initialMode
                 background: 'none',
                 border: 'none',
                 fontSize: '12px',
-                fontWeight: 500,
-                color: T.accent,
+                fontWeight: 600,
+                color: '#0a0a0a',
                 cursor: 'pointer',
                 textDecoration: 'underline',
                 textUnderlineOffset: '3px',
@@ -444,8 +444,8 @@ export default function SignUp({ navigate, initialRole = 'customer', initialMode
                 type="button"
                 onClick={() => navigate('/login/employee', { replace: true })}
                 style={{
-                  width: '100%', padding: '13px 16px', borderRadius: '10px', border: 'none', cursor: 'pointer',
-                  background: T.accent, color: 'var(--on-fill)', fontWeight: 700, fontSize: '15px', fontFamily: 'inherit',
+                  width: '100%', padding: '13px 16px', borderRadius: '8px', border: 'none', cursor: 'pointer',
+                  background: '#0a0a0a', color: '#ffffff', fontWeight: 600, fontSize: '15px', fontFamily: 'inherit',
                 }}
               >
                 Go to employee sign in
@@ -496,7 +496,7 @@ export default function SignUp({ navigate, initialRole = 'customer', initialMode
                   onChange={e => setDepartment(e.target.value)}
                 >
                   {DEPARTMENTS.map(d => (
-                    <option key={d} value={d} style={{ background: 'var(--surface-solid)', color: 'var(--text-strong)' }}>{d}</option>
+                    <option key={d} value={d} style={{ background: '#ffffff', color: '#0a0a0a' }}>{d}</option>
                   ))}
                 </FocusSelect>
               </Field>
@@ -560,20 +560,20 @@ export default function SignUp({ navigate, initialRole = 'customer', initialMode
               style={{
                 width: '100%',
                 padding: 'clamp(10px, 1.5vh, 13px)',
-                borderRadius: '99px',
+                borderRadius: '8px',
                 border: 'none',
-                background: submitting ? 'var(--text-dim)' : T.accent,
-                color: 'var(--auth-btn-fg)',
+                background: submitting ? '#a1a1aa' : '#0a0a0a',
+                color: '#ffffff',
                 fontSize: '15px',
-                fontWeight: 700,
+                fontWeight: 600,
                 fontFamily: 'inherit',
                 cursor: submitting ? 'not-allowed' : 'pointer',
                 letterSpacing: '0.01em',
-                transition: 'opacity 0.2s, transform 0.15s',
+                transition: 'opacity 0.2s, transform 0.15s, background 0.15s',
                 marginTop: '2px',
               }}
-              onMouseEnter={e => { if (!submitting) e.currentTarget.style.opacity = '0.88'; }}
-              onMouseLeave={e => { e.currentTarget.style.opacity = '1'; }}
+              onMouseEnter={e => { if (!submitting) e.currentTarget.style.background = '#27272a'; }}
+              onMouseLeave={e => { if (!submitting) e.currentTarget.style.background = '#0a0a0a'; }}
               onMouseDown={e  => { if (!submitting) e.currentTarget.style.transform = 'scale(0.98)'; }}
               onMouseUp={e    => { e.currentTarget.style.transform = 'scale(1)'; }}
             >

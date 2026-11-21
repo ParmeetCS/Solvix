@@ -1,6 +1,5 @@
 import { lazy, Suspense } from 'react';
 import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
-import ErrorBoundary from '@/components/ErrorBoundary';
 import './App.css';
 import RoleLogin, { EmployeePortalChooser } from './pages/auth/RoleLogin';
 import { RequireAuth, PublicOnly, PendingOnly } from './components/route-guards';
@@ -96,6 +95,15 @@ const AdminReports = lazy(() => import('./pages/admin/AdminReports'));
 export default function App() {
   const navigate = useNavigate();
   const location = useLocation();
+
+  const isFormPage = [
+    '/signup',
+    '/get-quote',
+    '/register',
+    '/login',
+    '/forgot-password',
+    '/reset-password',
+  ].some(p => location.pathname.startsWith(p));
 
   return (
     <>
@@ -209,8 +217,7 @@ export default function App() {
         <Route path="*" element={<NotFound />} />
       </Routes>
       </Suspense>
-      </ErrorBoundary>
-      <ThemeToggle floating />
+      {!isFormPage && <ThemeToggle floating />}
     </>
   );
 }

@@ -27,7 +27,7 @@ const PANELS = {
 export default function AuthLayout({ panel = 'customer', children }) {
   const content = typeof panel === 'string' ? PANELS[panel] || PANELS.customer : panel;
   return (
-    <div className="auth-page">
+    <div className="auth-page" data-theme="light">
       <div className="auth-shell">
         <div className="auth-form-side">{children}</div>
         <aside className="auth-panel">
