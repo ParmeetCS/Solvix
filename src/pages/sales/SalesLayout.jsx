@@ -11,7 +11,8 @@ import {
   Home,
   FileText,
   ShoppingCart,
-  Package
+  Package,
+  Compass
 } from 'lucide-react';
 import './crm.css';
 
