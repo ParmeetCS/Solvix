@@ -3,17 +3,17 @@ import { postJson } from '../api';
 
 /* ─── Design tokens matching the landing page night theme ──────────────── */
 const T = {
-  bg:       'var(--app-bg)',
-  card:     'rgba(var(--surface-rgb), 0.72)',
-  line:     'rgba(var(--ink-rgb), 0.11)',
-  ink:      'var(--text-strong)',
-  muted:    'var(--text-muted)',
-  accent:   'var(--accent-text)',
-  accentDk: '#6d8f2a',
-  input:    'rgba(var(--ink-rgb), 0.045)',
-  inputBd:  'rgba(var(--ink-rgb), 0.10)',
-  focus:    'rgba(var(--accent-rgb), 0.55)',
-  err:      'var(--c-red)',
+  bg:       '#000000',
+  card:     'rgba(5, 10, 25, 0.80)',
+  line:     'rgba(255,255,255,0.11)',
+  ink:      '#ffffff',
+  muted:    '#9fb0c8',
+  accent:   '#60a5fa',
+  accentDk: '#1d4ed8',
+  input:    'rgba(255,255,255,0.045)',
+  inputBd:  'rgba(255,255,255,0.10)',
+  focus:    'rgba(96,165,250,0.55)',
+  err:      '#f87171',
   errBg:    'rgba(248,113,113,0.10)',
   ok:       'var(--c-green-soft)',
   okBg:     'rgba(134,239,172,0.10)',
@@ -89,7 +89,7 @@ function PasswordInput({ id, value, onChange, placeholder = '••••••�
           ...inputStyle,
           paddingRight: '42px',
           borderColor: focused ? T.accentDk : T.inputBd,
-          boxShadow: focused ? `0 0 0 3px rgba(var(--accent-rgb), 0.14)` : 'none',
+          boxShadow: focused ? `0 0 0 3px rgba(96,165,250,0.14)` : 'none',
         }}
       />
       <button
@@ -144,7 +144,7 @@ function TextInput({ id, type = 'text', value, onChange, placeholder, autoComple
       style={{
         ...inputStyle,
         borderColor: focused ? T.accentDk : T.inputBd,
-        boxShadow: focused ? `0 0 0 3px rgba(var(--accent-rgb), 0.14)` : 'none',
+        boxShadow: focused ? `0 0 0 3px rgba(96,165,250,0.14)` : 'none',
       }}
     />
   );
@@ -167,7 +167,7 @@ function FocusSelect({ id, value, onChange, children }) {
           cursor: 'pointer',
           paddingRight: '36px',
           borderColor: focused ? T.accentDk : T.inputBd,
-          boxShadow: focused ? `0 0 0 3px rgba(var(--accent-rgb), 0.14)` : 'none',
+          boxShadow: focused ? `0 0 0 3px rgba(96,165,250,0.14)` : 'none',
         }}
       >
         {children}
@@ -284,7 +284,7 @@ export default function SignUp({ navigate, initialRole = 'customer', initialMode
       padding: '100px 20px 60px',
       position: 'relative',
       zIndex: 0,
-      background: 'var(--app-bg)',
+      background: '#000000',
     }}>
       <div style={{ width: '100%', maxWidth: '480px' }}>
 
@@ -320,7 +320,7 @@ export default function SignUp({ navigate, initialRole = 'customer', initialMode
             display: 'flex', alignItems: 'center', justifyContent: 'center',
           }}>
             <svg width="16" height="16" viewBox="0 0 17 17" fill="none">
-              <path d="M9.5 2L4 9.5H8.5L7.5 15L13 7.5H8.5L9.5 2Z" fill="var(--app-bg)"/>
+              <path d="M9.5 2L4 9.5H8.5L7.5 15L13 7.5H8.5L9.5 2Z" fill="#ffffff"/>
             </svg>
           </span>
           <span style={{ fontWeight: 700, fontSize: '14px', letterSpacing: '0.12em', color: T.ink }}>SOLVIX</span>
@@ -388,7 +388,7 @@ export default function SignUp({ navigate, initialRole = 'customer', initialMode
                 fontFamily: 'inherit',
                 transition: 'all 0.2s',
                 ...(role === tab.value
-                  ? { background: T.accent, color: 'var(--on-fill)', boxShadow: '0 2px 10px rgba(0,0,0,0.3)' }
+                  ? { background: T.accent, color: '#ffffff', boxShadow: '0 2px 10px rgba(0,0,0,0.3)' }
                   : { background: 'transparent', color: T.muted }),
               }}
             >
@@ -505,7 +505,7 @@ export default function SignUp({ navigate, initialRole = 'customer', initialMode
                   onChange={e => setDepartment(e.target.value)}
                 >
                   {DEPARTMENTS.map(d => (
-                    <option key={d} value={d} style={{ background: 'var(--surface-solid)', color: 'var(--text-strong)' }}>{d}</option>
+                    <option key={d} value={d} style={{ background: '#000000', color: '#fff' }}>{d}</option>
                   ))}
                 </FocusSelect>
               </Field>
@@ -569,8 +569,8 @@ export default function SignUp({ navigate, initialRole = 'customer', initialMode
                 padding: '13px',
                 borderRadius: '99px',
                 border: 'none',
-                background: submitting ? 'rgba(var(--accent-rgb), 0.6)' : T.accent,
-                color: 'var(--on-fill)',
+                background: submitting ? 'rgba(216,238,142,0.6)' : T.accent,
+                color: '#ffffff',
                 fontSize: '15px',
                 fontWeight: 700,
                 fontFamily: 'inherit',
