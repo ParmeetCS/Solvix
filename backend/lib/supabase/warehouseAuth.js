@@ -67,8 +67,9 @@ export async function requireWarehouseAccess(request, { requireManage = false, r
   }
 
   const roleCode = (profile.roles?.code || '').toLowerCase();
-  const deptCode = (profile.departments?.code || '').toLowerCase();
-  const deptName = (profile.departments?.name || '').toLowerCase();
+  const deptText = await collectDepartmentText(adminClient, profile);
+  const deptCode = deptText;
+  const deptName = deptText;
 
   const isAdmin = roleCode === 'admin' || profile.account_type === 'admin';
   const isWarehouseManager = isAdmin || 

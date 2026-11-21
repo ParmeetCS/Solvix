@@ -70,8 +70,9 @@ export async function requireSurveyAccess(request, { requireManage = false, targ
   }
 
   const roleCode = (profile.roles?.code || '').toLowerCase();
-  const deptCode = (profile.departments?.code || '').toLowerCase();
-  const deptName = (profile.departments?.name || '').toLowerCase();
+  const deptText = await collectDepartmentText(adminClient, profile);
+  const deptCode = deptText;
+  const deptName = deptText;
 
   const isAdmin = roleCode === 'admin' || profile.account_type === 'admin';
   const isSurveyManager = isAdmin || 
@@ -82,6 +83,9 @@ export async function requireSurveyAccess(request, { requireManage = false, targ
   const isSales = isAdmin || deptCode.includes('sales') || deptName.includes('sales') || deptName.includes('crm');
 
   // Authorization check
+  if (profile.account_type === 'customer' || (!isAdmin && !isSurveyor && !isSales)) {
+    return { error: 'Access denied. Survey, Sales or Administrator access required.', status: 403 };
+  }
   const canManage = isAdmin || isSurveyManager;
 
   if (requireManage && !canManage) {

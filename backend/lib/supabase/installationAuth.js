@@ -69,8 +69,9 @@ export async function requireInstallationAccess(request, { requireManager = fals
   }
 
   const roleCode = (profile.roles?.code || '').toLowerCase();
-  const deptCode = (profile.departments?.code || '').toLowerCase();
-  const deptName = (profile.departments?.name || '').toLowerCase();
+  const deptText = await collectDepartmentText(adminClient, profile);
+  const deptCode = deptText;
+  const deptName = deptText;
 
   const isAdmin = roleCode === 'admin' || profile.account_type === 'admin';
   const isManager = isAdmin || 
@@ -94,6 +95,10 @@ export async function requireInstallationAccess(request, { requireManager = fals
     roleCode.includes('technician') || deptCode.includes('install') || deptName.includes('install');
 
   const canManage = isAdmin || isManager;
+
+  if (profile.account_type === 'customer' || (!isAdmin && !isTechnician)) {
+    return { error: 'Access denied. Installation team or Administrator access required.', status: 403 };
+  }
 
   if (requireManager && !canManage) {
     return { error: 'Access denied. Installation Manager or Administrator privileges required.', status: 403 };
