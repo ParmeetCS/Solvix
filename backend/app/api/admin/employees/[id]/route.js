@@ -2,12 +2,11 @@ import { jsonResponse, jsonError, handleOptions, corsHeaders } from '@/lib/utils
 import { createAdminClient } from '@/lib/supabase/client';
 import { getUserFromRequest } from '@/lib/supabase/auth';
 
-// Extract id from the URL path (Next.js app router dynamic segment)
-const url = new URL(request.url);
-const pathId = url.pathname.split('/').pop();
-
-export async function GET(request) {
+export async function GET(request, { params }) {
   try {
+    const { id: paramId } = (await params) || {};
+    const url = new URL(request.url);
+    const id = paramId || url.pathname.split('/').pop() || url.searchParams.get('id');
     // Verify admin authentication
     const { user, error: userError } = await getUserFromRequest(request);
 
@@ -36,9 +35,6 @@ export async function GET(request) {
     if (roleError || roleData.code !== 'admin') {
       return jsonError('Admin privileges required', 403);
     }
-
-    // Extract id from the URL path
-    const id = pathId || url.searchParams.get('id');
 
     if (!id) {
       return jsonError('Employee ID is required', 400);

@@ -19,6 +19,15 @@ import WhatsAppEnquiries from './pages/sales/WhatsAppEnquiries';
 import CustomersList from './pages/sales/CustomersList';
 import CustomerDetail from './pages/sales/CustomerDetail';
 
+// Site Survey & Solar Feasibility Module Pages
+import SurveyDashboard from './pages/survey/SurveyDashboard';
+import SurveyRequestsList from './pages/survey/SurveyRequestsList';
+import SurveyDetail from './pages/survey/SurveyDetail';
+import SurveyAssignments from './pages/survey/SurveyAssignments';
+import SurveySchedule from './pages/survey/SurveySchedule';
+import SurveyInspectionForm from './pages/survey/SurveyInspectionForm';
+import SurveyApprovals from './pages/survey/SurveyApprovals';
+
 export default function App() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const navigate = useNavigate();
@@ -1154,6 +1163,15 @@ void main(){
         <Route path="/sales/whatsapp-enquiries" element={<WhatsAppEnquiries />} />
         <Route path="/sales/customers" element={<CustomersList />} />
         <Route path="/sales/customers/:id" element={<CustomerDetail />} />
+
+        {/* Site Survey & Solar Feasibility Module Routes */}
+        <Route path="/survey/dashboard" element={<SurveyDashboard />} />
+        <Route path="/survey/requests" element={<SurveyRequestsList />} />
+        <Route path="/survey/requests/:id" element={<SurveyDetail />} />
+        <Route path="/survey/requests/:id/inspection" element={<SurveyInspectionForm />} />
+        <Route path="/survey/assignments" element={<SurveyAssignments />} />
+        <Route path="/survey/schedule" element={<SurveySchedule />} />
+        <Route path="/survey/approvals" element={<SurveyApprovals />} />
 
         <Route path="*" element={<NotFound />} />
       </Routes>

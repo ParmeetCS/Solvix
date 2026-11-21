@@ -8,7 +8,8 @@ import {
   UserCheck,
   LogOut,
   Sun,
-  Home
+  Home,
+  Compass
 } from 'lucide-react';
 import './crm.css';
 
@@ -29,6 +30,7 @@ export default function SalesLayout({ children, title, subtitle, actions }) {
     { label: 'Sales Dashboard', path: '/sales/dashboard', icon: LayoutDashboard },
     { label: 'Leads Pipeline', path: '/sales/leads', icon: Users2 },
     { label: 'Follow-ups', path: '/sales/follow-ups', icon: CalendarClock },
+    { label: 'Site Surveys', path: '/survey/dashboard', icon: Compass },
     { label: 'WhatsApp Enquiries', path: '/sales/whatsapp-enquiries', icon: MessageSquare },
     { label: 'Customers', path: '/sales/customers', icon: UserCheck },
   ];
