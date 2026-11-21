@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import './App.css';
+import SignUp from './components/SignUp';
 import CustomerLogin from './components/CustomerLogin';
 import EmployeeLogin from './components/EmployeeLogin';
 import QuoteForm from './components/QuoteForm';
@@ -481,8 +482,7 @@ void main(){
           <li><a href="#contact" onClick={() => setMobileOpen(false)}>Contact</a></li>
         </ul>
         <div className="side">
-          <a href="/login/customer" onClick={(e) => { e.preventDefault(); navigate('/login/customer'); setMobileOpen(false); }}>Customer Login</a>
-          <a href="/login/employee" onClick={(e) => { e.preventDefault(); navigate('/login/employee'); setMobileOpen(false); }}>Employee Login</a>
+          <a className="cta cta-signup" href="/signup" onClick={(e) => { e.preventDefault(); navigate('/signup'); setMobileOpen(false); }}>Sign Up</a>
           <a className="cta" href="/get-quote" onClick={(e) => { e.preventDefault(); navigate('/get-quote'); setMobileOpen(false); }}>Get a Quote</a>
         </div>
         <button className="menu-toggle" aria-label="Toggle menu" aria-expanded={mobileOpen} onClick={() => setMobileOpen(!mobileOpen)}>
@@ -504,8 +504,7 @@ void main(){
             <a href="#contact" onClick={() => setMobileOpen(false)}>Contact</a>
           </nav>
           <div className="acct">
-            <a href="/login/customer" onClick={(e) => { e.preventDefault(); navigate('/login/customer'); setMobileOpen(false); }}>Customer Login</a>
-            <a href="/login/employee" onClick={(e) => { e.preventDefault(); navigate('/login/employee'); setMobileOpen(false); }}>Employee Login</a>
+            <a className="cta-btn cta-signup" href="/signup" onClick={(e) => { e.preventDefault(); navigate('/signup'); setMobileOpen(false); }}>Sign Up</a>
             <a className="cta-btn" href="/get-quote" onClick={(e) => { e.preventDefault(); navigate('/get-quote'); setMobileOpen(false); }}>Get a Quote</a>
           </div>
         </div>
@@ -515,628 +514,629 @@ void main(){
         <>
           {/* HERO */}
           <div className="hero-pin" id="heroPin">
-        <main className="hero" id="hero">
-          <div className="layer sky">
-            <img id="skyM" alt=""
-              src="https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20261102_040343_a73684b4-3f71-4613-a843-c8be80fb1211.png&w=1600&q=80" />
-            <img id="skyN" alt=""
-              src="https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20261102_040308_f31964ab-ed8e-4ea4-90eb-3226c0859936.png&w=1600&q=80" />
-          </div>
-          <div className="layer home">
-            <div className="set" id="setM">
-              <div className="layer ground">
-                <img alt=""
-                  src="https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20261102_040259_1be34093-835e-4de4-b3a8-f875e6a74591.png&w=2560&q=85" />
+            <main className="hero" id="hero">
+              <div className="layer sky">
+                <img id="skyM" alt=""
+                  src="https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20261102_040343_a73684b4-3f71-4613-a843-c8be80fb1211.png&w=1600&q=80" />
+                <img id="skyN" alt=""
+                  src="https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20261102_040308_f31964ab-ed8e-4ea4-90eb-3226c0859936.png&w=1600&q=80" />
               </div>
-              <img className="cut" alt="A charcoal farmhouse with solar panels in soft morning light"
-                src="https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20261102_040416_e3b05fa4-cc80-4a43-afde-8a0a053933e9.png&w=2560&q=85"
-                style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: '50% 62%' }} />
-            </div>
-            <div className="set is-on" id="setN">
-              <div className="layer ground">
-                <img alt=""
-                  src="https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20261102_040211_c8fd4865-285e-4c1f-8a37-4bfe0771357b.png&w=2560&q=85" />
+              <div className="layer home">
+                <div className="set" id="setM">
+                  <div className="layer ground">
+                    <img alt=""
+                      src="https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20261102_040259_1be34093-835e-4de4-b3a8-f875e6a74591.png&w=2560&q=85" />
+                  </div>
+                  <img className="cut" alt="A charcoal farmhouse with solar panels in soft morning light"
+                    src="https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20261102_040416_e3b05fa4-cc80-4a43-afde-8a0a053933e9.png&w=2560&q=85"
+                    style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: '50% 62%' }} />
+                </div>
+                <div className="set is-on" id="setN">
+                  <div className="layer ground">
+                    <img alt=""
+                      src="https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20261102_040211_c8fd4865-285e-4c1f-8a37-4bfe0771357b.png&w=2560&q=85" />
+                  </div>
+                  <img className="cut" alt="The same farmhouse at dusk with warm amber windows"
+                    src="https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20261102_040415_2ab95096-8c39-449f-b36c-17c2813815a4.png&w=2560&q=85"
+                    style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: '50% 62%' }} />
+                </div>
               </div>
-              <img className="cut" alt="The same farmhouse at dusk with warm amber windows"
-                src="https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20261102_040415_2ab95096-8c39-449f-b36c-17c2813815a4.png&w=2560&q=85"
-                style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: '50% 62%' }} />
-            </div>
-          </div>
-          <div className="tilt"></div>
-          <canvas id="fog" aria-hidden="true"></canvas>
-          <div className="veil"></div>
-          <div className="ui">
-            <h1>
-              <span className="l1">
-                <span className="w">$0</span> <span className="w">Electricity</span> <span className="w">Bills</span>
-              </span>
-              <span className="l2">
-                <i><span className="w">for</span> <span className="w">the</span> <span className="w">next</span></i>{' '}
-                <span className="y"><span className="w">7</span> <span className="w">Years</span></span>
-              </span>
-            </h1>
-            <div className="dock">
-              <div className="toggle" role="group" aria-label="Time of day">
-                <button data-t="0" aria-pressed="false"><b>Morning</b><small>$0 for Electricity</small></button>
-                <button data-t="1" aria-pressed="true"><b>Night</b><small>$0 for Electricity</small></button>
+              <div className="tilt"></div>
+              <canvas id="fog" aria-hidden="true"></canvas>
+              <div className="veil"></div>
+              <div className="ui">
+                <h1>
+                  <span className="l1">
+                    <span className="w">$0</span> <span className="w">Electricity</span> <span className="w">Bills</span>
+                  </span>
+                  <span className="l2">
+                    <i><span className="w">for</span> <span className="w">the</span> <span className="w">next</span></i>{' '}
+                    <span className="y"><span className="w">7</span> <span className="w">Years</span></span>
+                  </span>
+                </h1>
+                <div className="dock">
+                  <div className="toggle" role="group" aria-label="Time of day">
+                    <button data-t="0" aria-pressed="false"><b>Morning</b><small>$0 for Electricity</small></button>
+                    <button data-t="1" aria-pressed="true"><b>Night</b><small>$0 for Electricity</small></button>
+                  </div>
+                  <p className="cap">Forget the energy market, weather conditions and seasons. Our Smart <br />Controller guarantees
+                    you get no electricity bill for seven years.</p>
+                </div>
               </div>
-              <p className="cap">Forget the energy market, weather conditions and seasons. Our Smart <br />Controller guarantees
-                you get no electricity bill for seven years.</p>
-            </div>
+            </main>
           </div>
-        </main>
-      </div>
 
-      {/* SITE SECTIONS */}
-      <div className="site">
+          {/* SITE SECTIONS */}
+          <div className="site">
 
-        {/* Ticker */}
-        <div className="ticker" aria-hidden="true">
-          <div className="tick-track">
-            <div className="grp">
-              <span>Leads</span><svg className="sun"><use href="#sun" width="22" height="22" /></svg>
-              <span>Quotations</span><svg className="sun"><use href="#sun" width="22" height="22" /></svg>
-              <span>Inventory</span><svg className="sun"><use href="#sun" width="22" height="22" /></svg>
-              <span>Installations</span><svg className="sun"><use href="#sun" width="22" height="22" /></svg>
-              <span>Warranty</span><svg className="sun"><use href="#sun" width="22" height="22" /></svg>
-              <span>Finance</span><svg className="sun"><use href="#sun" width="22" height="22" /></svg>
-              <span>Analytics</span><svg className="sun"><use href="#sun" width="22" height="22" /></svg>
-            </div>
-            <div className="grp">
-              <span>Leads</span><svg className="sun"><use href="#sun" width="22" height="22" /></svg>
-              <span>Quotations</span><svg className="sun"><use href="#sun" width="22" height="22" /></svg>
-              <span>Inventory</span><svg className="sun"><use href="#sun" width="22" height="22" /></svg>
-              <span>Installations</span><svg className="sun"><use href="#sun" width="22" height="22" /></svg>
-              <span>Warranty</span><svg className="sun"><use href="#sun" width="22" height="22" /></svg>
-              <span>Finance</span><svg className="sun"><use href="#sun" width="22" height="22" /></svg>
-              <span>Analytics</span><svg className="sun"><use href="#sun" width="22" height="22" /></svg>
-            </div>
-          </div>
-        </div>
-
-        {/* Story */}
-        <section className="sec story" id="story">
-          <div className="wrap">
-            <span className="eyebrow" data-reveal="">Why SIMS</span>
-            <p className="big" id="storyText">Solar companies don&#39;t lose money on panels. They lose it in the gaps: a lead that
-              went quiet, a quote built by hand, a part nobody can trace, a warranty nobody remembers. <em>SIMS closes every
-                gap.</em></p>
-            <ul className="pains">
-              <li data-reveal="">Lost customer leads</li>
-              <li data-reveal="">Manual quotation errors</li>
-              <li data-reveal="">Unorganised inventory</li>
-              <li data-reveal="">No equipment traceability</li>
-              <li data-reveal="">Messy installation scheduling</li>
-              <li data-reveal="">Missed warranties</li>
-              <li data-reveal="">Unclear project profit</li>
-            </ul>
-          </div>
-        </section>
-
-        {/* Modules */}
-        <section className="hs" id="platform">
-          <div className="hs-in">
-            <div className="hs-head wrap">
-              <span className="eyebrow" data-reveal="">The platform</span>
-              <h2 className="display" data-split="">Seven modules. <em>One source of truth.</em></h2>
-              <p className="lead" data-reveal="">Customer, sales, stock, crews, service and finance all live in the same system, so
-                nothing has to be re-typed, chased or guessed.</p>
-            </div>
-            <div className="track">
-              {/* Card 01 */}
-              <article className="mcard">
-                <div className="top">
-                  <div className="ico"><svg viewBox="0 0 24 24">
-                    <circle cx="9" cy="8" r="3.2" />
-                    <path d="M3 19c0-3.3 2.7-5.5 6-5.5s6 2.2 6 5.5" />
-                    <circle cx="17.5" cy="9" r="2.4" />
-                    <path d="M17 14c2.4.2 4 1.8 4 4.2" />
-                  </svg></div><span className="no">01</span>
+            {/* Ticker */}
+            <div className="ticker" aria-hidden="true">
+              <div className="tick-track">
+                <div className="grp">
+                  <span>Leads</span><svg className="sun"><use href="#sun" width="22" height="22" /></svg>
+                  <span>Quotations</span><svg className="sun"><use href="#sun" width="22" height="22" /></svg>
+                  <span>Inventory</span><svg className="sun"><use href="#sun" width="22" height="22" /></svg>
+                  <span>Installations</span><svg className="sun"><use href="#sun" width="22" height="22" /></svg>
+                  <span>Warranty</span><svg className="sun"><use href="#sun" width="22" height="22" /></svg>
+                  <span>Finance</span><svg className="sun"><use href="#sun" width="22" height="22" /></svg>
+                  <span>Analytics</span><svg className="sun"><use href="#sun" width="22" height="22" /></svg>
                 </div>
-                <div>
-                  <h3><small>CRM</small>Capture every enquiry. Never lose a lead.</h3>
-                  <p>Every enquiry gets an owner, a status and a next step, so follow-ups happen on time.</p>
-                  <ul className="tags">
-                    <li>Lead pipeline</li><li>Reminders</li><li>Customer history</li>
-                  </ul>
+                <div className="grp">
+                  <span>Leads</span><svg className="sun"><use href="#sun" width="22" height="22" /></svg>
+                  <span>Quotations</span><svg className="sun"><use href="#sun" width="22" height="22" /></svg>
+                  <span>Inventory</span><svg className="sun"><use href="#sun" width="22" height="22" /></svg>
+                  <span>Installations</span><svg className="sun"><use href="#sun" width="22" height="22" /></svg>
+                  <span>Warranty</span><svg className="sun"><use href="#sun" width="22" height="22" /></svg>
+                  <span>Finance</span><svg className="sun"><use href="#sun" width="22" height="22" /></svg>
+                  <span>Analytics</span><svg className="sun"><use href="#sun" width="22" height="22" /></svg>
                 </div>
-              </article>
-              {/* Card 02 */}
-              <article className="mcard">
-                <div className="top">
-                  <div className="ico"><svg viewBox="0 0 24 24">
-                    <path d="M6 3h8l4 4v14H6z" />
-                    <path d="M14 3v4h4M9 12h6M9 16h6" />
-                  </svg></div><span className="no">02</span>
-                </div>
-                <div>
-                  <h3><small>Sales &amp; Quotations</small>Quotes that add up, every time.</h3>
-                  <p>Build quotations from live stock and pricing instead of hand-typed spreadsheets.</p>
-                  <ul className="tags">
-                    <li>Templates</li><li>Versions</li><li>Approvals</li>
-                  </ul>
-                </div>
-              </article>
-              {/* Card 03 */}
-              <article className="mcard">
-                <div className="top">
-                  <div className="ico"><svg viewBox="0 0 24 24">
-                    <path d="M3 7.5 12 3l9 4.5v9L12 21l-9-4.5z" />
-                    <path d="M3 7.5 12 12l9-4.5M12 12v9" />
-                  </svg></div><span className="no">03</span>
-                </div>
-                <div>
-                  <h3><small>Inventory</small>Know every panel by its serial number.</h3>
-                  <p>Track stock, suppliers and equipment from the shelf to the roof it ends up on.</p>
-                  <ul className="tags">
-                    <li>Stock levels</li><li>Traceability</li><li>Suppliers</li>
-                  </ul>
-                </div>
-              </article>
-              {/* Card 04 */}
-              <article className="mcard">
-                <div className="top">
-                  <div className="ico"><svg viewBox="0 0 24 24">
-                    <rect x="3.5" y="5" width="17" height="15" rx="2.5" />
-                    <path d="M3.5 10h17M8 3v4M16 3v4M9 15l2 2 4-4" />
-                  </svg></div><span className="no">04</span>
-                </div>
-                <div>
-                  <h3><small>Projects &amp; Workforce</small>Crews, sites and schedules in sync.</h3>
-                  <p>Plan surveys and installations, assign technicians and watch progress as it happens.</p>
-                  <ul className="tags">
-                    <li>Scheduling</li><li>Checklists</li><li>Progress</li>
-                  </ul>
-                </div>
-              </article>
-              {/* Card 05 */}
-              <article className="mcard">
-                <div className="top">
-                  <div className="ico"><svg viewBox="0 0 24 24">
-                    <path d="M12 3 4.5 6v5.5c0 4.4 3 7.7 7.5 9.5 4.5-1.8 7.5-5.1 7.5-9.5V6z" />
-                    <path d="m9 12 2.2 2.2L15.5 10" />
-                  </svg></div><span className="no">05</span>
-                </div>
-                <div>
-                  <h3><small>Warranty &amp; Service</small>Warranties that remember themselves.</h3>
-                  <p>Warranty terms attach to the serial number, with reminders and service tickets to match.</p>
-                  <ul className="tags">
-                    <li>Warranty terms</li><li>Expiry alerts</li><li>Service tickets</li>
-                  </ul>
-                </div>
-              </article>
-              {/* Card 06 */}
-              <article className="mcard">
-                <div className="top">
-                  <div className="ico"><svg viewBox="0 0 24 24">
-                    <rect x="3" y="6" width="18" height="13" rx="2.5" />
-                    <path d="M3 10h18M16 14.5h2" />
-                  </svg></div><span className="no">06</span>
-                </div>
-                <div>
-                  <h3><small>Finance</small>See profit per project, not per guess.</h3>
-                  <p>Invoices, payments and project costs roll up into a margin you can trust.</p>
-                  <ul className="tags">
-                    <li>Invoicing</li><li>Payments</li><li>Project costing</li>
-                  </ul>
-                </div>
-              </article>
-              {/* Card 07 */}
-              <article className="mcard">
-                <div className="top">
-                  <div className="ico"><svg viewBox="0 0 24 24">
-                    <path d="M4 20v-7M10 20V5M16 20v-10M2.5 20h19" />
-                  </svg></div><span className="no">07</span>
-                </div>
-                <div>
-                  <h3><small>Analytics</small>Decisions from data, not hunches.</h3>
-                  <p>Dashboards for conversion, utilisation, stock and profitability, ready when management asks.</p>
-                  <ul className="tags">
-                    <li>Dashboards</li><li>Reports</li><li>Trends</li>
-                  </ul>
-                </div>
-              </article>
-            </div>
-            <div className="hs-prog" aria-hidden="true"><i></i></div>
-          </div>
-        </section>
-
-        {/* Lifecycle */}
-        <section className="sec flow" id="flow">
-          <div className="wrap flow-grid">
-            <div className="flow-side">
-              <div className="sticky">
-                <span className="eyebrow" data-reveal="">How it works</span>
-                <h2 className="display" data-split="">From first enquiry to <em>final report.</em></h2>
-                <p className="lead" data-reveal="">One continuous record follows every job through seven stages, with no hand-offs
-                  lost in between.</p>
-                <div className="stepno" aria-hidden="true"><b id="stepNo">01</b><span>/ 07</span></div>
-              </div>
-            </div>
-            <ol className="steps">
-              <div className="rail" aria-hidden="true"><i></i></div>
-              <li className="step"><span className="n">01</span>
-                <h3>Enquiry</h3>
-                <p>A lead is captured, assigned to a salesperson and followed up on schedule.</p>
-                <ul className="tags"><li>CRM</li></ul>
-              </li>
-              <li className="step"><span className="n">02</span>
-                <h3>Quotation</h3>
-                <p>The system is sized and priced from live stock, then sent for approval and to the customer.</p>
-                <ul className="tags"><li>Sales</li><li>Inventory</li></ul>
-              </li>
-              <li className="step"><span className="n">03</span>
-                <h3>Procurement</h3>
-                <p>Materials are reserved against the project and shortages are flagged before they delay a crew.</p>
-                <ul className="tags"><li>Inventory</li><li>Finance</li></ul>
-              </li>
-              <li className="step"><span className="n">04</span>
-                <h3>Installation</h3>
-                <p>Technicians get the schedule and checklist, and record serial numbers on site as they go.</p>
-                <ul className="tags"><li>Projects</li><li>Workforce</li></ul>
-              </li>
-              <li className="step"><span className="n">05</span>
-                <h3>Commissioning</h3>
-                <p>The finished system is handed over and its documents land in the customer&#39;s portal.</p>
-                <ul className="tags"><li>Projects</li><li>Customer portal</li></ul>
-              </li>
-              <li className="step"><span className="n">06</span>
-                <h3>Warranty &amp; service</h3>
-                <p>Warranty clocks start automatically and service requests are tracked to resolution.</p>
-                <ul className="tags"><li>Warranty</li><li>Service</li></ul>
-              </li>
-              <li className="step"><span className="n">07</span>
-                <h3>Reporting</h3>
-                <p>Profit per project, team performance and pipeline health, straight from the same records.</p>
-                <ul className="tags"><li>Finance</li><li>Analytics</li></ul>
-              </li>
-            </ol>
-          </div>
-        </section>
-
-        {/* Roles */}
-        <section className="sec roles" id="roles">
-          <div className="wrap">
-            <div className="roles-head">
-              <span className="eyebrow" data-reveal="">Role-based access</span>
-              <h2 className="display" data-split="">One platform. <em>Four views.</em></h2>
-              <div className="tabs" role="tablist" aria-label="Choose a role" data-reveal="">
-                <button role="tab" id="t0" aria-selected="true" aria-controls="p0">Administrator</button>
-                <button role="tab" id="t1" aria-selected="false" aria-controls="p1" tabIndex={-1}>Sales</button>
-                <button role="tab" id="t2" aria-selected="false" aria-controls="p2" tabIndex={-1}>Technician</button>
-                <button role="tab" id="t3" aria-selected="false" aria-controls="p3" tabIndex={-1}>Customer</button>
               </div>
             </div>
 
-            {/* Panel 0: Admin */}
-            <div className="panel" id="p0" role="tabpanel" aria-labelledby="t0">
-              <div className="pinfo">
-                <h3>The whole business at a glance.</h3>
-                <p>Administrators see every project, every rupee and every risk, and control who can do what.</p>
-                <ul className="ticks">
-                  <li>Company-wide dashboards and project profitability</li>
-                  <li>User, role and permission management</li>
-                  <li>Approvals for quotations, purchases and discounts</li>
-                  <li>Audit trail across stock, pricing and payments</li>
+            {/* Story */}
+            <section className="sec story" id="story">
+              <div className="wrap">
+                <span className="eyebrow" data-reveal="">Why SIMS</span>
+                <p className="big" id="storyText">Solar companies don&#39;t lose money on panels. They lose it in the gaps: a lead that
+                  went quiet, a quote built by hand, a part nobody can trace, a warranty nobody remembers. <em>SIMS closes every
+                    gap.</em></p>
+                <ul className="pains">
+                  <li data-reveal="">Lost customer leads</li>
+                  <li data-reveal="">Manual quotation errors</li>
+                  <li data-reveal="">Unorganised inventory</li>
+                  <li data-reveal="">No equipment traceability</li>
+                  <li data-reveal="">Messy installation scheduling</li>
+                  <li data-reveal="">Missed warranties</li>
+                  <li data-reveal="">Unclear project profit</li>
                 </ul>
               </div>
-              <div className="mock">
-                <div className="mbar"><i></i><i></i><i></i><b>Admin · Overview</b><span>Illustrative data</span></div>
-                <div className="kpis">
-                  <div className="kpi"><small>Active projects</small><b>24</b><span>+4 this month</span></div>
-                  <div className="kpi"><small>Quotes pending</small><b>11</b><span>3 need approval</span></div>
-                  <div className="kpi"><small>Low-stock items</small><b>5</b><span>Reorder suggested</span></div>
-                  <div className="kpi"><small>Average margin</small><b>18.4%</b><span>+1.2 pts</span></div>
+            </section>
+
+            {/* Modules */}
+            <section className="hs" id="platform">
+              <div className="hs-in">
+                <div className="hs-head wrap">
+                  <span className="eyebrow" data-reveal="">The platform</span>
+                  <h2 className="display" data-split="">Seven modules. <em>One source of truth.</em></h2>
+                  <p className="lead" data-reveal="">Customer, sales, stock, crews, service and finance all live in the same system, so
+                    nothing has to be re-typed, chased or guessed.</p>
                 </div>
-                <div className="chart"><small>Profit by month</small>
-                  <div className="bars">
-                    <div className="b"><i style={{ '--h': '38%', '--d': 0 }}></i></div>
-                    <div className="b"><i style={{ '--h': '46%', '--d': 1 }}></i></div>
-                    <div className="b"><i style={{ '--h': '42%', '--d': 2 }}></i></div>
-                    <div className="b"><i style={{ '--h': '58%', '--d': 3 }}></i></div>
-                    <div className="b"><i style={{ '--h': '52%', '--d': 4 }}></i></div>
-                    <div className="b"><i style={{ '--h': '66%', '--d': 5 }}></i></div>
-                    <div className="b"><i style={{ '--h': '61%', '--d': 6 }}></i></div>
-                    <div className="b"><i style={{ '--h': '74%', '--d': 7 }}></i></div>
-                    <div className="b"><i style={{ '--h': '70%', '--d': 8 }}></i></div>
-                    <div className="b"><i style={{ '--h': '82%', '--d': 9 }}></i></div>
-                    <div className="b"><i style={{ '--h': '78%', '--d': 10 }}></i></div>
-                    <div className="b"><i style={{ '--h': '92%', '--d': 11 }}></i></div>
+                <div className="track">
+                  {/* Card 01 */}
+                  <article className="mcard">
+                    <div className="top">
+                      <div className="ico"><svg viewBox="0 0 24 24">
+                        <circle cx="9" cy="8" r="3.2" />
+                        <path d="M3 19c0-3.3 2.7-5.5 6-5.5s6 2.2 6 5.5" />
+                        <circle cx="17.5" cy="9" r="2.4" />
+                        <path d="M17 14c2.4.2 4 1.8 4 4.2" />
+                      </svg></div><span className="no">01</span>
+                    </div>
+                    <div>
+                      <h3><small>CRM</small>Capture every enquiry. Never lose a lead.</h3>
+                      <p>Every enquiry gets an owner, a status and a next step, so follow-ups happen on time.</p>
+                      <ul className="tags">
+                        <li>Lead pipeline</li><li>Reminders</li><li>Customer history</li>
+                      </ul>
+                    </div>
+                  </article>
+                  {/* Card 02 */}
+                  <article className="mcard">
+                    <div className="top">
+                      <div className="ico"><svg viewBox="0 0 24 24">
+                        <path d="M6 3h8l4 4v14H6z" />
+                        <path d="M14 3v4h4M9 12h6M9 16h6" />
+                      </svg></div><span className="no">02</span>
+                    </div>
+                    <div>
+                      <h3><small>Sales &amp; Quotations</small>Quotes that add up, every time.</h3>
+                      <p>Build quotations from live stock and pricing instead of hand-typed spreadsheets.</p>
+                      <ul className="tags">
+                        <li>Templates</li><li>Versions</li><li>Approvals</li>
+                      </ul>
+                    </div>
+                  </article>
+                  {/* Card 03 */}
+                  <article className="mcard">
+                    <div className="top">
+                      <div className="ico"><svg viewBox="0 0 24 24">
+                        <path d="M3 7.5 12 3l9 4.5v9L12 21l-9-4.5z" />
+                        <path d="M3 7.5 12 12l9-4.5M12 12v9" />
+                      </svg></div><span className="no">03</span>
+                    </div>
+                    <div>
+                      <h3><small>Inventory</small>Know every panel by its serial number.</h3>
+                      <p>Track stock, suppliers and equipment from the shelf to the roof it ends up on.</p>
+                      <ul className="tags">
+                        <li>Stock levels</li><li>Traceability</li><li>Suppliers</li>
+                      </ul>
+                    </div>
+                  </article>
+                  {/* Card 04 */}
+                  <article className="mcard">
+                    <div className="top">
+                      <div className="ico"><svg viewBox="0 0 24 24">
+                        <rect x="3.5" y="5" width="17" height="15" rx="2.5" />
+                        <path d="M3.5 10h17M8 3v4M16 3v4M9 15l2 2 4-4" />
+                      </svg></div><span className="no">04</span>
+                    </div>
+                    <div>
+                      <h3><small>Projects &amp; Workforce</small>Crews, sites and schedules in sync.</h3>
+                      <p>Plan surveys and installations, assign technicians and watch progress as it happens.</p>
+                      <ul className="tags">
+                        <li>Scheduling</li><li>Checklists</li><li>Progress</li>
+                      </ul>
+                    </div>
+                  </article>
+                  {/* Card 05 */}
+                  <article className="mcard">
+                    <div className="top">
+                      <div className="ico"><svg viewBox="0 0 24 24">
+                        <path d="M12 3 4.5 6v5.5c0 4.4 3 7.7 7.5 9.5 4.5-1.8 7.5-5.1 7.5-9.5V6z" />
+                        <path d="m9 12 2.2 2.2L15.5 10" />
+                      </svg></div><span className="no">05</span>
+                    </div>
+                    <div>
+                      <h3><small>Warranty &amp; Service</small>Warranties that remember themselves.</h3>
+                      <p>Warranty terms attach to the serial number, with reminders and service tickets to match.</p>
+                      <ul className="tags">
+                        <li>Warranty terms</li><li>Expiry alerts</li><li>Service tickets</li>
+                      </ul>
+                    </div>
+                  </article>
+                  {/* Card 06 */}
+                  <article className="mcard">
+                    <div className="top">
+                      <div className="ico"><svg viewBox="0 0 24 24">
+                        <rect x="3" y="6" width="18" height="13" rx="2.5" />
+                        <path d="M3 10h18M16 14.5h2" />
+                      </svg></div><span className="no">06</span>
+                    </div>
+                    <div>
+                      <h3><small>Finance</small>See profit per project, not per guess.</h3>
+                      <p>Invoices, payments and project costs roll up into a margin you can trust.</p>
+                      <ul className="tags">
+                        <li>Invoicing</li><li>Payments</li><li>Project costing</li>
+                      </ul>
+                    </div>
+                  </article>
+                  {/* Card 07 */}
+                  <article className="mcard">
+                    <div className="top">
+                      <div className="ico"><svg viewBox="0 0 24 24">
+                        <path d="M4 20v-7M10 20V5M16 20v-10M2.5 20h19" />
+                      </svg></div><span className="no">07</span>
+                    </div>
+                    <div>
+                      <h3><small>Analytics</small>Decisions from data, not hunches.</h3>
+                      <p>Dashboards for conversion, utilisation, stock and profitability, ready when management asks.</p>
+                      <ul className="tags">
+                        <li>Dashboards</li><li>Reports</li><li>Trends</li>
+                      </ul>
+                    </div>
+                  </article>
+                </div>
+                <div className="hs-prog" aria-hidden="true"><i></i></div>
+              </div>
+            </section>
+
+            {/* Lifecycle */}
+            <section className="sec flow" id="flow">
+              <div className="wrap flow-grid">
+                <div className="flow-side">
+                  <div className="sticky">
+                    <span className="eyebrow" data-reveal="">How it works</span>
+                    <h2 className="display" data-split="">From first enquiry to <em>final report.</em></h2>
+                    <p className="lead" data-reveal="">One continuous record follows every job through seven stages, with no hand-offs
+                      lost in between.</p>
+                    <div className="stepno" aria-hidden="true"><b id="stepNo">01</b><span>/ 07</span></div>
+                  </div>
+                </div>
+                <ol className="steps">
+                  <div className="rail" aria-hidden="true"><i></i></div>
+                  <li className="step"><span className="n">01</span>
+                    <h3>Enquiry</h3>
+                    <p>A lead is captured, assigned to a salesperson and followed up on schedule.</p>
+                    <ul className="tags"><li>CRM</li></ul>
+                  </li>
+                  <li className="step"><span className="n">02</span>
+                    <h3>Quotation</h3>
+                    <p>The system is sized and priced from live stock, then sent for approval and to the customer.</p>
+                    <ul className="tags"><li>Sales</li><li>Inventory</li></ul>
+                  </li>
+                  <li className="step"><span className="n">03</span>
+                    <h3>Procurement</h3>
+                    <p>Materials are reserved against the project and shortages are flagged before they delay a crew.</p>
+                    <ul className="tags"><li>Inventory</li><li>Finance</li></ul>
+                  </li>
+                  <li className="step"><span className="n">04</span>
+                    <h3>Installation</h3>
+                    <p>Technicians get the schedule and checklist, and record serial numbers on site as they go.</p>
+                    <ul className="tags"><li>Projects</li><li>Workforce</li></ul>
+                  </li>
+                  <li className="step"><span className="n">05</span>
+                    <h3>Commissioning</h3>
+                    <p>The finished system is handed over and its documents land in the customer&#39;s portal.</p>
+                    <ul className="tags"><li>Projects</li><li>Customer portal</li></ul>
+                  </li>
+                  <li className="step"><span className="n">06</span>
+                    <h3>Warranty &amp; service</h3>
+                    <p>Warranty clocks start automatically and service requests are tracked to resolution.</p>
+                    <ul className="tags"><li>Warranty</li><li>Service</li></ul>
+                  </li>
+                  <li className="step"><span className="n">07</span>
+                    <h3>Reporting</h3>
+                    <p>Profit per project, team performance and pipeline health, straight from the same records.</p>
+                    <ul className="tags"><li>Finance</li><li>Analytics</li></ul>
+                  </li>
+                </ol>
+              </div>
+            </section>
+
+            {/* Roles */}
+            <section className="sec roles" id="roles">
+              <div className="wrap">
+                <div className="roles-head">
+                  <span className="eyebrow" data-reveal="">Role-based access</span>
+                  <h2 className="display" data-split="">One platform. <em>Four views.</em></h2>
+                  <div className="tabs" role="tablist" aria-label="Choose a role" data-reveal="">
+                    <button role="tab" id="t0" aria-selected="true" aria-controls="p0">Administrator</button>
+                    <button role="tab" id="t1" aria-selected="false" aria-controls="p1" tabIndex={-1}>Sales</button>
+                    <button role="tab" id="t2" aria-selected="false" aria-controls="p2" tabIndex={-1}>Technician</button>
+                    <button role="tab" id="t3" aria-selected="false" aria-controls="p3" tabIndex={-1}>Customer</button>
+                  </div>
+                </div>
+
+                {/* Panel 0: Admin */}
+                <div className="panel" id="p0" role="tabpanel" aria-labelledby="t0">
+                  <div className="pinfo">
+                    <h3>The whole business at a glance.</h3>
+                    <p>Administrators see every project, every rupee and every risk, and control who can do what.</p>
+                    <ul className="ticks">
+                      <li>Company-wide dashboards and project profitability</li>
+                      <li>User, role and permission management</li>
+                      <li>Approvals for quotations, purchases and discounts</li>
+                      <li>Audit trail across stock, pricing and payments</li>
+                    </ul>
+                  </div>
+                  <div className="mock">
+                    <div className="mbar"><i></i><i></i><i></i><b>Admin · Overview</b><span>Illustrative data</span></div>
+                    <div className="kpis">
+                      <div className="kpi"><small>Active projects</small><b>24</b><span>+4 this month</span></div>
+                      <div className="kpi"><small>Quotes pending</small><b>11</b><span>3 need approval</span></div>
+                      <div className="kpi"><small>Low-stock items</small><b>5</b><span>Reorder suggested</span></div>
+                      <div className="kpi"><small>Average margin</small><b>18.4%</b><span>+1.2 pts</span></div>
+                    </div>
+                    <div className="chart"><small>Profit by month</small>
+                      <div className="bars">
+                        <div className="b"><i style={{ '--h': '38%', '--d': 0 }}></i></div>
+                        <div className="b"><i style={{ '--h': '46%', '--d': 1 }}></i></div>
+                        <div className="b"><i style={{ '--h': '42%', '--d': 2 }}></i></div>
+                        <div className="b"><i style={{ '--h': '58%', '--d': 3 }}></i></div>
+                        <div className="b"><i style={{ '--h': '52%', '--d': 4 }}></i></div>
+                        <div className="b"><i style={{ '--h': '66%', '--d': 5 }}></i></div>
+                        <div className="b"><i style={{ '--h': '61%', '--d': 6 }}></i></div>
+                        <div className="b"><i style={{ '--h': '74%', '--d': 7 }}></i></div>
+                        <div className="b"><i style={{ '--h': '70%', '--d': 8 }}></i></div>
+                        <div className="b"><i style={{ '--h': '82%', '--d': 9 }}></i></div>
+                        <div className="b"><i style={{ '--h': '78%', '--d': 10 }}></i></div>
+                        <div className="b"><i style={{ '--h': '92%', '--d': 11 }}></i></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Panel 1: Sales */}
+                <div className="panel" id="p1" role="tabpanel" aria-labelledby="t1" hidden>
+                  <div className="pinfo">
+                    <h3>Every lead, one pipeline.</h3>
+                    <p>Sales teams log enquiries, build quotations and keep customers moving, without a spreadsheet in sight.</p>
+                    <ul className="ticks">
+                      <li>Log enquiries and schedule follow-ups</li>
+                      <li>Build and send quotations from live pricing</li>
+                      <li>See each customer&#39;s full history</li>
+                      <li>Track conversion from enquiry to order</li>
+                    </ul>
+                  </div>
+                  <div className="mock">
+                    <div className="mbar"><i></i><i></i><i></i><b>Sales · Pipeline</b><span>Illustrative data</span></div>
+                    <div className="kanban">
+                      <div className="col">
+                        <h5>New</h5>
+                        <div className="lc" data-in=""><b>Residential</b>5 kW rooftop</div>
+                        <div className="lc" data-in=""><b>Commercial</b>40 kW rooftop</div>
+                        <div className="lc" data-in=""><b>Residential</b>3 kW rooftop</div>
+                      </div>
+                      <div className="col">
+                        <h5>Quoted</h5>
+                        <div className="lc" data-in=""><b>Residential</b>8 kW + battery</div>
+                        <div className="lc" data-in=""><b>Farm</b>15 kW pump</div>
+                      </div>
+                      <div className="col">
+                        <h5>Negotiating</h5>
+                        <div className="lc" data-in=""><b>Commercial</b>60 kW rooftop</div>
+                        <div className="lc" data-in=""><b>Residential</b>6 kW rooftop</div>
+                      </div>
+                      <div className="col win">
+                        <h5>Won</h5>
+                        <div className="lc" data-in=""><b>Residential</b>10 kW rooftop</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Panel 2: Technician */}
+                <div className="panel" id="p2" role="tabpanel" aria-labelledby="t2" hidden>
+                  <div className="pinfo">
+                    <h3>Today&#39;s jobs, in hand.</h3>
+                    <p>Technicians see what is scheduled, tick off the checklist and record exactly which equipment went where.</p>
+                    <ul className="ticks">
+                      <li>Assigned installations and site checklists</li>
+                      <li>Serial numbers recorded on site</li>
+                      <li>Progress updates the office sees instantly</li>
+                      <li>Service issues raised from the field</li>
+                    </ul>
+                  </div>
+                  <div className="mock">
+                    <div className="mbar"><i></i><i></i><i></i><b>Technician · Today</b><span>Illustrative data</span></div>
+                    <div className="jobs">
+                      <div className="job" data-in=""><span className="ck done"></span>Site survey, 3 kW rooftop<small>9:00</small></div>
+                      <div className="job" data-in=""><span className="ck done"></span>Mount rails, 8 kW system<small>11:30</small></div>
+                      <div className="job" data-in=""><span className="ck"></span>Fit panels and scan serials<small>1:30</small></div>
+                      <div className="job" data-in=""><span className="ck"></span>Inverter commissioning<small>4:00</small></div>
+                    </div>
+                    <div className="mrow"><span>Serial numbers scanned</span><b>12 / 16</b></div>
+                    <div className="pg"><i style={{ '--w': '75%' }}></i></div>
+                  </div>
+                </div>
+
+                {/* Panel 3: Customer */}
+                <div className="panel" id="p3" role="tabpanel" aria-labelledby="t3" hidden>
+                  <div className="pinfo">
+                    <h3>Always know where your system stands.</h3>
+                    <p>Customers follow their installation, find their documents and ask for service, all in one place.</p>
+                    <ul className="ticks">
+                      <li>Live installation progress</li>
+                      <li>Documents and warranty details on file</li>
+                      <li>Service requests with status updates</li>
+                      <li>Invoices and payment history</li>
+                    </ul>
+                  </div>
+                  <div className="mock">
+                    <div className="mbar"><i></i><i></i><i></i><b>Customer · My system</b><span>Illustrative data</span></div>
+                    <div className="cs d" data-in="">Enquiry received</div>
+                    <div className="cs d" data-in="">Quotation approved</div>
+                    <div className="cs d" data-in="">Materials delivered</div>
+                    <div className="cs n" data-in="">Installation in progress</div>
+                    <div className="cs" data-in="">Commissioning</div>
+                    <div className="mrow"><span>Overall progress</span><b>68%</b></div>
+                    <div className="pg"><i style={{ '--w': '68%' }}></i></div>
+                    <div className="wrow">
+                      <div className="wc"><small>Panel warranty</small><b>25 years</b></div>
+                      <div className="wc"><small>Inverter warranty</small><b>10 years</b></div>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
+            </section>
 
-            {/* Panel 1: Sales */}
-            <div className="panel" id="p1" role="tabpanel" aria-labelledby="t1" hidden>
-              <div className="pinfo">
-                <h3>Every lead, one pipeline.</h3>
-                <p>Sales teams log enquiries, build quotations and keep customers moving, without a spreadsheet in sight.</p>
-                <ul className="ticks">
-                  <li>Log enquiries and schedule follow-ups</li>
-                  <li>Build and send quotations from live pricing</li>
-                  <li>See each customer&#39;s full history</li>
-                  <li>Track conversion from enquiry to order</li>
-                </ul>
-              </div>
-              <div className="mock">
-                <div className="mbar"><i></i><i></i><i></i><b>Sales · Pipeline</b><span>Illustrative data</span></div>
-                <div className="kanban">
-                  <div className="col">
-                    <h5>New</h5>
-                    <div className="lc" data-in=""><b>Residential</b>5 kW rooftop</div>
-                    <div className="lc" data-in=""><b>Commercial</b>40 kW rooftop</div>
-                    <div className="lc" data-in=""><b>Residential</b>3 kW rooftop</div>
-                  </div>
-                  <div className="col">
-                    <h5>Quoted</h5>
-                    <div className="lc" data-in=""><b>Residential</b>8 kW + battery</div>
-                    <div className="lc" data-in=""><b>Farm</b>15 kW pump</div>
-                  </div>
-                  <div className="col">
-                    <h5>Negotiating</h5>
-                    <div className="lc" data-in=""><b>Commercial</b>60 kW rooftop</div>
-                    <div className="lc" data-in=""><b>Residential</b>6 kW rooftop</div>
-                  </div>
-                  <div className="col win">
-                    <h5>Won</h5>
-                    <div className="lc" data-in=""><b>Residential</b>10 kW rooftop</div>
-                  </div>
+            {/* Solutions */}
+            <section className="sec solutions" id="solutions">
+              <div className="wrap">
+                <span className="eyebrow" data-reveal="">Solutions</span>
+                <h2 className="display" data-split="">Built for every <em>team in the field.</em></h2>
+                <p className="lead" data-reveal="">SOLVIX gives each department the tools it needs, on a single shared record&mdash;from first enquiry to final report.</p>
+                <div className="sol-grid">
+                  <article className="solution-card">
+                    <h3>Sales Teams</h3>
+                    <p>Capture enquiries, build quotations from live pricing, and track conversion from first contact to signed order.</p>
+                    <a href="/get-quote">Get a quote &rarr;</a>
+                  </article>
+                  <article className="solution-card">
+                    <h3>Survey Teams</h3>
+                    <p>Schedule site surveys, record roof and shading details, and convert surveys into scoped projects.</p>
+                    <a href="#platform">Explore modules &rarr;</a>
+                  </article>
+                  <article className="solution-card">
+                    <h3>Warehouse Teams</h3>
+                    <p>Track stock, suppliers and every panel by its serial number, from the shelf to the roof.</p>
+                    <a href="#platform">Explore modules &rarr;</a>
+                  </article>
+                  <article className="solution-card">
+                    <h3>Installation Teams</h3>
+                    <p>Assign crews and schedules, run site checklists, and record serial numbers as work happens.</p>
+                    <a href="#platform">Explore modules &rarr;</a>
+                  </article>
+                  <article className="solution-card">
+                    <h3>Customer Support</h3>
+                    <p>Give customers live installation progress, documents, warranty details and service requests in one portal.</p>
+                    <a href="#roles">Customer portal &rarr;</a>
+                  </article>
+                  <article className="solution-card">
+                    <h3>Accounts &amp; Finance</h3>
+                    <p>Roll up invoices, payments and project costs into margins you can trust, with per-project profitability.</p>
+                    <a href="#platform">Explore modules &rarr;</a>
+                  </article>
                 </div>
               </div>
-            </div>
+            </section>
 
-            {/* Panel 2: Technician */}
-            <div className="panel" id="p2" role="tabpanel" aria-labelledby="t2" hidden>
-              <div className="pinfo">
-                <h3>Today&#39;s jobs, in hand.</h3>
-                <p>Technicians see what is scheduled, tick off the checklist and record exactly which equipment went where.</p>
-                <ul className="ticks">
-                  <li>Assigned installations and site checklists</li>
-                  <li>Serial numbers recorded on site</li>
-                  <li>Progress updates the office sees instantly</li>
-                  <li>Service issues raised from the field</li>
-                </ul>
-              </div>
-              <div className="mock">
-                <div className="mbar"><i></i><i></i><i></i><b>Technician · Today</b><span>Illustrative data</span></div>
-                <div className="jobs">
-                  <div className="job" data-in=""><span className="ck done"></span>Site survey, 3 kW rooftop<small>9:00</small></div>
-                  <div className="job" data-in=""><span className="ck done"></span>Mount rails, 8 kW system<small>11:30</small></div>
-                  <div className="job" data-in=""><span className="ck"></span>Fit panels and scan serials<small>1:30</small></div>
-                  <div className="job" data-in=""><span className="ck"></span>Inverter commissioning<small>4:00</small></div>
+            {/* Contact */}
+            <section className="sec contact" id="contact">
+              <div className="wrap">
+                <span className="eyebrow" data-reveal="">Contact</span>
+                <h2 className="display" data-split="">Get in <em>touch.</em></h2>
+                <p className="lead" data-reveal="">Reach the SOLVIX team. Project enquiries are handled through the quotation form below.</p>
+                <div className="contact-grid">
+                  <div className="contact-item">
+                    <span className="label">General enquiries</span>
+                    <div className="value placeholder">[Email address]</div>
+                  </div>
+                  <div className="contact-item">
+                    <span className="label">Sales &amp; quotations</span>
+                    <div className="value placeholder">[Phone number]</div>
+                  </div>
+                  <div className="contact-item">
+                    <span className="label">Office</span>
+                    <div className="value placeholder">[Office address]</div>
+                  </div>
                 </div>
-                <div className="mrow"><span>Serial numbers scanned</span><b>12 / 16</b></div>
-                <div className="pg"><i style={{ '--w': '75%' }}></i></div>
+                <p style={{ marginTop: 32, textAlign: 'center' }}>
+                  <a className="btn primary mag" href="/get-quote" onClick={(e) => { e.preventDefault(); navigate('/get-quote'); }}>Submit an enquiry <svg style={{ width: 18, height: 18 }}><use href="#arrow" /></svg></a>
+                </p>
               </div>
-            </div>
+            </section>
 
-            {/* Panel 3: Customer */}
-            <div className="panel" id="p3" role="tabpanel" aria-labelledby="t3" hidden>
-              <div className="pinfo">
-                <h3>Always know where your system stands.</h3>
-                <p>Customers follow their installation, find their documents and ask for service, all in one place.</p>
-                <ul className="ticks">
-                  <li>Live installation progress</li>
-                  <li>Documents and warranty details on file</li>
-                  <li>Service requests with status updates</li>
-                  <li>Invoices and payment history</li>
-                </ul>
+            {/* Numbers */}
+            <section className="stats">
+              <div className="wrap stat-grid">
+                <div className="stat"><b data-count="7">7</b><span>Integrated modules</span></div>
+                <div className="stat"><b data-count="4">4</b><span>Role-based portals</span></div>
+                <div className="stat"><b data-count="7">7</b><span>Lifecycle stages tracked</span></div>
+                <div className="stat"><b data-count="1">1</b><span>Source of truth</span></div>
               </div>
-              <div className="mock">
-                <div className="mbar"><i></i><i></i><i></i><b>Customer · My system</b><span>Illustrative data</span></div>
-                <div className="cs d" data-in="">Enquiry received</div>
-                <div className="cs d" data-in="">Quotation approved</div>
-                <div className="cs d" data-in="">Materials delivered</div>
-                <div className="cs n" data-in="">Installation in progress</div>
-                <div className="cs" data-in="">Commissioning</div>
-                <div className="mrow"><span>Overall progress</span><b>68%</b></div>
-                <div className="pg"><i style={{ '--w': '68%' }}></i></div>
-                <div className="wrow">
-                  <div className="wc"><small>Panel warranty</small><b>25 years</b></div>
-                  <div className="wc"><small>Inverter warranty</small><b>10 years</b></div>
+            </section>
+
+            {/* Future */}
+            <section className="sec future" id="future">
+              <div className="wrap fut-grid">
+                <div>
+                  <span className="eyebrow" data-reveal="">Roadmap</span>
+                  <h2 className="display" data-split="">Ready for <em>what&#39;s next.</em></h2>
+                  <p className="lead" data-reveal="">Clean, connected data is the foundation for the next layer: forecasting how much
+                    each system will generate and flagging when it falls short.</p>
+                  <ul className="chips" data-reveal="">
+                    <li>Artificial intelligence</li>
+                    <li>Generation prediction</li>
+                    <li>Performance monitoring</li>
+                    <li>Intelligent analytics</li>
+                  </ul>
+                </div>
+                <figure className="gen" data-reveal="">
+                  <svg viewBox="0 0 600 340" role="img"
+                    aria-label="Illustration: a solar generation curve over a day, with a predicted curve beside it">
+                    <defs>
+                      <linearGradient id="gFill" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0" style={{ stopColor: 'var(--accent)', stopOpacity: .4 }} />
+                        <stop offset="1" style={{ stopColor: 'var(--accent)', stopOpacity: 0 }} />
+                      </linearGradient>
+                      <clipPath id="gClip">
+                        <rect id="gClipR" x="0" y="0" width="600" height="340" />
+                      </clipPath>
+                    </defs>
+                    <line className="gl" x1="20" y1="290" x2="580" y2="290" />
+                    <line className="gl" x1="20" y1="210" x2="580" y2="210" strokeDasharray="3 6" />
+                    <line className="gl" x1="20" y1="130" x2="580" y2="130" strokeDasharray="3 6" />
+                    <line className="gl" x1="20" y1="50" x2="580" y2="50" strokeDasharray="3 6" />
+                    <path d="M20 290 C 130 290, 180 50, 310 50 S 490 290, 580 290 L580 290 L20 290 Z" fill="url(#gFill)" clipPath="url(#gClip)" />
+                    <path d="M20 290 C 120 288, 190 62, 310 60 S 480 280, 580 290" fill="none" stroke="var(--muted)" strokeWidth="2" strokeDasharray="5 7" opacity=".8" />
+                    <path id="gLine" d="M20 290 C 130 290, 180 50, 310 50 S 490 290, 580 290" fill="none" stroke="var(--accent)" strokeWidth="3.5" strokeLinecap="round" />
+                    <g id="gDot">
+                      <circle r="16" style={{ fill: 'var(--accent)', opacity: .25 }} />
+                      <circle r="7" style={{ fill: 'var(--accent)' }} />
+                    </g>
+                    <text className="ax" x="20" y="314">6 am</text>
+                    <text className="ax" x="160" y="314" textAnchor="middle">9 am</text>
+                    <text className="ax" x="300" y="314" textAnchor="middle">12 pm</text>
+                    <text className="ax" x="440" y="314" textAnchor="middle">3 pm</text>
+                    <text className="ax" x="580" y="314" textAnchor="end">6 pm</text>
+                  </svg>
+                  <figcaption>
+                    <span>Solid: generation so far · Dashed: predicted</span>
+                    <span>Output now <b id="gKw">0.0 kW</b></span>
+                  </figcaption>
+                </figure>
+              </div>
+            </section>
+
+            {/* Closing CTA */}
+            <section className="sec cta-sec" id="demo">
+              <div className="orb o1"></div>
+              <div className="orb o2"></div>
+              <div className="wrap">
+                <h2 className="display" data-split="">Run your solar business like a <em>system.</em></h2>
+                <p className="lead" data-reveal="">From the first enquiry to the final report, see how SIMS keeps every project, part
+                  and payment in one place.</p>
+                <div className="btns" data-reveal="">
+                  <a className="btn primary mag" href="#">Request a demo <svg><use href="#arrow" /></svg></a>
+                  <a className="btn ghost mag" href="#platform">Explore the modules</a>
                 </div>
               </div>
-            </div>
-          </div>
-        </section>
+            </section>
 
-        {/* Solutions */}
-        <section className="sec solutions" id="solutions">
-          <div className="wrap">
-            <span className="eyebrow" data-reveal="">Solutions</span>
-            <h2 className="display" data-split="">Built for every <em>team in the field.</em></h2>
-            <p className="lead" data-reveal="">SOLVIX gives each department the tools it needs, on a single shared record&mdash;from first enquiry to final report.</p>
-            <div className="sol-grid">
-              <article className="solution-card">
-                <h3>Sales Teams</h3>
-                <p>Capture enquiries, build quotations from live pricing, and track conversion from first contact to signed order.</p>
-                <a href="/get-quote">Get a quote &rarr;</a>
-              </article>
-              <article className="solution-card">
-                <h3>Survey Teams</h3>
-                <p>Schedule site surveys, record roof and shading details, and convert surveys into scoped projects.</p>
-                <a href="#platform">Explore modules &rarr;</a>
-              </article>
-              <article className="solution-card">
-                <h3>Warehouse Teams</h3>
-                <p>Track stock, suppliers and every panel by its serial number, from the shelf to the roof.</p>
-                <a href="#platform">Explore modules &rarr;</a>
-              </article>
-              <article className="solution-card">
-                <h3>Installation Teams</h3>
-                <p>Assign crews and schedules, run site checklists, and record serial numbers as work happens.</p>
-                <a href="#platform">Explore modules &rarr;</a>
-              </article>
-              <article className="solution-card">
-                <h3>Customer Support</h3>
-                <p>Give customers live installation progress, documents, warranty details and service requests in one portal.</p>
-                <a href="#roles">Customer portal &rarr;</a>
-              </article>
-              <article className="solution-card">
-                <h3>Accounts &amp; Finance</h3>
-                <p>Roll up invoices, payments and project costs into margins you can trust, with per-project profitability.</p>
-                <a href="#platform">Explore modules &rarr;</a>
-              </article>
-            </div>
+            {/* Footer */}
+            <footer id="foot">
+              <div className="wrap">
+                <div className="foot">
+                  <div>
+                    <a className="logo" href="#">
+                      <svg className="sun" viewBox="0 0 40 40" aria-hidden="true"><use href="#sun" width="40" height="40" /></svg>
+                      Solvix
+                    </a>
+                    <p>Solar, run as a system.</p>
+                  </div>
+                  <div>
+                    <h6>Platform</h6>
+                    <ul>
+                      <li><a href="#platform">CRM</a></li>
+                      <li><a href="#platform">Quotations</a></li>
+                      <li><a href="#platform">Inventory</a></li>
+                      <li><a href="#platform">Projects</a></li>
+                      <li><a href="#platform">Warranty</a></li>
+                      <li><a href="#platform">Finance &amp; analytics</a></li>
+                    </ul>
+                  </div>
+                  <div>
+                    <h6>Explore</h6>
+                    <ul>
+                      <li><a href="#story">About</a></li>
+                      <li><a href="#flow">How it works</a></li>
+                      <li><a href="#solutions">Solutions</a></li>
+                      <li><a href="#roles">Roles</a></li>
+                      <li><a href="#contact">Contact</a></li>
+                      <li><a href="#future">Roadmap</a></li>
+                    </ul>
+                  </div>
+                  <div>
+                    <h6>Get started</h6>
+                    <ul>
+                      <li><a href="#demo">Request a demo</a></li>
+                      <li><a href="#demo">Instant quote</a></li>
+                    </ul>
+                  </div>
+                </div>
+                <p className="legal" style={{ maxWidth: 'none' }}>&copy; 2026 Solvix. Dashboard figures on this page are illustrative.</p>
+              </div>
+            </footer>
           </div>
-        </section>
-
-        {/* Contact */}
-        <section className="sec contact" id="contact">
-          <div className="wrap">
-            <span className="eyebrow" data-reveal="">Contact</span>
-            <h2 className="display" data-split="">Get in <em>touch.</em></h2>
-            <p className="lead" data-reveal="">Reach the SOLVIX team. Project enquiries are handled through the quotation form below.</p>
-            <div className="contact-grid">
-              <div className="contact-item">
-                <span className="label">General enquiries</span>
-                <div className="value placeholder">[Email address]</div>
-              </div>
-              <div className="contact-item">
-                <span className="label">Sales &amp; quotations</span>
-                <div className="value placeholder">[Phone number]</div>
-              </div>
-              <div className="contact-item">
-                <span className="label">Office</span>
-                <div className="value placeholder">[Office address]</div>
-              </div>
-            </div>
-            <p style={{ marginTop: 32, textAlign: 'center' }}>
-              <a className="btn primary mag" href="/get-quote" onClick={(e) => { e.preventDefault(); navigate('/get-quote'); }}>Submit an enquiry <svg style={{ width: 18, height: 18 }}><use href="#arrow" /></svg></a>
-            </p>
-          </div>
-        </section>
-
-        {/* Numbers */}
-        <section className="stats">
-          <div className="wrap stat-grid">
-            <div className="stat"><b data-count="7">7</b><span>Integrated modules</span></div>
-            <div className="stat"><b data-count="4">4</b><span>Role-based portals</span></div>
-            <div className="stat"><b data-count="7">7</b><span>Lifecycle stages tracked</span></div>
-            <div className="stat"><b data-count="1">1</b><span>Source of truth</span></div>
-          </div>
-        </section>
-
-        {/* Future */}
-        <section className="sec future" id="future">
-          <div className="wrap fut-grid">
-            <div>
-              <span className="eyebrow" data-reveal="">Roadmap</span>
-              <h2 className="display" data-split="">Ready for <em>what&#39;s next.</em></h2>
-              <p className="lead" data-reveal="">Clean, connected data is the foundation for the next layer: forecasting how much
-                each system will generate and flagging when it falls short.</p>
-              <ul className="chips" data-reveal="">
-                <li>Artificial intelligence</li>
-                <li>Generation prediction</li>
-                <li>Performance monitoring</li>
-                <li>Intelligent analytics</li>
-              </ul>
-            </div>
-            <figure className="gen" data-reveal="">
-              <svg viewBox="0 0 600 340" role="img"
-                aria-label="Illustration: a solar generation curve over a day, with a predicted curve beside it">
-                <defs>
-                  <linearGradient id="gFill" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0" style={{ stopColor: 'var(--accent)', stopOpacity: .4 }} />
-                    <stop offset="1" style={{ stopColor: 'var(--accent)', stopOpacity: 0 }} />
-                  </linearGradient>
-                  <clipPath id="gClip">
-                    <rect id="gClipR" x="0" y="0" width="600" height="340" />
-                  </clipPath>
-                </defs>
-                <line className="gl" x1="20" y1="290" x2="580" y2="290" />
-                <line className="gl" x1="20" y1="210" x2="580" y2="210" strokeDasharray="3 6" />
-                <line className="gl" x1="20" y1="130" x2="580" y2="130" strokeDasharray="3 6" />
-                <line className="gl" x1="20" y1="50" x2="580" y2="50" strokeDasharray="3 6" />
-                <path d="M20 290 C 130 290, 180 50, 310 50 S 490 290, 580 290 L580 290 L20 290 Z" fill="url(#gFill)" clipPath="url(#gClip)" />
-                <path d="M20 290 C 120 288, 190 62, 310 60 S 480 280, 580 290" fill="none" stroke="var(--muted)" strokeWidth="2" strokeDasharray="5 7" opacity=".8" />
-                <path id="gLine" d="M20 290 C 130 290, 180 50, 310 50 S 490 290, 580 290" fill="none" stroke="var(--accent)" strokeWidth="3.5" strokeLinecap="round" />
-                <g id="gDot">
-                  <circle r="16" style={{ fill: 'var(--accent)', opacity: .25 }} />
-                  <circle r="7" style={{ fill: 'var(--accent)' }} />
-                </g>
-                <text className="ax" x="20" y="314">6 am</text>
-                <text className="ax" x="160" y="314" textAnchor="middle">9 am</text>
-                <text className="ax" x="300" y="314" textAnchor="middle">12 pm</text>
-                <text className="ax" x="440" y="314" textAnchor="middle">3 pm</text>
-                <text className="ax" x="580" y="314" textAnchor="end">6 pm</text>
-              </svg>
-              <figcaption>
-                <span>Solid: generation so far · Dashed: predicted</span>
-                <span>Output now <b id="gKw">0.0 kW</b></span>
-              </figcaption>
-            </figure>
-          </div>
-        </section>
-
-        {/* Closing CTA */}
-        <section className="sec cta-sec" id="demo">
-          <div className="orb o1"></div>
-          <div className="orb o2"></div>
-          <div className="wrap">
-            <h2 className="display" data-split="">Run your solar business like a <em>system.</em></h2>
-            <p className="lead" data-reveal="">From the first enquiry to the final report, see how SIMS keeps every project, part
-              and payment in one place.</p>
-            <div className="btns" data-reveal="">
-              <a className="btn primary mag" href="#">Request a demo <svg><use href="#arrow" /></svg></a>
-              <a className="btn ghost mag" href="#platform">Explore the modules</a>
-            </div>
-          </div>
-        </section>
-
-        {/* Footer */}
-        <footer id="foot">
-          <div className="wrap">
-            <div className="foot">
-              <div>
-                <a className="logo" href="#">
-                  <svg className="sun" viewBox="0 0 40 40" aria-hidden="true"><use href="#sun" width="40" height="40" /></svg>
-                  Solvix
-                </a>
-                <p>Solar, run as a system.</p>
-              </div>
-              <div>
-                <h6>Platform</h6>
-                <ul>
-                  <li><a href="#platform">CRM</a></li>
-                  <li><a href="#platform">Quotations</a></li>
-                  <li><a href="#platform">Inventory</a></li>
-                  <li><a href="#platform">Projects</a></li>
-                  <li><a href="#platform">Warranty</a></li>
-                  <li><a href="#platform">Finance &amp; analytics</a></li>
-                </ul>
-              </div>
-              <div>
-                <h6>Explore</h6>
-                <ul>
-                  <li><a href="#story">About</a></li>
-                  <li><a href="#flow">How it works</a></li>
-                  <li><a href="#solutions">Solutions</a></li>
-                  <li><a href="#roles">Roles</a></li>
-                  <li><a href="#contact">Contact</a></li>
-                  <li><a href="#future">Roadmap</a></li>
-                </ul>
-              </div>
-              <div>
-                <h6>Get started</h6>
-                <ul>
-                  <li><a href="#demo">Request a demo</a></li>
-                  <li><a href="#demo">Instant quote</a></li>
-                </ul>
-              </div>
-            </div>
-            <p className="legal" style={{ maxWidth: 'none' }}>&copy; 2026 Solvix. Dashboard figures on this page are illustrative.</p>
-          </div>
-        </footer>
-      </div>
         </>
       ) : (
         <section className="page">
-          {route === '/login/customer' && <CustomerLogin navigate={navigate} />}
-          {route === '/login/employee' && <EmployeeLogin navigate={navigate} />}
+          {route === '/signup' && <SignUp navigate={navigate} initialRole="customer" initialMode="signup" />}
+          {route === '/login/customer' && <SignUp navigate={navigate} initialRole="customer" initialMode="signin" />}
+          {route === '/login/employee' && <SignUp navigate={navigate} initialRole="employee" initialMode="signin" />}
           {route === '/get-quote' && <QuoteForm navigate={navigate} />}
-          {route !== '/' && route !== '/login/customer' && route !== '/login/employee' && route !== '/get-quote' && (
+          {route !== '/' && route !== '/signup' && route !== '/login/customer' && route !== '/login/employee' && route !== '/get-quote' && (
             <div className="page-head">
               <a href="/" onClick={(e) => { e.preventDefault(); navigate('/'); }}>Back to home</a>
               <h1>Page not found</h1>

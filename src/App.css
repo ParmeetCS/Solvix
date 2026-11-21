@@ -179,8 +179,8 @@ html.lenis body {
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  gap: calc(40*var(--u));
-  font-size: calc(16.5*var(--u));
+  gap: calc(14*var(--u));
+  font-size: calc(15*var(--u));
   font-weight: 500
 }
 
@@ -191,13 +191,28 @@ html.lenis body {
 .cta {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   height: calc(46*var(--u));
-  padding: 0 calc(26*var(--u));
+  padding: 0 calc(24*var(--u));
   border-radius: 99px;
   background: color-mix(in srgb, #0d1117 var(--day), #fff);
   color: color-mix(in srgb, #fff var(--day), #0d1117);
   opacity: calc(1 - var(--dip)*.62);
-  transition: transform .25s
+  transition: transform .25s, background .25s, color .25s, border-color .25s;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.cta.cta-signup {
+  background: transparent;
+  border: 1.5px solid color-mix(in srgb, #0d1117 var(--day), #fff);
+  color: color-mix(in srgb, #0d1117 var(--day), #fff);
+}
+
+.cta.cta-signup:hover {
+  background: color-mix(in srgb, #0d1117 var(--day), #fff);
+  color: color-mix(in srgb, #fff var(--day), #0d1117);
+  transform: translateY(-1px);
 }
 
 .cta:hover {
@@ -891,13 +906,19 @@ h1 i {
 .flow-grid {
   display: grid;
   grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr);
-  gap: clamp(40px, 7vw, 120px);
-  align-items: start
+  gap: clamp(32px, 5vw, 120px);
+  align-items: stretch;
+}
+
+.flow-side {
+  position: relative;
+  height: 100%;
 }
 
 .sticky {
   position: sticky;
-  top: 18vh
+  top: clamp(80px, 14vh, 130px);
+  will-change: transform;
 }
 
 .sticky .display {
@@ -1720,14 +1741,9 @@ footer {
     display: none
   }
 
-  .flow-grid,
   .fut-grid,
   .panel {
     grid-template-columns: 1fr
-  }
-
-  .sticky {
-    position: static
   }
 
   .stat-grid {
@@ -1753,6 +1769,17 @@ footer {
 
   .kanban {
     grid-template-columns: repeat(2, minmax(0, 1fr))
+  }
+}
+
+@media (max-width:720px) {
+  .flow-grid {
+    grid-template-columns: 1fr;
+    gap: 36px;
+  }
+
+  .sticky {
+    position: static;
   }
 }
 
@@ -1861,6 +1888,12 @@ footer {
     font-size: 15px;
     margin-top: 6px
   }
+
+  .mobile-menu .cta-btn.cta-signup {
+    background: transparent;
+    border: 1.5px solid color-mix(in srgb, #0d1117 var(--day), #fff);
+    color: color-mix(in srgb, #0d1117 var(--day), #fff);
+  }
 }
 
 /* =====================================================================
@@ -1871,6 +1904,14 @@ footer {
   max-width: 1280px;
   margin: 0 auto;
   color: var(--ink)
+}
+
+/* ── Sign Up page: dark background regardless of day/night toggle ── */
+.page:has(.solvix-signup-wrap) {
+  max-width: none;
+  padding: 0;
+  background: #0a1224;
+  min-height: 100vh;
 }
 
 .page-head { margin-bottom: 40px }
