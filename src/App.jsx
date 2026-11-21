@@ -1,22 +1,18 @@
 import { useState, useEffect } from 'react';
+import { Routes, Route, useNavigate } from 'react-router-dom';
 import './App.css';
 import CustomerLogin from './components/CustomerLogin';
 import EmployeeLogin from './components/EmployeeLogin';
 import QuoteForm from './components/QuoteForm';
+import RegisterCustomer from './pages/auth/RegisterCustomer';
+import RegisterEmployee from './pages/auth/RegisterEmployee';
+import NotFound from './pages/shared/NotFound';
 
 export default function App() {
-  const [route, setRoute] = useState(window.location.pathname);
   const [mobileOpen, setMobileOpen] = useState(false);
-
-  const navigate = (to) => {
-    if (to === window.location.pathname) return;
-    window.history.pushState(null, '', to);
-    setRoute(to);
-    setMobileOpen(false);
-  };
+  const navigate = useNavigate();
 
   const onPopState = () => {
-    setRoute(window.location.pathname);
     setMobileOpen(false);
   };
 
@@ -511,9 +507,10 @@ void main(){
         </div>
       )}
 
-      {route === '/' ? (
-        <>
-          {/* HERO */}
+      <Routes>
+        <Route path="/" element={
+          <>
+            {/* HERO */}
           <div className="hero-pin" id="heroPin">
         <main className="hero" id="hero">
           <div className="layer sky">
@@ -1131,20 +1128,14 @@ void main(){
         </footer>
       </div>
         </>
-      ) : (
-        <section className="page">
-          {route === '/login/customer' && <CustomerLogin navigate={navigate} />}
-          {route === '/login/employee' && <EmployeeLogin navigate={navigate} />}
-          {route === '/get-quote' && <QuoteForm navigate={navigate} />}
-          {route !== '/' && route !== '/login/customer' && route !== '/login/employee' && route !== '/get-quote' && (
-            <div className="page-head">
-              <a href="/" onClick={(e) => { e.preventDefault(); navigate('/'); }}>Back to home</a>
-              <h1>Page not found</h1>
-              <p>The page you&rsquo;re looking for doesn&rsquo;t exist.</p>
-            </div>
-          )}
-        </section>
-      )}
+        } />
+        <Route path="/login/customer" element={<CustomerLogin navigate={navigate} />} />
+        <Route path="/login/employee" element={<EmployeeLogin navigate={navigate} />} />
+        <Route path="/get-quote" element={<QuoteForm navigate={navigate} />} />
+        <Route path="/register/customer" element={<RegisterCustomer />} />
+        <Route path="/register/employee" element={<RegisterEmployee />} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
 
       {/* Mini floating toggle */}
       <div className="mini" id="mini" role="group" aria-label="Time of day">

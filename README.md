@@ -1,16 +1,85 @@
-# React + Vite
+# SOLVIX — Solar Installation Management Platform
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Full-stack foundation for a solar installation management platform (hackathon).
 
-Currently, two official plugins are available:
+## Tech stack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+**Frontend** (React + Vite, repo root)
+- React.js, Vite, JavaScript
+- React Router DOM (client-side routing)
+- Tailwind CSS (preflight disabled — landing page untouched)
+- Lucide React, Recharts, Axios
 
-## React Compiler
+**Backend** (`backend/`)
+- Next.js 15 App Router (Route Handlers), port 3001
+- Zod (validation), Supabase JS SDK
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+**Database & Cloud**
+- Supabase PostgreSQL, Auth, Storage, Row Level Security
 
-## Expanding the ESLint configuration
+## Repository layout
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+```
+SOLVIX/
+├── src/              (React frontend — landing page preserved)
+├── public/
+├── backend/          (Next.js API)
+├── database/
+│   └── solvix_complete_schema.sql   (single executable SQL file)
+├── docs/
+│   ├── architecture.md
+│   └── api-documentation.md
+├── .env.example
+├── package.json      (root — npm workspaces + concurrently)
+└── README.md
+```
+
+## Environment setup
+
+1. Copy `backend/.env.example` → `backend/.env.local` and fill in Supabase
+   credentials (`SUPABASE_URL`, `SUPABASE_ANON_KEY`,
+   `SUPABASE_SERVICE_ROLE_KEY`).
+2. Copy `.env.example` → `.env` at root (frontend) if you want to override
+   `VITE_API_BASE_URL` (default `http://localhost:3001/api/v1`).
+3. Never commit `.env` or `.env.local` — they are gitignored.
+
+## Database (mandatory, one-time)
+
+Execute `database/solvix_complete_schema.sql` once in the Supabase SQL Editor
+against a **fresh** project. See `database/README.md` for full instructions and
+the secure first-Admin bootstrap procedure.
+
+## Commands
+
+From the repository root:
+
+```
+npm install                 # installs frontend + backend (workspace) deps
+npm run dev                 # starts frontend (5173) + backend (3001)
+npm run build               # builds frontend + backend
+npm run lint                # lints frontend + backend
+```
+
+Endpoints:
+- Frontend: http://localhost:5173
+- Backend health: http://localhost:3001/api/health
+- Backend version: http://localhost:3001/api/v1
+
+## Routes
+
+- `/` — Landing page (existing, unchanged)
+- `/login/customer` — Customer login
+- `/login/employee` — Employee login
+- `/register/customer` — Customer registration (placeholder)
+- `/register/employee` — Employee registration (placeholder)
+- `/get-quote` — Quote form
+
+## Notes
+
+- The landing page (src/App.jsx UI, App.css, index.css reset) is intentionally
+  left unchanged. Tailwind preflight is disabled so new pages/dashboards can use
+  Tailwind without affecting the landing page.
+- Backend runs independently on port 3001 with CORS configured for the frontend
+  origin.
+- Do not build complete business dashboards in this foundation task — the
+  database schema and technical setup are ready for future modules.

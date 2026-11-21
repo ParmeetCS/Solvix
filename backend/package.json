@@ -1,0 +1,26 @@
+{
+  "name": "solvix-backend",
+  "version": "0.0.0",
+  "private": true,
+  "description": "SOLVIX — Solar Installation Management Platform (Next.js backend)",
+  "scripts": {
+    "dev": "next dev --port 3001",
+    "build": "next build",
+    "start": "next start --port 3001",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "next": "^15.2.0",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "@supabase/supabase-js": "^2.45.0",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "eslint": "^8.57.0",
+    "eslint-config-next": "^15.2.0"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
