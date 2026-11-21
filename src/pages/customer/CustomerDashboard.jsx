@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { supportApi } from '@/services/api';
 import {
   Sun,
   Zap,
@@ -18,7 +19,8 @@ import {
   Download,
   LogOut,
   User,
-  Home
+  Home,
+  LifeBuoy
 } from 'lucide-react';
 
 export default function CustomerDashboard() {
@@ -55,14 +57,31 @@ export default function CustomerDashboard() {
     navigate('/');
   };
 
-  const handleServiceSubmit = (e) => {
+  const handleServiceSubmit = async (e) => {
     e.preventDefault();
-    setRequestSuccess(true);
-    setTimeout(() => {
-      setRequestSuccess(false);
-      setRequestModal(false);
-      setServiceNotes('');
-    }, 2000);
+    try {
+      const catMap = {
+        site_inspection: 'Installation issue',
+        quotation_review: 'Other',
+        maintenance: 'Maintenance',
+        other: 'Other'
+      };
+      await supportApi.createTicket({
+        subject: `[${catMap[serviceType] || 'Other'}] Service & Inspection Request`,
+        description: serviceNotes.trim() || 'Customer requested service/inspection via Customer Portal.',
+        issue_category: catMap[serviceType] || 'Other',
+        priority: 'medium'
+      });
+      setRequestSuccess(true);
+      setTimeout(() => {
+        setRequestSuccess(false);
+        setRequestModal(false);
+        setServiceNotes('');
+        navigate('/support/tickets');
+      }, 1500);
+    } catch (err) {
+      alert(err?.response?.data?.message || err.message || 'Failed to submit service request.');
+    }
   };
 
   if (loading) {
@@ -146,6 +165,22 @@ export default function CustomerDashboard() {
           >
             <Home size={15} />
             Home
+          </button>
+          <button
+            onClick={() => navigate('/support/tickets')}
+            style={{
+              background: 'transparent',
+              border: 'none',
+              color: '#38bdf8',
+              fontSize: '0.85rem',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.35rem'
+            }}
+          >
+            <LifeBuoy size={15} />
+            Support & Warranty
           </button>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#94a3b8', fontSize: '0.875rem' }}>
             <User size={16} />

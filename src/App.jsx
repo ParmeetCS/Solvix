@@ -34,6 +34,15 @@ import CustomerQuotationDetail from './pages/customer/CustomerQuotationDetail';
 import CustomerOrders from './pages/customer/CustomerOrders';
 import CustomerOrderDetail from './pages/customer/CustomerOrderDetail';
 
+// Support & Warranty Module Pages
+import SupportDashboard from './pages/support/SupportDashboard';
+import TicketsList from './pages/support/TicketsList';
+import NewTicket from './pages/support/NewTicket';
+import TicketDetail from './pages/support/TicketDetail';
+import WarrantiesList from './pages/support/WarrantiesList';
+import WarrantyDetail from './pages/support/WarrantyDetail';
+import WarrantyClaimsList from './pages/support/WarrantyClaimsList';
+
 // Admin Catalogue
 import AdminCatalogue from './pages/admin/catalogue';
 
@@ -1195,6 +1204,15 @@ void main(){
         <Route path="/customer/quotations/:id" element={<CustomerQuotationDetail />} />
         <Route path="/customer/orders" element={<CustomerOrders />} />
         <Route path="/customer/orders/:id" element={<CustomerOrderDetail />} />
+
+        {/* Support & Warranty Module Routes */}
+        <Route path="/support/dashboard" element={<SupportDashboard />} />
+        <Route path="/support/tickets" element={<TicketsList />} />
+        <Route path="/support/tickets/new" element={<NewTicket />} />
+        <Route path="/support/tickets/:id" element={<TicketDetail />} />
+        <Route path="/support/warranties" element={<WarrantiesList />} />
+        <Route path="/support/warranties/:id" element={<WarrantyDetail />} />
+        <Route path="/support/claims" element={<WarrantyClaimsList />} />
 
         {/* Admin Catalogue Routes */}
         <Route path="/admin/catalogue" element={<AdminCatalogue />} />

@@ -13,7 +13,8 @@ import {
   ShoppingCart,
   Package,
   Compass,
-  Boxes
+  Boxes,
+  LifeBuoy
 } from 'lucide-react';
 import './crm.css';
 
@@ -40,6 +41,7 @@ export default function SalesLayout({ children, title, subtitle, actions }) {
     { label: 'Quotations', path: '/sales/quotations', icon: FileText },
     { label: 'Orders', path: '/sales/orders', icon: ShoppingCart },
     { label: 'Warehouse & Stock', path: '/warehouse/dashboard', icon: Boxes },
+    { label: 'Support & Warranty', path: '/support/dashboard', icon: LifeBuoy },
   ];
 
   const isAdmin =
