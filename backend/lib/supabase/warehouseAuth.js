@@ -1,6 +1,7 @@
 // Authentication and RBAC verification helpers for Warehouse & Inventory endpoints
 import { getUserFromRequest } from './auth';
 import { createAdminClient } from './client';
+import { collectDepartmentText } from './access.js';
 
 /**
  * Validates whether the requesting user is authenticated and has permission to
@@ -76,6 +77,12 @@ export async function requireWarehouseAccess(request, { requireManage = false, r
   const isWarehouseStaff = isAdmin || isWarehouseManager ||
     deptCode.includes('warehouse') || deptCode.includes('inventory') || deptCode.includes('logistics') || deptName.includes('warehouse') ||
     roleCode.includes('warehouse') || roleCode.includes('inventory') || roleCode.includes('dispatch');
+
+  // Sales and installation staff get read-only visibility of stock.
+  const hasReadAccess = isAdmin || isWarehouseStaff || deptText.includes('sales') || deptText.includes('install');
+  if (profile.account_type === 'customer' || !hasReadAccess) {
+    return { error: 'Access denied. Warehouse team or Administrator access required.', status: 403 };
+  }
 
   if (requireAdjustment && !isAdmin && !isWarehouseManager) {
     return { error: 'Access denied. Only Warehouse Managers or Administrators can perform manual stock adjustments.', status: 403 };

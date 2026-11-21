@@ -1,6 +1,7 @@
 // Authentication and RBAC verification helpers for Site Survey & Feasibility endpoints
 import { getUserFromRequest } from './auth';
 import { createAdminClient } from './client';
+import { collectDepartmentText } from './access.js';
 
 /**
  * Validates whether the requesting user is authenticated and has permission to

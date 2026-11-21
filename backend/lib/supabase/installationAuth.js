@@ -1,6 +1,7 @@
 // Authentication and RBAC verification helpers for Installation & Technical Operations endpoints
 import { getUserFromRequest } from './auth.js';
 import { createAdminClient } from './client.js';
+import { collectDepartmentText } from './access.js';
 
 /**
  * Validates whether the requesting user is authenticated and has permission to
