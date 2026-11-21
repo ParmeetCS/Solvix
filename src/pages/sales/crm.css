@@ -1,12 +1,12 @@
 /* =====================================================================
    SOLVIX CRM & SALES MODULE STYLES
-   Matches the night-first solar tech theme (--bg: #0a1224, --accent: #d8ee8e)
+   Matches the night-first solar tech theme (--bg: #0a1224, --accent: #60a5fa)
    ===================================================================== */
 
 .crm-layout {
   display: flex;
   min-height: 100vh;
-  background-color: #080e1b;
+  background-color: #000000;
   color: #f1f5f9;
   font-family: "Instrument Sans", system-ui, sans-serif;
 }
@@ -14,7 +14,7 @@
 /* Sidebar */
 .crm-sidebar {
   width: 260px;
-  background: rgba(13, 23, 42, 0.95);
+  background: rgba(0, 0, 0, 0.95);
   border-right: 1px solid rgba(255, 255, 255, 0.08);
   display: flex;
   flex-direction: column;
@@ -40,11 +40,11 @@
   width: 32px;
   height: 32px;
   border-radius: 8px;
-  background: linear-gradient(135deg, #d8ee8e 0%, #a2c638 100%);
+  background: linear-gradient(135deg, #60a5fa 0%, #2563eb 100%);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #0a1224;
+  color: #ffffff;
 }
 
 .crm-nav {
@@ -73,9 +73,9 @@
 }
 
 .crm-nav-item.active {
-  background: rgba(216, 238, 142, 0.12);
-  color: #d8ee8e;
-  border: 1px solid rgba(216, 238, 142, 0.25);
+  background: rgba(59, 130, 246, 0.15);
+  color: #60a5fa;
+  border: 1px solid rgba(59, 130, 246, 0.3);
 }
 
 .crm-user-card {
@@ -158,7 +158,7 @@
 
 /* Reusable UI Components */
 .crm-card {
-  background: rgba(16, 27, 51, 0.6);
+  background: rgba(5, 10, 20, 0.7);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 12px;
   padding: 24px;
@@ -194,12 +194,12 @@
 }
 
 .crm-btn-primary {
-  background: #d8ee8e;
-  color: #0a1224;
+  background: #60a5fa;
+  color: #ffffff;
 }
 
 .crm-btn-primary:hover {
-  background: #c3df6b;
+  background: #3b82f6;
   transform: translateY(-1px);
 }
 
@@ -215,12 +215,12 @@
 
 .crm-btn-outline {
   background: transparent;
-  color: #d8ee8e;
-  border: 1px solid rgba(216, 238, 142, 0.4);
+  color: #60a5fa;
+  border: 1px solid rgba(96, 165, 250, 0.4);
 }
 
 .crm-btn-outline:hover {
-  background: rgba(216, 238, 142, 0.08);
+  background: rgba(96, 165, 250, 0.08);
 }
 
 .crm-btn-danger {
@@ -246,7 +246,7 @@
 }
 
 .crm-stat-box {
-  background: rgba(16, 27, 51, 0.7);
+  background: rgba(5, 10, 20, 0.7);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 12px;
   padding: 18px 20px;
@@ -264,7 +264,7 @@
   left: 0;
   width: 4px;
   height: 100%;
-  background: #d8ee8e;
+  background: #60a5fa;
 }
 
 .crm-stat-box.urgent::after {
@@ -309,7 +309,7 @@
 .crm-badge-new { background: rgba(59, 130, 246, 0.18); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.3); }
 .crm-badge-contacted { background: rgba(168, 85, 247, 0.18); color: #c084fc; border: 1px solid rgba(168, 85, 247, 0.3); }
 .crm-badge-qualified { background: rgba(16, 185, 129, 0.18); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); }
-.crm-badge-converted { background: rgba(216, 238, 142, 0.22); color: #d8ee8e; border: 1px solid rgba(216, 238, 142, 0.4); }
+.crm-badge-converted { background: rgba(216, 238, 142, 0.22); color: #60a5fa; border: 1px solid rgba(96, 165, 250, 0.4); }
 .crm-badge-lost { background: rgba(239, 68, 68, 0.18); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); }
 .crm-badge-survey { background: rgba(245, 158, 11, 0.18); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.3); }
 .crm-badge-quotation { background: rgba(14, 165, 233, 0.18); color: #38bdf8; border: 1px solid rgba(14, 165, 233, 0.3); }
@@ -330,7 +330,7 @@
 }
 
 .crm-table th {
-  background: rgba(13, 23, 42, 0.8);
+  background: rgba(0, 0, 0, 0.8);
   padding: 12px 16px;
   color: #94a3b8;
   font-weight: 600;
@@ -365,7 +365,7 @@
 }
 
 .crm-input, .crm-select, .crm-textarea {
-  background: rgba(13, 23, 42, 0.8);
+  background: rgba(0, 0, 0, 0.8);
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 8px;
   padding: 9px 12px;
@@ -379,8 +379,8 @@
 
 .crm-input:focus, .crm-select:focus, .crm-textarea:focus {
   outline: none;
-  border-color: #d8ee8e;
-  box-shadow: 0 0 0 2px rgba(216, 238, 142, 0.15);
+  border-color: #60a5fa;
+  box-shadow: 0 0 0 2px rgba(96, 165, 250, 0.15);
 }
 
 .crm-textarea {

@@ -2,7 +2,7 @@
 .support-layout {
   display: flex;
   min-height: 100vh;
-  background-color: #0b1020;
+  background-color: #ffffff;
   color: #e2e8f0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
 }
@@ -10,7 +10,7 @@
 /* Sidebar */
 .support-sidebar {
   width: 260px;
-  background-color: #0d1527;
+  background-color: #000000;
   border-right: 1px solid #1e293b;
   display: flex;
   flex-direction: column;
@@ -31,12 +31,12 @@
 .support-brand-icon {
   width: 36px;
   height: 36px;
-  background: #d8ee8e;
+  background: #60a5fa;
   border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #0b1020;
+  color: #ffffff;
   font-weight: bold;
 }
 
@@ -75,8 +75,8 @@
 }
 
 .support-nav-item.active {
-  background-color: rgba(216, 238, 142, 0.12);
-  color: #d8ee8e;
+  background-color: rgba(59, 130, 246, 0.12);
+  color: #60a5fa;
   font-weight: 600;
 }
 
@@ -162,7 +162,7 @@
 
 .support-header {
   padding: 1.5rem 2rem;
-  background-color: #0d1527;
+  background-color: #000000;
   border-bottom: 1px solid #1e293b;
   display: flex;
   justify-content: space-between;
@@ -199,8 +199,8 @@
 
 /* Primary Button */
 .btn-primary {
-  background-color: #d8ee8e;
-  color: #0b1020;
+  background-color: #60a5fa;
+  color: #ffffff;
   font-weight: 600;
   font-size: 0.875rem;
   padding: 0.6rem 1.15rem;
@@ -215,7 +215,7 @@
 }
 
 .btn-primary:hover {
-  background-color: #c9e078;
+  background-color: #2563eb;
 }
 
 .btn-secondary {
@@ -246,7 +246,7 @@
 }
 
 .support-metric-card {
-  background-color: #111927;
+  background-color: #060c18;
   border: 1px solid #1e293b;
   border-radius: 12px;
   padding: 1.25rem;
@@ -291,7 +291,7 @@
 
 /* Card Container */
 .support-card {
-  background-color: #111927;
+  background-color: #060c18;
   border: 1px solid #1e293b;
   border-radius: 12px;
   padding: 1.5rem;
@@ -322,7 +322,7 @@
   align-items: center;
   gap: 0.75rem;
   flex-wrap: wrap;
-  background-color: #111927;
+  background-color: #060c18;
   border: 1px solid #1e293b;
   padding: 1rem 1.25rem;
   border-radius: 10px;
@@ -331,7 +331,7 @@
 .support-search-input {
   flex: 1;
   min-width: 220px;
-  background-color: #0b1020;
+  background-color: #ffffff;
   border: 1px solid #1e293b;
   border-radius: 6px;
   padding: 0.55rem 0.85rem;
@@ -341,11 +341,11 @@
 
 .support-search-input:focus {
   outline: none;
-  border-color: #d8ee8e;
+  border-color: #60a5fa;
 }
 
 .support-select {
-  background-color: #0b1020;
+  background-color: #ffffff;
   border: 1px solid #1e293b;
   border-radius: 6px;
   padding: 0.55rem 0.85rem;
@@ -356,7 +356,7 @@
 
 .support-select:focus {
   outline: none;
-  border-color: #d8ee8e;
+  border-color: #60a5fa;
 }
 
 /* Table */
@@ -374,7 +374,7 @@
 }
 
 .support-table th {
-  background-color: #0d1527;
+  background-color: #000000;
   padding: 0.85rem 1rem;
   color: #94a3b8;
   font-weight: 600;
@@ -388,7 +388,7 @@
 }
 
 .support-table tr:hover td {
-  background-color: #162032;
+  background-color: #060c18;
 }
 
 /* Badges */
@@ -404,7 +404,7 @@
 }
 
 .badge-open { background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.3); }
-.badge-new { background: rgba(216, 238, 142, 0.15); color: #d8ee8e; border: 1px solid rgba(216, 238, 142, 0.3); }
+.badge-new { background: rgba(59, 130, 246, 0.15); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.3); }
 .badge-assigned { background: rgba(168, 85, 247, 0.15); color: #c084fc; border: 1px solid rgba(168, 85, 247, 0.3); }
 .badge-in_progress { background: rgba(251, 191, 36, 0.15); color: #fbbf24; border: 1px solid rgba(251, 191, 36, 0.3); }
 .badge-waiting_for_parts { background: rgba(249, 115, 22, 0.15); color: #fb923c; border: 1px solid rgba(249, 115, 22, 0.3); }
@@ -439,7 +439,7 @@
 .support-form-input,
 .support-form-textarea,
 .support-form-select {
-  background-color: #0b1020;
+  background-color: #ffffff;
   border: 1px solid #1e293b;
   border-radius: 8px;
   padding: 0.75rem 1rem;
@@ -451,7 +451,7 @@
 .support-form-textarea:focus,
 .support-form-select:focus {
   outline: none;
-  border-color: #d8ee8e;
+  border-color: #60a5fa;
 }
 
 /* Modals */
@@ -467,7 +467,7 @@
 }
 
 .modal-content {
-  background-color: #111927;
+  background-color: #060c18;
   border: 1px solid #1e293b;
   border-radius: 12px;
   width: 100%;
@@ -512,8 +512,8 @@
 
 /* Warranty Verification Banner */
 .warranty-verify-box {
-  background: linear-gradient(135deg, rgba(216, 238, 142, 0.08) 0%, rgba(56, 189, 248, 0.08) 100%);
-  border: 1px solid rgba(216, 238, 142, 0.25);
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.08) 0%, rgba(56, 189, 248, 0.08) 100%);
+  border: 1px solid rgba(59, 130, 246, 0.25);
   border-radius: 12px;
   padding: 1.5rem;
 }
@@ -567,7 +567,7 @@
 .timeline-body {
   font-size: 0.875rem;
   color: #cbd5e1;
-  background-color: #0b1020;
+  background-color: #ffffff;
   padding: 0.75rem 1rem;
   border-radius: 8px;
   border: 1px solid #1e293b;

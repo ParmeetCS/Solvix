@@ -53,7 +53,7 @@ export default function Landing() {
     const SINK = 240, RISE = 820, DEPTH = 0.27;
     const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
     const smooth = (a, b, x) => { x = clamp((x - a) / (b - a)); return x * x * (3 - 2 * x); };
-    let target = 1, from = 1, start = -1e9, queued = null, swapped = true, k = 1;
+    let target = 0, from = 0, start = -1e9, queued = null, swapped = true, k = 0;
     let animating = false, clock = 0, phase = calm ? 'run' : 'wait';
     let heroPin, hero, bar, mini, spBar;
     let pinH = 1, heroH = 1, docMax = 1;
@@ -515,7 +515,7 @@ void main(){
                     src="https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20261102_040308_f31964ab-ed8e-4ea4-90eb-3226c0859936.png&w=1600&q=80" />
                 </div>
                 <div className="layer home">
-                  <div className="set" id="setM">
+                  <div className="set is-on" id="setM">
                     <div className="layer ground">
                       <img alt=""
                         src="https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20261102_040259_1be34093-835e-4de4-b3a8-f875e6a74591.png&w=2560&q=85" />
@@ -524,7 +524,7 @@ void main(){
                       src="https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20261102_040416_e3b05fa4-cc80-4a43-afde-8a0a053933e9.png&w=2560&q=85"
                       style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: '50% 62%' }} />
                   </div>
-                  <div className="set is-on" id="setN">
+                  <div className="set" id="setN">
                     <div className="layer ground">
                       <img alt=""
                         src="https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20261102_040211_c8fd4865-285e-4c1f-8a37-4bfe0771357b.png&w=2560&q=85" />
@@ -549,8 +549,8 @@ void main(){
                   </h1>
                   <div className="dock">
                     <div className="toggle" role="group" aria-label="Time of day">
-                      <button data-t="0" aria-pressed="false"><b>Morning</b><small>0 for Electricity</small></button>
-                      <button data-t="1" aria-pressed="true"><b>Night</b><small>0 for Electricity</small></button>
+                      <button data-t="0" aria-pressed="true"><b>Morning</b></button>
+                      <button data-t="1" aria-pressed="false"><b>Night</b></button>
                     </div>
                     <p className="cap">Forget the energy market, weather conditions and seasons. Our Smart <br />Controller guarantees
                       you get no electricity bill for seven years.</p>
@@ -1127,14 +1127,14 @@ void main(){
       {/* Mini floating toggle (landing page only) */}
       {isHome && (
         <div className="mini" id="mini" role="group" aria-label="Time of day">
-          <button data-t="0" aria-pressed="false">
+          <button data-t="0" aria-pressed="true">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
               <circle cx="12" cy="12" r="4" />
               <path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M18.7 5.3l-1.6 1.6M6.9 17.1l-1.6 1.6" />
             </svg>
             <span>Morning</span>
           </button>
-          <button data-t="1" aria-pressed="true">
+          <button data-t="1" aria-pressed="false">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
               <path d="M20 14.5A8 8 0 0 1 9.5 4 8 8 0 1 0 20 14.5Z" />
             </svg>
