@@ -90,7 +90,7 @@ SUPABASE_SERVICE_ROLE_KEY=your-supabase-service-role-key
 - **A. User & Department:** profiles, departments, roles, permissions, role_permissions, employee_departments
 - **B. Customer & Lead:** customers, customer_addresses, leads, lead_assignments, follow_ups, customer_interactions
 - **C. Site Survey:** site_surveys, survey_assignments, survey_photos, survey_reports, survey_approvals
-- **D. Quotation & Order:** quotations, quotation_items, orders, order_status_history, payments
+- **D. Quotation & Order:** quotations, quotation_items, orders, order_status_history, payments, product_packages, package_items, quotation_status_history, quotation_comments
 - **E. Product & Warehouse:** product_categories, products, warehouses, inventory, stock_movements, inventory_reservations, purchase_orders, purchase_order_items
 - **F. Equipment & Dispatch:** equipment_serial_numbers, dispatches, dispatch_items, equipment_deliveries
 - **G. Technician & Installation:** technicians, technician_assignments, installations, installation_tasks, installation_photos, installation_reports, customer_signatures

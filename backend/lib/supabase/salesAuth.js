@@ -1,6 +1,6 @@
 // Authentication and RBAC verification helpers for CRM & Sales endpoints
-import { getUserFromRequest } from './auth';
-import { createAdminClient } from './client';
+import { getUserFromRequest } from './auth.js';
+import { createAdminClient } from './client.js';
 
 /**
  * Validates whether the requesting user is authenticated and has permission to

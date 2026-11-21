@@ -18,6 +18,20 @@ import FollowUpsList from './pages/sales/FollowUpsList';
 import WhatsAppEnquiries from './pages/sales/WhatsAppEnquiries';
 import CustomersList from './pages/sales/CustomersList';
 import CustomerDetail from './pages/sales/CustomerDetail';
+import QuotationsList from './pages/sales/QuotationsList';
+import QuotationBuilder from './pages/sales/QuotationBuilder';
+import QuotationDetail from './pages/sales/QuotationDetail';
+import OrdersList from './pages/sales/OrdersList';
+import OrderDetail from './pages/sales/OrderDetail';
+
+// Customer Portal Pages
+import CustomerQuotations from './pages/customer/CustomerQuotations';
+import CustomerQuotationDetail from './pages/customer/CustomerQuotationDetail';
+import CustomerOrders from './pages/customer/CustomerOrders';
+import CustomerOrderDetail from './pages/customer/CustomerOrderDetail';
+
+// Admin Catalogue
+import AdminCatalogue from './pages/admin/catalogue';
 
 export default function App() {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -1154,6 +1168,23 @@ void main(){
         <Route path="/sales/whatsapp-enquiries" element={<WhatsAppEnquiries />} />
         <Route path="/sales/customers" element={<CustomersList />} />
         <Route path="/sales/customers/:id" element={<CustomerDetail />} />
+
+        {/* Quotations & Orders Module Routes */}
+        <Route path="/sales/quotations" element={<QuotationsList />} />
+        <Route path="/sales/quotations/new" element={<QuotationBuilder />} />
+        <Route path="/sales/quotations/:id/edit" element={<QuotationBuilder />} />
+        <Route path="/sales/quotations/:id" element={<QuotationDetail />} />
+        <Route path="/sales/orders" element={<OrdersList />} />
+        <Route path="/sales/orders/:id" element={<OrderDetail />} />
+
+        {/* Customer Portal Routes */}
+        <Route path="/customer/quotations" element={<CustomerQuotations />} />
+        <Route path="/customer/quotations/:id" element={<CustomerQuotationDetail />} />
+        <Route path="/customer/orders" element={<CustomerOrders />} />
+        <Route path="/customer/orders/:id" element={<CustomerOrderDetail />} />
+
+        {/* Admin Catalogue Routes */}
+        <Route path="/admin/catalogue" element={<AdminCatalogue />} />
 
         <Route path="*" element={<NotFound />} />
       </Routes>

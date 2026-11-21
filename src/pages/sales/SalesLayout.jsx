@@ -8,7 +8,10 @@ import {
   UserCheck,
   LogOut,
   Sun,
-  Home
+  Home,
+  FileText,
+  ShoppingCart,
+  Package
 } from 'lucide-react';
 import './crm.css';
 
@@ -31,7 +34,15 @@ export default function SalesLayout({ children, title, subtitle, actions }) {
     { label: 'Follow-ups', path: '/sales/follow-ups', icon: CalendarClock },
     { label: 'WhatsApp Enquiries', path: '/sales/whatsapp-enquiries', icon: MessageSquare },
     { label: 'Customers', path: '/sales/customers', icon: UserCheck },
+    { label: 'Quotations', path: '/sales/quotations', icon: FileText },
+    { label: 'Orders', path: '/sales/orders', icon: ShoppingCart },
   ];
+
+  const isAdmin =
+    user?.account_type === 'admin' || String(user?.role || '').toLowerCase() === 'admin';
+  if (isAdmin) {
+    navItems.push({ label: 'Catalogue', path: '/admin/catalogue', icon: Package });
+  }
 
   return (
     <div className="crm-layout">
