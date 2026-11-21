@@ -12,7 +12,8 @@ import {
   FileText,
   ShoppingCart,
   Package,
-  Compass
+  Compass,
+  Boxes
 } from 'lucide-react';
 import './crm.css';
 
@@ -38,6 +39,7 @@ export default function SalesLayout({ children, title, subtitle, actions }) {
     { label: 'Customers', path: '/sales/customers', icon: UserCheck },
     { label: 'Quotations', path: '/sales/quotations', icon: FileText },
     { label: 'Orders', path: '/sales/orders', icon: ShoppingCart },
+    { label: 'Warehouse & Stock', path: '/warehouse/dashboard', icon: Boxes },
   ];
 
   const isAdmin =

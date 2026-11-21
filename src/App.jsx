@@ -37,27 +37,6 @@ import CustomerOrderDetail from './pages/customer/CustomerOrderDetail';
 // Admin Catalogue
 import AdminCatalogue from './pages/admin/catalogue';
 
-// Site Survey Module Pages
-import SurveyDashboard from './pages/survey/SurveyDashboard';
-import SurveyRequestsList from './pages/survey/SurveyRequestsList';
-import SurveyAssignments from './pages/survey/SurveyAssignments';
-import SurveySchedule from './pages/survey/SurveySchedule';
-import SurveyApprovals from './pages/survey/SurveyApprovals';
-import SurveyDetail from './pages/survey/SurveyDetail';
-
-// Installation & Technical Operations Module Pages
-import InstallationDashboard from './pages/installation/InstallationDashboard';
-import InstallationJobsList from './pages/installation/InstallationJobsList';
-import InstallationJobDetail from './pages/installation/InstallationJobDetail';
-import InstallationAssignments from './pages/installation/InstallationAssignments';
-import InstallationSchedule from './pages/installation/InstallationSchedule';
-import TechniciansList from './pages/installation/TechniciansList';
-import TechnicianDetail from './pages/installation/TechnicianDetail';
-
-// Field Technician Mobile App
-import TechnicianDashboard from './pages/technician/TechnicianDashboard';
-
-
 export default function App() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const navigate = useNavigate();
@@ -1219,26 +1198,6 @@ void main(){
 
         {/* Admin Catalogue Routes */}
         <Route path="/admin/catalogue" element={<AdminCatalogue />} />
-
-        {/* Site Survey Module Routes */}
-        <Route path="/survey/dashboard" element={<SurveyDashboard />} />
-        <Route path="/survey/requests" element={<SurveyRequestsList />} />
-        <Route path="/survey/assignments" element={<SurveyAssignments />} />
-        <Route path="/survey/schedule" element={<SurveySchedule />} />
-        <Route path="/survey/approvals" element={<SurveyApprovals />} />
-        <Route path="/survey/requests/:id" element={<SurveyDetail />} />
-
-        {/* Installation & Technical Operations Module Routes */}
-        <Route path="/installation/dashboard" element={<InstallationDashboard />} />
-        <Route path="/installation/jobs" element={<InstallationJobsList />} />
-        <Route path="/installation/jobs/:id" element={<InstallationJobDetail />} />
-        <Route path="/installation/assignments" element={<InstallationAssignments />} />
-        <Route path="/installation/schedule" element={<InstallationSchedule />} />
-        <Route path="/installation/technicians" element={<TechniciansList />} />
-        <Route path="/installation/technicians/:id" element={<TechnicianDetail />} />
-
-        {/* Field Technician Mobile App Route */}
-        <Route path="/technician/dashboard" element={<TechnicianDashboard />} />
 
         <Route path="*" element={<NotFound />} />
       </Routes>
