@@ -123,14 +123,16 @@ ON CONFLICT (id) DO UPDATE SET
 
 -- Storage RLS policies:
 -- Only authenticated users with survey, sales, or admin role can access survey files
-CREATE POLICY IF NOT EXISTS "Survey files viewable by authorized employees"
+DROP POLICY IF EXISTS "Survey files viewable by authorized employees" ON storage.objects;
+CREATE POLICY "Survey files viewable by authorized employees"
 ON storage.objects FOR SELECT
 USING (
   bucket_id = 'survey-attachments'
   AND auth.role() = 'authenticated'
 );
 
-CREATE POLICY IF NOT EXISTS "Survey files uploadable by survey engineers and admins"
+DROP POLICY IF EXISTS "Survey files uploadable by survey engineers and admins" ON storage.objects;
+CREATE POLICY "Survey files uploadable by survey engineers and admins"
 ON storage.objects FOR INSERT
 WITH CHECK (
   bucket_id = 'survey-attachments'
