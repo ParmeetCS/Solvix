@@ -1,85 +1,72 @@
-# SOLVIX — Solar Installation Management Platform
+# SOLVIX - Solar Installation Management Platform
 
-Full-stack foundation for a solar installation management platform (hackathon).
+One system for the whole journey of a rooftop-solar job, from the customer's first enquiry to
+warranty support and financial reporting. See [docs/workflow.md](docs/workflow.md).
 
-## Tech stack
+## Stack
 
-**Frontend** (React + Vite, repo root)
-- React.js, Vite, JavaScript
-- React Router DOM (client-side routing)
-- Tailwind CSS (preflight disabled — landing page untouched)
-- Lucide React, Recharts, Axios
+| Part | Technology |
+|------|------------|
+| Frontend (repo root) | React 19, Vite, React Router, Axios, Lucide icons |
+| Backend (`backend/`) | Next.js 15 route handlers (REST API on port 3001) |
+| Data | Supabase: PostgreSQL, Auth, Storage, Row Level Security |
 
-**Backend** (`backend/`)
-- Next.js 15 App Router (Route Handlers), port 3001
-- Zod (validation), Supabase JS SDK
+## Getting started
 
-**Database & Cloud**
-- Supabase PostgreSQL, Auth, Storage, Row Level Security
+1. **Database** - follow [database/README.md](database/README.md): run `database/solvix_schema.sql`,
+   create the admin user in Supabase Auth, run `database/02_bootstrap_admin.sql`.
+2. **Backend settings** - copy `backend/.env.example` to `backend/.env.local` and fill in
+   `SUPABASE_URL`, `SUPABASE_ANON_KEY` and `SUPABASE_SERVICE_ROLE_KEY`. Never commit this file.
+3. **Run** (from the repo root):
 
-## Repository layout
+   ```
+   npm install
+   npm run dev
+   ```
 
-```
-SOLVIX/
-├── src/              (React frontend — landing page preserved)
-├── public/
-├── backend/          (Next.js API)
-├── database/
-│   └── solvix_complete_schema.sql   (single executable SQL file)
-├── docs/
-│   ├── architecture.md
-│   └── api-documentation.md
-├── .env.example
-├── package.json      (root — npm workspaces + concurrently)
-└── README.md
-```
+   Frontend: http://localhost:5173 - API: http://localhost:3001. The frontend calls `/api/...` and
+   Vite forwards it to the backend, so no CORS or URL settings are needed in development.
 
-## Environment setup
-
-1. Copy `backend/.env.example` → `backend/.env.local` and fill in Supabase
-   credentials (`SUPABASE_URL`, `SUPABASE_ANON_KEY`,
-   `SUPABASE_SERVICE_ROLE_KEY`).
-2. Copy `.env.example` → `.env` at root (frontend) if you want to override
-   `VITE_API_BASE_URL` (default `http://localhost:3001/api/v1`).
-3. Never commit `.env` or `.env.local` — they are gitignored.
-
-## Database (mandatory, one-time)
-
-Execute `database/solvix_complete_schema.sql` once in the Supabase SQL Editor
-against a **fresh** project. See `database/README.md` for full instructions and
-the secure first-Admin bootstrap procedure.
-
-## Commands
-
-From the repository root:
+## Project layout
 
 ```
-npm install                 # installs frontend + backend (workspace) deps
-npm run dev                 # starts frontend (5173) + backend (3001)
-npm run build               # builds frontend + backend
-npm run lint                # lints frontend + backend
+src/
+  App.jsx                routes only
+  pages/
+    Landing.jsx          public website (loads its own fonts/animation)
+    auth/                one sign-in page per user type
+    admin/               overview, people & access, reports, activity log, catalogue
+    sales/               leads, follow-ups, customers, quotations, orders
+    survey/              site surveys, assignments, approvals
+    installation/        jobs, technicians, schedule
+    technician/          technician "My day"
+    warehouse/           stock, purchase orders, packing, serial numbers, dispatch
+    support/             tickets, warranties, claims
+    finance/  subsidy/   dashboards
+    customer/            customer portal
+  components/            route guards, shared layout, public forms
+  config/navigation.js   sidebar menu for every user type
+  context/auth.jsx       signed-in user
+  services/api/          one API wrapper per module
+backend/
+  app/api/auth           sign in, register, refresh
+  app/api/enquiries      public "Get a quote" endpoint
+  app/api/v1/<module>    admin, sales, survey, installation, warehouse, support, finance, subsidy, customer
+  lib/supabase/access.js role and department checks used by every module
+database/                the schema, admin bootstrap and patches
+docs/                    workflow, authentication, module notes
 ```
 
-Endpoints:
-- Frontend: http://localhost:5173
-- Backend health: http://localhost:3001/api/health
-- Backend version: http://localhost:3001/api/v1
+## Tests
 
-## Routes
+```
+cd backend && npm test        # business rules and access rules
+```
 
-- `/` — Landing page (existing, unchanged)
-- `/login/customer` — Customer login
-- `/login/employee` — Employee login
-- `/register/customer` — Customer registration (placeholder)
-- `/register/employee` — Employee registration (placeholder)
-- `/get-quote` — Quote form
+## Documentation
 
-## Notes
-
-- The landing page (src/App.jsx UI, App.css, index.css reset) is intentionally
-  left unchanged. Tailwind preflight is disabled so new pages/dashboards can use
-  Tailwind without affecting the landing page.
-- Backend runs independently on port 3001 with CORS configured for the frontend
-  origin.
-- Do not build complete business dashboards in this foundation task — the
-  database schema and technical setup are ready for future modules.
+- [Workflow and who uses what](docs/workflow.md)
+- [Authentication and roles](docs/authentication-and-roles.md)
+- Module notes: [sales](docs/sales-crm-documentation.md), [survey](docs/site-survey-documentation.md),
+  [quotations & orders](docs/QUOTATION_ORDER_MODULE.md), [warehouse](docs/warehouse-inventory-documentation.md),
+  [installation](docs/installation-module.md)

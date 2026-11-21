@@ -6,3 +6,4 @@ export { customerApi } from './customer';
 export { installationApi } from './installation';
 export { warehouseApi } from './warehouse';
 export { surveyApi } from './survey';
+export { adminApi } from './admin';

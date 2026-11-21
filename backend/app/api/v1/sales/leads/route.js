@@ -60,7 +60,8 @@ export async function GET(request) {
 
     // Enforce Sales Employee scope
     if (!isAdmin) {
-      query = query.eq('assigned_to', profile.id);
+      // own leads plus the unassigned queue (new website enquiries waiting to be picked up)
+      query = query.or(`assigned_to.eq.${profile.id},assigned_to.is.null`);
     } else if (assignedTo) {
       query = query.eq('assigned_to', assignedTo);
     }

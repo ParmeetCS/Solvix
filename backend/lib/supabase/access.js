@@ -73,6 +73,14 @@ export function portalForProfile(profile, deptText) {
   return null; // employee not yet approved into a department
 }
 
+const ACTOR_TTL_MS = 30 * 1000;
+const actorCache = new Map(); // auth user id -> { value, until }
+
+/** Call after changing a user's role, department or status so the change applies at once. */
+export function invalidateActor(authUserId) {
+  if (authUserId) actorCache.delete(authUserId); else actorCache.clear();
+}
+
 /**
  * Resolve the authenticated actor for a request.
  * Returns { actor } on success or { error, status } on failure.
@@ -96,6 +104,11 @@ export async function resolveActor(request) {
     return { error: 'Server is not configured: Supabase credentials are missing.', status: 500 };
   }
 
+  const cached = actorCache.get(user.id);
+  if (cached && cached.until > Date.now()) {
+    return { actor: { ...cached.value, user, adminClient } };
+  }
+
   const { data: profile, error: profileError } = await adminClient
     .from('profiles')
     .select(PROFILE_SELECT)
@@ -114,20 +127,29 @@ export async function resolveActor(request) {
   const deptText = await collectDepartmentText(adminClient, profile);
   const portal = portalForProfile(profile, deptText);
 
-  return {
-    actor: {
-      user,
-      profile,
-      adminClient,
-      roleCode,
-      isAdmin,
-      isCustomer: profile.account_type === 'customer',
-      isEmployee: profile.account_type === 'employee',
-      deptText,
-      portal,
-      inDepartment: (keywords) => isAdmin || departmentMatches(deptText, keywords),
-    },
+  return { actor: buildActor({ user, profile, adminClient, roleCode, isAdmin, deptText, portal }, true) };
+}
+
+function buildActor(base, store) {
+  const actor = {
+    ...base,
+    isCustomer: base.profile.account_type === 'customer',
+    isEmployee: base.profile.account_type === 'employee',
+    inDepartment: (keywords) => base.isAdmin || departmentMatches(base.deptText, keywords),
   };
+  if (store) {
+    actorCache.set(base.user.id, { value: { profile: base.profile, roleCode: base.roleCode, isAdmin: base.isAdmin, deptText: base.deptText, portal: base.portal, isCustomer: actor.isCustomer, isEmployee: actor.isEmployee, inDepartment: actor.inDepartment }, until: Date.now() + ACTOR_TTL_MS });
+    if (actorCache.size > 500) actorCache.delete(actorCache.keys().next().value);
+  }
+  return actor;
+}
+
+/** Admin-only guard shared by every /api/v1/admin endpoint. */
+export async function requireAdminActor(request) {
+  const { actor, error, status } = await resolveActor(request);
+  if (error) return { error, status };
+  if (!actor.isAdmin) return { error: 'Administrator access required.', status: 403 };
+  return { actor };
 }
 
 /** Same as resolveActor but allows only the listed department keywords (or admin). */

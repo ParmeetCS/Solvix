@@ -217,12 +217,9 @@ export default function QuoteForm({ navigate }) {
     setMessage(null);
     try {
       const res = await postJson('/api/enquiries', form);
-      if (!res.ok) {
-        const text = await res.text().catch(() => '');
-        throw new Error(text || 'Unable to submit enquiry');
-      }
-      const data = await res.text().catch(() => '');
-      setMessage({ kind: 'ok', text: data || 'Your enquiry has been submitted.' });
+      const data = await res.json().catch(() => null);
+      if (!res.ok) throw new Error(data?.message || data?.error || 'Unable to submit your enquiry. Please try again.');
+      setMessage({ kind: 'ok', text: data?.message || 'Your enquiry has been submitted.' });
       setForm({ fullName: '', phone: '', email: '', address: '', systemType: '', capacity: '', monthlyBill: '', additional: '' });
     } catch (err) {
       setMessage({ kind: 'error', text: err.message || 'Unable to reach the server. Please try again later.' });

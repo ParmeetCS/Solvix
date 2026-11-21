@@ -22,3 +22,21 @@ export async function requireSalesOrAdmin(request) {
 }
 
 
+/**
+ * Log an action into the activity_logs table
+ */
+export async function logActivity({ actorId, action, entityType, entityId, metadata, departmentId }) {
+  try {
+    const admin = createAdminClient();
+    await admin.from('activity_logs').insert({
+      actor_id: actorId || null,
+      action,
+      entity_type: entityType,
+      entity_id: entityId || null,
+      metadata: metadata || {},
+      department_id: departmentId || null,
+    });
+  } catch (err) {
+    console.error('Failed to write activity log:', err.message);
+  }
+}

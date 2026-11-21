@@ -1,6 +1,4 @@
-/* index.css — base reset only; all landing-page styles are in App.css.
-   Tailwind utilities are added below (preflight disabled) so new pages
-   and dashboards can use Tailwind without affecting the landing page. */
+/* Base reset only; landing-page styles are in App.css and each module has its own stylesheet. */
 body {
   margin: 0;
 }
@@ -10,4 +8,3 @@ body {
   min-height: 100svh;
 }
 
-@tailwind utilities;

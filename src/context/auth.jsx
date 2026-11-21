@@ -89,6 +89,16 @@ export function AuthProvider({ children }) {
     return data.user;
   }, []);
 
+  // Re-reads the signed-in user from the server (e.g. after an admin approves an employee).
+  const refreshUser = useCallback(async () => {
+    const res = await apiClient.get('/api/auth/me');
+    const fresh = res.data?.data?.user;
+    if (!fresh) throw new Error('No user');
+    session.saveUser(fresh);
+    setUser(fresh);
+    return fresh;
+  }, []);
+
   const logout = useCallback(async () => {
     const portal = user?.portal;
     try {
@@ -108,9 +118,10 @@ export function AuthProvider({ children }) {
       isAuthenticated: status === 'authenticated',
       login,
       logout,
+      refreshUser,
       hasModule: (m) => Boolean(user?.modules?.includes(m)),
     }),
-    [user, status, login, logout],
+    [user, status, login, logout, refreshUser],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

@@ -2,22 +2,27 @@ import {
   LayoutDashboard, Users2, CalendarClock, Compass, FileText, UserCheck, ShoppingCart, MessageSquare,
   Boxes, Truck, Wrench, ClipboardCheck, ScanLine, LifeBuoy, ShieldCheck, Coins, BarChart3, Settings,
   Users, Package, Layers, FileSpreadsheet, CheckSquare, QrCode, Ticket, FileCheck2, Landmark, ListTodo,
-  MapPin, Hammer,
+  MapPin, Hammer, ScrollText,
 } from 'lucide-react';
 
+// Administrator menu, in workflow order: enquiry -> survey -> quotation/order ->
+// warehouse -> installation -> support -> finance, then company administration.
 const ADMIN = [
   { label: 'Overview', path: '/admin/dashboard', icon: LayoutDashboard },
-  { label: 'Customers & Leads', path: '/admin/customers', icon: Users2 },
-  { label: 'Quotations & Orders', path: '/sales/quotations', icon: FileText },
+  { label: 'Enquiries & Leads', path: '/sales/leads', icon: Users2 },
+  { label: 'Customers', path: '/sales/customers', icon: UserCheck },
   { label: 'Site Surveys', path: '/survey/dashboard', icon: Compass },
-  { label: 'Inventory & Serial Numbers', path: '/warehouse/dashboard', icon: Boxes },
+  { label: 'Quotations', path: '/sales/quotations', icon: FileText },
+  { label: 'Orders', path: '/sales/orders', icon: ShoppingCart },
+  { label: 'Product Catalogue', path: '/admin/catalogue', icon: Package },
+  { label: 'Warehouse & Inventory', path: '/warehouse/dashboard', icon: Boxes },
   { label: 'Installations & Technicians', path: '/installation/dashboard', icon: Wrench },
-  { label: 'Warranty & Services', path: '/support/dashboard', icon: LifeBuoy },
+  { label: 'Warranty & Support', path: '/support/dashboard', icon: LifeBuoy },
   { label: 'Finance & Invoices', path: '/finance/dashboard', icon: Coins },
   { label: 'Subsidy & Documents', path: '/subsidy/dashboard', icon: Landmark },
   { label: 'Reports & Analytics', path: '/admin/reports', icon: BarChart3 },
-  { label: 'Employees & Access', path: '/admin/employees', icon: Users },
-  { label: 'Settings', path: '/admin/settings', icon: Settings },
+  { label: 'People & Access', path: '/admin/people', icon: Users },
+  { label: 'Activity Log', path: '/admin/activity', icon: ScrollText },
 ];
 
 const SALES = [

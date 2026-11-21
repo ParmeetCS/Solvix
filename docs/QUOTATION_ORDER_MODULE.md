@@ -130,6 +130,6 @@ Run: `npm test --workspace=backend`
 - All tests pass after fixes
 
 ## Known Pre-existing Issues (not related to this module)
-- Admin API routes under `/api/admin/` have ESLint/config compatibility issues with Next.js 15 (these existed before this module's work)
+- (Resolved) the old `/api/admin/*` routes were replaced by `/api/v1/admin/*`.
 - Full production build may require resolving those pre-existing admin route issues
 - No `.env` or Supabase credentials configured for live DB integration tests
