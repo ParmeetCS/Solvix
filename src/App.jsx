@@ -1127,21 +1127,15 @@ void main(){
             </footer>
           </div>
         </>
-      ) : (
-        <section className="page">
-          {route === '/signup' && <SignUp navigate={navigate} initialRole="customer" initialMode="signup" />}
-          {route === '/login/customer' && <SignUp navigate={navigate} initialRole="customer" initialMode="signin" />}
-          {route === '/login/employee' && <SignUp navigate={navigate} initialRole="employee" initialMode="signin" />}
-          {route === '/get-quote' && <QuoteForm navigate={navigate} />}
-          {route !== '/' && route !== '/signup' && route !== '/login/customer' && route !== '/login/employee' && route !== '/get-quote' && (
-            <div className="page-head">
-              <a href="/" onClick={(e) => { e.preventDefault(); navigate('/'); }}>Back to home</a>
-              <h1>Page not found</h1>
-              <p>The page you&rsquo;re looking for doesn&rsquo;t exist.</p>
-            </div>
-          )}
-        </section>
-      )}
+        } />
+        <Route path="/signup" element={<SignUp navigate={navigate} initialRole="customer" initialMode="signup" />} />
+        <Route path="/login/customer" element={<SignUp navigate={navigate} initialRole="customer" initialMode="signin" />} />
+        <Route path="/login/employee" element={<SignUp navigate={navigate} initialRole="employee" initialMode="signin" />} />
+        <Route path="/get-quote" element={<QuoteForm navigate={navigate} />} />
+        <Route path="/register/customer" element={<RegisterCustomer />} />
+        <Route path="/register/employee" element={<RegisterEmployee />} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
 
       {/* Mini floating toggle */}
       <div className="mini" id="mini" role="group" aria-label="Time of day">
