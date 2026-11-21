@@ -1,6 +1,6 @@
 // Authentication, RBAC, and Notification helpers for Accounts, Finance & Subsidy Modules
 import { getUserFromRequest } from './auth.js';
-import { requireDepartment } from './access.js';
+import { requireDepartment, resolveActor } from './access.js';
 import { createAdminClient } from './client.js';
 
 /**
@@ -24,61 +24,34 @@ export async function requireFinanceOrAdmin(request) {
  * Validates request for Customer OR Finance/Admin (e.g. view customer's own invoices or subsidy applications).
  */
 export async function requireCustomerOrFinanceOrAdmin(request) {
-  const { user, error: userError } = await getUserFromRequest(request);
-  if (userError || !user) {
-    return { error: 'Authentication required. Missing or invalid Bearer token.', status: 401 };
+  const { actor, error, status } = await resolveActor(request);
+  if (error) return { error, status };
+
+  const staffAllowed = actor.isAdmin ||
+    (actor.isEmployee && actor.inDepartment(['finance', 'account', 'billing', 'subsidy', 'documentation']));
+  if (!actor.isCustomer && !staffAllowed) {
+    return { error: 'Access denied. Customer, Accounts, Subsidy or Administrator access required.', status: 403 };
   }
-
-  const adminClient = createAdminClient();
-
-  const { data: profile, error: profileError } = await adminClient
-    .from('profiles')
-    .select(`
-      id,
-      auth_user_id,
-      full_name,
-      email,
-      phone,
-      account_type,
-      is_active,
-      role_id,
-      roles:role_id ( id, name, code ),
-      department_id
-    `)
-    .eq('auth_user_id', user.id)
-    .single();
-
-  if (profileError || !profile) {
-    return { error: 'User profile not found.', status: 404 };
-  }
-
-  if (!profile.is_active) {
-    return { error: 'Account suspended or inactive.', status: 403 };
-  }
-
-  const isCustomer = profile.account_type === 'customer';
-  const isAdmin = profile.account_type === 'admin' || profile.roles?.code === 'admin';
-  const isEmployee = profile.account_type === 'employee';
 
   let customerRecord = null;
-  if (isCustomer) {
-    const { data: cust } = await adminClient
+  if (actor.isCustomer) {
+    const { data: cust } = await actor.adminClient
       .from('customers')
       .select('id, customer_code, contact_name, email, phone')
-      .eq('profile_id', profile.id)
+      .eq('profile_id', actor.profile.id)
       .maybeSingle();
     customerRecord = cust;
   }
 
   return {
-    user,
-    profile,
+    user: actor.user,
+    profile: actor.profile,
     customerRecord,
-    isCustomer,
-    isEmployee,
-    isAdmin,
-    adminClient,
-    error: null
+    isCustomer: actor.isCustomer,
+    isEmployee: actor.isEmployee,
+    isAdmin: actor.isAdmin,
+    adminClient: actor.adminClient,
+    error: null,
   };
 }
 

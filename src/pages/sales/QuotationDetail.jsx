@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import SalesLayout from './SalesLayout';
 import QuotationPreview from '@/components/quotation/QuotationPreview';
-import { useAuth } from '@/context/AuthContext';
+import { useAuth } from '@/context/auth';
 import { quotationsApi } from '@/services/api';
 import {
   ArrowLeft,

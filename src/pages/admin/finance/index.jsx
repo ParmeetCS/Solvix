@@ -2,9 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import AdminSidebar from '@/components/AdminSidebar';
 import AdminHeader from '@/components/AdminHeader';
-import { Card, Button, Badge, Notification } from '@/components/ui';
-import { useAuth } from '@/context/AuthContext';
-import { jsonResponse } from '@/services/api';
+import { Card, Button, Badge, Notification, Alert, Table } from '@/components/ui';
+import { useAuth } from '@/context/auth';
 
 const FinanceOverview = () => {
   const { user, status } = useAuth();
@@ -87,21 +86,21 @@ const FinanceOverview = () => {
         {/* Revenue & Expenses Summary Card */}
         <Card style={{ background: '#e3f2fd', marginBottom: '1.5rem' }}>
           <div style={{ padding: '1.5rem' }}>
-            <h3 style={{ margin: '0 0 1rem 0', color: '#1a237e', fontSize: '0.875rem', textTransform: 'uppercase' }},
+            <h3 style={{ margin: '0 0 1rem 0', color: '#1a237e', fontSize: '0.875rem', textTransform: 'uppercase' }}>
               Financial Summary
-            >
+            </h3>
               <Table style={{ width: '100%', borderCollapse: 'collapse' }}>
                 <Table.Row>
-                  <Table.Cell style={{ width: '50%' }>
+                  <Table.Cell style={{ width: '50%' }}>
                     <div style={{ fontSize: '0.875rem', color: '#1a237e' }}>Total Revenue</div>
                     <div style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#1a237e' }}>
-                      {totalRevenue > 0 ? `$${totalRevenue.toFixed(2)}` : '0.00'}
+                      {totalRevenue > 0 ? `₹${totalRevenue.toFixed(2)}` : '0.00'}
                     </div>
                   </Table.Cell>
                   <Table.Cell style={{ width: '50%' }}>
                     <div style={{ fontSize: '0.875rem', color: '#1a237e' }}>Total Expenses</div>
                     <div style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#e53935' }}>
-                      {totalExpenses > 0 ? `$${totalExpenses.toFixed(2)}` : '0.00'}
+                      {totalExpenses > 0 ? `₹${totalExpenses.toFixed(2)}` : '0.00'}
                     </div>
                   </Table.Cell>
                 </Table.Row>
@@ -112,12 +111,11 @@ const FinanceOverview = () => {
                       status={netRevenue >= 0 ? 'success' : 'error'}
                       style={{ marginLeft: 'auto' }}
                     >
-                      {netRevenue >= 0 ? `+$${netRevenue.toFixed(2)}` : `-$${Math.abs(netRevenue).toFixed(2)}`}
+                      {netRevenue >= 0 ? `+₹${netRevenue.toFixed(2)}` : `-₹${Math.abs(netRevenue).toFixed(2)}`}
                     </Badge>
                   </Table.Cell>
                 </Table.Row>
               </Table>
-            </Table>
           </div>
         </Card>
 
@@ -136,7 +134,7 @@ const FinanceOverview = () => {
               </div>
               <div style={{ background: '#fff', padding: '1rem', borderRadius: '8px' }}>
                 <div style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#e53935' }}>
-                  {totalOutstanding > 0 ? `$${totalOutstanding.toFixed(2)}` : '0.00'}
+                  {totalOutstanding > 0 ? `₹${totalOutstanding.toFixed(2)}` : '0.00'}
                 </div>
                 <div style={{ fontSize: '0.75rem', color: '#666' }}>Total Outstanding</div>
               </div>
@@ -196,7 +194,7 @@ const FinanceOverview = () => {
                     alignItems: 'center',
                   }}>
                     <span style={{ fontSize: '0.875rem', color: '#333' }}>
-                      {tx.transaction_type}: {tx.amount > 0 ? `$${tx.amount.toFixed(2)}` : `-$${Math.abs(tx.amount).toFixed(2)}`}
+                      {tx.transaction_type}: {tx.amount > 0 ? `₹${tx.amount.toFixed(2)}` : `-₹${Math.abs(tx.amount).toFixed(2)}`}
                     </span>
                     <span style={{ fontSize: '0.75rem', color: '#666', textTransform: 'uppercase' }}>
                       {tx.transaction_type}

@@ -2,9 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import AdminSidebar from '@/components/AdminSidebar';
 import AdminHeader from '@/components/AdminHeader';
-import { Card, Input, Select, Badge, Notification } from '@/components/ui';
-import { useAuth } from '@/context/AuthContext';
-import { jsonResponse } from '@/services/api';
+import { Card, Input, Select, Badge, Notification, Label, Button } from '@/components/ui';
+import { useAuth } from '@/context/auth';
 
 const ReportsAnalytics = () => {
   const { user, status } = useAuth();
@@ -190,7 +189,7 @@ const ReportsAnalytics = () => {
                 </p>
                 <ul style={{ listStyle: 'none', padding: 0 }}>
                   {Object.entries(employeeDistribution || {}).slice(0, 5).map(([action, count]) => (
-                    <li key={action} style={{ padding: '0.25rem 0', borderBottom: '1pxsolid #f0f0f0' }}>
+                    <li key={action} style={{ padding: '0.25rem 0', borderBottom: '1px solid #f0f0f0' }}>
                       <span style={{ color: '#1a237e', width: '120px', display: 'inline-block' }}>{action}</span>
                       <span>{count}</span>
                     </li>
@@ -220,7 +219,7 @@ const ReportsAnalytics = () => {
               <div style={{ padding: '1.5rem' }}>
                 <h3 style={{ margin: '0 0 0.5rem 0', color: '#1a237e', fontSize: '0.875rem', textTransform: 'uppercase' }}>
                   Lead Conversion
-                </p>
+                </h3>
                 <p style={{ margin: '0', color: '#666', fontSize: '0.75rem' }}>
                   Lead conversion data will appear here
                 </p>

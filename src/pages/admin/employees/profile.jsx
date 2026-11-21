@@ -2,9 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useLocation, useNavigate } from 'react-router-dom';
 import AdminSidebar from '@/components/AdminSidebar';
 import AdminHeader from '@/components/AdminHeader';
-import { Card, Alert } from '@/components/ui';
-import { useAuth } from '@/context/AuthContext';
-import { jsonResponse } from '@/services/api';
+import { Card, Alert, Table, Badge, Button } from '@/components/ui';
+import { useAuth } from '@/context/auth';
 
 const EmployeeProfile = () => {
   const { user, status } = useAuth();
@@ -81,9 +80,9 @@ const EmployeeProfile = () => {
 
           {/* Employee Information Card */}
           <Card style={{ marginBottom: '1.5rem' }}>
-            <h3 style={{ margin: '0 0 1rem 0', color: '#1a237e', fontSize: '0.875rem', textTransform: 'uppercase' }},
+            <h3 style={{ margin: '0 0 1rem 0', color: '#1a237e', fontSize: '0.875rem', textTransform: 'uppercase' }}>
               Employee Information
-            >
+            </h3>
               <Table style={{ width: '100%', borderCollapse: 'collapse' }}>
                 <Table.Row>
                   <Table.Cell style={{ width: '40%' }}>Employee ID</Table.Cell>
@@ -144,7 +143,6 @@ const EmployeeProfile = () => {
                   <Table.Cell>{employee.department_requested || 'None'}</Table.Cell>
                 </Table.Row>
               </Table>
-            </Table>
           </Card>
 
           {/* Assigned Departments */}

@@ -1,109 +1,48 @@
-import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { X, Sun, Menu, LogOut, User, Shield, Mail, MailOpen, Layout, Users, Folder, Coins, BarChart, Bell, Settings } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { Bell, LogOut } from 'lucide-react';
+import { useShell } from '@/hooks/useShell';
 
+// Fixed 64px header to the right of the 240px AdminSidebar.
 const AdminHeader = () => {
-  const navigate = useNavigate();
-  const [notifications, setNotifications] = useState([]);
-  const [unreadCount, setUnreadCount] = useState(0);
-  const [mobileOpen, setMobileOpen] = useState(false);
-
-  // Fetch notifications on mount
-  useEffect(() => {
-    // In a real implementation, this would fetch from the API
-    const mockNotifications = [
-      { id: 1, title: 'New employee access request', type: 'info', read: false },
-      { id: 2, title: 'Pending approval for John Doe', type: 'warning', read: false },
-    ];
-    setNotifications(mockNotifications);
-    setUnreadCount(mockNotifications.filter(n => !n.read).length);
-  }, []);
-
-  const toggleMobile = () => setMobileOpen(!mobileOpen);
+  const { user, handleLogout } = useShell();
 
   return (
     <header
       style={{
-        padding: '1rem 1.5rem',
+        padding: '0 1.5rem',
         background: 'var(--solvix-navy, #1a237e)',
         color: 'white',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
-        height: '64px',
+        height: 64,
         boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
         position: 'fixed',
         top: 0,
-        left: '240px',
+        left: 240,
         right: 0,
-        zIndex: 1000,
-        transition: 'left 0.3s ease',
+        zIndex: 999,
       }}
     >
-      <div className="header-left" style={{
-        display: 'flex',
-        alignItems: 'center',
-        gap: '1rem',
-      }}>
-        <a href="/admin/dashboard" style={{ textDecoration: 'none', color: 'white' }}>
-          <svg width="32" height="32" viewBox="0 0 40 40" style={{ marginRight: '0.5rem' }}>
-            <use href="#sun" width="32" height="32" />
-          </svg>
-          <span style={{ fontWeight: 'bold', color: 'var(--solvix-accent, #f57f17)' }}>SOLVIX</span>
-        </a>
-        <button onClick={toggleMobile} style={{ background: 'none', border: 'none', color: 'white', cursor: 'pointer' }}>
-          {mobileOpen ? <X width="24" height="24" /> : <Menu width="24" height="24" />}
+      <strong style={{ fontSize: '0.95rem', letterSpacing: '0.04em' }}>Administrator Console</strong>
+
+      <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
+        <Link to="/admin/notifications" style={{ color: 'white', display: 'flex' }} aria-label="Notifications">
+          <Bell size={20} />
+        </Link>
+        <div style={{ textAlign: 'right', lineHeight: 1.2 }}>
+          <div style={{ fontSize: '0.85rem', fontWeight: 600 }}>{user?.full_name || user?.email}</div>
+          <div style={{ fontSize: '0.7rem', opacity: 0.7 }}>{user?.email}</div>
+        </div>
+        <button
+          onClick={handleLogout}
+          style={{
+            display: 'flex', alignItems: 'center', gap: 6, background: 'rgba(255,255,255,0.12)',
+            border: 0, color: 'white', padding: '0.45rem 0.8rem', borderRadius: 8, cursor: 'pointer',
+          }}
+        >
+          <LogOut size={16} /> Sign out
         </button>
-      </div>
-
-      <div className="header-right" style={{
-        display: 'flex',
-        alignItems: 'center',
-        gap: '1.5rem',
-      }}>
-        <div style={{ position: 'relative' }}>
-          <button
-            style={{
-              background: 'none',
-              border: 'none',
-              color: 'white',
-              padding: '0.5rem',
-              cursor: 'pointer',
-              fontSize: '1.2rem',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.5rem',
-            }}
-          >
-            <Bell width="20" height="20" />
-            <span
-              style={{
-                position: 'absolute',
-                top: '2px',
-                right: '2px',
-                width: '8px',
-                height: '8px',
-                background: 'var(--solvix-accent, #f57f17)',
-                borderRadius: '50%',
-              }}
-            >
-              {unreadCount > 0 ? unreadCount : ''}
-            </span>
-          </button>
-        </div>
-
-        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-          <User width="24" height="24" />
-          <span style={{ fontSize: '0.875rem', color: 'rgba(255,255,255,0.8)' }}>Admin</span>
-          <svg
-            width="20"
-            height="20"
-            style={{ marginLeft: '0.5rem', color: 'rgba(255,255,255,0.5)' }}
-            aria-hidden="true"
-          >
-            <use href="#log-out" width="20" height="20" />
-          </svg>
-        </div>
       </div>
     </header>
   );

@@ -3,7 +3,7 @@ import { useParams, useLocation, useNavigate } from 'react-router-dom';
 import AdminSidebar from '@/components/AdminSidebar';
 import AdminHeader from '@/components/AdminHeader';
 import { Card, Alert } from '@/components/ui';
-import { useAuth } from '@/context/AuthContext';
+import { useAuth } from '@/context/auth';
 
 const Dashboard = () => {
   const { user, status } = useAuth();
@@ -419,10 +419,10 @@ const Dashboard = () => {
                     Net Revenue: {charts.netRevenue > 0 ? `+${charts.netRevenue}` : charts.netRevenue}
                   </p>
                   <p style={{ margin: '0.25rem 0 0 0', fontSize: '0.75rem', color: '#666' }}>
-                    Total Revenue: {charts.revenue > 0 ? `$${charts.revenue}` : '0'}
+                    Total Revenue: {charts.revenue > 0 ? `₹${charts.revenue}` : '0'}
                   </p>
                   <p style={{ margin: '0.25rem 0 0 0', fontSize: '0.75rem', color: '#666' }}>
-                    Total Expenses: {charts.expenses > 0 ? `$${charts.expenses}` : '0'}
+                    Total Expenses: {charts.expenses > 0 ? `₹${charts.expenses}` : '0'}
                   </p>
                 </div>
               )}

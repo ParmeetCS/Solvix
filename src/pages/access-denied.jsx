@@ -1,24 +1,27 @@
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { useShell } from '@/hooks/useShell';
+import { homeFor } from '@/lib/session';
+import '@/pages/auth/auth.css';
 
 export default function AccessDenied() {
-  const navigate = useNavigate();
+  const { user, handleLogout } = useShell();
 
   return (
-    <section className="page">
-      <div className="page-head">
-        <a
-          href="/"
-          onClick={(e) => { e.preventDefault(); navigate('/'); }}
-          className="back-link"
-        >
-          &larr; Back to home
-        </a>
-        <h1>Access Denied</h1>
+    <div className="auth-page">
+      <div className="auth-card">
+        <div className="auth-heading">
+          <div>
+            <h1>Access denied</h1>
+            <p>Your account does not have permission to open this area.</p>
+          </div>
+        </div>
+        <Link to={homeFor(user)} replace className="auth-submit" style={{ textDecoration: 'none' }}>
+          Go to my dashboard
+        </Link>
+        <p className="auth-foot">
+          Need different access? <button onClick={handleLogout} style={{ background: 'none', border: 0, color: '#d8ee8e', cursor: 'pointer', textDecoration: 'underline' }}>Sign out</button>
+        </p>
       </div>
-
-      <div className="alert alert-error">
-        You do not have permission to access this page. You are not authorized to view content for this department. Please contact an Administrator if you believe this is an error.
-      </div>
-    </section>
+    </div>
   );
 }

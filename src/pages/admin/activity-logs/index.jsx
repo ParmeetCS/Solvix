@@ -2,9 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import AdminSidebar from '@/components/AdminSidebar';
 import AdminHeader from '@/components/AdminHeader';
-import { Table, Input, Select, Badge, Card, Notification } from '@/components/ui';
-import { useAuth } from '@/context/AuthContext';
-import { jsonResponse } from '@/services/api';
+import { Table, Input, Select, Badge, Card, Notification, Button } from '@/components/ui';
+import { useAuth } from '@/context/auth';
 
 const ActivityLogs = () => {
   const { user, status } = useAuth();
@@ -60,13 +59,13 @@ const ActivityLogs = () => {
   }
 
   // Filter options
-  const [actionFilters, setActionFilters] = useState([
+  const actionFilters = [
     { value: '', label: 'All Actions' },
     { value: 'employee_approval', label: 'Employee Approval' },
     { value: 'employee_rejection', label: 'Employee Rejection' },
     { value: 'department_assignment', label: 'Department Assignment' },
     { value: 'status_update', label: 'Status Update' },
-  ]);
+  ];
 
   return (
     <div className="page">

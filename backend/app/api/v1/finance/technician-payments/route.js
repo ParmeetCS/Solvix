@@ -30,7 +30,7 @@ export async function GET(request) {
         created_by,
         technicians:technician_id (
           id,
-          technician_code,
+          employee_code,
           is_available,
           profile:profile_id (
             id,
@@ -67,7 +67,7 @@ export async function GET(request) {
       .from('technicians')
       .select(`
         id,
-        technician_code,
+        employee_code,
         profile:profile_id (
           id,
           full_name,
@@ -132,7 +132,7 @@ export async function POST(request) {
         *,
         technicians:technician_id (
           id,
-          technician_code,
+          employee_code,
           profile:profile_id ( full_name )
         )
       `)

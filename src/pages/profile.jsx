@@ -1,28 +1,10 @@
-import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { apiClient } from '@/services/api';
+import { useAuth } from '@/context/auth';
+import { homeFor } from '@/lib/session';
 
 export default function Profile() {
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const { user, loading } = useAuth();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    // Check authentication
-    const token = localStorage.getItem('solvix_token');
-    if (!token) {
-      setLoading(false);
-      navigate('/login/customer');
-      return;
-    }
-
-    // Fetch user profile
-    // Note: In a full implementation, we'd call an API endpoint
-    // for now, use localStorage data
-    const storedUser = JSON.parse(localStorage.getItem('solvix_user') || 'null');
-    setUser(storedUser);
-    setLoading(false);
-  }, [navigate]);
 
   if (loading) {
     return (
@@ -39,11 +21,11 @@ export default function Profile() {
     <section className="page">
       <div className="page-head">
         <a
-          href="/"
-          onClick={(e) => { e.preventDefault(); navigate('/'); }}
+          href={homeFor(user)}
+          onClick={(e) => { e.preventDefault(); navigate(homeFor(user), { replace: true }); }}
           className="back-link"
         >
-          &larr; Back to home
+          &larr; Back to dashboard
         </a>
         <h1>Profile</h1>
       </div>

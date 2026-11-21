@@ -155,12 +155,12 @@ export async function createNotification({ recipientId, title, message, surveyId
   try {
     const admin = createAdminClient();
     await admin.from('notifications').insert({
-      user_id: recipientId,
+      recipient_id: recipientId,
       title,
-      message,
-      notification_type: type,
-      reference_id: surveyId,
-      is_read: false
+      body: message,
+      type: 'assignment',
+      link: surveyId ? '/survey/requests/' + surveyId : null,
+      read: false,
     });
   } catch (err) {
     // Non-blocking notification logging

@@ -1,101 +1,51 @@
-# SOLVIX Database
+# SOLVIX database
 
-This folder contains the complete, single-file database schema for the SOLVIX
-Solar Installation Management Platform.
+Two files. Run them once, in order, on a **new, empty** Supabase project.
 
-## File
+| Order | File | Purpose |
+|------:|------|---------|
+| 1 | `solvix_schema.sql` | Everything: tables, constraints, functions, Row Level Security, grants, seed roles and departments |
+| 2 | `02_bootstrap_admin.sql` | Promotes the first Administrator (after you create the user in Supabase Auth) |
 
-`database/solvix_complete_schema.sql` — one self-contained, executable SQL
-script that creates the entire initial database structure (tables, indexes,
-functions, triggers, Row Level Security policies) in one go.
+## Setup
 
-## How to execute in Supabase
+1. Create a Supabase project and copy **Project URL**, **anon key** and **service_role key**
+   from *Project Settings → API*.
+2. *SQL Editor* → paste `solvix_schema.sql` → **Run**. You should see
+   `SOLVIX schema created successfully.`
+3. *Authentication → Users → Add user*: create the administrator with **Auto Confirm User** ticked.
+4. Edit the email in `02_bootstrap_admin.sql` and run it.
+5. Put the credentials in `backend/.env.local` (never commit it):
 
-1. **Create a Supabase project**
-   - Go to https://supabase.com and create a new project.
-   - Note the project reference, URL, and API keys from
-     **Project Settings → API**.
-
-2. **Open the SQL Editor**
-   - In the Supabase dashboard, open **SQL Editor** from the left sidebar.
-
-3. **Open the schema file**
-   - Copy the entire contents of
-     `database/solvix_complete_schema.sql`
-     and paste it into the SQL Editor query tab.
-
-4. **Execute once**
-   - Click **Run** to execute the complete script.
-   - The script is designed for a **fresh project**. Do not blindly rerun it on
-     a populated database — it does not drop existing tables or data.
-
-5. **Verify all tables were created**
-   - In the SQL Editor, run:
-     ```sql
-     select table_name
-     from information_schema.tables
-     where table_schema = 'public'
-       and table_type = 'BASE TABLE'
-     order by table_name;
-     ```
-   - You should see tables across sections A–L (profiles, departments, roles,
-     customers, leads, quotations, orders, products, inventory, installations,
-     warranties, service_tickets, invoices, notifications, etc.).
-
-## Creating the first Admin (secure bootstrap)
-
-Do NOT hardcode an Admin UUID or invent an authentication account.
-
-1. Sign up a real user through Supabase Auth (or invite them via the Supabase
-   dashboard **Authentication → Users**).
-2. Copy the new user's `id` from **Authentication → Users**.
-3. Create an `admin` role and assign it:
-   ```sql
-   insert into roles (name, code, is_system)
-   values ('Administrator', 'admin', true)
-   on conflict (code) do nothing;
-
-   update profiles
-   set role_id = (select id from roles where code = 'admin')
-   where auth_user_id = '<REAL_AUTH_USER_ID>';
    ```
-4. Create required departments and permissions as needed, then link them via
-   `role_permissions` and `employee_departments`.
+   SUPABASE_URL=https://<project-ref>.supabase.co
+   SUPABASE_ANON_KEY=<anon key>
+   SUPABASE_SERVICE_ROLE_KEY=<service_role key>
+   ```
+6. *Authentication → Providers → Email*: for customer self-sign-up to work end to end either
+   turn **Confirm email** off, or keep it on and let customers confirm by email before signing in.
 
-## Configuring Supabase environment variables
+## Security model
 
-Create `backend/.env` (from `backend/.env.example`) with:
+* The Next.js backend uses the `service_role` key and checks the caller's account type and
+  department on every request (see `backend/lib/supabase/access.js`).
+* Row Level Security is **enabled on every table** with no open policies. Customers can only
+  see their own orders, invoices and subsidy applications; finance and subsidy staff only
+  their own areas; `anon` has no privileges at all.
+* Storage buckets `survey-attachments`, `subsidy-documents` and `finance-documents` are
+  private and have no storage policies, so only the backend can read or write them.
+* `financial_transactions` is append-only and payments, invoices and expenses can't be deleted;
+  corrections are recorded as reversals, refunds or voids.
 
-```
-SUPABASE_URL=https://your-project-ref.supabase.co
-SUPABASE_ANON_KEY=your-supabase-anon-key
-SUPABASE_SERVICE_ROLE_KEY=your-supabase-service-role-key
-```
+## Roles and departments
 
-- `SUPABASE_URL` and `SUPABASE_ANON_KEY` — from Project Settings → API.
-- `SUPABASE_SERVICE_ROLE_KEY` — the service_role key (server-side only, bypasses RLS).
-- Never commit `.env` to Git. Only `.env.example` is tracked.
+`profiles.account_type` is `admin`, `employee` or `customer`. Employees reach a dashboard only
+after an Administrator assigns a department (seeded codes: `SALES`, `SURVEY`, `INSTALLATION`,
+`WAREHOUSE`, `SUPPORT`, `FINANCE`, `SUBSIDY`).
 
-## Troubleshooting common SQL errors
+## Money rules enforced in the database
 
-| Error | Likely cause | Fix |
-|-------|--------------|-----|
-| `relation "auth.users" does not exist` | Supabase Auth not initialized | Ensure Auth is enabled in the Supabase project; `auth.users` is provided by Supabase automatically. |
-| `permission denied for schema pgcrypto` | pgcrypto extension missing | The script runs `create extension if not exists pgcrypto`; ensure the database user can create extensions (Supabase postgres user can). |
-| `duplicate key` / `already exists` | Script run more than once | The script uses `create table if not exists` and `create extension if not exists`. For a clean state, start from a fresh project. |
-| RLS policy blocks access | Policies restrict non-admin access | Sign in as a user with the `admin` role, or adjust policies temporarily for testing. |
-
-## Table groups
-
-- **A. User & Department:** profiles, departments, roles, permissions, role_permissions, employee_departments
-- **B. Customer & Lead:** customers, customer_addresses, leads, lead_assignments, follow_ups, customer_interactions
-- **C. Site Survey:** site_surveys, survey_assignments, survey_photos, survey_reports, survey_approvals
-- **D. Quotation & Order:** quotations, quotation_items, orders, order_status_history, payments, product_packages, package_items, quotation_status_history, quotation_comments
-- **E. Product & Warehouse:** product_categories, products, warehouses, inventory, stock_movements, inventory_reservations, purchase_orders, purchase_order_items
-- **F. Equipment & Dispatch:** equipment_serial_numbers, dispatches, dispatch_items, equipment_deliveries
-- **G. Technician & Installation:** technicians, technician_assignments, installations, installation_tasks, installation_photos, installation_reports, customer_signatures
-- **H. Warranty:** warranties, warranty_claims, warranty_history
-- **I. Support & Service:** service_tickets, service_ticket_updates, repair_assignments, replacement_records, customer_feedback
-- **J. Accounts & Finance:** invoices, invoice_items, expenses, project_costs, technician_payments, financial_transactions
-- **K. Subsidy & Documentation:** subsidy_applications, subsidy_documents, documents, document_verification_history
-- **L. Notifications & Activity:** notifications, activity_logs
+* Invoice totals are always computed from line items inside the database.
+* One active invoice per order and billing event unless a *supplementary* invoice with a reason is created.
+* A payment counts as **collected** only after it is `verified` (gateway or authorised manual reconciliation).
+* Duplicate payment references and over-payments are rejected.

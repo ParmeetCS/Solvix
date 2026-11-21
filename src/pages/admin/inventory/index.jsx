@@ -2,9 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import AdminSidebar from '@/components/AdminSidebar';
 import AdminHeader from '@/components/AdminHeader';
-import { Card, Button, Badge, Notification } from '@/components/ui';
-import { useAuth } from '@/context/AuthContext';
-import { jsonResponse } from '@/services/api';
+import { Card, Button, Badge, Notification, Alert } from '@/components/ui';
+import { useAuth } from '@/context/auth';
 
 const InventoryOverview = () => {
   const { user, status } = useAuth();
@@ -129,7 +128,7 @@ const InventoryOverview = () => {
               </p>
               <ul style={{ listStyle: 'none', padding: 0 }}>
                 {warehouseOverview.slice(0, 5).map((wh) => (
-                  <li key={wh.id} style={{ padding: '0.25rem 0', borderBottom: '1pxsolid #f0f0f0' }}>
+                  <li key={wh.id} style={{ padding: '0.25rem 0', borderBottom: '1px solid #f0f0f0' }}>
                     <span style={{ color: '#1a237e', fontWeight: 'bold' }}>{wh.name || 'Unnamed'}</span>
                     <span style={{ fontSize: '0.75rem', color: '#666' }}>({wh.code || 'N/A'})</span>
                   </li>
@@ -175,7 +174,6 @@ const InventoryOverview = () => {
                   >
                     Restock
                   </Button>
-                </div>
               </div>
             </Card>
           )}
@@ -201,7 +199,6 @@ const InventoryOverview = () => {
                   >
                     Reorder
                   </Button>
-                </div>
               </div>
             </Card>
           )}

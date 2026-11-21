@@ -1,60 +1,96 @@
 // Centralized API client for SOLVIX frontend.
-// Uses the backend base URL from environment variables so no component
-// hardcodes a backend address. All requests are JSON and errors are
-// normalized into a single shape.
+//
+// Requests go to the same origin ('/api/...') and the Vite dev server proxies
+// them to the Next.js backend, so there is no cross-origin traffic in
+// development. Set VITE_API_BASE_URL only when the backend is hosted elsewhere
+// (the backend then needs FRONTEND_ORIGIN configured for CORS).
 import axios from 'axios';
+import { session } from '@/lib/session';
 
-const BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001/api/v1';
+const CONFIGURED = import.meta.env.VITE_API_BASE_URL;
+const BASE_URL = (CONFIGURED || '/api/v1').replace(/\/$/, '');
+const ROOT_URL = BASE_URL.replace(/\/api\/v1$/, '');
 
 export const apiClient = axios.create({
   baseURL: BASE_URL,
-  headers: {
-    'Content-Type': 'application/json',
-  },
+  headers: { 'Content-Type': 'application/json' },
 });
 
-// Request interceptor: attach auth token when authentication is implemented.
-// The token is read from memory/localStorage here; actual issuance is handled
-// by the auth module in a later task. This keeps components free of auth logic.
-apiClient.interceptors.request.use(
-  (config) => {
-    // If request starts with /api/, direct to backend root so it doesn't become /api/v1/api/...
-    if (config.url && config.url.startsWith('/api/')) {
-      config.baseURL = (import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001/api/v1').replace(/\/api\/v1\/?$/, '');
-    }
-    try {
-      const token = localStorage.getItem('solvix_token');
-      if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
-      }
-    } catch (e) {
-      // localStorage unavailable (e.g. SSR); proceed without token.
-    }
-    return config;
-  },
-  (error) => Promise.reject(error)
-);
+// Plain client without interceptors, used only for token refresh.
+const bare = axios.create({ baseURL: ROOT_URL, headers: { 'Content-Type': 'application/json' } });
 
-// Response interceptor: normalize errors and surface consistent messages.
-// Never logs tokens or secrets.
+apiClient.interceptors.request.use((config) => {
+  // '/api/auth/...' lives at the backend root, not under /api/v1.
+  if (config.url && config.url.startsWith('/api/')) {
+    config.baseURL = ROOT_URL;
+  }
+  const token = session.getToken();
+  if (token) config.headers.Authorization = `Bearer ${token}`;
+  return config;
+});
+
+let refreshing = null;
+
+async function refreshAccessToken() {
+  const refresh_token = session.getRefreshToken();
+  if (!refresh_token) throw new Error('No refresh token');
+  if (!refreshing) {
+    refreshing = bare
+      .post('/api/auth/refresh', { refresh_token })
+      .then((res) => {
+        const data = res.data?.data || {};
+        if (!data.token) throw new Error('Refresh failed');
+        session.save({ token: data.token, refresh_token: data.refresh_token });
+        return data.token;
+      })
+      .finally(() => {
+        refreshing = null;
+      });
+  }
+  return refreshing;
+}
+
+function normalize(error) {
+  const { status, data } = error.response || {};
+  const message =
+    (data && (data.message || data.error)) ||
+    (!error.response
+      ? 'Cannot reach the SOLVIX server. Make sure the backend is running on port 3001.'
+      : status === 401 ? 'Your session has expired. Please sign in again.'
+      : status === 403 ? 'You do not have permission for this action.'
+      : status === 404 ? 'The requested resource was not found.'
+      : status === 429 ? 'Too many requests. Please try again later.'
+      : status >= 500 ? 'Server error. Please try again later.'
+      : 'An unexpected error occurred.');
+  const normalized = new Error(message);
+  normalized.status = status;
+  normalized.data = data;
+  return normalized;
+}
+
 apiClient.interceptors.response.use(
   (response) => response,
-  (error) => {
-    const { status, data } = error.response || {};
-    const message =
-      (data && data.message) ||
-      (data && data.error) ||
-      (status === 401 ? 'Unauthorized. Please sign in again.' :
-       status === 403 ? 'Forbidden. You do not have permission for this action.' :
-       status === 404 ? 'The requested resource was not found.' :
-       status === 429 ? 'Too many requests. Please try again later.' :
-       status >= 500 ? 'Server error. Please try again later.' :
-       'An unexpected error occurred.');
-    const normalized = new Error(message);
-    normalized.status = status;
-    normalized.data = data;
-    return Promise.reject(normalized);
-  }
+  async (error) => {
+    const original = error.config;
+    const isAuthCall = original?.url?.startsWith('/api/auth/login') || original?.url?.startsWith('/api/auth/refresh');
+
+    if (error.response?.status === 401 && original && !original._retried && !isAuthCall && session.getRefreshToken()) {
+      original._retried = true;
+      try {
+        const token = await refreshAccessToken();
+        original.headers.Authorization = `Bearer ${token}`;
+        return apiClient(original);
+      } catch {
+        // fall through to forced sign-out
+      }
+    }
+
+    if (error.response?.status === 401 && !isAuthCall) {
+      // Session is no longer valid: tell the app to sign the user out.
+      window.dispatchEvent(new CustomEvent('solvix:session-expired'));
+    }
+    return Promise.reject(normalize(error));
+  },
 );
 
 export default apiClient;

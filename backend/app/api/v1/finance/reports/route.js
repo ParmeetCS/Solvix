@@ -141,7 +141,7 @@ export async function GET(request) {
         .select(`
           id,
           order_code,
-          total_price,
+          total_amount,
           advance_paid,
           balance_due,
           status,
@@ -154,7 +154,7 @@ export async function GET(request) {
         orderCode: o.order_code,
         customer: o.customer?.contact_name || 'N/A',
         phone: o.customer?.phone || 'N/A',
-        totalPrice: parseFloat(o.total_price) || 0,
+        totalPrice: parseFloat(o.total_amount) || 0,
         advancePaid: parseFloat(o.advance_paid) || 0,
         balanceDue: parseFloat(o.balance_due) || 0,
         orderStatus: o.status
@@ -177,7 +177,7 @@ export async function GET(request) {
           payment_method,
           reference,
           technician:technician_id (
-            technician_code,
+            employee_code,
             profile:profile_id ( full_name )
           ),
           order:order_id ( order_code )
@@ -189,7 +189,7 @@ export async function GET(request) {
 
       const { data: payments } = await query;
       const recs = (payments || []).map(tp => ({
-        technician: tp.technician?.profile?.full_name || tp.technician?.technician_code || 'N/A',
+        technician: tp.technician?.profile?.full_name || tp.technician?.employee_code || 'N/A',
         orderCode: tp.order?.order_code || 'N/A',
         amount: parseFloat(tp.amount) || 0,
         type: tp.payment_type,

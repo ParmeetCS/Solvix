@@ -3,8 +3,7 @@ import { useParams, useLocation, useNavigate } from 'react-router-dom';
 import AdminSidebar from '@/components/AdminSidebar';
 import AdminHeader from '@/components/AdminHeader';
 import { Table, Button, Input, Select, Badge, Icon, Drawer, Dialog, DialogAction, Notification } from '@/components/ui';
-import { useAuth } from '@/context/AuthContext';
-import { jsonResponse } from '@/services/api';
+import { useAuth } from '@/context/auth';
 
 const EmployeeRequests = () => {
   const { user, status } = useAuth();

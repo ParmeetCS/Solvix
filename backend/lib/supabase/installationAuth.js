@@ -174,12 +174,12 @@ export async function createInstallationNotification({ recipientId, title, messa
   try {
     const admin = createAdminClient();
     await admin.from('notifications').insert({
-      user_id: recipientId,
+      recipient_id: recipientId,
       title,
-      message,
-      notification_type: type,
-      reference_id: installationId,
-      is_read: false
+      body: message,
+      type: 'assignment',
+      link: installationId ? '/installation/jobs/' + installationId : null,
+      read: false,
     });
   } catch (err) {
     // Non-blocking

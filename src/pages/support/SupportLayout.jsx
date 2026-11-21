@@ -1,5 +1,5 @@
-import { NavLink, useNavigate } from 'react-router-dom';
-import { useAuth } from '@/context/AuthContext';
+import { NavLink } from 'react-router-dom';
+import { useShell } from '@/hooks/useShell';
 import {
   LifeBuoy,
   LayoutDashboard,
@@ -14,27 +14,10 @@ import {
 import './support.css';
 
 export default function SupportLayout({ children, title, subtitle, actions }) {
-  const { user, logout } = useAuth();
-  const navigate = useNavigate();
+  const { user, navItems, handleLogout } = useShell();
 
-  const handleLogout = async () => {
-    try {
-      await logout();
-      navigate('/login/customer');
-    } catch (e) {
-      navigate('/login/customer');
-    }
-  };
 
-  const navItems = [
-    { label: 'Support Dashboard', path: '/support/dashboard', icon: LayoutDashboard },
-    { label: 'Service Tickets', path: '/support/tickets', icon: Ticket },
-    { label: 'New Ticket', path: '/support/tickets/new', icon: PlusCircle },
-    { label: 'Warranty Registry', path: '/support/warranties', icon: ShieldCheck },
-    { label: 'Warranty Claims', path: '/support/claims', icon: FileCheck2 },
-  ];
 
-  const isCustomer = user?.account_type === 'customer';
 
   return (
     <div className="support-layout">
@@ -64,19 +47,6 @@ export default function SupportLayout({ children, title, subtitle, actions }) {
             );
           })}
 
-          <div style={{ marginTop: 'auto', paddingTop: '1rem', borderTop: '1px solid #1e293b' }}>
-            {isCustomer ? (
-              <NavLink to="/customer/dashboard" className="support-nav-item">
-                <ArrowLeft size={16} />
-                <span>Customer Portal</span>
-              </NavLink>
-            ) : (
-              <NavLink to="/sales/dashboard" className="support-nav-item">
-                <Sun size={16} />
-                <span>Sales & Operations</span>
-              </NavLink>
-            )}
-          </div>
         </nav>
 
         <div className="support-sidebar-footer">

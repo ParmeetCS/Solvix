@@ -1,40 +1,18 @@
-import { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { Menu, Folder, Users, Settings, LogOut, Bell, ChartPie, Mail, Shield, Layout, Box, Coins, BarChart, Briefcase } from 'lucide-react';
+import { NavLink } from 'react-router-dom';
+import { Sun } from 'lucide-react';
+import { getNavItems } from '@/config/navigation';
+import { useAuth } from '@/context/auth';
 
+// Fixed 240px sidebar. Pages that render it offset their content by 240px.
 const AdminSidebar = () => {
-  const [collapsed, setCollapsed] = useState(false);
-  const [mobileOpen, setMobileOpen] = useState(false);
-  const location = useLocation();
-  const path = location.pathname;
-
-  const navItems = [
-    { key: 'dashboard', label: 'Dashboard', icon: Layout, href: '/admin/dashboard' },
-    { key: 'employees', label: 'Employee Management', icon: Users, href: '/admin/employees' },
-    { key: 'departments', label: 'Department Management', icon: Folder, href: '/admin/departments' },
-    { key: 'customers', label: 'Customer Management', icon: Users, href: '/admin/customers' },
-    { key: 'leads', label: 'Lead Overview', icon: Mail, href: '/admin/leads' },
-    { key: 'projects', label: 'Project Management', icon: Briefcase, href: '/admin/projects' },
-    { key: 'inventory', label: 'Inventory Overview', icon: Box, href: '/admin/inventory' },
-    { key: 'finance', label: 'Finance Overview', icon: Coins, href: '/admin/finance' },
-    { key: 'reports', label: 'Reports & Analytics', icon: BarChart, href: '/admin/reports' },
-    { key: 'activity-logs', label: 'Activity Logs', icon: Shield, href: '/admin/activity-logs' },
-    { key: 'notifications', label: 'Notifications', icon: Bell, href: '/admin/notifications' },
-    { key: 'settings', label: 'Settings', icon: Settings, href: '/admin/settings' },
-  ];
-
-  const isActive = (key) => {
-    const exactMatch = `/admin/${key}` === path;
-    const prefixMatch = path.startsWith(`/admin/${key}/`);
-    return exactMatch || prefixMatch;
-  };
+  const { user } = useAuth();
+  const items = getNavItems({ portal: 'admin', modules: user?.modules });
 
   return (
     <aside
       className="sidebar"
       style={{
-        width: collapsed ? '80px' : '240px',
-        transition: 'width 0.3s ease',
+        width: 240,
         background: 'var(--solvix-navy, #1a237e)',
         height: '100vh',
         color: 'white',
@@ -47,116 +25,49 @@ const AdminSidebar = () => {
         zIndex: 1000,
       }}
     >
-      <div className="sidebar-brand" style={{
-        padding: '1rem 1.5rem',
-        borderBottom: '1px solid rgba(255,255,255,0.1)',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-      }}>
-        <svg width="32" height="32" viewBox="0 0 40 40" style={{ marginRight: '0.5rem' }}>
-          <use href="#sun" width="32" height="32" />
-        </svg>
-        <span style={{ fontWeight: 'bold', color: 'var(--solvix-accent, #f57f17)' }}>SOLVIX</span>
+      <div
+        style={{
+          padding: '1rem 1.5rem',
+          borderBottom: '1px solid rgba(255,255,255,0.1)',
+          display: 'flex',
+          alignItems: 'center',
+          gap: 10,
+          height: 64,
+          boxSizing: 'border-box',
+        }}
+      >
+        <Sun size={22} color="#f57f17" />
+        <span style={{ fontWeight: 700, letterSpacing: '0.08em', color: '#f57f17' }}>SOLVIX</span>
+        <span style={{ fontSize: 11, opacity: 0.6, marginLeft: 'auto' }}>Admin</span>
       </div>
 
-      <nav className="sidebar-nav" style={{
-        flex: 1,
-        overflowY: 'auto',
-        padding: '1rem 0',
-      }}>
-        {navItems.map((item) => (
-          <div
-            key={item.key}
-            style={{
-              margin: '0.25rem 1rem',
-              borderRadius: '8px',
-            }}
-            onMouseEnter={() => setCollapsed(false)}
-          >
-            <Link
-              to={item.href}
-              style={{
+      <nav style={{ flex: 1, overflowY: 'auto', padding: '0.75rem 0.75rem' }}>
+        {items.map((item) => {
+          const Icon = item.icon;
+          return (
+            <NavLink
+              key={item.path}
+              to={item.path}
+              style={({ isActive }) => ({
                 display: 'flex',
                 alignItems: 'center',
-                padding: '0.75rem 1rem',
+                gap: 12,
+                padding: '0.65rem 0.85rem',
+                margin: '2px 0',
                 color: 'white',
                 textDecoration: 'none',
-                borderRadius: '8px',
-                margin: '0.125rem 1rem',
-                transition: 'background 0.2s',
-                width: '100%',
-                background: isActive(item.key) ? 'rgba(245, 127, 23, 0.15)' : 'transparent',
-              }}
-              aria-current={isActive(item.key) ? 'page' : 'false'}
+                borderRadius: 8,
+                fontSize: '0.875rem',
+                background: isActive ? 'rgba(245, 127, 23, 0.18)' : 'transparent',
+                borderLeft: isActive ? '3px solid #f57f17' : '3px solid transparent',
+              })}
             >
-              {item.icon && <item.icon size={20} style={{ marginRight: '0.75rem', flexShrink: 0 }} />}
-              <span
-                style={{
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  whiteSpace: 'nowrap',
-                  color: 'white',
-                  fontSize: '0.875rem',
-                  display: collapsed ? 'none' : 'block',
-                }}
-              >
-                {item.label}
-              </span>
-            </Link>
-          </div>
-        ))}
+              <Icon size={18} style={{ flexShrink: 0 }} />
+              <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{item.label}</span>
+            </NavLink>
+          );
+        })}
       </nav>
-
-      <div className="sidebar-footer" style={{
-        padding: '1rem 1.5rem',
-        borderTop: '1px solid rgba(255,255,255,0.1)',
-        marginTop: 'auto',
-        display: 'flex',
-        flexDirection: 'column',
-      }}>
-        <button
-          onClick={() => setMobileOpen(true)}
-          style={{
-            background: 'none',
-            border: 'none',
-            color: 'rgba(255,255,255,0.5)',
-            padding: '0.5rem',
-            cursor: 'pointer',
-            alignSelf: 'flex-end',
-            fontSize: '1.2rem',
-          }}
-          aria-label="Toggle sidebar"
-        >
-          {collapsed ? '⦿' : '☰'}
-        </button>
-        <div
-          style={{
-            marginTop: '0.5rem',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'flex-end',
-          }}
-        >
-          <span
-            style={{
-              marginRight: '1rem',
-              fontSize: '0.75rem',
-              color: 'rgba(255,255,255,0.5)',
-            }}
-          >
-            Admin
-          </span>
-          <svg
-            width="20"
-            height="20"
-            style={{ marginLeft: '0.5rem', color: 'rgba(255,255,255,0.5)' }}
-            aria-hidden="true"
-          >
-            <use href="#log-out" width="20" height="20" />
-          </svg>
-        </div>
-      </div>
     </aside>
   );
 };

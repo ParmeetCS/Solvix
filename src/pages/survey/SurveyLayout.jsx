@@ -1,5 +1,5 @@
 import { NavLink, useNavigate, Link } from 'react-router-dom';
-import { useAuth } from '@/context/AuthContext';
+import { useShell } from '@/hooks/useShell';
 import {
   Compass,
   LayoutDashboard,
@@ -15,25 +15,9 @@ import {
 import './survey.css';
 
 export default function SurveyLayout({ children, title, subtitle, actions }) {
-  const { user, logout } = useAuth();
-  const navigate = useNavigate();
+  const { user, navItems, handleLogout } = useShell();
 
-  const handleLogout = async () => {
-    try {
-      await logout();
-      navigate('/login/employee');
-    } catch (e) {
-      navigate('/login/employee');
-    }
-  };
 
-  const navItems = [
-    { label: 'Survey Dashboard', path: '/survey/dashboard', icon: LayoutDashboard },
-    { label: 'Survey Requests', path: '/survey/requests', icon: ClipboardList },
-    { label: 'Assignments & Workload', path: '/survey/assignments', icon: CalendarCheck2 },
-    { label: 'Visit Schedule', path: '/survey/schedule', icon: Calendar },
-    { label: 'Approvals Queue', path: '/survey/approvals', icon: CheckCheck },
-  ];
 
   return (
     <div className="survey-layout">
@@ -47,23 +31,6 @@ export default function SurveyLayout({ children, title, subtitle, actions }) {
         </div>
 
         <nav className="survey-nav">
-          <NavLink
-            to="/"
-            className="survey-nav-item"
-            style={{ marginBottom: '4px', opacity: 0.8 }}
-          >
-            <Home size={18} />
-            <span>Public Site</span>
-          </NavLink>
-
-          <Link
-            to="/sales/dashboard"
-            className="survey-nav-item"
-            style={{ marginBottom: '8px', opacity: 0.8 }}
-          >
-            <Layers size={18} />
-            <span>Sales & CRM</span>
-          </Link>
 
           {navItems.map((item) => {
             const Icon = item.icon;

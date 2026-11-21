@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { installationApi } from '@/services/api';
-import { useAuth } from '@/context/AuthContext';
+import InstallationLayout from '../installation/InstallationLayout';
 import {
   Wrench,
   Calendar,
@@ -22,9 +22,6 @@ import {
 import '../installation/installation.css';
 
 export default function TechnicianDashboard() {
-  const { user, logout } = useAuth();
-  const navigate = useNavigate();
-
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -46,15 +43,6 @@ export default function TechnicianDashboard() {
     }
   };
 
-  const handleLogout = async () => {
-    try {
-      await logout();
-      navigate('/login/employee');
-    } catch (e) {
-      navigate('/login/employee');
-    }
-  };
-
   const counts = data?.counts || {
     totalAssigned: 0,
     todayCount: 0,
@@ -72,45 +60,15 @@ export default function TechnicianDashboard() {
   const tech = data?.technician || {};
 
   return (
-    <div style={{ minHeight: '100vh', background: '#080e1b', color: '#f1f5f9', fontFamily: '"Instrument Sans", system-ui, sans-serif', paddingBottom: '40px' }}>
-      {/* Top Mobile Bar */}
-      <header style={{ background: 'rgba(13, 23, 42, 0.95)', borderBottom: '1px solid rgba(255, 255, 255, 0.08)', padding: '14px 20px', position: 'sticky', top: 0, zIndex: 40, backdropFilter: 'blur(8px)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-          <div style={{ width: 34, height: 34, borderRadius: 8, background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#080e1b' }}>
-            <Wrench size={18} />
-          </div>
-          <div>
-            <div style={{ fontSize: '0.95rem', fontWeight: 700, color: '#fff', lineHeight: 1.1 }}>
-              SOLVIX FIELD TECH
-            </div>
-            <div style={{ fontSize: '0.72rem', color: '#34d399' }}>
-              {tech.full_name || 'Field Technician'} ({tech.employee_code || 'TECH'})
-            </div>
-          </div>
-        </div>
-
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-          <button
-            onClick={loadMyJobs}
-            style={{ background: 'rgba(255,255,255,0.06)', border: 'none', color: '#94a3b8', padding: '6px 10px', borderRadius: 6, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 4, fontSize: '0.75rem' }}
-          >
-            <RefreshCw size={13} /> Sync
-          </button>
-          <Link
-            to="/installation/dashboard"
-            style={{ background: 'rgba(245,158,11,0.15)', color: '#f59e0b', padding: '6px 10px', borderRadius: 6, textDecoration: 'none', fontSize: '0.75rem', fontWeight: 600 }}
-          >
-            Manager View
-          </Link>
-          <button
-            onClick={handleLogout}
-            style={{ background: 'transparent', border: 'none', color: '#64748b', cursor: 'pointer', padding: 4 }}
-            title="Sign Out"
-          >
-            <LogOut size={16} />
-          </button>
-        </div>
-      </header>
+    <InstallationLayout
+      title="My Day"
+      subtitle={`${tech.full_name || 'Field technician'}${tech.employee_code ? ' (' + tech.employee_code + ')' : ''}`}
+      actions={
+        <button className="inst-btn inst-btn-secondary inst-btn-sm" onClick={loadMyJobs}>
+          <RefreshCw size={13} /> Sync
+        </button>
+      }
+    >
 
       <div className="tech-mobile-container">
         {/* Safety Standard Notice Banner */}
@@ -283,6 +241,6 @@ export default function TechnicianDashboard() {
           </div>
         </div>
       </div>
-    </div>
+    </InstallationLayout>
   );
 }

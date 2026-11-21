@@ -3,8 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import AdminSidebar from '@/components/AdminSidebar';
 import AdminHeader from '@/components/AdminHeader';
 import { Table, Button, Input, Select, Badge, Card, Notification } from '@/components/ui';
-import { useAuth } from '@/context/AuthContext';
-import { jsonResponse } from '@/services/api';
+import { useAuth } from '@/context/auth';
 
 const LeadOverview = () => {
   const { user, status } = useAuth();

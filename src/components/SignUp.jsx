@@ -201,7 +201,7 @@ export default function SignUp({ navigate, initialRole = 'customer', initialMode
 
   /* ── Tab switch resets errors/messages ─────────────────────────────── */
   const switchRole = (r) => { setRole(r); setErrors({}); setMessage(null); };
-  const switchMode = () => { setMode(m => m === 'signup' ? 'signin' : 'signup'); setErrors({}); setMessage(null); };
+  const switchMode = () => navigate(role === 'customer' ? '/login/customer' : '/login/employee');
 
   /* ── Submit ─────────────────────────────────────────────────────────── */
   const handleSubmit = async (e) => {
@@ -218,45 +218,13 @@ export default function SignUp({ navigate, initialRole = 'customer', initialMode
           ? { full_name: fullName, email, phone, password, confirm_password: confirmPassword, role: 'customer' }
           : { full_name: fullName, email, requested_department: department, password, confirm_password: confirmPassword, role: 'employee' };
       } else {
-        endpoint = '/api/auth/login';
-        payload  = { email, password };
+        return;
       }
 
       const res  = await postJson(endpoint, payload);
       const data = await res.json().catch(() => null);
 
       if (!res.ok) throw new Error(data?.message || data?.error || (mode === 'signup' ? 'Registration failed.' : 'Login failed.'));
-
-      // Handle sign in
-      if (mode === 'signin') {
-        const token = data?.token || data?.data?.token || 'session_' + Date.now();
-        const user = data?.user || data?.data?.user || { email, full_name: fullName, account_type: role };
-
-        localStorage.setItem('solvix_token', token);
-        localStorage.setItem('solvix_user', JSON.stringify(user));
-        localStorage.setItem('solvix_role', user.account_type || role);
-
-        setMessage({
-          kind: 'ok',
-          text: `Signed in successfully. Redirecting to your dashboard...`,
-        });
-
-        setTimeout(() => {
-          if (user.account_type === 'admin') {
-            navigate('/admin/dashboard');
-          } else if (user.account_type === 'employee') {
-            if (user.department === 'Sales' || user.department_id === 'Sales' || !user.department) {
-              navigate('/sales/dashboard');
-            } else {
-              navigate('/pending-approval');
-            }
-          } else {
-            // Customer Dashboard
-            navigate('/customer/dashboard');
-          }
-        }, 700);
-        return;
-      }
 
       // Handle sign up
       if (mode === 'signup') {
@@ -265,18 +233,13 @@ export default function SignUp({ navigate, initialRole = 'customer', initialMode
             kind: 'ok',
             text: 'Account created successfully! Please sign in to access your portal.',
           });
-          setTimeout(() => {
-            setMode('signin');
-            setMessage(null);
-          }, 1200);
+          setTimeout(() => navigate('/login/customer', { replace: true }), 1200);
         } else {
           setMessage({
             kind: 'ok',
-            text: 'Employee registration submitted! An Administrator will review your account.',
+            text: 'Employee registration submitted! An Administrator must approve your department before you can sign in to a dashboard.',
           });
-          setTimeout(() => {
-            navigate('/pending-approval');
-          }, 1500);
+          setTimeout(() => navigate('/login/employee', { replace: true }), 1800);
         }
       }
     } catch (err) {

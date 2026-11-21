@@ -2,13 +2,12 @@ import { useState, useEffect } from 'react';
 import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import './App.css';
 import SignUp from './components/SignUp';
-import CustomerLogin from './components/CustomerLogin';
-import EmployeeLogin from './components/EmployeeLogin';
 import QuoteForm from './components/QuoteForm';
-import RegisterCustomer from './pages/auth/RegisterCustomer';
-import RegisterEmployee from './pages/auth/RegisterEmployee';
 import NotFound from './pages/shared/NotFound';
 import PendingApproval from './pages/pending-approval';
+import AccessDenied from './pages/access-denied';
+import RoleLogin, { EmployeePortalChooser } from './pages/auth/RoleLogin';
+import { RequireAuth, PublicOnly, PendingOnly } from './components/route-guards';
 import Profile from './pages/profile';
 import CustomerDashboard from './pages/customer/CustomerDashboard';
 import AdminDashboard from './pages/admin/dashboard';
@@ -45,6 +44,70 @@ import WarrantyClaimsList from './pages/support/WarrantyClaimsList';
 
 // Admin Catalogue
 import AdminCatalogue from './pages/admin/catalogue';
+
+// Customer portal extras
+import CustomerInstallation from './pages/customer/CustomerInstallation';
+import CustomerWarranty from './pages/customer/CustomerWarranty';
+import CustomerServiceRequests from './pages/customer/CustomerServiceRequests';
+
+// Technician
+import TechnicianDashboard from './pages/technician/TechnicianDashboard';
+
+// Site Survey
+import SurveyDashboard from './pages/survey/SurveyDashboard';
+import SurveyRequestsList from './pages/survey/SurveyRequestsList';
+import SurveyAssignments from './pages/survey/SurveyAssignments';
+import SurveySchedule from './pages/survey/SurveySchedule';
+import SurveyApprovals from './pages/survey/SurveyApprovals';
+import SurveyDetail from './pages/survey/SurveyDetail';
+import SurveyInspectionForm from './pages/survey/SurveyInspectionForm';
+
+// Installation
+import InstallationDashboard from './pages/installation/InstallationDashboard';
+import InstallationJobsList from './pages/installation/InstallationJobsList';
+import InstallationJobDetail from './pages/installation/InstallationJobDetail';
+import InstallationAssignments from './pages/installation/InstallationAssignments';
+import InstallationSchedule from './pages/installation/InstallationSchedule';
+import TechniciansList from './pages/installation/TechniciansList';
+import TechnicianDetail from './pages/installation/TechnicianDetail';
+
+// Warehouse
+import WarehouseDashboard from './pages/warehouse/WarehouseDashboard';
+import ProductsList from './pages/warehouse/ProductsList';
+import ProductForm from './pages/warehouse/ProductForm';
+import InventoryList from './pages/warehouse/InventoryList';
+import InventoryDetail from './pages/warehouse/InventoryDetail';
+import PurchaseOrdersList from './pages/warehouse/PurchaseOrdersList';
+import NewPurchaseOrder from './pages/warehouse/NewPurchaseOrder';
+import PackingQueue from './pages/warehouse/PackingQueue';
+import OrderPacking from './pages/warehouse/OrderPacking';
+import SerialNumbersList from './pages/warehouse/SerialNumbersList';
+import SerialRegistration from './pages/warehouse/SerialRegistration';
+import DispatchesList from './pages/warehouse/DispatchesList';
+import NewDispatch from './pages/warehouse/NewDispatch';
+import DispatchDetail from './pages/warehouse/DispatchDetail';
+
+// Finance & Subsidy
+import FinanceDashboard from './pages/finance/FinanceDashboard';
+import SubsidyDashboard from './pages/subsidy/SubsidyDashboard';
+
+// Admin console
+import CustomerManagement from './pages/admin/customers';
+import CustomerProfile from './pages/admin/customers/[id]/profile';
+import DepartmentManagement from './pages/admin/departments';
+import DepartmentProfile from './pages/admin/departments/[id]/profile';
+import EmployeeManagement from './pages/admin/employees';
+import EmployeeProfile from './pages/admin/employees/profile';
+import EmployeeRequests from './pages/admin/employees/requests';
+import LeadOverview from './pages/admin/leads';
+import ProjectManagement from './pages/admin/projects';
+import InventoryOverview from './pages/admin/inventory';
+import FinanceOverview from './pages/admin/finance';
+import ReportsAnalytics from './pages/admin/reports';
+import AdminSettings from './pages/admin/settings';
+import Notifications from './pages/admin/notifications';
+import ActivityLogs from './pages/admin/activity-logs';
+
 
 export default function App() {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -549,7 +612,7 @@ void main(){
 
       <Routes>
         <Route path="/" element={
-          <>
+          <PublicOnly><>
             {/* HERO */}
             <div className="hero-pin" id="heroPin">
               <main className="hero" id="hero">
@@ -1167,55 +1230,120 @@ void main(){
                 </div>
               </footer>
             </div>
-          </>
+          </></PublicOnly>
         } />
-        <Route path="/signup" element={<SignUp navigate={navigate} initialRole="customer" initialMode="signup" />} />
-        <Route path="/login/customer" element={<SignUp navigate={navigate} initialRole="customer" initialMode="signin" />} />
-        <Route path="/login/employee" element={<SignUp navigate={navigate} initialRole="employee" initialMode="signin" />} />
+        {/* Public: a separate sign-in page for every user type */}
+        <Route path="/signup" element={<PublicOnly><SignUp navigate={navigate} initialRole="customer" initialMode="signup" /></PublicOnly>} />
         <Route path="/get-quote" element={<QuoteForm navigate={navigate} />} />
-        <Route path="/register/customer" element={<RegisterCustomer />} />
-        <Route path="/register/employee" element={<RegisterEmployee />} />
+        <Route path="/register/customer" element={<PublicOnly><SignUp navigate={navigate} initialRole="customer" initialMode="signup" /></PublicOnly>} />
+        <Route path="/register/employee" element={<PublicOnly><SignUp navigate={navigate} initialRole="employee" initialMode="signup" /></PublicOnly>} />
+        <Route path="/login/customer" element={<PublicOnly><RoleLogin portal="customer" /></PublicOnly>} />
+        <Route path="/login/sales" element={<PublicOnly><RoleLogin portal="sales" /></PublicOnly>} />
+        <Route path="/login/technician" element={<PublicOnly><RoleLogin portal="technician" /></PublicOnly>} />
+        <Route path="/login/staff" element={<PublicOnly><RoleLogin portal="staff" /></PublicOnly>} />
+        <Route path="/login/admin" element={<PublicOnly><RoleLogin portal="admin" /></PublicOnly>} />
+        <Route path="/login/employee" element={<PublicOnly><EmployeePortalChooser /></PublicOnly>} />
 
-        <Route path="/customer/dashboard" element={<CustomerDashboard />} />
-        <Route path="/admin/dashboard" element={<AdminDashboard />} />
-        <Route path="/pending-approval" element={<PendingApproval />} />
-        <Route path="/profile" element={<Profile />} />
+        {/* Signed-in utility pages */}
+        <Route path="/pending-approval" element={<PendingOnly><PendingApproval /></PendingOnly>} />
+        <Route path="/access-denied" element={<AccessDenied />} />
+        <Route path="/profile" element={<RequireAuth><Profile /></RequireAuth>} />
 
-        {/* Sales & CRM Module Routes */}
-        <Route path="/sales/dashboard" element={<SalesDashboard />} />
-        <Route path="/sales/leads" element={<LeadsList />} />
-        <Route path="/sales/leads/new" element={<NewLead />} />
-        <Route path="/sales/leads/:id" element={<LeadDetail />} />
-        <Route path="/sales/follow-ups" element={<FollowUpsList />} />
-        <Route path="/sales/whatsapp-enquiries" element={<WhatsAppEnquiries />} />
-        <Route path="/sales/customers" element={<CustomersList />} />
-        <Route path="/sales/customers/:id" element={<CustomerDetail />} />
+        {/* Customer portal */}
+        <Route path="/customer/dashboard" element={<RequireAuth portals={['customer']}><CustomerDashboard /></RequireAuth>} />
+        <Route path="/customer/orders" element={<RequireAuth portals={['customer']}><CustomerOrders /></RequireAuth>} />
+        <Route path="/customer/orders/:id" element={<RequireAuth portals={['customer']}><CustomerOrderDetail /></RequireAuth>} />
+        <Route path="/customer/quotations" element={<RequireAuth portals={['customer']}><CustomerQuotations /></RequireAuth>} />
+        <Route path="/customer/quotations/:id" element={<RequireAuth portals={['customer']}><CustomerQuotationDetail /></RequireAuth>} />
+        <Route path="/customer/installation" element={<RequireAuth portals={['customer']}><CustomerInstallation /></RequireAuth>} />
+        <Route path="/customer/warranty" element={<RequireAuth portals={['customer']}><CustomerWarranty /></RequireAuth>} />
+        <Route path="/customer/service-requests" element={<RequireAuth portals={['customer']}><CustomerServiceRequests /></RequireAuth>} />
 
-        {/* Quotations & Orders Module Routes */}
-        <Route path="/sales/quotations" element={<QuotationsList />} />
-        <Route path="/sales/quotations/new" element={<QuotationBuilder />} />
-        <Route path="/sales/quotations/:id/edit" element={<QuotationBuilder />} />
-        <Route path="/sales/quotations/:id" element={<QuotationDetail />} />
-        <Route path="/sales/orders" element={<OrdersList />} />
-        <Route path="/sales/orders/:id" element={<OrderDetail />} />
+        {/* Sales team (and admins) */}
+        <Route path="/sales/dashboard" element={<RequireAuth module="sales"><SalesDashboard /></RequireAuth>} />
+        <Route path="/sales/leads" element={<RequireAuth module="sales"><LeadsList /></RequireAuth>} />
+        <Route path="/sales/leads/new" element={<RequireAuth module="sales"><NewLead /></RequireAuth>} />
+        <Route path="/sales/leads/:id" element={<RequireAuth module="sales"><LeadDetail /></RequireAuth>} />
+        <Route path="/sales/follow-ups" element={<RequireAuth module="sales"><FollowUpsList /></RequireAuth>} />
+        <Route path="/sales/whatsapp-enquiries" element={<RequireAuth module="sales"><WhatsAppEnquiries /></RequireAuth>} />
+        <Route path="/sales/customers" element={<RequireAuth module="sales"><CustomersList /></RequireAuth>} />
+        <Route path="/sales/customers/:id" element={<RequireAuth module="sales"><CustomerDetail /></RequireAuth>} />
+        <Route path="/sales/quotations" element={<RequireAuth module="sales"><QuotationsList /></RequireAuth>} />
+        <Route path="/sales/quotations/new" element={<RequireAuth module="sales"><QuotationBuilder /></RequireAuth>} />
+        <Route path="/sales/quotations/:id/edit" element={<RequireAuth module="sales"><QuotationBuilder /></RequireAuth>} />
+        <Route path="/sales/quotations/:id" element={<RequireAuth module="sales"><QuotationDetail /></RequireAuth>} />
+        <Route path="/sales/orders" element={<RequireAuth module="sales"><OrdersList /></RequireAuth>} />
+        <Route path="/sales/orders/:id" element={<RequireAuth module="sales"><OrderDetail /></RequireAuth>} />
 
-        {/* Customer Portal Routes */}
-        <Route path="/customer/quotations" element={<CustomerQuotations />} />
-        <Route path="/customer/quotations/:id" element={<CustomerQuotationDetail />} />
-        <Route path="/customer/orders" element={<CustomerOrders />} />
-        <Route path="/customer/orders/:id" element={<CustomerOrderDetail />} />
+        {/* Technician */}
+        <Route path="/technician/dashboard" element={<RequireAuth module="technician"><TechnicianDashboard /></RequireAuth>} />
 
-        {/* Support & Warranty Module Routes */}
-        <Route path="/support/dashboard" element={<SupportDashboard />} />
-        <Route path="/support/tickets" element={<TicketsList />} />
-        <Route path="/support/tickets/new" element={<NewTicket />} />
-        <Route path="/support/tickets/:id" element={<TicketDetail />} />
-        <Route path="/support/warranties" element={<WarrantiesList />} />
-        <Route path="/support/warranties/:id" element={<WarrantyDetail />} />
-        <Route path="/support/claims" element={<WarrantyClaimsList />} />
+        {/* Site survey */}
+        <Route path="/survey/dashboard" element={<RequireAuth module="survey"><SurveyDashboard /></RequireAuth>} />
+        <Route path="/survey/requests" element={<RequireAuth module="survey"><SurveyRequestsList /></RequireAuth>} />
+        <Route path="/survey/requests/:id" element={<RequireAuth module="survey"><SurveyDetail /></RequireAuth>} />
+        <Route path="/survey/requests/:id/inspection" element={<RequireAuth module="survey"><SurveyInspectionForm /></RequireAuth>} />
+        <Route path="/survey/assignments" element={<RequireAuth module="survey"><SurveyAssignments /></RequireAuth>} />
+        <Route path="/survey/schedule" element={<RequireAuth module="survey"><SurveySchedule /></RequireAuth>} />
+        <Route path="/survey/approvals" element={<RequireAuth module="survey"><SurveyApprovals /></RequireAuth>} />
 
-        {/* Admin Catalogue Routes */}
-        <Route path="/admin/catalogue" element={<AdminCatalogue />} />
+        {/* Installation */}
+        <Route path="/installation/dashboard" element={<RequireAuth module="installation"><InstallationDashboard /></RequireAuth>} />
+        <Route path="/installation/jobs" element={<RequireAuth module="installation"><InstallationJobsList /></RequireAuth>} />
+        <Route path="/installation/jobs/:id" element={<RequireAuth module="installation"><InstallationJobDetail /></RequireAuth>} />
+        <Route path="/installation/assignments" element={<RequireAuth module="installation"><InstallationAssignments /></RequireAuth>} />
+        <Route path="/installation/schedule" element={<RequireAuth module="installation"><InstallationSchedule /></RequireAuth>} />
+        <Route path="/installation/technicians" element={<RequireAuth module="installation"><TechniciansList /></RequireAuth>} />
+        <Route path="/installation/technicians/:id" element={<RequireAuth module="installation"><TechnicianDetail /></RequireAuth>} />
+
+        {/* Warehouse */}
+        <Route path="/warehouse/dashboard" element={<RequireAuth module="warehouse"><WarehouseDashboard /></RequireAuth>} />
+        <Route path="/warehouse/products" element={<RequireAuth module="warehouse"><ProductsList /></RequireAuth>} />
+        <Route path="/warehouse/products/new" element={<RequireAuth module="warehouse"><ProductForm /></RequireAuth>} />
+        <Route path="/warehouse/products/:id" element={<RequireAuth module="warehouse"><ProductForm /></RequireAuth>} />
+        <Route path="/warehouse/inventory" element={<RequireAuth module="warehouse"><InventoryList /></RequireAuth>} />
+        <Route path="/warehouse/inventory/:id" element={<RequireAuth module="warehouse"><InventoryDetail /></RequireAuth>} />
+        <Route path="/warehouse/purchase-orders" element={<RequireAuth module="warehouse"><PurchaseOrdersList /></RequireAuth>} />
+        <Route path="/warehouse/purchase-orders/new" element={<RequireAuth module="warehouse"><NewPurchaseOrder /></RequireAuth>} />
+        <Route path="/warehouse/packing" element={<RequireAuth module="warehouse"><PackingQueue /></RequireAuth>} />
+        <Route path="/warehouse/packing/:orderId" element={<RequireAuth module="warehouse"><OrderPacking /></RequireAuth>} />
+        <Route path="/warehouse/serial-numbers" element={<RequireAuth module="warehouse"><SerialNumbersList /></RequireAuth>} />
+        <Route path="/warehouse/serial-numbers/register" element={<RequireAuth module="warehouse"><SerialRegistration /></RequireAuth>} />
+        <Route path="/warehouse/dispatches" element={<RequireAuth module="warehouse"><DispatchesList /></RequireAuth>} />
+        <Route path="/warehouse/dispatches/new" element={<RequireAuth module="warehouse"><NewDispatch /></RequireAuth>} />
+        <Route path="/warehouse/dispatches/:id" element={<RequireAuth module="warehouse"><DispatchDetail /></RequireAuth>} />
+
+        {/* Support & warranty */}
+        <Route path="/support/dashboard" element={<RequireAuth module="support"><SupportDashboard /></RequireAuth>} />
+        <Route path="/support/tickets" element={<RequireAuth module="support"><TicketsList /></RequireAuth>} />
+        <Route path="/support/tickets/new" element={<RequireAuth module="support"><NewTicket /></RequireAuth>} />
+        <Route path="/support/tickets/:id" element={<RequireAuth module="support"><TicketDetail /></RequireAuth>} />
+        <Route path="/support/warranties" element={<RequireAuth module="support"><WarrantiesList /></RequireAuth>} />
+        <Route path="/support/warranties/:id" element={<RequireAuth module="support"><WarrantyDetail /></RequireAuth>} />
+        <Route path="/support/claims" element={<RequireAuth module="support"><WarrantyClaimsList /></RequireAuth>} />
+
+        {/* Finance & subsidy */}
+        <Route path="/finance/dashboard" element={<RequireAuth module="finance"><FinanceDashboard /></RequireAuth>} />
+        <Route path="/subsidy/dashboard" element={<RequireAuth module="subsidy"><SubsidyDashboard /></RequireAuth>} />
+
+        {/* Administrator console */}
+        <Route path="/admin/dashboard" element={<RequireAuth portals={['admin']}><AdminDashboard /></RequireAuth>} />
+        <Route path="/admin/catalogue" element={<RequireAuth portals={['admin']}><AdminCatalogue /></RequireAuth>} />
+        <Route path="/admin/customers" element={<RequireAuth portals={['admin']}><CustomerManagement /></RequireAuth>} />
+        <Route path="/admin/customers/:id" element={<RequireAuth portals={['admin']}><CustomerProfile /></RequireAuth>} />
+        <Route path="/admin/departments" element={<RequireAuth portals={['admin']}><DepartmentManagement /></RequireAuth>} />
+        <Route path="/admin/departments/:id" element={<RequireAuth portals={['admin']}><DepartmentProfile /></RequireAuth>} />
+        <Route path="/admin/employees" element={<RequireAuth portals={['admin']}><EmployeeManagement /></RequireAuth>} />
+        <Route path="/admin/employees/requests" element={<RequireAuth portals={['admin']}><EmployeeRequests /></RequireAuth>} />
+        <Route path="/admin/employees/:id" element={<RequireAuth portals={['admin']}><EmployeeProfile /></RequireAuth>} />
+        <Route path="/admin/leads" element={<RequireAuth portals={['admin']}><LeadOverview /></RequireAuth>} />
+        <Route path="/admin/projects" element={<RequireAuth portals={['admin']}><ProjectManagement /></RequireAuth>} />
+        <Route path="/admin/inventory" element={<RequireAuth portals={['admin']}><InventoryOverview /></RequireAuth>} />
+        <Route path="/admin/finance" element={<RequireAuth portals={['admin']}><FinanceOverview /></RequireAuth>} />
+        <Route path="/admin/reports" element={<RequireAuth portals={['admin']}><ReportsAnalytics /></RequireAuth>} />
+        <Route path="/admin/settings" element={<RequireAuth portals={['admin']}><AdminSettings /></RequireAuth>} />
+        <Route path="/admin/notifications" element={<RequireAuth portals={['admin']}><Notifications /></RequireAuth>} />
+        <Route path="/admin/activity-logs" element={<RequireAuth portals={['admin']}><ActivityLogs /></RequireAuth>} />
 
         <Route path="*" element={<NotFound />} />
       </Routes>

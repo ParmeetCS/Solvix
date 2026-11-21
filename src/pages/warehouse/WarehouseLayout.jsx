@@ -1,5 +1,5 @@
 import { NavLink, useNavigate, Link } from 'react-router-dom';
-import { useAuth } from '@/context/AuthContext';
+import { useShell } from '@/hooks/useShell';
 import {
   Boxes,
   LayoutDashboard,
@@ -16,27 +16,9 @@ import {
 import './warehouse.css';
 
 export default function WarehouseLayout({ children, title, subtitle, actions }) {
-  const { user, logout } = useAuth();
-  const navigate = useNavigate();
+  const { user, navItems, handleLogout } = useShell();
 
-  const handleLogout = async () => {
-    try {
-      await logout();
-      navigate('/login/employee');
-    } catch (e) {
-      navigate('/login/employee');
-    }
-  };
 
-  const navItems = [
-    { label: 'Warehouse Dashboard', path: '/warehouse/dashboard', icon: LayoutDashboard },
-    { label: 'Products & Catalog', path: '/warehouse/products', icon: Package },
-    { label: 'Stock & Inventory', path: '/warehouse/inventory', icon: Layers },
-    { label: 'Purchase Orders', path: '/warehouse/purchase-orders', icon: FileSpreadsheet },
-    { label: 'Order Packing', path: '/warehouse/packing', icon: CheckSquare },
-    { label: 'Serial & QR Registry', path: '/warehouse/serial-numbers', icon: QrCode },
-    { label: 'Dispatches & Delivery', path: '/warehouse/dispatches', icon: Truck },
-  ];
 
   return (
     <div className="warehouse-layout">
@@ -50,23 +32,6 @@ export default function WarehouseLayout({ children, title, subtitle, actions }) 
         </div>
 
         <nav className="warehouse-nav">
-          <NavLink
-            to="/"
-            className="warehouse-nav-item"
-            style={{ marginBottom: '4px', opacity: 0.8 }}
-          >
-            <Home size={18} />
-            <span>Public Site</span>
-          </NavLink>
-
-          <Link
-            to="/sales/dashboard"
-            className="warehouse-nav-item"
-            style={{ marginBottom: '8px', opacity: 0.8 }}
-          >
-            <Boxes size={18} />
-            <span>Sales & CRM</span>
-          </Link>
 
           <div style={{ height: '1px', background: 'rgba(255,255,255,0.06)', margin: '6px 0' }} />
 
@@ -90,14 +55,14 @@ export default function WarehouseLayout({ children, title, subtitle, actions }) 
         <div className="warehouse-sidebar-footer">
           <div className="warehouse-user-card">
             <div className="warehouse-avatar">
-              {(user?.email?.[0] || 'W').toUpperCase()}
+              {((user?.full_name || user?.email || 'W')[0]).toUpperCase()}
             </div>
             <div style={{ overflow: 'hidden', flex: 1 }}>
               <div style={{ fontSize: '0.85rem', fontWeight: 600, color: '#f8fafc', whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden' }}>
-                {user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'Warehouse Staff'}
+                {user?.full_name || user?.email?.split('@')[0] || 'Warehouse Staff'}
               </div>
               <div style={{ fontSize: '0.72rem', color: '#94a3b8' }}>
-                {user?.app_metadata?.role || 'Inventory Specialist'}
+                {user?.department || 'Inventory Specialist'}
               </div>
             </div>
           </div>

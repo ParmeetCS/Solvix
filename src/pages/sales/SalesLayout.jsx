@@ -1,5 +1,5 @@
-import { NavLink, useNavigate } from 'react-router-dom';
-import { useAuth } from '@/context/AuthContext';
+import { NavLink } from 'react-router-dom';
+import { useShell } from '@/hooks/useShell';
 import {
   LayoutDashboard,
   Users2,
@@ -19,36 +19,10 @@ import {
 import './crm.css';
 
 export default function SalesLayout({ children, title, subtitle, actions }) {
-  const { user, logout } = useAuth();
-  const navigate = useNavigate();
+  const { user, navItems, handleLogout } = useShell();
 
-  const handleLogout = async () => {
-    try {
-      await logout();
-      navigate('/login/customer');
-    } catch (e) {
-      navigate('/login/customer');
-    }
-  };
 
-  const navItems = [
-    { label: 'Sales Dashboard', path: '/sales/dashboard', icon: LayoutDashboard },
-    { label: 'Leads Pipeline', path: '/sales/leads', icon: Users2 },
-    { label: 'Follow-ups', path: '/sales/follow-ups', icon: CalendarClock },
-    { label: 'Site Surveys', path: '/survey/dashboard', icon: Compass },
-    { label: 'WhatsApp Enquiries', path: '/sales/whatsapp-enquiries', icon: MessageSquare },
-    { label: 'Customers', path: '/sales/customers', icon: UserCheck },
-    { label: 'Quotations', path: '/sales/quotations', icon: FileText },
-    { label: 'Orders', path: '/sales/orders', icon: ShoppingCart },
-    { label: 'Warehouse & Stock', path: '/warehouse/dashboard', icon: Boxes },
-    { label: 'Support & Warranty', path: '/support/dashboard', icon: LifeBuoy },
-  ];
 
-  const isAdmin =
-    user?.account_type === 'admin' || String(user?.role || '').toLowerCase() === 'admin';
-  if (isAdmin) {
-    navItems.push({ label: 'Catalogue', path: '/admin/catalogue', icon: Package });
-  }
 
   return (
     <div className="crm-layout">
@@ -62,14 +36,6 @@ export default function SalesLayout({ children, title, subtitle, actions }) {
         </div>
 
         <nav className="crm-nav">
-          <NavLink
-            to="/"
-            className="crm-nav-item"
-            style={{ marginBottom: '8px', opacity: 0.8 }}
-          >
-            <Home size={18} />
-            <span>Public Site</span>
-          </NavLink>
 
           {navItems.map((item) => {
             const Icon = item.icon;

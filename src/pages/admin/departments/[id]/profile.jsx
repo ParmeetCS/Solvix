@@ -2,9 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useLocation, useNavigate } from 'react-router-dom';
 import AdminSidebar from '@/components/AdminSidebar';
 import AdminHeader from '@/components/AdminHeader';
-import { Card, Table, Badge } from '@/components/ui';
-import { useAuth } from '@/context/AuthContext';
-import { jsonResponse } from '@/services/api';
+import { Card, Table, Badge, Alert, Button } from '@/components/ui';
+import { useAuth } from '@/context/auth';
 
 const DepartmentProfile = () => {
   const { user, status } = useAuth();
@@ -149,6 +148,7 @@ const DepartmentProfile = () => {
         )}
 </Table.Cell>
 </Table.Row>
+))}
 </Table.TableBody>
 </Table>
 </Card>

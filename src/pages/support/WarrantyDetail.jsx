@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import SupportLayout from './SupportLayout';
 import { supportApi } from '@/services/api';
-import { useAuth } from '@/context/AuthContext';
+import { useAuth } from '@/context/auth';
 import {
   ShieldCheck,
   ShieldAlert,

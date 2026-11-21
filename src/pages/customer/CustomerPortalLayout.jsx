@@ -1,25 +1,13 @@
-import { NavLink, useNavigate } from 'react-router-dom';
-import { useAuth } from '@/context/AuthContext';
+import { NavLink } from 'react-router-dom';
+import { useShell } from '@/hooks/useShell';
 import { FileText, ShoppingCart, Home, LogOut, Sun } from 'lucide-react';
 import '../sales/crm.css';
 import '../sales/quotations.css';
 
 export default function CustomerPortalLayout({ children, title, subtitle, actions }) {
-  const { user, logout } = useAuth();
-  const navigate = useNavigate();
+  const { user, navItems, handleLogout } = useShell();
 
-  const handleLogout = async () => {
-    try {
-      await logout();
-    } finally {
-      navigate('/login/customer');
-    }
-  };
 
-  const navItems = [
-    { label: 'My Quotations', path: '/customer/quotations', icon: FileText },
-    { label: 'My Orders', path: '/customer/orders', icon: ShoppingCart },
-  ];
 
   return (
     <div className="crm-layout">
@@ -32,10 +20,6 @@ export default function CustomerPortalLayout({ children, title, subtitle, action
         </div>
 
         <nav className="crm-nav">
-          <NavLink to="/" className="crm-nav-item" style={{ marginBottom: 8, opacity: 0.8 }}>
-            <Home size={18} />
-            <span>Public Site</span>
-          </NavLink>
           {navItems.map((item) => {
             const Icon = item.icon;
             return (
