@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { KeyRound, Sun } from 'lucide-react';
 import { apiClient } from '@/services/api';
-import './auth.css';
+import AuthLayout from './AuthLayout';
 
 // Supabase puts the recovery token in the link's URL fragment: /reset-password#access_token=...&type=recovery
 function readToken() {
@@ -41,7 +41,7 @@ export default function ResetPassword() {
   const invalid = !token;
 
   return (
-    <div className="auth-page">
+    <AuthLayout panel="reset">
       <div className="auth-card">
         <Link to="/login/customer" className="auth-back">&larr; Back to sign in</Link>
         <div className="auth-brand"><span className="auth-brand-mark"><Sun size={20} /></span><span>SOLVIX</span></div>
@@ -71,6 +71,6 @@ export default function ResetPassword() {
           </form>
         )}
       </div>
-    </div>
+    </AuthLayout>
   );
 }

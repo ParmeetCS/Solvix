@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useShell } from '@/hooks/useShell';
 import { useAuth } from '@/context/auth';
-import '@/pages/auth/auth.css';
+import AuthLayout from '@/pages/auth/AuthLayout';
 
 export default function PendingApproval() {
   const { user, handleLogout } = useShell();
@@ -30,7 +30,7 @@ export default function PendingApproval() {
   }, [check]);
 
   return (
-    <div className="auth-page">
+    <AuthLayout panel="pending">
       <div className="auth-card">
         <div className="auth-heading">
           <div>
@@ -53,6 +53,6 @@ export default function PendingApproval() {
           <button onClick={handleLogout} style={{ background: 'none', border: 0, color: 'var(--accent-text)', cursor: 'pointer', textDecoration: 'underline' }}>Sign out</button>
         </p>
       </div>
-    </div>
+    </AuthLayout>
   );
 }

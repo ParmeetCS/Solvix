@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { KeyRound, Sun } from 'lucide-react';
 import { apiClient } from '@/services/api';
-import './auth.css';
+import AuthLayout from './AuthLayout';
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState('');
@@ -26,7 +26,7 @@ export default function ForgotPassword() {
   };
 
   return (
-    <div className="auth-page">
+    <AuthLayout panel="forgot">
       <div className="auth-card">
         <Link to="/login/customer" className="auth-back">&larr; Back to sign in</Link>
         <div className="auth-brand"><span className="auth-brand-mark"><Sun size={20} /></span><span>SOLVIX</span></div>
@@ -50,6 +50,6 @@ export default function ForgotPassword() {
           </form>
         )}
       </div>
-    </div>
+    </AuthLayout>
   );
 }

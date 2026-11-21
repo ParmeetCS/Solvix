@@ -1,22 +1,23 @@
 import { useState } from 'react';
 import { postJson } from '../api';
+import AuthLayout from '../pages/auth/AuthLayout';
 
 /* ─── Design tokens matching the landing page night theme ──────────────── */
 const T = {
-  bg:       '#000000',
-  card:     'rgba(5, 10, 25, 0.80)',
-  line:     'rgba(255,255,255,0.11)',
-  ink:      '#ffffff',
-  muted:    '#9fb0c8',
-  accent:   '#60a5fa',
-  accentDk: '#1d4ed8',
-  input:    'rgba(255,255,255,0.045)',
-  inputBd:  'rgba(255,255,255,0.10)',
-  focus:    'rgba(96,165,250,0.55)',
-  err:      '#f87171',
-  errBg:    'rgba(248,113,113,0.10)',
-  ok:       'var(--c-green-soft)',
-  okBg:     'rgba(134,239,172,0.10)',
+  bg:       'var(--app-bg)',
+  card:     'rgba(var(--surface-rgb), 0.8)',
+  line:     'rgba(var(--ink-rgb), 0.12)',
+  ink:      'var(--text-strong)',
+  muted:    'var(--text-muted)',
+  accent:   'var(--auth-btn-bg)',      // dark button in light mode, lime in dark mode
+  accentDk: 'var(--text-strong)',
+  input:    'var(--auth-field-bg)',
+  inputBd:  'var(--auth-field-line)',
+  focus:    'var(--text-strong)',
+  err:      'var(--c-red)',
+  errBg:    'rgba(248, 113, 113, 0.10)',
+  ok:       'var(--c-green)',
+  okBg:     'rgba(74, 222, 128, 0.10)',
 };
 
 // Same names as the departments in the database, so an administrator can approve
@@ -47,8 +48,8 @@ const inputStyle = {
   background: T.input,
   border: `1px solid ${T.inputBd}`,
   borderRadius: '10px',
-  padding: '11px 14px',
-  fontSize: '15px',
+  padding: 'clamp(8px, 1.3vh, 11px) 14px',
+  fontSize: '14px',
   fontFamily: 'inherit',
   color: T.ink,
   outline: 'none',
@@ -89,7 +90,7 @@ function PasswordInput({ id, value, onChange, placeholder = '••••••�
           ...inputStyle,
           paddingRight: '42px',
           borderColor: focused ? T.accentDk : T.inputBd,
-          boxShadow: focused ? `0 0 0 3px rgba(96,165,250,0.14)` : 'none',
+          boxShadow: focused ? `0 0 0 3px rgba(var(--ink-rgb), 0.1)` : 'none',
         }}
       />
       <button
@@ -144,7 +145,7 @@ function TextInput({ id, type = 'text', value, onChange, placeholder, autoComple
       style={{
         ...inputStyle,
         borderColor: focused ? T.accentDk : T.inputBd,
-        boxShadow: focused ? `0 0 0 3px rgba(96,165,250,0.14)` : 'none',
+        boxShadow: focused ? `0 0 0 3px rgba(var(--ink-rgb), 0.1)` : 'none',
       }}
     />
   );
@@ -167,7 +168,7 @@ function FocusSelect({ id, value, onChange, children }) {
           cursor: 'pointer',
           paddingRight: '36px',
           borderColor: focused ? T.accentDk : T.inputBd,
-          boxShadow: focused ? `0 0 0 3px rgba(96,165,250,0.14)` : 'none',
+          boxShadow: focused ? `0 0 0 3px rgba(var(--ink-rgb), 0.1)` : 'none',
         }}
       >
         {children}
@@ -275,18 +276,8 @@ export default function SignUp({ navigate, initialRole = 'customer', initialMode
 
   /* ── Render ──────────────────────────────────────────────────────────── */
   return (
-    <div className="solvix-signup-wrap" style={{
-      minHeight: '100vh',
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      justifyContent: 'center',
-      padding: '100px 20px 60px',
-      position: 'relative',
-      zIndex: 0,
-      background: '#000000',
-    }}>
-      <div style={{ width: '100%', maxWidth: '480px' }}>
+    <AuthLayout panel={role === 'customer' ? 'signup-customer' : 'signup-employee'}>
+      <div style={{ width: '100%', maxWidth: '400px' }}>
 
         {/* Back link */}
         <a
@@ -300,7 +291,7 @@ export default function SignUp({ navigate, initialRole = 'customer', initialMode
             fontWeight: 500,
             color: T.muted,
             textDecoration: 'none',
-            marginBottom: '28px',
+            marginBottom: 'clamp(6px, 1.6vh, 18px)',
             transition: 'color 0.15s',
           }}
           onMouseEnter={e => e.currentTarget.style.color = T.ink}
@@ -313,14 +304,14 @@ export default function SignUp({ navigate, initialRole = 'customer', initialMode
         </a>
 
         {/* Brand */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '20px' }}>
+        <div className="su-brand" style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '14px' }}>
           <span style={{
             width: '30px', height: '30px', borderRadius: '7px',
             background: T.accent,
             display: 'flex', alignItems: 'center', justifyContent: 'center',
           }}>
             <svg width="16" height="16" viewBox="0 0 17 17" fill="none">
-              <path d="M9.5 2L4 9.5H8.5L7.5 15L13 7.5H8.5L9.5 2Z" fill="#ffffff"/>
+              <path d="M9.5 2L4 9.5H8.5L7.5 15L13 7.5H8.5L9.5 2Z" fill="var(--auth-btn-fg)"/>
             </svg>
           </span>
           <span style={{ fontWeight: 700, fontSize: '14px', letterSpacing: '0.12em', color: T.ink }}>SOLVIX</span>
@@ -328,16 +319,17 @@ export default function SignUp({ navigate, initialRole = 'customer', initialMode
 
         {/* Heading */}
         <h1 style={{
-          fontSize: 'clamp(30px, 6vw, 42px)',
+          fontSize: 'clamp(26px, 4vw, 30px)',
+          textAlign: 'center',
           fontWeight: 500,
           letterSpacing: '-0.03em',
           lineHeight: 1.1,
           color: T.ink,
-          margin: '0 0 10px',
+          margin: '0 0 6px',
         }}>
           {isSignUp ? <>Create your <em style={{ fontStyle: 'italic', color: T.accent }}>Solvix</em> account</> : 'Welcome back to Solvix'}
         </h1>
-        <p style={{ fontSize: '14px', color: T.muted, marginBottom: '24px', lineHeight: 1.55 }}>
+        <p className="su-sub" style={{ fontSize: '13px', color: T.muted, marginBottom: 'clamp(8px, 1.8vh, 16px)', lineHeight: 1.5, textAlign: 'center' }}>
           {subtitle}
         </p>
 
@@ -388,7 +380,7 @@ export default function SignUp({ navigate, initialRole = 'customer', initialMode
                 fontFamily: 'inherit',
                 transition: 'all 0.2s',
                 ...(role === tab.value
-                  ? { background: T.accent, color: '#ffffff', boxShadow: '0 2px 10px rgba(0,0,0,0.3)' }
+                  ? { background: T.accent, color: 'var(--auth-btn-fg)', boxShadow: '0 2px 10px rgba(0,0,0,0.18)' }
                   : { background: 'transparent', color: T.muted }),
               }}
             >
@@ -400,20 +392,17 @@ export default function SignUp({ navigate, initialRole = 'customer', initialMode
 
         {/* Form card */}
         <div style={{
-          background: T.card,
-          border: `1px solid ${T.line}`,
-          borderRadius: '18px',
-          padding: '28px',
-          backdropFilter: 'blur(18px)',
-          WebkitBackdropFilter: 'blur(18px)',
+          background: 'transparent',
+          border: 'none',
+          padding: '0',
         }}>
           {/* Card header */}
           <div style={{
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            paddingBottom: '16px',
-            marginBottom: '20px',
+            paddingBottom: '8px',
+            marginBottom: 'clamp(8px, 1.6vh, 14px)',
             borderBottom: `1px solid ${T.line}`,
           }}>
             <span style={{ fontSize: '15px', fontWeight: 600, color: T.ink }}>
@@ -463,8 +452,9 @@ export default function SignUp({ navigate, initialRole = 'customer', initialMode
               </button>
             </div>
           ) : (
-          <form onSubmit={handleSubmit} noValidate style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+          <form onSubmit={handleSubmit} noValidate style={{ display: 'flex', flexDirection: 'column', gap: 'clamp(8px, 1.5vh, 14px)' }}>
 
+            <div className="su-row">
             {/* Full name — signup only */}
             {isSignUp && (
               <Field label="Full name" error={errors.fullName}>
@@ -485,6 +475,7 @@ export default function SignUp({ navigate, initialRole = 'customer', initialMode
                 autoComplete="email"
               />
             </Field>
+            </div>
 
             {/* Phone — customer signup only */}
             {isSignUp && role === 'customer' && (
@@ -505,12 +496,13 @@ export default function SignUp({ navigate, initialRole = 'customer', initialMode
                   onChange={e => setDepartment(e.target.value)}
                 >
                   {DEPARTMENTS.map(d => (
-                    <option key={d} value={d} style={{ background: '#000000', color: '#fff' }}>{d}</option>
+                    <option key={d} value={d} style={{ background: 'var(--surface-solid)', color: 'var(--text-strong)' }}>{d}</option>
                   ))}
                 </FocusSelect>
               </Field>
             )}
 
+            <div className="su-row">
             {/* Password */}
             <Field label="Password" error={errors.password}>
               <PasswordInput
@@ -530,6 +522,7 @@ export default function SignUp({ navigate, initialRole = 'customer', initialMode
                 />
               </Field>
             )}
+            </div>
 
             {/* Forgot password link — signin only */}
             {!isSignUp && (
@@ -553,7 +546,7 @@ export default function SignUp({ navigate, initialRole = 'customer', initialMode
                 fontWeight: 500,
                 lineHeight: 1.4,
                 background: message.kind === 'ok' ? T.okBg : T.errBg,
-                border: `1px solid ${message.kind === 'ok' ? 'rgba(134,239,172,0.3)' : 'rgba(248,113,113,0.3)'}`,
+                border: `1px solid ${message.kind === 'ok' ? 'rgba(74, 222, 128, 0.35)' : 'rgba(248, 113, 113, 0.35)'}`,
                 color: message.kind === 'ok' ? T.ok : T.err,
               }}>
                 {message.text}
@@ -566,18 +559,18 @@ export default function SignUp({ navigate, initialRole = 'customer', initialMode
               disabled={submitting}
               style={{
                 width: '100%',
-                padding: '13px',
+                padding: 'clamp(10px, 1.5vh, 13px)',
                 borderRadius: '99px',
                 border: 'none',
-                background: submitting ? 'rgba(216,238,142,0.6)' : T.accent,
-                color: '#ffffff',
+                background: submitting ? 'var(--text-dim)' : T.accent,
+                color: 'var(--auth-btn-fg)',
                 fontSize: '15px',
                 fontWeight: 700,
                 fontFamily: 'inherit',
                 cursor: submitting ? 'not-allowed' : 'pointer',
                 letterSpacing: '0.01em',
                 transition: 'opacity 0.2s, transform 0.15s',
-                marginTop: '4px',
+                marginTop: '2px',
               }}
               onMouseEnter={e => { if (!submitting) e.currentTarget.style.opacity = '0.88'; }}
               onMouseLeave={e => { e.currentTarget.style.opacity = '1'; }}
@@ -604,6 +597,6 @@ export default function SignUp({ navigate, initialRole = 'customer', initialMode
           )}
         </div>
       </div>
-    </div>
+    </AuthLayout>
   );
 }

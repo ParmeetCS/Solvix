@@ -3,7 +3,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Eye, EyeOff, LogIn, ShieldCheck, Sun, Wrench, UserRound, Briefcase, Boxes } from 'lucide-react';
 import { useAuth } from '@/context/auth';
 import { homeFor, LOGIN_PATHS } from '@/lib/session';
-import './auth.css';
+import AuthLayout from './AuthLayout';
 
 export const PORTAL_CONFIG = {
   admin: {
@@ -82,7 +82,7 @@ export default function RoleLogin({ portal }) {
   };
 
   return (
-    <div className="auth-page">
+    <AuthLayout panel={portal}>
       <div className="auth-card">
         <Link to="/" className="auth-back">&larr; Back to home</Link>
 
@@ -152,7 +152,7 @@ export default function RoleLogin({ portal }) {
           ))}
         </div>
       </div>
-    </div>
+    </AuthLayout>
   );
 }
 
@@ -164,7 +164,7 @@ export function EmployeePortalChooser() {
     ['staff', 'Operations', 'Warehouse, support, accounts and subsidy', Boxes],
   ];
   return (
-    <div className="auth-page">
+    <AuthLayout panel="employee">
       <div className="auth-card">
         <Link to="/" className="auth-back">&larr; Back to home</Link>
         <div className="auth-brand">
@@ -201,6 +201,6 @@ export function EmployeePortalChooser() {
           <Link to={LOGIN_PATHS.admin}>Administrator</Link>
         </div>
       </div>
-    </div>
+    </AuthLayout>
   );
 }
