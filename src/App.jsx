@@ -568,7 +568,7 @@ void main(){
               <div className="ui">
                 <h1>
                   <span className="l1">
-                    <span className="w">$0</span> <span className="w">Electricity</span> <span className="w">Bills</span>
+                    <span className="w">0</span> <span className="w">Electricity</span> <span className="w">Bills</span>
                   </span>
                   <span className="l2">
                     <i><span className="w">for</span> <span className="w">the</span> <span className="w">next</span></i>{' '}
@@ -577,8 +577,8 @@ void main(){
                 </h1>
                 <div className="dock">
                   <div className="toggle" role="group" aria-label="Time of day">
-                    <button data-t="0" aria-pressed="false"><b>Morning</b><small>$0 for Electricity</small></button>
-                    <button data-t="1" aria-pressed="true"><b>Night</b><small>$0 for Electricity</small></button>
+                    <button data-t="0" aria-pressed="false"><b>Morning</b><small>0 for Electricity</small></button>
+                    <button data-t="1" aria-pressed="true"><b>Night</b><small>0 for Electricity</small></button>
                   </div>
                   <p className="cap">Forget the energy market, weather conditions and seasons. Our Smart <br />Controller guarantees
                     you get no electricity bill for seven years.</p>
