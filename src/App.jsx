@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Routes, Route, useNavigate } from 'react-router-dom';
+import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import './App.css';
 import SignUp from './components/SignUp';
 import CustomerLogin from './components/CustomerLogin';
@@ -8,6 +8,10 @@ import QuoteForm from './components/QuoteForm';
 import RegisterCustomer from './pages/auth/RegisterCustomer';
 import RegisterEmployee from './pages/auth/RegisterEmployee';
 import NotFound from './pages/shared/NotFound';
+import PendingApproval from './pages/pending-approval';
+import Profile from './pages/profile';
+import CustomerDashboard from './pages/customer/CustomerDashboard';
+import AdminDashboard from './pages/admin/dashboard';
 
 // Sales & CRM Module Pages
 import SalesDashboard from './pages/sales/SalesDashboard';
@@ -36,6 +40,8 @@ import AdminCatalogue from './pages/admin/catalogue';
 export default function App() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
+  const isHome = location.pathname === '/';
 
   const onPopState = () => {
     setMobileOpen(false);
@@ -482,35 +488,37 @@ void main(){
         </defs>
       </svg>
 
-      {/* Scroll progress bar */}
-      <div id="sp" aria-hidden="true"></div>
+      {/* Scroll progress bar (landing page only) */}
+      {isHome && <div id="sp" aria-hidden="true"></div>}
 
-      {/* NAV */}
-      <header className="bar" id="bar">
-        <a className="logo" href="#" aria-label="Solvix, back to top" onClick={(e) => { e.preventDefault(); navigate('/'); setMobileOpen(false); }}>
-          <svg className="sun" viewBox="0 0 40 40" aria-hidden="true">
-            <use href="#sun" width="40" height="40" />
-          </svg>
-          Solvix
-        </a>
-        <ul className="links">
-          <li><a href="#" onClick={(e) => { e.preventDefault(); navigate('/'); setMobileOpen(false); }}>Home</a></li>
-          <li><a href="#flow" onClick={() => setMobileOpen(false)}>How It Works</a></li>
-          <li><a href="#platform" onClick={() => setMobileOpen(false)}>Features</a></li>
-          <li><a href="#solutions" onClick={() => setMobileOpen(false)}>Solutions</a></li>
-          <li><a href="#story" onClick={() => setMobileOpen(false)}>About Us</a></li>
-          <li><a href="#contact" onClick={() => setMobileOpen(false)}>Contact</a></li>
-        </ul>
-        <div className="side">
-          <a className="cta cta-signup" href="/signup" onClick={(e) => { e.preventDefault(); navigate('/signup'); setMobileOpen(false); }}>Sign Up</a>
-          <a className="cta" href="/get-quote" onClick={(e) => { e.preventDefault(); navigate('/get-quote'); setMobileOpen(false); }}>Get a Quote</a>
-        </div>
-        <button className="menu-toggle" aria-label="Toggle menu" aria-expanded={mobileOpen} onClick={() => setMobileOpen(!mobileOpen)}>
-          <span aria-hidden="true">{mobileOpen ? '\u2715' : '\u2630'}</span>
-        </button>
-      </header>
+      {/* NAV (landing page only) */}
+      {isHome && (
+        <header className="bar" id="bar">
+          <a className="logo" href="#" aria-label="Solvix, back to top" onClick={(e) => { e.preventDefault(); navigate('/'); setMobileOpen(false); }}>
+            <svg className="sun" viewBox="0 0 40 40" aria-hidden="true">
+              <use href="#sun" width="40" height="40" />
+            </svg>
+            Solvix
+          </a>
+          <ul className="links">
+            <li><a href="#" onClick={(e) => { e.preventDefault(); navigate('/'); setMobileOpen(false); }}>Home</a></li>
+            <li><a href="#flow" onClick={() => setMobileOpen(false)}>How It Works</a></li>
+            <li><a href="#platform" onClick={() => setMobileOpen(false)}>Features</a></li>
+            <li><a href="#solutions" onClick={() => setMobileOpen(false)}>Solutions</a></li>
+            <li><a href="#story" onClick={() => setMobileOpen(false)}>About Us</a></li>
+            <li><a href="#contact" onClick={() => setMobileOpen(false)}>Contact</a></li>
+          </ul>
+          <div className="side">
+            <a className="cta cta-signup" href="/signup" onClick={(e) => { e.preventDefault(); navigate('/signup'); setMobileOpen(false); }}>Sign Up</a>
+            <a className="cta" href="/get-quote" onClick={(e) => { e.preventDefault(); navigate('/get-quote'); setMobileOpen(false); }}>Get a Quote</a>
+          </div>
+          <button className="menu-toggle" aria-label="Toggle menu" aria-expanded={mobileOpen} onClick={() => setMobileOpen(!mobileOpen)}>
+            <span aria-hidden="true">{mobileOpen ? '\u2715' : '\u2630'}</span>
+          </button>
+        </header>
+      )}
 
-      {mobileOpen && (
+      {isHome && mobileOpen && (
         <div className="mobile-menu open" role="navigation" aria-label="Mobile menu">
           <button className="mobile-close" onClick={() => setMobileOpen(false)} aria-label="Close menu">
             <span aria-hidden="true">\u2715</span>
@@ -1159,6 +1167,11 @@ void main(){
         <Route path="/register/customer" element={<RegisterCustomer />} />
         <Route path="/register/employee" element={<RegisterEmployee />} />
 
+        <Route path="/customer/dashboard" element={<CustomerDashboard />} />
+        <Route path="/admin/dashboard" element={<AdminDashboard />} />
+        <Route path="/pending-approval" element={<PendingApproval />} />
+        <Route path="/profile" element={<Profile />} />
+
         {/* Sales & CRM Module Routes */}
         <Route path="/sales/dashboard" element={<SalesDashboard />} />
         <Route path="/sales/leads" element={<LeadsList />} />
@@ -1189,22 +1202,24 @@ void main(){
         <Route path="*" element={<NotFound />} />
       </Routes>
 
-      {/* Mini floating toggle */}
-      <div className="mini" id="mini" role="group" aria-label="Time of day">
-        <button data-t="0" aria-pressed="false">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
-            <circle cx="12" cy="12" r="4" />
-            <path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M18.7 5.3l-1.6 1.6M6.9 17.1l-1.6 1.6" />
-          </svg>
-          <span>Morning</span>
-        </button>
-        <button data-t="1" aria-pressed="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M20 14.5A8 8 0 0 1 9.5 4 8 8 0 1 0 20 14.5Z" />
-          </svg>
-          <span>Night</span>
-        </button>
-      </div>
+      {/* Mini floating toggle (landing page only) */}
+      {isHome && (
+        <div className="mini" id="mini" role="group" aria-label="Time of day">
+          <button data-t="0" aria-pressed="false">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
+              <circle cx="12" cy="12" r="4" />
+              <path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M18.7 5.3l-1.6 1.6M6.9 17.1l-1.6 1.6" />
+            </svg>
+            <span>Morning</span>
+          </button>
+          <button data-t="1" aria-pressed="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M20 14.5A8 8 0 0 1 9.5 4 8 8 0 1 0 20 14.5Z" />
+            </svg>
+            <span>Night</span>
+          </button>
+        </div>
+      )}
     </>
   );
 }

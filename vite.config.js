@@ -15,6 +15,12 @@ export default defineConfig({
     },
   },
   server: {
+    proxy: {
+      '/api': {
+        target: 'http://localhost:3001',
+        changeOrigin: true,
+      },
+    },
     middleware: [
       // SPA fallback: serve index.html for client-side routes so direct
       // navigation / refresh to /login/customer, /login/employee, /get-quote works.

@@ -6,7 +6,7 @@
   "workspaces": ["backend"],
   "scripts": {
     "dev": "concurrently \"vite\" \"npm run dev --workspace=backend\"",
-    "build": "concurrently \"npm run build\" \"npm run build --workspace=backend\"",
+    "build": "vite build && npm run build --workspace=backend",
     "lint": "npm run lint && npm run lint --workspace=backend",
     "preview": "vite preview"
   },

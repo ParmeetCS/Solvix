@@ -1,4 +1,5 @@
 import { jsonResponse, jsonError, handleOptions, corsHeaders } from '@/lib/utils';
+import { createAdminClient } from '@/lib/supabase/client';
 
 export async function GET() {
   return jsonResponse({ name: 'SOLVIX Auth API', version: '1.0.0' }, {
@@ -91,8 +92,8 @@ export async function POST(request) {
       .from('customers')
       .insert({
         customer_code: 'CUST-' + authData.user.id.substring(0, 8),
-        profile_id: authData.user.id,
-        customer_name: body.full_name,
+        profile_id: profileData.id,
+        contact_name: body.full_name,
         email: body.email,
         phone: body.phone || '',
         status: 'active',

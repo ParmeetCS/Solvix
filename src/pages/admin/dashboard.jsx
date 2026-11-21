@@ -4,7 +4,6 @@ import AdminSidebar from '@/components/AdminSidebar';
 import AdminHeader from '@/components/AdminHeader';
 import { Card, Alert } from '@/components/ui';
 import { useAuth } from '@/context/AuthContext';
-import { jsonResponse } from '@/services/api';
 
 const Dashboard = () => {
   const { user, status } = useAuth();
@@ -309,7 +308,7 @@ const Dashboard = () => {
                     display: 'grid',
                     gap: '0.25rem',
                   }}>
-                    Object.entries(charts.projectsByStatus).map(([status, count], i) => (
+                    {Object.entries(charts.projectsByStatus).map(([status, count], i) => (
                       <div key={i} style={{
                         background: getStatusColor(status),
                         height: '20px',
@@ -324,13 +323,13 @@ const Dashboard = () => {
                         }}>{count}</span>
                         <span style={{
                           display: 'block',
-                          width: `${(count / Math.max(1, Object.values(charts.projectsByStatus).reduce((a, b) => a + b, 0)) * 100}%}`,
+                          width: `${(count / Math.max(1, Object.values(charts.projectsByStatus).reduce((a, b) => a + b, 0)) * 100)}%`,
                           height: '20px',
                           background: getStatusColor(status),
                           borderRadius: '4px 4px 0 0',
                         }} />
                       </div>
-                    ))
+                    ))}
                   </div>
                 </div>
               )}
@@ -345,7 +344,7 @@ const Dashboard = () => {
                     display: 'grid',
                     gap: '0.25rem',
                   }}>
-                    Object.entries(charts.leadsByStatus).map(([status, count], i) => (
+                    {Object.entries(charts.leadsByStatus).map(([status, count], i) => (
                       <div key={i} style={{
                         background: getLeadStatusColor(status),
                         height: '20px',
@@ -366,7 +365,7 @@ const Dashboard = () => {
                           borderRadius: '4px 4px 0 0',
                         }} />
                       </div>
-                    ))
+                    ))}
                   </div>
                 </div>
               )}
@@ -381,7 +380,7 @@ const Dashboard = () => {
                     display: 'grid',
                     gap: '0.25rem',
                   }}>
-                    Object.entries(charts.employeeDistributionByDepartment).map(([deptId, count], i) => (
+                    {Object.entries(charts.employeeDistributionByDepartment).map(([deptId, count], i) => (
                       <div key={i} style={{
                         background: '#1a237e',
                         height: '20px',
@@ -402,7 +401,7 @@ const Dashboard = () => {
                           borderRadius: '4px 4px 0 0',
                         }} />
                       </div>
-                    ))
+                    ))}
                   </div>
                 </div>
               )}

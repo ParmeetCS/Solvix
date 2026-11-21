@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, Folder, Users, Settings, Logout, Bell, ChartPie, Users as Users2, Folder as Folder2, Mail, Shield, LogOut } from 'lucide-react';
+import { Menu, Folder, Users, Settings, LogOut, Bell, ChartPie, Mail, Shield, Layout, Box, Coins, BarChart, Briefcase } from 'lucide-react';
 
 const AdminSidebar = () => {
   const [collapsed, setCollapsed] = useState(false);
@@ -12,11 +12,11 @@ const AdminSidebar = () => {
     { key: 'dashboard', label: 'Dashboard', icon: Layout, href: '/admin/dashboard' },
     { key: 'employees', label: 'Employee Management', icon: Users, href: '/admin/employees' },
     { key: 'departments', label: 'Department Management', icon: Folder, href: '/admin/departments' },
-    { key: 'customers', label: 'Customer Management', icon: Users2, href: '/admin/customers' },
+    { key: 'customers', label: 'Customer Management', icon: Users, href: '/admin/customers' },
     { key: 'leads', label: 'Lead Overview', icon: Mail, href: '/admin/leads' },
-    { key: 'projects', label: 'Project Management', icon: Folder2, href: '/admin/projects' },
+    { key: 'projects', label: 'Project Management', icon: Briefcase, href: '/admin/projects' },
     { key: 'inventory', label: 'Inventory Overview', icon: Box, href: '/admin/inventory' },
-    { key: 'finance', label: 'Finance Overview', icon: Coin, href: '/admin/finance' },
+    { key: 'finance', label: 'Finance Overview', icon: Coins, href: '/admin/finance' },
     { key: 'reports', label: 'Reports & Analytics', icon: BarChart, href: '/admin/reports' },
     { key: 'activity-logs', label: 'Activity Logs', icon: Shield, href: '/admin/activity-logs' },
     { key: 'notifications', label: 'Notifications', icon: Bell, href: '/admin/notifications' },
@@ -57,7 +57,7 @@ const AdminSidebar = () => {
         <svg width="32" height="32" viewBox="0 0 40 40" style={{ marginRight: '0.5rem' }}>
           <use href="#sun" width="32" height="32" />
         </svg>
-        <span style={{ fontWeight: 'bold', color: 'var(--solvix-accent, #f57f17)'' }}>SOLVIX</span>
+        <span style={{ fontWeight: 'bold', color: 'var(--solvix-accent, #f57f17)' }}>SOLVIX</span>
       </div>
 
       <nav className="sidebar-nav" style={{
@@ -72,7 +72,7 @@ const AdminSidebar = () => {
               margin: '0.25rem 1rem',
               borderRadius: '8px',
             }}
-            onmouseenter={() => setCollapsed(false)}
+            onMouseEnter={() => setCollapsed(false)}
           >
             <Link
               to={item.href}
@@ -86,35 +86,11 @@ const AdminSidebar = () => {
                 margin: '0.125rem 1rem',
                 transition: 'background 0.2s',
                 width: '100%',
-              }
-            }
-            style={{ background: isActive(item.key) ? 'rgba(245, 127, 23, 0.15)' : 'transparent' }}
-            aria-current={isActive(item.key) ? 'page' : 'false'}
+                background: isActive(item.key) ? 'rgba(245, 127, 23, 0.15)' : 'transparent',
+              }}
+              aria-current={isActive(item.key) ? 'page' : 'false'}
             >
-              <svg
-                width="20"
-                height="20"
-                style={{ marginRight: '0.75rem', flexShrink: 0, opacity: collapsed ? 0 : 1 }}
-                style={{ width: collapsed ? 0 : 20, height: collapsed ? 0 : 20 }}
-              >
-                {item.icon && <item.icon />}
-
-                {/* Fallback for collapsed mode */}
-                {collapsed && item.icon && (
-                  <span
-                    style={{
-                      width: 20,
-                      height: 20,
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      fontSize: '0.875rem',
-                    }}
-                  >
-                    {item.icon && item.icon.startsWith('<') ? item.icon : ''}
-                  </span>
-                )}
-              </Link>
+              {item.icon && <item.icon size={20} style={{ marginRight: '0.75rem', flexShrink: 0 }} />}
               <span
                 style={{
                   overflow: 'hidden',
@@ -122,12 +98,10 @@ const AdminSidebar = () => {
                   whiteSpace: 'nowrap',
                   color: 'white',
                   fontSize: '0.875rem',
-                  marginLeft: collapsed ? -1rem : 0.5,
-                  display: 'block',
-                  width: collapsed ? '80px' : 'auto',
+                  display: collapsed ? 'none' : 'block',
                 }}
               >
-                {collapsed ? '' : item.label}
+                {item.label}
               </span>
             </Link>
           </div>

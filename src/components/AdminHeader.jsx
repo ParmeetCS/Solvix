@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { X, Sun, Menu, LogOut, User, Shield, Mail, MailOpen, Layout, Users, Folder, Users as Users2, Coin, BarChart, Shield as Shield2, Bell, Settings, LogOut as LogOutIcon } from 'lucide-react';
+import { X, Sun, Menu, LogOut, User, Shield, Mail, MailOpen, Layout, Users, Folder, Coins, BarChart, Bell, Settings } from 'lucide-react';
 
 const AdminHeader = () => {
   const navigate = useNavigate();
@@ -34,7 +34,7 @@ const AdminHeader = () => {
         boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
         position: 'fixed',
         top: 0,
-        left: 240px,
+        left: '240px',
         right: 0,
         zIndex: 1000,
         transition: 'left 0.3s ease',
@@ -49,7 +49,7 @@ const AdminHeader = () => {
           <svg width="32" height="32" viewBox="0 0 40 40" style={{ marginRight: '0.5rem' }}>
             <use href="#sun" width="32" height="32" />
           </svg>
-          <span style={{ fontWeight: 'bold', color: 'var(--solvix-accent, #f57f17)' }}'>SOLVIX</span>
+          <span style={{ fontWeight: 'bold', color: 'var(--solvix-accent, #f57f17)' }}>SOLVIX</span>
         </a>
         <button onClick={toggleMobile} style={{ background: 'none', border: 'none', color: 'white', cursor: 'pointer' }}>
           {mobileOpen ? <X width="24" height="24" /> : <Menu width="24" height="24" />}

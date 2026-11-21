@@ -18,6 +18,10 @@ export const apiClient = axios.create({
 // by the auth module in a later task. This keeps components free of auth logic.
 apiClient.interceptors.request.use(
   (config) => {
+    // If request starts with /api/, direct to backend root so it doesn't become /api/v1/api/...
+    if (config.url && config.url.startsWith('/api/')) {
+      config.baseURL = (import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001/api/v1').replace(/\/api\/v1\/?$/, '');
+    }
     try {
       const token = localStorage.getItem('solvix_token');
       if (token) {

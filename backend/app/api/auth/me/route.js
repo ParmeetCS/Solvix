@@ -1,5 +1,6 @@
 import { jsonResponse, jsonError, handleOptions, corsHeaders } from '@/lib/utils';
 import { createClientFromToken, getUserFromRequest } from '@/lib/supabase/auth';
+import { createAdminClient } from '@/lib/supabase/client';
 
 export async function GET(request) {
   try {

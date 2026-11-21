@@ -213,28 +213,72 @@ export default function SignUp({ navigate, initialRole = 'customer', initialMode
     try {
       let endpoint, payload;
       if (mode === 'signup') {
-        endpoint = role === 'customer' ? '/api/auth/customer/register' : '/api/auth/employee/register';
+        endpoint = role === 'customer' ? '/api/auth/register/customer' : '/api/auth/register/employee';
         payload  = role === 'customer'
-          ? { fullName, email, phone, password, role: 'customer' }
-          : { fullName, email, department, password, role: 'employee' };
+          ? { full_name: fullName, email, phone, password, confirm_password: confirmPassword, role: 'customer' }
+          : { full_name: fullName, email, requested_department: department, password, confirm_password: confirmPassword, role: 'employee' };
       } else {
-        endpoint = role === 'customer' ? '/api/auth/customer/login' : '/api/auth/employee/login';
+        endpoint = '/api/auth/login';
         payload  = { email, password };
       }
 
       const res  = await postJson(endpoint, payload);
-      const text = await res.text().catch(() => '');
+      const data = await res.json().catch(() => null);
 
-      if (!res.ok) throw new Error(text || (mode === 'signup' ? 'Registration failed.' : 'Login failed.'));
+      if (!res.ok) throw new Error(data?.message || data?.error || (mode === 'signup' ? 'Registration failed.' : 'Login failed.'));
 
-      setMessage({
-        kind: 'ok',
-        text: text || (mode === 'signup'
-          ? (role === 'customer'
-            ? 'Account created! Welcome to your Customer Portal.'
-            : 'Registration submitted — an Administrator will review and provision your access.')
-          : `Signed in successfully as ${role === 'customer' ? 'Customer' : 'Employee'}.`),
-      });
+      // Handle sign in
+      if (mode === 'signin') {
+        const token = data?.token || data?.data?.token || 'session_' + Date.now();
+        const user = data?.user || data?.data?.user || { email, full_name: fullName, account_type: role };
+
+        localStorage.setItem('solvix_token', token);
+        localStorage.setItem('solvix_user', JSON.stringify(user));
+        localStorage.setItem('solvix_role', user.account_type || role);
+
+        setMessage({
+          kind: 'ok',
+          text: `Signed in successfully. Redirecting to your dashboard...`,
+        });
+
+        setTimeout(() => {
+          if (user.account_type === 'admin') {
+            navigate('/admin/dashboard');
+          } else if (user.account_type === 'employee') {
+            if (user.department === 'Sales' || user.department_id === 'Sales' || !user.department) {
+              navigate('/sales/dashboard');
+            } else {
+              navigate('/pending-approval');
+            }
+          } else {
+            // Customer Dashboard
+            navigate('/customer/dashboard');
+          }
+        }, 700);
+        return;
+      }
+
+      // Handle sign up
+      if (mode === 'signup') {
+        if (role === 'customer') {
+          setMessage({
+            kind: 'ok',
+            text: 'Account created successfully! Please sign in to access your portal.',
+          });
+          setTimeout(() => {
+            setMode('signin');
+            setMessage(null);
+          }, 1200);
+        } else {
+          setMessage({
+            kind: 'ok',
+            text: 'Employee registration submitted! An Administrator will review your account.',
+          });
+          setTimeout(() => {
+            navigate('/pending-approval');
+          }, 1500);
+        }
+      }
     } catch (err) {
       setMessage({ kind: 'error', text: err.message || 'Unable to reach the server. Please try again.' });
     } finally {
