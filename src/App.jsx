@@ -9,6 +9,16 @@ import RegisterCustomer from './pages/auth/RegisterCustomer';
 import RegisterEmployee from './pages/auth/RegisterEmployee';
 import NotFound from './pages/shared/NotFound';
 
+// Sales & CRM Module Pages
+import SalesDashboard from './pages/sales/SalesDashboard';
+import LeadsList from './pages/sales/LeadsList';
+import NewLead from './pages/sales/NewLead';
+import LeadDetail from './pages/sales/LeadDetail';
+import FollowUpsList from './pages/sales/FollowUpsList';
+import WhatsAppEnquiries from './pages/sales/WhatsAppEnquiries';
+import CustomersList from './pages/sales/CustomersList';
+import CustomerDetail from './pages/sales/CustomerDetail';
+
 export default function App() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const navigate = useNavigate();
@@ -1134,6 +1144,17 @@ void main(){
         <Route path="/get-quote" element={<QuoteForm navigate={navigate} />} />
         <Route path="/register/customer" element={<RegisterCustomer />} />
         <Route path="/register/employee" element={<RegisterEmployee />} />
+
+        {/* Sales & CRM Module Routes */}
+        <Route path="/sales/dashboard" element={<SalesDashboard />} />
+        <Route path="/sales/leads" element={<LeadsList />} />
+        <Route path="/sales/leads/new" element={<NewLead />} />
+        <Route path="/sales/leads/:id" element={<LeadDetail />} />
+        <Route path="/sales/follow-ups" element={<FollowUpsList />} />
+        <Route path="/sales/whatsapp-enquiries" element={<WhatsAppEnquiries />} />
+        <Route path="/sales/customers" element={<CustomersList />} />
+        <Route path="/sales/customers/:id" element={<CustomerDetail />} />
+
         <Route path="*" element={<NotFound />} />
       </Routes>
 
