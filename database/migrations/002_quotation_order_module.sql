@@ -873,7 +873,9 @@ grant execute on function expire_quotations(uuid) to service_role;
 -- ------------------------------------------------------------------------------
 -- 7. Seed catalogue (configurable; Admin can edit every field and composition)
 -- ------------------------------------------------------------------------------
-insert into product_categories (name, code, description) values
+insert into product_categories (name, code, description)
+select v.name, v.code, v.description
+from (values
   ('Solar Panels', 'solar_panels', 'Photovoltaic modules'),
   ('Solar Inverters', 'solar_inverters', 'On-grid and off-grid inverters'),
   ('Batteries', 'batteries', 'Battery storage'),
@@ -883,7 +885,16 @@ insert into product_categories (name, code, description) values
   ('Earthing Equipment', 'earthing_equipment', 'Earthing kits and conductors'),
   ('Accessories', 'accessories', 'Connectors, glands and consumables'),
   ('Installation & Services', 'installation_services', 'Installation, commissioning and service charges')
-on conflict (code) do nothing;
+) as v(name, code, description)
+where not exists (
+  select 1 from product_categories c
+  where c.code = v.code or c.name = v.name
+);
+
+-- Synchronize category codes if existing rows matched by name
+update product_categories set code = 'solar_inverters' where name = 'Solar Inverters' and code != 'solar_inverters' and not exists (select 1 from product_categories where code = 'solar_inverters');
+update product_categories set code = 'solar_panels' where name = 'Solar Panels' and code != 'solar_panels' and not exists (select 1 from product_categories where code = 'solar_panels');
+update product_categories set code = 'batteries' where name = 'Batteries' and code != 'batteries' and not exists (select 1 from product_categories where code = 'batteries');
 
 insert into products (
   sku, name, category_id, description, unit, base_price, warranty_years,
@@ -944,7 +955,7 @@ from (values
    'Site survey and system design service.',
    'piece', 1500.00, 0, 18.00, array['on-grid','off-grid','hybrid'], 'service', '9983')
 ) as v(sku, name, category_code, description, unit, base_price, min_stock, tax_rate, system_types, item_type, hsn)
-join product_categories c on c.code = v.category_code
+join product_categories c on (c.code = v.category_code or c.name = case v.category_code when 'solar_inverters' then 'Solar Inverters' when 'solar_panels' then 'Solar Panels' when 'batteries' then 'Batteries' else null end)
 on conflict (sku) do nothing;
 
 -- Seed ten configurable packages (1-5 kW, on-grid and off-grid).

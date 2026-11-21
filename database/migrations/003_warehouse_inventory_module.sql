@@ -6,7 +6,9 @@
 -- ==============================================================================
 
 -- 1. Ensure Solar Product Categories exist
-INSERT INTO product_categories (name, code, description) VALUES
+INSERT INTO product_categories (name, code, description)
+SELECT v.name, v.code, v.description
+FROM (VALUES
   ('Solar Panels', 'SOLAR_PANEL', 'Photovoltaic solar modules (Mono PERC, Bifacial, Poly)'),
   ('Inverters', 'INVERTER', 'Solar inverters (On-grid, Hybrid, Microinverters)'),
   ('Batteries', 'BATTERY', 'Solar energy storage systems (Lithium-ion, LiFePO4, Lead-acid)'),
@@ -14,7 +16,11 @@ INSERT INTO product_categories (name, code, description) VALUES
   ('Cables & Wires', 'CABLE', 'Solar DC cables (4 sq mm, 6 sq mm) and AC armored cables'),
   ('Protection Equipment', 'PROTECTION', 'ACDB, DCDB, lightning arresters, surge protection devices, earthing rods'),
   ('Accessories', 'ACCESSORY', 'MC4 connectors, conduits, cable trays, monitoring dongles')
-ON CONFLICT (code) DO NOTHING;
+) AS v(name, code, description)
+WHERE NOT EXISTS (
+  SELECT 1 FROM product_categories c
+  WHERE c.code = v.code OR c.name = v.name
+);
 
 -- 2. Extend products table
 ALTER TABLE products ADD COLUMN IF NOT EXISTS manufacturer text;
