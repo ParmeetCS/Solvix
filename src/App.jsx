@@ -1,7 +1,25 @@
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import './App.css';
+import CustomerLogin from './components/CustomerLogin';
+import EmployeeLogin from './components/EmployeeLogin';
+import QuoteForm from './components/QuoteForm';
 
 export default function App() {
+  const [route, setRoute] = useState(window.location.pathname);
+  const [mobileOpen, setMobileOpen] = useState(false);
+
+  const navigate = (to) => {
+    if (to === window.location.pathname) return;
+    window.history.pushState(null, '', to);
+    setRoute(to);
+    setMobileOpen(false);
+  };
+
+  const onPopState = () => {
+    setRoute(window.location.pathname);
+    setMobileOpen(false);
+  };
+
   useEffect(() => {
     // Load Google Fonts
     const link1 = document.createElement('link');
@@ -109,6 +127,7 @@ void main(){
     const onResize = () => { size(); measure(); };
     addEventListener('resize', onResize); size(); measure();
     addEventListener('load', measure);
+    addEventListener('popstate', onPopState);
 
     function show(n) {
       const setM = $('setM'), setN = $('setN');
@@ -132,6 +151,7 @@ void main(){
 
     function frame(now) {
       clock = now;
+      if (window.location.pathname !== '/' && !document.getElementById('heroPin')) return;
       if (!heroPin || !hero || !bar || !mini || !spBar) { heroPin = $('heroPin'); hero = $('hero'); bar = $('bar'); mini = $('mini'); spBar = $('sp'); }
       const sy = window.scrollY || 0, p = clamp(sy / Math.max(1, pinH - heroH));
       const d = now - start; let y = 0, s = 0, dip = 0, k2 = k;
@@ -357,6 +377,7 @@ void main(){
       loadScript('https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js'),
       loadScript('https://cdn.jsdelivr.net/npm/lenis@1/dist/lenis.min.js'),
     ]).then(() => {
+      if (window.location.pathname !== '/') return;
       const gsapLoaded = !!(window.gsap && window.ScrollTrigger);
 
       if (gsapLoaded && !calm) {
@@ -411,6 +432,7 @@ void main(){
       cancelAnimationFrame(rafId);
       removeEventListener('resize', onResize);
       removeEventListener('load', measure);
+      removeEventListener('popstate', onPopState);
     };
   }, []);
 
@@ -444,27 +466,55 @@ void main(){
 
       {/* NAV */}
       <header className="bar" id="bar">
-        <a className="logo" href="#" aria-label="Solvix, back to top">
+        <a className="logo" href="#" aria-label="Solvix, back to top" onClick={(e) => { e.preventDefault(); navigate('/'); setMobileOpen(false); }}>
           <svg className="sun" viewBox="0 0 40 40" aria-hidden="true">
             <use href="#sun" width="40" height="40" />
           </svg>
           Solvix
         </a>
         <ul className="links">
-          <li><a href="#flow">How It Works</a></li>
-          <li><a href="#platform">Our Cases</a></li>
-          <li><a href="#story">About Us</a></li>
-          <li><a href="#future">Careers</a></li>
-          <li><a href="#foot">Resources</a></li>
+          <li><a href="#" onClick={(e) => { e.preventDefault(); navigate('/'); setMobileOpen(false); }}>Home</a></li>
+          <li><a href="#flow" onClick={() => setMobileOpen(false)}>How It Works</a></li>
+          <li><a href="#platform" onClick={() => setMobileOpen(false)}>Features</a></li>
+          <li><a href="#solutions" onClick={() => setMobileOpen(false)}>Solutions</a></li>
+          <li><a href="#story" onClick={() => setMobileOpen(false)}>About Us</a></li>
+          <li><a href="#contact" onClick={() => setMobileOpen(false)}>Contact</a></li>
         </ul>
         <div className="side">
-          <a href="#roles">Customers</a>
-          <a className="cta" href="#demo">Get an Instant Quote</a>
+          <a href="/login/customer" onClick={(e) => { e.preventDefault(); navigate('/login/customer'); setMobileOpen(false); }}>Customer Login</a>
+          <a href="/login/employee" onClick={(e) => { e.preventDefault(); navigate('/login/employee'); setMobileOpen(false); }}>Employee Login</a>
+          <a className="cta" href="/get-quote" onClick={(e) => { e.preventDefault(); navigate('/get-quote'); setMobileOpen(false); }}>Get a Quote</a>
         </div>
+        <button className="menu-toggle" aria-label="Toggle menu" aria-expanded={mobileOpen} onClick={() => setMobileOpen(!mobileOpen)}>
+          <span aria-hidden="true">{mobileOpen ? '\u2715' : '\u2630'}</span>
+        </button>
       </header>
 
-      {/* HERO */}
-      <div className="hero-pin" id="heroPin">
+      {mobileOpen && (
+        <div className="mobile-menu open" role="navigation" aria-label="Mobile menu">
+          <button className="mobile-close" onClick={() => setMobileOpen(false)} aria-label="Close menu">
+            <span aria-hidden="true">\u2715</span>
+          </button>
+          <nav>
+            <a href="#" onClick={(e) => { e.preventDefault(); navigate('/'); setMobileOpen(false); }}>Home</a>
+            <a href="#flow" onClick={() => setMobileOpen(false)}>How It Works</a>
+            <a href="#platform" onClick={() => setMobileOpen(false)}>Features</a>
+            <a href="#solutions" onClick={() => setMobileOpen(false)}>Solutions</a>
+            <a href="#story" onClick={() => setMobileOpen(false)}>About Us</a>
+            <a href="#contact" onClick={() => setMobileOpen(false)}>Contact</a>
+          </nav>
+          <div className="acct">
+            <a href="/login/customer" onClick={(e) => { e.preventDefault(); navigate('/login/customer'); setMobileOpen(false); }}>Customer Login</a>
+            <a href="/login/employee" onClick={(e) => { e.preventDefault(); navigate('/login/employee'); setMobileOpen(false); }}>Employee Login</a>
+            <a className="cta-btn" href="/get-quote" onClick={(e) => { e.preventDefault(); navigate('/get-quote'); setMobileOpen(false); }}>Get a Quote</a>
+          </div>
+        </div>
+      )}
+
+      {route === '/' ? (
+        <>
+          {/* HERO */}
+          <div className="hero-pin" id="heroPin">
         <main className="hero" id="hero">
           <div className="layer sky">
             <img id="skyM" alt=""
@@ -891,6 +941,73 @@ void main(){
           </div>
         </section>
 
+        {/* Solutions */}
+        <section className="sec solutions" id="solutions">
+          <div className="wrap">
+            <span className="eyebrow" data-reveal="">Solutions</span>
+            <h2 className="display" data-split="">Built for every <em>team in the field.</em></h2>
+            <p className="lead" data-reveal="">SOLVIX gives each department the tools it needs, on a single shared record&mdash;from first enquiry to final report.</p>
+            <div className="sol-grid">
+              <article className="solution-card">
+                <h3>Sales Teams</h3>
+                <p>Capture enquiries, build quotations from live pricing, and track conversion from first contact to signed order.</p>
+                <a href="/get-quote">Get a quote &rarr;</a>
+              </article>
+              <article className="solution-card">
+                <h3>Survey Teams</h3>
+                <p>Schedule site surveys, record roof and shading details, and convert surveys into scoped projects.</p>
+                <a href="#platform">Explore modules &rarr;</a>
+              </article>
+              <article className="solution-card">
+                <h3>Warehouse Teams</h3>
+                <p>Track stock, suppliers and every panel by its serial number, from the shelf to the roof.</p>
+                <a href="#platform">Explore modules &rarr;</a>
+              </article>
+              <article className="solution-card">
+                <h3>Installation Teams</h3>
+                <p>Assign crews and schedules, run site checklists, and record serial numbers as work happens.</p>
+                <a href="#platform">Explore modules &rarr;</a>
+              </article>
+              <article className="solution-card">
+                <h3>Customer Support</h3>
+                <p>Give customers live installation progress, documents, warranty details and service requests in one portal.</p>
+                <a href="#roles">Customer portal &rarr;</a>
+              </article>
+              <article className="solution-card">
+                <h3>Accounts &amp; Finance</h3>
+                <p>Roll up invoices, payments and project costs into margins you can trust, with per-project profitability.</p>
+                <a href="#platform">Explore modules &rarr;</a>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        {/* Contact */}
+        <section className="sec contact" id="contact">
+          <div className="wrap">
+            <span className="eyebrow" data-reveal="">Contact</span>
+            <h2 className="display" data-split="">Get in <em>touch.</em></h2>
+            <p className="lead" data-reveal="">Reach the SOLVIX team. Project enquiries are handled through the quotation form below.</p>
+            <div className="contact-grid">
+              <div className="contact-item">
+                <span className="label">General enquiries</span>
+                <div className="value placeholder">[Email address]</div>
+              </div>
+              <div className="contact-item">
+                <span className="label">Sales &amp; quotations</span>
+                <div className="value placeholder">[Phone number]</div>
+              </div>
+              <div className="contact-item">
+                <span className="label">Office</span>
+                <div className="value placeholder">[Office address]</div>
+              </div>
+            </div>
+            <p style={{ marginTop: 32, textAlign: 'center' }}>
+              <a className="btn primary mag" href="/get-quote" onClick={(e) => { e.preventDefault(); navigate('/get-quote'); }}>Submit an enquiry <svg style={{ width: 18, height: 18 }}><use href="#arrow" /></svg></a>
+            </p>
+          </div>
+        </section>
+
         {/* Numbers */}
         <section className="stats">
           <div className="wrap stat-grid">
@@ -995,7 +1112,9 @@ void main(){
                 <ul>
                   <li><a href="#story">About</a></li>
                   <li><a href="#flow">How it works</a></li>
+                  <li><a href="#solutions">Solutions</a></li>
                   <li><a href="#roles">Roles</a></li>
+                  <li><a href="#contact">Contact</a></li>
                   <li><a href="#future">Roadmap</a></li>
                 </ul>
               </div>
@@ -1011,6 +1130,21 @@ void main(){
           </div>
         </footer>
       </div>
+        </>
+      ) : (
+        <section className="page">
+          {route === '/login/customer' && <CustomerLogin navigate={navigate} />}
+          {route === '/login/employee' && <EmployeeLogin navigate={navigate} />}
+          {route === '/get-quote' && <QuoteForm navigate={navigate} />}
+          {route !== '/' && route !== '/login/customer' && route !== '/login/employee' && route !== '/get-quote' && (
+            <div className="page-head">
+              <a href="/" onClick={(e) => { e.preventDefault(); navigate('/'); }}>Back to home</a>
+              <h1>Page not found</h1>
+              <p>The page you&rsquo;re looking for doesn&rsquo;t exist.</p>
+            </div>
+          )}
+        </section>
+      )}
 
       {/* Mini floating toggle */}
       <div className="mini" id="mini" role="group" aria-label="Time of day">
