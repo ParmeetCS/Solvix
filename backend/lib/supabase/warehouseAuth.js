@@ -31,32 +31,7 @@ export async function requireWarehouseAccess(request, { requireManage = false, r
 
   // Dev fallback: allow dev testing with mock manager profile if no DB connection
   if (userError || !user) {
-    if (process.env.NODE_ENV === 'production') {
-      return { error: 'Authentication required. Missing or invalid Bearer token.', status: 401 };
-    }
-
-    const mockProfile = {
-      id: '00000000-0000-0000-0000-000000000001',
-      auth_user_id: '00000000-0000-0000-0000-000000000001',
-      full_name: 'Lead Warehouse Manager (Dev)',
-      email: 'warehouse.manager@solvix.energy',
-      account_type: 'admin',
-      is_active: true,
-      roles: { code: 'admin', name: 'Administrator' },
-      departments: { code: 'WAREHOUSE', name: 'Warehouse & Logistics' }
-    };
-
-    return {
-      user: { id: mockProfile.auth_user_id, email: mockProfile.email },
-      profile: mockProfile,
-      isAdmin: true,
-      isWarehouseManager: true,
-      isWarehouseStaff: true,
-      canAdjustStock: true,
-      canManageCatalogue: true,
-      adminClient,
-      error: null
-    };
+    return { error: 'Authentication required. Missing or invalid Bearer token.', status: 401 };
   }
 
   if (!adminClient) {

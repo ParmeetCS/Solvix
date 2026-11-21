@@ -33,41 +33,7 @@ export async function requireInstallationAccess(request, { requireManager = fals
 
   // If no user token in request, check if we're in dev mode
   if (userError || !user) {
-    if (process.env.NODE_ENV === 'production') {
-      return { error: 'Authentication required. Missing or invalid Bearer token.', status: 401 };
-    }
-
-    // Dev fallback: allow testing with mock profile
-    const mockProfile = {
-      id: '00000000-0000-0000-0000-000000000001',
-      auth_user_id: '00000000-0000-0000-0000-000000000001',
-      full_name: 'Lead Operations Engineer (Dev)',
-      email: 'operations.lead@solvix.energy',
-      phone: '+91 98765 43210',
-      account_type: 'admin',
-      is_active: true,
-      roles: { code: 'admin', name: 'Administrator' },
-      departments: { code: 'INSTALLATION', name: 'Installation & Technical Operations' }
-    };
-
-    return {
-      user: { id: mockProfile.auth_user_id, email: mockProfile.email },
-      profile: mockProfile,
-      isAdmin: true,
-      isManager: true,
-      isTechnician: true,
-      technicianRecord: {
-        id: 'tech-001',
-        profile_id: mockProfile.id,
-        employee_code: 'TECH-101',
-        full_name: mockProfile.full_name,
-        email: mockProfile.email,
-        phone: mockProfile.phone
-      },
-      canManage: true,
-      adminClient,
-      error: null
-    };
+    return { error: 'Authentication required. Missing or invalid Bearer token.', status: 401 };
   }
 
   if (!adminClient) {

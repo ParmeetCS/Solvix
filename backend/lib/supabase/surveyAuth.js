@@ -34,35 +34,7 @@ export async function requireSurveyAccess(request, { requireManage = false, targ
 
   // If no user token in request, check if we're in dev mode
   if (userError || !user) {
-    // In strict production, return 401
-    if (process.env.NODE_ENV === 'production') {
-      return { error: 'Authentication required. Missing or invalid Bearer token.', status: 401 };
-    }
-
-    // Dev fallback: allow dev testing with mock admin profile if no DB connection
-    const mockProfile = {
-      id: '00000000-0000-0000-0000-000000000001',
-      auth_user_id: '00000000-0000-0000-0000-000000000001',
-      full_name: 'Lead Survey Engineer (Dev)',
-      email: 'survey.lead@solvix.energy',
-      phone: '+91 98765 43210',
-      account_type: 'admin',
-      is_active: true,
-      roles: { code: 'admin', name: 'Administrator' },
-      departments: { code: 'SURVEY', name: 'Site Survey & Engineering' }
-    };
-
-    return {
-      user: { id: mockProfile.auth_user_id, email: mockProfile.email },
-      profile: mockProfile,
-      isAdmin: true,
-      isSurveyManager: true,
-      isSurveyor: true,
-      isSales: true,
-      canManage: true,
-      adminClient,
-      error: null
-    };
+    return { error: 'Authentication required. Missing or invalid Bearer token.', status: 401 };
   }
 
   if (!adminClient) {
