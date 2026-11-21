@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import SupportLayout from './SupportLayout';
+import PortalLayout from '@/components/PortalLayout';
 import { supportApi } from '@/services/api';
 import {
   ShieldCheck,
@@ -78,19 +78,19 @@ export default function WarrantiesList() {
   };
 
   return (
-    <SupportLayout
+    <PortalLayout
       title="Equipment Warranty Verification Registry"
       subtitle="Strictly verified from warehouse equipment delivery records according to configured manufacturer terms"
     >
       {/* Critical Milestone Rule Banner */}
       <div className="warranty-verify-box" style={{ marginBottom: '1.5rem' }}>
         <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem', marginBottom: '1rem' }}>
-          <ShieldCheck size={24} color="#d8ee8e" style={{ flexShrink: 0, marginTop: '2px' }} />
+          <ShieldCheck size={24} color="var(--accent-text)" style={{ flexShrink: 0, marginTop: '2px' }} />
           <div>
-            <h3 style={{ margin: '0 0 0.25rem 0', color: '#ffffff', fontSize: '1rem' }}>
+            <h3 style={{ margin: '0 0 0.25rem 0', color: 'var(--text-strong)', fontSize: '1rem' }}>
               Core Warranty Rule: Delivery Date Precedence
             </h3>
-            <p style={{ margin: 0, color: '#94a3b8', fontSize: '0.8125rem', lineHeight: 1.5 }}>
+            <p style={{ margin: 0, color: 'var(--text-muted)', fontSize: '0.8125rem', lineHeight: 1.5 }}>
               Under SOLVIX policy, the warranty period activates on the <strong>equipment delivery date</strong> recorded by logistics, not the later installation completion date. Warranty durations strictly reflect configured manufacturer terms.
             </p>
           </div>
@@ -125,7 +125,7 @@ export default function WarrantiesList() {
             {verifyResult.found ? (
               <div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#34d399', fontWeight: 600 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--c-green)', fontWeight: 600 }}>
                     <CheckCircle2 size={18} />
                     <span>Serial: {verifyResult.serial_number}</span>
                   </div>
@@ -134,17 +134,17 @@ export default function WarrantiesList() {
                   </span>
                 </div>
 
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '0.75rem', fontSize: '0.8125rem', color: '#cbd5e1' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '0.75rem', fontSize: '0.8125rem', color: 'var(--text-soft)' }}>
                   <div>Product: <strong>{verifyResult.product?.name}</strong></div>
                   <div>Customer: <strong>{verifyResult.customer?.contact_name}</strong></div>
                   <div>Delivery Date: <strong>{verifyResult.delivery?.delivered_at ? new Date(verifyResult.delivery.delivered_at).toLocaleDateString() : 'N/A'}</strong></div>
                   <div>Duration: <strong>{verifyResult.verification?.warranty_duration_years} Years</strong></div>
                   <div>Expiry Date: <strong>{verifyResult.verification?.expiry_date}</strong></div>
-                  <div>Claim Eligible: <strong style={{ color: verifyResult.verification?.eligible_for_claim ? '#34d399' : '#f87171' }}>{verifyResult.verification?.eligible_for_claim ? 'YES' : 'NO (Expired or Inactive)'}</strong></div>
+                  <div>Claim Eligible: <strong style={{ color: verifyResult.verification?.eligible_for_claim ? 'var(--c-green)' : 'var(--c-red)' }}>{verifyResult.verification?.eligible_for_claim ? 'YES' : 'NO (Expired or Inactive)'}</strong></div>
                 </div>
               </div>
             ) : (
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#f87171', fontSize: '0.875rem' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--c-red)', fontSize: '0.875rem' }}>
                 <AlertCircle size={18} />
                 <span>{verifyResult.message}</span>
               </div>
@@ -156,7 +156,7 @@ export default function WarrantiesList() {
       {/* Filters Bar */}
       <form onSubmit={handleSearchSubmit} className="support-filters-bar">
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flex: 1, minWidth: '240px' }}>
-          <Search size={16} color="#94a3b8" />
+          <Search size={16} color="var(--text-muted)" />
           <input
             type="text"
             className="support-search-input"
@@ -187,20 +187,20 @@ export default function WarrantiesList() {
       {/* Warranties Table */}
       {loading ? (
         <div style={{ display: 'flex', justifyContent: 'center', padding: '4rem 0' }}>
-          <Loader2 className="animate-spin" size={36} color="#d8ee8e" />
+          <Loader2 className="animate-spin" size={36} color="var(--accent-text)" />
         </div>
       ) : error ? (
-        <div className="support-card" style={{ borderColor: '#ef4444' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', color: '#f87171' }}>
+        <div className="support-card" style={{ borderColor: 'var(--c-red-2)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', color: 'var(--c-red)' }}>
             <AlertCircle size={20} />
             <span>{error}</span>
           </div>
         </div>
       ) : warranties.length === 0 ? (
         <div className="support-card" style={{ textAlign: 'center', padding: '3rem 1rem' }}>
-          <ShieldAlert size={40} color="#64748b" style={{ margin: '0 auto 1rem auto' }} />
-          <h3 style={{ color: '#ffffff', margin: '0 0 0.5rem 0' }}>No warranty records found</h3>
-          <p style={{ color: '#94a3b8', fontSize: '0.875rem' }}>
+          <ShieldAlert size={40} color="var(--text-dim)" style={{ margin: '0 auto 1rem auto' }} />
+          <h3 style={{ color: 'var(--text-strong)', margin: '0 0 0.5rem 0' }}>No warranty records found</h3>
+          <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem' }}>
             No warranties matched the query criteria.
           </p>
         </div>
@@ -224,12 +224,12 @@ export default function WarrantiesList() {
               <tbody>
                 {warranties.map((w) => (
                   <tr key={w.id}>
-                    <td style={{ fontWeight: 600, color: '#d8ee8e' }}>
-                      <Link to={`/support/warranties/${w.id}`} style={{ color: '#d8ee8e', textDecoration: 'none' }}>
+                    <td style={{ fontWeight: 600, color: 'var(--accent-text)' }}>
+                      <Link to={`/support/warranties/${w.id}`} style={{ color: 'var(--accent-text)', textDecoration: 'none' }}>
                         {w.warranty_code}
                       </Link>
                     </td>
-                    <td style={{ color: '#38bdf8', fontWeight: 500 }}>
+                    <td style={{ color: 'var(--c-blue)', fontWeight: 500 }}>
                       {w.equipment_serial_numbers?.serial_number || '—'}
                     </td>
                     <td>
@@ -239,10 +239,10 @@ export default function WarrantiesList() {
                       {w.customers?.contact_name || 'Customer'}
                     </td>
                     <td>{w.duration_years} Years</td>
-                    <td style={{ fontSize: '0.8125rem', color: '#cbd5e1' }}>
+                    <td style={{ fontSize: '0.8125rem', color: 'var(--text-soft)' }}>
                       {w.start_date || '—'}
                     </td>
-                    <td style={{ fontSize: '0.8125rem', color: w.computed_status === 'expired' ? '#f87171' : '#cbd5e1' }}>
+                    <td style={{ fontSize: '0.8125rem', color: w.computed_status === 'expired' ? 'var(--c-red)' : 'var(--text-soft)' }}>
                       {w.expiry_date || '—'}
                     </td>
                     <td>
@@ -266,8 +266,8 @@ export default function WarrantiesList() {
           </div>
 
           {totalPages > 1 && (
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1rem 1.5rem', borderTop: '1px solid #1e293b' }}>
-              <span style={{ fontSize: '0.8125rem', color: '#94a3b8' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1rem 1.5rem', borderTop: '1px solid var(--surface-2)' }}>
+              <span style={{ fontSize: '0.8125rem', color: 'var(--text-muted)' }}>
                 Page {page} of {totalPages} ({totalCount} total)
               </span>
               <div style={{ display: 'flex', gap: '0.5rem' }}>
@@ -292,6 +292,6 @@ export default function WarrantiesList() {
           )}
         </div>
       )}
-    </SupportLayout>
+    </PortalLayout>
   );
 }

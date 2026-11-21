@@ -43,7 +43,7 @@ export async function GET(request) {
           id,
           order_code,
           system_capacity_kw,
-          total_price,
+          total_amount,
           customer:customer_id (
             id,
             contact_name,

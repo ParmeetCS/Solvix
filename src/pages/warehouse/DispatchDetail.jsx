@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import WarehouseLayout from './WarehouseLayout';
+import PortalLayout from '@/components/PortalLayout';
 import { warehouseApi } from '@/services/api/warehouse';
 import {
   Truck,
@@ -93,7 +93,7 @@ export default function DispatchDetail() {
   const isDelivered = dispatch?.status === 'delivered';
 
   return (
-    <WarehouseLayout
+    <PortalLayout
       title={`Dispatch: ${dispatch?.dispatch_number || id}`}
       subtitle={`Carrier: ${dispatch?.transporter_name || '-'} | AWB: ${dispatch?.tracking_number || '-'}`}
       actions={
@@ -157,19 +157,19 @@ export default function DispatchDetail() {
 
       {/* Printable Delivery Challan & Dispatch Overview */}
       <div className="wh-card" id="delivery-challan">
-        <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid rgba(255,255,255,0.08)', paddingBottom: '16px', marginBottom: '20px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid rgba(var(--ink-rgb), 0.08)', paddingBottom: '16px', marginBottom: '20px' }}>
           <div>
-            <div style={{ fontSize: '1.4rem', fontWeight: 800, color: '#fff' }}>SOLVIX ENERGY SYSTEMS</div>
-            <div style={{ fontSize: '0.85rem', color: '#94a3b8' }}>Equipment Delivery Challan & Dispatch Manifest</div>
-            <div style={{ fontSize: '0.82rem', color: '#cbd5e1', marginTop: '4px' }}>
-              Dispatch Number: <strong style={{ color: '#38bdf8' }}>{dispatch?.dispatch_number}</strong>
+            <div style={{ fontSize: '1.4rem', fontWeight: 800, color: 'var(--text-strong)' }}>SOLVIX ENERGY SYSTEMS</div>
+            <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>Equipment Delivery Challan & Dispatch Manifest</div>
+            <div style={{ fontSize: '0.82rem', color: 'var(--text-soft)', marginTop: '4px' }}>
+              Dispatch Number: <strong style={{ color: 'var(--c-blue)' }}>{dispatch?.dispatch_number}</strong>
             </div>
           </div>
           <div style={{ textAlign: 'right' }}>
             <span className={`wh-badge ${isDelivered ? 'wh-badge-green' : 'wh-badge-blue'}`} style={{ fontSize: '0.85rem', padding: '6px 12px' }}>
               {dispatch?.status?.replace('_', ' ')}
             </span>
-            <div style={{ fontSize: '0.82rem', color: '#94a3b8', marginTop: '6px' }}>
+            <div style={{ fontSize: '0.82rem', color: 'var(--text-muted)', marginTop: '6px' }}>
               Date: {dispatch?.dispatched_at ? new Date(dispatch.dispatched_at).toLocaleDateString() : new Date().toLocaleDateString()}
             </div>
           </div>
@@ -178,31 +178,31 @@ export default function DispatchDetail() {
         {/* Customer & Transporter Metadata */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '20px', marginBottom: '24px' }}>
           <div>
-            <div style={{ fontSize: '0.78rem', textTransform: 'uppercase', color: '#94a3b8', fontWeight: 600 }}>Destination & Customer</div>
-            <div style={{ fontSize: '1rem', fontWeight: 600, color: '#fff', marginTop: '4px' }}>
+            <div style={{ fontSize: '0.78rem', textTransform: 'uppercase', color: 'var(--text-muted)', fontWeight: 600 }}>Destination & Customer</div>
+            <div style={{ fontSize: '1rem', fontWeight: 600, color: 'var(--text-strong)', marginTop: '4px' }}>
               {dispatch?.customer_name || 'Retail Client'}
             </div>
-            <div style={{ fontSize: '0.85rem', color: '#cbd5e1', marginTop: '2px' }}>
+            <div style={{ fontSize: '0.85rem', color: 'var(--text-soft)', marginTop: '2px' }}>
               {dispatch?.destination_address || 'Site Delivery'}
             </div>
           </div>
 
           <div>
-            <div style={{ fontSize: '0.78rem', textTransform: 'uppercase', color: '#94a3b8', fontWeight: 600 }}>Logistics & Carrier</div>
-            <div style={{ fontSize: '0.95rem', fontWeight: 600, color: '#fff', marginTop: '4px' }}>
+            <div style={{ fontSize: '0.78rem', textTransform: 'uppercase', color: 'var(--text-muted)', fontWeight: 600 }}>Logistics & Carrier</div>
+            <div style={{ fontSize: '0.95rem', fontWeight: 600, color: 'var(--text-strong)', marginTop: '4px' }}>
               {dispatch?.transporter_name}
             </div>
-            <div style={{ fontSize: '0.85rem', color: '#cbd5e1', marginTop: '2px' }}>
+            <div style={{ fontSize: '0.85rem', color: 'var(--text-soft)', marginTop: '2px' }}>
               AWB: {dispatch?.tracking_number || '-'} | Vehicle: {dispatch?.vehicle_number || '-'}
             </div>
           </div>
 
           <div>
-            <div style={{ fontSize: '0.78rem', textTransform: 'uppercase', color: '#94a3b8', fontWeight: 600 }}>Warehouse Facility</div>
-            <div style={{ fontSize: '0.95rem', fontWeight: 600, color: '#fff', marginTop: '4px' }}>
+            <div style={{ fontSize: '0.78rem', textTransform: 'uppercase', color: 'var(--text-muted)', fontWeight: 600 }}>Warehouse Facility</div>
+            <div style={{ fontSize: '0.95rem', fontWeight: 600, color: 'var(--text-strong)', marginTop: '4px' }}>
               {dispatch?.warehouse_name || 'Primary Regional Hub'}
             </div>
-            <div style={{ fontSize: '0.85rem', color: '#cbd5e1', marginTop: '2px' }}>
+            <div style={{ fontSize: '0.85rem', color: 'var(--text-soft)', marginTop: '2px' }}>
               Order Ref: {dispatch?.order_number || dispatch?.order_id || '-'}
             </div>
           </div>
@@ -222,20 +222,20 @@ export default function DispatchDetail() {
             <tbody>
               {(!dispatch?.items || dispatch.items.length === 0) ? (
                 <tr>
-                  <td colSpan="4" style={{ textAlign: 'center', color: '#94a3b8', padding: '20px' }}>
+                  <td colSpan="4" style={{ textAlign: 'center', color: 'var(--text-muted)', padding: '20px' }}>
                     No line items attached.
                   </td>
                 </tr>
               ) : (
                 dispatch.items.map((item, idx) => (
                   <tr key={idx}>
-                    <td style={{ fontWeight: 600, color: '#f8fafc' }}>
+                    <td style={{ fontWeight: 600, color: 'var(--text)' }}>
                       {item.product_name}
                     </td>
                     <td>
-                      <code style={{ fontSize: '0.8rem', color: '#38bdf8' }}>{item.product_sku}</code>
+                      <code style={{ fontSize: '0.8rem', color: 'var(--c-blue)' }}>{item.product_sku}</code>
                     </td>
-                    <td style={{ fontWeight: 700, color: '#fff' }}>
+                    <td style={{ fontWeight: 700, color: 'var(--text-strong)' }}>
                       {item.quantity} {item.unit || 'pcs'}
                     </td>
                     <td>
@@ -247,7 +247,7 @@ export default function DispatchDetail() {
                               style={{
                                 background: 'rgba(56, 189, 248, 0.1)',
                                 border: '1px solid rgba(56, 189, 248, 0.25)',
-                                color: '#38bdf8',
+                                color: 'var(--c-blue)',
                                 padding: '1px 6px',
                                 borderRadius: '4px',
                                 fontSize: '0.75rem'
@@ -258,7 +258,7 @@ export default function DispatchDetail() {
                           ))}
                         </div>
                       ) : (
-                        <span style={{ fontSize: '0.8rem', color: '#94a3b8' }}>Batch / Bulk</span>
+                        <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Batch / Bulk</span>
                       )}
                     </td>
                   </tr>
@@ -269,23 +269,23 @@ export default function DispatchDetail() {
         </div>
 
         {/* Handover & Delivery Signatures Block */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '24px', marginTop: '36px', paddingTop: '20px', borderTop: '1px dashed rgba(255,255,255,0.1)' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '24px', marginTop: '36px', paddingTop: '20px', borderTop: '1px dashed rgba(var(--ink-rgb), 0.1)' }}>
           <div>
-            <div style={{ fontSize: '0.8rem', color: '#94a3b8', marginBottom: '40px' }}>
+            <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '40px' }}>
               Warehouse Dispatcher Signature:
             </div>
-            <div style={{ borderBottom: '1px solid #94a3b8', width: '80%' }}></div>
-            <div style={{ fontSize: '0.78rem', color: '#cbd5e1', marginTop: '6px' }}>
+            <div style={{ borderBottom: '1px solid var(--text-muted)', width: '80%' }}></div>
+            <div style={{ fontSize: '0.78rem', color: 'var(--text-soft)', marginTop: '6px' }}>
               Authorized SOLVIX Dispatch Official
             </div>
           </div>
 
           <div>
-            <div style={{ fontSize: '0.8rem', color: '#94a3b8', marginBottom: '40px' }}>
+            <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '40px' }}>
               Recipient Signature & Date:
             </div>
-            <div style={{ borderBottom: '1px solid #94a3b8', width: '80%' }}></div>
-            <div style={{ fontSize: '0.78rem', color: '#cbd5e1', marginTop: '6px' }}>
+            <div style={{ borderBottom: '1px solid var(--text-muted)', width: '80%' }}></div>
+            <div style={{ fontSize: '0.78rem', color: 'var(--text-soft)', marginTop: '6px' }}>
               {isDelivered && dispatch.recipient_name ? (
                 <span>Received by: <strong>{dispatch.recipient_name}</strong></span>
               ) : (
@@ -301,7 +301,7 @@ export default function DispatchDetail() {
         <div className="wh-card">
           <div className="wh-card-header">
             <div className="wh-card-title">
-              <ShieldCheck size={18} style={{ color: '#10b981' }} />
+              <ShieldCheck size={18} style={{ color: 'var(--c-emerald)' }} />
               <span>Activated Warranties (Triggered by Delivery)</span>
             </div>
             <span className="wh-badge wh-badge-green">Live Warranties Active</span>
@@ -322,11 +322,11 @@ export default function DispatchDetail() {
               <tbody>
                 {dispatch.warranties.map((w, idx) => (
                   <tr key={idx}>
-                    <td style={{ fontWeight: 600, color: '#f8fafc' }}>{w.product_name}</td>
+                    <td style={{ fontWeight: 600, color: 'var(--text)' }}>{w.product_name}</td>
                     <td>
-                      <code style={{ fontSize: '0.82rem', color: '#38bdf8' }}>{w.serial_number}</code>
+                      <code style={{ fontSize: '0.82rem', color: 'var(--c-blue)' }}>{w.serial_number}</code>
                     </td>
-                    <td style={{ color: '#34d399', fontWeight: 600 }}>
+                    <td style={{ color: 'var(--c-green)', fontWeight: 600 }}>
                       {new Date(w.start_date).toLocaleDateString()}
                     </td>
                     <td>{new Date(w.expiry_date).toLocaleDateString()}</td>
@@ -348,12 +348,12 @@ export default function DispatchDetail() {
           <div className="wh-modal" style={{ maxWidth: '540px' }}>
             <div className="wh-modal-header">
               <h3 style={{ margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <PackageCheck size={18} style={{ color: '#10b981' }} />
+                <PackageCheck size={18} style={{ color: 'var(--c-emerald)' }} />
                 <span>Confirm Equipment Delivery</span>
               </h3>
               <button
                 onClick={() => setDeliverModalOpen(false)}
-                style={{ background: 'transparent', border: 'none', color: '#94a3b8', cursor: 'pointer' }}
+                style={{ background: 'transparent', border: 'none', color: 'var(--text-muted)', cursor: 'pointer' }}
               >
                 <X size={18} />
               </button>
@@ -440,6 +440,6 @@ export default function DispatchDetail() {
           </div>
         </div>
       )}
-    </WarehouseLayout>
+    </PortalLayout>
   );
 }

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import WarehouseLayout from './WarehouseLayout';
+import PortalLayout from '@/components/PortalLayout';
 import { warehouseApi } from '@/services/api/warehouse';
 import {
   QrCode,
@@ -129,7 +129,7 @@ export default function SerialRegistration() {
   };
 
   return (
-    <WarehouseLayout
+    <PortalLayout
       title="Register Equipment Serial Numbers"
       subtitle="Generate unique tracking identities and QR payloads for solar panels, inverters, and battery modules"
       actions={
@@ -174,7 +174,7 @@ export default function SerialRegistration() {
           <div className="wh-card">
             <div className="wh-card-header">
               <div className="wh-card-title">
-                <QrCode size={18} style={{ color: '#10b981' }} />
+                <QrCode size={18} style={{ color: 'var(--c-emerald)' }} />
                 <span>Single Equipment Details</span>
               </div>
             </div>
@@ -269,7 +269,7 @@ export default function SerialRegistration() {
           <div className="wh-card">
             <div className="wh-card-header">
               <div className="wh-card-title">
-                <FileText size={18} style={{ color: '#38bdf8' }} />
+                <FileText size={18} style={{ color: 'var(--c-blue)' }} />
                 <span>Batch Paste / Barcode Gun Rapid Import</span>
               </div>
             </div>
@@ -339,6 +339,6 @@ export default function SerialRegistration() {
           </div>
         </form>
       )}
-    </WarehouseLayout>
+    </PortalLayout>
   );
 }

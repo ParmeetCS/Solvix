@@ -40,7 +40,7 @@ export async function GET(request, { params }) {
           id,
           order_code,
           system_capacity_kw,
-          total_price,
+          total_amount,
           advance_paid,
           balance_due,
           status

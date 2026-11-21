@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import WarehouseLayout from './WarehouseLayout';
+import PortalLayout from '@/components/PortalLayout';
 import { warehouseApi } from '@/services/api/warehouse';
 import {
   CheckSquare,
@@ -45,7 +45,7 @@ export default function PackingQueue() {
   });
 
   return (
-    <WarehouseLayout
+    <PortalLayout
       title="Order Packing & Preparation Queue"
       subtitle="Eligible confirmed orders awaiting warehouse stock reservation, packing, and serial assignment"
       actions={
@@ -57,7 +57,7 @@ export default function PackingQueue() {
     >
       <div className="wh-filter-bar">
         <div className="wh-search-box">
-          <Search size={16} style={{ color: '#94a3b8' }} />
+          <Search size={16} style={{ color: 'var(--text-muted)' }} />
           <input
             type="text"
             placeholder="Search order number or customer name..."
@@ -84,7 +84,7 @@ export default function PackingQueue() {
             <tbody>
               {filteredQueue.length === 0 ? (
                 <tr>
-                  <td colSpan="7" style={{ textAlign: 'center', color: '#94a3b8', padding: '36px' }}>
+                  <td colSpan="7" style={{ textAlign: 'center', color: 'var(--text-muted)', padding: '36px' }}>
                     {loading ? 'Loading orders eligible for packing...' : 'No orders in packing queue.'}
                   </td>
                 </tr>
@@ -96,13 +96,13 @@ export default function PackingQueue() {
                   return (
                     <tr key={order.order_id}>
                       <td>
-                        <strong style={{ color: '#38bdf8' }}>{order.order_number}</strong>
+                        <strong style={{ color: 'var(--c-blue)' }}>{order.order_number}</strong>
                       </td>
-                      <td style={{ fontWeight: 600, color: '#f8fafc' }}>
+                      <td style={{ fontWeight: 600, color: 'var(--text)' }}>
                         {order.customer_name || 'Retail Client'}
                       </td>
                       <td>
-                        <span style={{ fontSize: '0.82rem', color: '#cbd5e1' }}>
+                        <span style={{ fontSize: '0.82rem', color: 'var(--text-soft)' }}>
                           {order.system_type || 'Rooftop Solar'} ({order.system_capacity_kw || 10} kW)
                         </span>
                       </td>
@@ -134,6 +134,6 @@ export default function PackingQueue() {
           </table>
         </div>
       </div>
-    </WarehouseLayout>
+    </PortalLayout>
   );
 }

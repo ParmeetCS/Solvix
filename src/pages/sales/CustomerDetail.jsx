@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import SalesLayout from './SalesLayout';
+import PortalLayout from '@/components/PortalLayout';
 import { salesApi } from '@/services/api';
 import {
   ArrowLeft,
@@ -47,7 +47,7 @@ export default function CustomerDetail() {
   const interactions = data?.interactions || [];
 
   return (
-    <SalesLayout
+    <PortalLayout
       title={customer ? `${customer.contact_name} (Customer)` : 'Customer 360°'}
       subtitle={customer ? `Code: ${customer.customer_code} • Type: ${customer.customer_type}` : ''}
       actions={
@@ -57,11 +57,11 @@ export default function CustomerDetail() {
       }
     >
       {loading ? (
-        <div className="crm-card" style={{ padding: '60px', textAlign: 'center', color: '#94a3b8' }}>
+        <div className="crm-card" style={{ padding: '60px', textAlign: 'center', color: 'var(--text-muted)' }}>
           Loading customer 360° history...
         </div>
       ) : error ? (
-        <div className="crm-card" style={{ color: '#f87171' }}>{error}</div>
+        <div className="crm-card" style={{ color: 'var(--c-red)' }}>{error}</div>
       ) : !customer ? (
         <div className="crm-card">Customer not found.</div>
       ) : (
@@ -74,25 +74,25 @@ export default function CustomerDetail() {
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', fontSize: '0.9rem' }}>
                 <div>
-                  <div style={{ color: '#94a3b8', fontSize: '0.78rem' }}>CONTACT NAME</div>
-                  <div style={{ fontWeight: 600, color: '#fff' }}>{customer.contact_name}</div>
+                  <div style={{ color: 'var(--text-muted)', fontSize: '0.78rem' }}>CONTACT NAME</div>
+                  <div style={{ fontWeight: 600, color: 'var(--text-strong)' }}>{customer.contact_name}</div>
                 </div>
                 {customer.company_name && (
                   <div>
-                    <div style={{ color: '#94a3b8', fontSize: '0.78rem' }}>COMPANY</div>
+                    <div style={{ color: 'var(--text-muted)', fontSize: '0.78rem' }}>COMPANY</div>
                     <div>{customer.company_name}</div>
                   </div>
                 )}
                 <div>
-                  <div style={{ color: '#94a3b8', fontSize: '0.78rem' }}>PHONE</div>
+                  <div style={{ color: 'var(--text-muted)', fontSize: '0.78rem' }}>PHONE</div>
                   <div>{customer.phone || 'N/A'}</div>
                 </div>
                 <div>
-                  <div style={{ color: '#94a3b8', fontSize: '0.78rem' }}>EMAIL</div>
+                  <div style={{ color: 'var(--text-muted)', fontSize: '0.78rem' }}>EMAIL</div>
                   <div>{customer.email}</div>
                 </div>
                 <div>
-                  <div style={{ color: '#94a3b8', fontSize: '0.78rem' }}>ACCOUNT STATUS</div>
+                  <div style={{ color: 'var(--text-muted)', fontSize: '0.78rem' }}>ACCOUNT STATUS</div>
                   <span className={`crm-badge crm-badge-${customer.status === 'active' ? 'converted' : 'lost'}`}>
                     {customer.status}
                   </span>
@@ -106,13 +106,13 @@ export default function CustomerDetail() {
                 <span className="crm-card-title">Site Addresses ({addresses.length})</span>
               </div>
               {addresses.length === 0 ? (
-                <p style={{ color: '#64748b', fontSize: '0.88rem' }}>No specific address saved.</p>
+                <p style={{ color: 'var(--text-dim)', fontSize: '0.88rem' }}>No specific address saved.</p>
               ) : (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                   {addresses.map((addr) => (
-                    <div key={addr.id} style={{ padding: '8px 12px', background: 'rgba(255,255,255,0.02)', borderRadius: '6px' }}>
-                      <div style={{ fontWeight: 600, color: '#fff', fontSize: '0.84rem' }}>{addr.label || 'Primary'}</div>
-                      <div style={{ color: '#cbd5e1', fontSize: '0.82rem' }}>
+                    <div key={addr.id} style={{ padding: '8px 12px', background: 'rgba(var(--ink-rgb), 0.02)', borderRadius: '6px' }}>
+                      <div style={{ fontWeight: 600, color: 'var(--text-strong)', fontSize: '0.84rem' }}>{addr.label || 'Primary'}</div>
+                      <div style={{ color: 'var(--text-soft)', fontSize: '0.82rem' }}>
                         {addr.street}, {addr.city} {addr.postal_code}
                       </div>
                     </div>
@@ -128,16 +128,16 @@ export default function CustomerDetail() {
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.88rem' }}>
-                  <span style={{ color: '#94a3b8' }}>Total Solar Leads:</span>
+                  <span style={{ color: 'var(--text-muted)' }}>Total Solar Leads:</span>
                   <b>{leads.length}</b>
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.88rem' }}>
-                  <span style={{ color: '#94a3b8' }}>Quotations Issued:</span>
+                  <span style={{ color: 'var(--text-muted)' }}>Quotations Issued:</span>
                   <b>{quotations.length}</b>
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.88rem' }}>
-                  <span style={{ color: '#94a3b8' }}>Confirmed Orders:</span>
-                  <b style={{ color: '#d8ee8e' }}>{orders.length}</b>
+                  <span style={{ color: 'var(--text-muted)' }}>Confirmed Orders:</span>
+                  <b style={{ color: 'var(--accent-text)' }}>{orders.length}</b>
                 </div>
               </div>
             </div>
@@ -149,7 +149,7 @@ export default function CustomerDetail() {
               <span className="crm-card-title">Connected Solar Enquiries & Leads ({leads.length})</span>
             </div>
             {leads.length === 0 ? (
-              <p style={{ color: '#64748b', fontSize: '0.88rem' }}>No leads attached to this customer.</p>
+              <p style={{ color: 'var(--text-dim)', fontSize: '0.88rem' }}>No leads attached to this customer.</p>
             ) : (
               <div className="crm-table-container">
                 <table className="crm-table">
@@ -165,7 +165,7 @@ export default function CustomerDetail() {
                   <tbody>
                     {leads.map((l) => (
                       <tr key={l.id}>
-                        <td><b style={{ color: '#d8ee8e' }}>{l.lead_code}</b></td>
+                        <td><b style={{ color: 'var(--accent-text)' }}>{l.lead_code}</b></td>
                         <td style={{ textTransform: 'capitalize' }}>{l.source}</td>
                         <td>
                           <span className={`crm-badge crm-badge-${l.status}`}>
@@ -194,14 +194,14 @@ export default function CustomerDetail() {
                 <span className="crm-card-title">Solar Quotations ({quotations.length})</span>
               </div>
               {quotations.length === 0 ? (
-                <p style={{ color: '#64748b', fontSize: '0.88rem' }}>No quotations issued yet.</p>
+                <p style={{ color: 'var(--text-dim)', fontSize: '0.88rem' }}>No quotations issued yet.</p>
               ) : (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                   {quotations.map((q) => (
-                    <div key={q.id} style={{ padding: '10px 14px', background: 'rgba(255,255,255,0.03)', borderRadius: '6px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <div key={q.id} style={{ padding: '10px 14px', background: 'rgba(var(--ink-rgb), 0.03)', borderRadius: '6px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                       <div>
                         <b>{q.quotation_code}</b>
-                        <div style={{ fontSize: '0.78rem', color: '#94a3b8' }}>
+                        <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>
                           {q.system_capacity_kw} kW ({q.system_type}) • ₹ {q.total_amount}
                         </div>
                       </div>
@@ -218,14 +218,14 @@ export default function CustomerDetail() {
                 <span className="crm-card-title">Installation Orders ({orders.length})</span>
               </div>
               {orders.length === 0 ? (
-                <p style={{ color: '#64748b', fontSize: '0.88rem' }}>No active or past installation orders.</p>
+                <p style={{ color: 'var(--text-dim)', fontSize: '0.88rem' }}>No active or past installation orders.</p>
               ) : (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                   {orders.map((o) => (
-                    <div key={o.id} style={{ padding: '10px 14px', background: 'rgba(255,255,255,0.03)', borderRadius: '6px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <div key={o.id} style={{ padding: '10px 14px', background: 'rgba(var(--ink-rgb), 0.03)', borderRadius: '6px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                       <div>
                         <b>{o.order_code}</b>
-                        <div style={{ fontSize: '0.78rem', color: '#94a3b8' }}>
+                        <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>
                           Total: ₹ {o.total_amount} • Balance Due: ₹ {o.balance_due}
                         </div>
                       </div>
@@ -243,20 +243,20 @@ export default function CustomerDetail() {
               <span className="crm-card-title">Customer Interaction Timeline ({interactions.length})</span>
             </div>
             {interactions.length === 0 ? (
-              <p style={{ color: '#64748b', fontSize: '0.88rem' }}>No interactions recorded.</p>
+              <p style={{ color: 'var(--text-dim)', fontSize: '0.88rem' }}>No interactions recorded.</p>
             ) : (
               <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                 {interactions.map((it) => (
-                  <div key={it.id} style={{ padding: '10px 14px', background: 'rgba(255,255,255,0.02)', borderRadius: '6px' }}>
+                  <div key={it.id} style={{ padding: '10px 14px', background: 'rgba(var(--ink-rgb), 0.02)', borderRadius: '6px' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <span style={{ fontWeight: 600, color: '#fff' }}>{it.subject}</span>
-                      <span style={{ fontSize: '0.74rem', color: '#64748b' }}>{new Date(it.occurred_at).toLocaleString()}</span>
+                      <span style={{ fontWeight: 600, color: 'var(--text-strong)' }}>{it.subject}</span>
+                      <span style={{ fontSize: '0.74rem', color: 'var(--text-dim)' }}>{new Date(it.occurred_at).toLocaleString()}</span>
                     </div>
-                    <div style={{ fontSize: '0.76rem', color: '#94a3b8', marginTop: '2px', textTransform: 'capitalize' }}>
+                    <div style={{ fontSize: '0.76rem', color: 'var(--text-muted)', marginTop: '2px', textTransform: 'capitalize' }}>
                       Channel: {it.interaction_type} • By: {it.author?.full_name || 'System'}
                     </div>
                     {it.summary && (
-                      <p style={{ fontSize: '0.84rem', color: '#cbd5e1', marginTop: '4px' }}>{it.summary}</p>
+                      <p style={{ fontSize: '0.84rem', color: 'var(--text-soft)', marginTop: '4px' }}>{it.summary}</p>
                     )}
                   </div>
                 ))}
@@ -265,6 +265,6 @@ export default function CustomerDetail() {
           </div>
         </>
       )}
-    </SalesLayout>
+    </PortalLayout>
   );
 }

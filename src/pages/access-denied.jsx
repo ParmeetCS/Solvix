@@ -19,7 +19,7 @@ export default function AccessDenied() {
           Go to my dashboard
         </Link>
         <p className="auth-foot">
-          Need different access? <button onClick={handleLogout} style={{ background: 'none', border: 0, color: '#d8ee8e', cursor: 'pointer', textDecoration: 'underline' }}>Sign out</button>
+          Need different access? <button onClick={handleLogout} style={{ background: 'none', border: 0, color: 'var(--accent-text)', cursor: 'pointer', textDecoration: 'underline' }}>Sign out</button>
         </p>
       </div>
     </div>

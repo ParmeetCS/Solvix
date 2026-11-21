@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import SalesLayout from './SalesLayout';
+import PortalLayout from '@/components/PortalLayout';
 import { quotationsApi } from '@/services/api';
 import {
   Search,
@@ -86,7 +86,7 @@ export default function OrdersList() {
   );
 
   return (
-    <SalesLayout
+    <PortalLayout
       title="Orders"
       subtitle="Track accepted quotations through payment, dispatch and warehouse handoff"
     >
@@ -122,7 +122,7 @@ export default function OrdersList() {
 
       <form className="q-filter-bar" onSubmit={handleSearch}>
         <div className="q-search">
-          <Search size={16} style={{ color: '#94a3b8' }} />
+          <Search size={16} style={{ color: 'var(--text-muted)' }} />
           <input
             type="text"
             placeholder="Search order code, quotation or customer…"
@@ -150,7 +150,7 @@ export default function OrdersList() {
           <option value="overdue">Overdue</option>
           <option value="refunded">Refunded</option>
         </select>
-        <label style={{ display: 'flex', alignItems: 'center', gap: 8, color: '#cbd5e1', fontSize: '0.84rem' }}>
+        <label style={{ display: 'flex', alignItems: 'center', gap: 8, color: 'var(--text-soft)', fontSize: '0.84rem' }}>
           <input
             type="checkbox"
             checked={warehouseReady}
@@ -192,28 +192,28 @@ export default function OrdersList() {
                 {orders.map((order) => (
                   <tr key={order.id}>
                     <td>
-                      <b style={{ color: '#d8ee8e' }}>{order.order_code}</b>
-                      <div style={{ fontSize: '0.72rem', color: '#64748b' }}>
+                      <b style={{ color: 'var(--accent-text)' }}>{order.order_code}</b>
+                      <div style={{ fontSize: '0.72rem', color: 'var(--text-dim)' }}>
                         {order.quotation?.quotation_code || formatDate(order.created_at)}
                       </div>
                     </td>
                     <td>
-                      <div style={{ fontWeight: 600, color: '#fff' }}>
+                      <div style={{ fontWeight: 600, color: 'var(--text-strong)' }}>
                         {order.customer?.company_name || order.customer?.contact_name || 'Customer'}
                       </div>
-                      <div style={{ fontSize: '0.74rem', color: '#94a3b8' }}>
+                      <div style={{ fontSize: '0.74rem', color: 'var(--text-muted)' }}>
                         {order.customer?.customer_code || order.customer?.phone || '—'}
                       </div>
                     </td>
                     <td>
                       <div style={{ textTransform: 'capitalize' }}>{order.system_type?.replace('-', ' ')}</div>
-                      <div style={{ fontSize: '0.74rem', color: '#94a3b8' }}>
+                      <div style={{ fontSize: '0.74rem', color: 'var(--text-muted)' }}>
                         {formatNumber(order.system_capacity_kw)} kW
                       </div>
                     </td>
                     <td>{formatCurrency(order.total_amount)}</td>
                     <td>{formatCurrency(order.advance_paid)}</td>
-                    <td style={{ color: Number(order.balance_due) > 0 ? '#fbbf24' : '#86efac' }}>
+                    <td style={{ color: Number(order.balance_due) > 0 ? 'var(--c-amber-soft)' : 'var(--c-green-soft)' }}>
                       {formatCurrency(order.balance_due)}
                     </td>
                     <td>
@@ -254,10 +254,10 @@ export default function OrdersList() {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'space-between',
-              borderTop: '1px solid rgba(255,255,255,0.06)',
+              borderTop: '1px solid rgba(var(--ink-rgb), 0.06)',
             }}
           >
-            <span style={{ fontSize: '0.82rem', color: '#94a3b8' }}>
+            <span style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>
               Page {pagination.page} of {pagination.totalPages} ({pagination.total} orders)
             </span>
             <div style={{ display: 'flex', gap: 8 }}>
@@ -279,6 +279,6 @@ export default function OrdersList() {
           </div>
         )}
       </div>
-    </SalesLayout>
+    </PortalLayout>
   );
 }

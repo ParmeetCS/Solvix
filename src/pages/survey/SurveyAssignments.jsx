@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import SurveyLayout from './SurveyLayout';
+import PortalLayout from '@/components/PortalLayout';
 import { surveyApi } from '@/services/api';
 import {
   CalendarCheck2,
@@ -81,7 +81,7 @@ export default function SurveyAssignments() {
   const unassignedSurveys = surveys.filter(s => s.status === 'pending');
 
   return (
-    <SurveyLayout
+    <PortalLayout
       title="Surveyor Assignments & Workload Capacity"
       subtitle="Monitor field engineer availability, balance survey workload, and dispatch site inspections"
       actions={
@@ -106,7 +106,7 @@ export default function SurveyAssignments() {
         <div
           className="survey-card"
           style={{
-            borderColor: '#f59e0b',
+            borderColor: 'var(--c-amber)',
             background: 'rgba(245, 158, 11, 0.08)',
             display: 'flex',
             alignItems: 'center',
@@ -115,12 +115,12 @@ export default function SurveyAssignments() {
           }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <AlertCircle size={22} style={{ color: '#fbbf24' }} />
+            <AlertCircle size={22} style={{ color: 'var(--c-amber-soft)' }} />
             <div>
-              <div style={{ fontWeight: 600, color: '#fbbf24' }}>
+              <div style={{ fontWeight: 600, color: 'var(--c-amber-soft)' }}>
                 {unassignedSurveys.length} Survey Request(s) Pending Assignment
               </div>
-              <div style={{ fontSize: '0.82rem', color: '#cbd5e1', marginTop: '2px' }}>
+              <div style={{ fontSize: '0.82rem', color: 'var(--text-soft)', marginTop: '2px' }}>
                 Field engineers need to be assigned to these incoming requests from Sales.
               </div>
             </div>
@@ -140,7 +140,7 @@ export default function SurveyAssignments() {
 
       {/* Surveyor Cards Grid */}
       <div>
-        <h3 style={{ color: '#fff', fontSize: '1.1rem', marginBottom: '14px' }}>
+        <h3 style={{ color: 'var(--text-strong)', fontSize: '1.1rem', marginBottom: '14px' }}>
           Field Surveyors & Workload Status
         </h3>
 
@@ -154,10 +154,10 @@ export default function SurveyAssignments() {
                 <div>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '12px' }}>
                     <div>
-                      <h4 style={{ margin: 0, color: '#fff', fontSize: '1.05rem', fontWeight: 600 }}>
+                      <h4 style={{ margin: 0, color: 'var(--text-strong)', fontSize: '1.05rem', fontWeight: 600 }}>
                         {sr.full_name}
                       </h4>
-                      <span style={{ fontSize: '0.8rem', color: '#94a3b8' }}>
+                      <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
                         {sr.role || 'Survey Engineer'}
                       </span>
                     </div>
@@ -166,7 +166,7 @@ export default function SurveyAssignments() {
                       className="survey-badge"
                       style={{
                         background: isHighLoad ? 'rgba(239, 68, 68, 0.15)' : 'rgba(16, 185, 129, 0.15)',
-                        color: isHighLoad ? '#f87171' : '#34d399',
+                        color: isHighLoad ? 'var(--c-red)' : 'var(--c-green)',
                         border: `1px solid ${isHighLoad ? 'rgba(239, 68, 68, 0.3)' : 'rgba(16, 185, 129, 0.3)'}`
                       }}
                     >
@@ -174,22 +174,22 @@ export default function SurveyAssignments() {
                     </span>
                   </div>
 
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', fontSize: '0.82rem', color: '#cbd5e1', marginBottom: '16px' }}>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', fontSize: '0.82rem', color: 'var(--text-soft)', marginBottom: '16px' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      <Phone size={13} style={{ color: '#94a3b8' }} /> {sr.phone || '+91 98101 00000'}
+                      <Phone size={13} style={{ color: 'var(--text-muted)' }} /> {sr.phone || '+91 98101 00000'}
                     </div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      <Mail size={13} style={{ color: '#94a3b8' }} /> {sr.email}
+                      <Mail size={13} style={{ color: 'var(--text-muted)' }} /> {sr.email}
                     </div>
                   </div>
 
                   {/* Workload Meter */}
                   <div style={{ background: 'rgba(0,0,0,0.3)', padding: '12px', borderRadius: '8px', marginBottom: '16px' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.82rem', marginBottom: '6px' }}>
-                      <span style={{ color: '#94a3b8' }}>Active Visits Allocated:</span>
-                      <span style={{ fontWeight: 700, color: '#38bdf8' }}>{activeVisits} / 5 max</span>
+                      <span style={{ color: 'var(--text-muted)' }}>Active Visits Allocated:</span>
+                      <span style={{ fontWeight: 700, color: 'var(--c-blue)' }}>{activeVisits} / 5 max</span>
                     </div>
-                    <div style={{ height: '6px', background: 'rgba(255,255,255,0.08)', borderRadius: '3px', overflow: 'hidden' }}>
+                    <div style={{ height: '6px', background: 'rgba(var(--ink-rgb), 0.08)', borderRadius: '3px', overflow: 'hidden' }}>
                       <div
                         style={{
                           height: '100%',
@@ -199,7 +199,7 @@ export default function SurveyAssignments() {
                         }}
                       />
                     </div>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.74rem', color: '#64748b', marginTop: '6px' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.74rem', color: 'var(--text-dim)', marginTop: '6px' }}>
                       <span>Completed: {sr.completed_surveys || 0}</span>
                       <span>Quality Rating: {sr.rating || '4.9'} / 5.0</span>
                     </div>
@@ -229,7 +229,7 @@ export default function SurveyAssignments() {
       <div className="survey-card" style={{ marginTop: '20px' }}>
         <div className="survey-card-header">
           <h3>
-            <CalendarCheck2 size={18} style={{ color: '#60a5fa' }} />
+            <CalendarCheck2 size={18} style={{ color: 'var(--c-blue)' }} />
             Assignment History & Dispatches
           </h3>
         </div>
@@ -253,25 +253,25 @@ export default function SurveyAssignments() {
                   <td>
                     <Link
                       to={`/survey/requests/${asg.survey_id}`}
-                      style={{ color: '#38bdf8', fontWeight: 600, textDecoration: 'none' }}
+                      style={{ color: 'var(--c-blue)', fontWeight: 600, textDecoration: 'none' }}
                     >
                       {asg.survey_code}
                     </Link>
                   </td>
                   <td>
-                    <div style={{ fontWeight: 500, color: '#fff' }}>{asg.customer_name}</div>
-                    <div style={{ fontSize: '0.78rem', color: '#94a3b8' }}>{asg.site_address}</div>
+                    <div style={{ fontWeight: 500, color: 'var(--text-strong)' }}>{asg.customer_name}</div>
+                    <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>{asg.site_address}</div>
                   </td>
                   <td>
-                    <span style={{ fontWeight: 500, color: '#60a5fa' }}>{asg.assigned_to_name}</span>
+                    <span style={{ fontWeight: 500, color: 'var(--c-blue)' }}>{asg.assigned_to_name}</span>
                   </td>
                   <td>
-                    <span style={{ color: '#22d3ee' }}>
+                    <span style={{ color: 'var(--c-blue)' }}>
                       {asg.scheduled_at ? new Date(asg.scheduled_at).toLocaleDateString() : 'Awaiting date'}
                     </span>
                   </td>
                   <td>
-                    <span style={{ fontSize: '0.82rem', color: '#94a3b8' }}>
+                    <span style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>
                       {asg.assigned_by_name || 'Admin'}
                     </span>
                   </td>
@@ -299,7 +299,7 @@ export default function SurveyAssignments() {
       {showAssignModal && (
         <div className="survey-modal-overlay">
           <div className="survey-modal-content">
-            <h3 style={{ color: '#fff', margin: '0 0 16px 0' }}>Assign Survey to Field Engineer</h3>
+            <h3 style={{ color: 'var(--text-strong)', margin: '0 0 16px 0' }}>Assign Survey to Field Engineer</h3>
             <form onSubmit={handleAssignSubmit}>
               <div className="survey-form-group">
                 <label className="survey-label">Select Survey Request</label>
@@ -389,6 +389,6 @@ export default function SurveyAssignments() {
           </div>
         </div>
       )}
-    </SurveyLayout>
+    </PortalLayout>
   );
 }

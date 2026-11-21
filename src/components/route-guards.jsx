@@ -21,8 +21,8 @@ function FullPageMessage({ children }) {
         minHeight: '100vh',
         display: 'grid',
         placeItems: 'center',
-        background: '#0a1224',
-        color: '#9fb0c8',
+        background: 'var(--app-bg)',
+        color: 'var(--text-muted)',
         fontFamily: 'inherit',
       }}
     >

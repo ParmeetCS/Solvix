@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import WarehouseLayout from './WarehouseLayout';
+import PortalLayout from '@/components/PortalLayout';
 import { warehouseApi } from '@/services/api/warehouse';
 import {
   Layers,
@@ -136,7 +136,7 @@ export default function InventoryList() {
   };
 
   return (
-    <WarehouseLayout
+    <PortalLayout
       title="Stock Inventory & Warehouses"
       subtitle="Multi-warehouse stock levels, reservations, adjustments, and location tracking"
       actions={
@@ -163,7 +163,7 @@ export default function InventoryList() {
       {/* Filter and Facility Selector */}
       <div className="wh-filter-bar">
         <form onSubmit={handleSearchSubmit} className="wh-search-box">
-          <Search size={16} style={{ color: '#94a3b8' }} />
+          <Search size={16} style={{ color: 'var(--text-muted)' }} />
           <input
             type="text"
             placeholder="Search product name, SKU, or bin location..."
@@ -173,7 +173,7 @@ export default function InventoryList() {
         </form>
 
         <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-          <label style={{ fontSize: '0.82rem', color: '#94a3b8' }}>Facility:</label>
+          <label style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>Facility:</label>
           <select
             className="wh-select"
             value={selectedWh}
@@ -208,7 +208,7 @@ export default function InventoryList() {
             <tbody>
               {inventory.length === 0 ? (
                 <tr>
-                  <td colSpan="10" style={{ textAlign: 'center', color: '#94a3b8', padding: '36px' }}>
+                  <td colSpan="10" style={{ textAlign: 'center', color: 'var(--text-muted)', padding: '36px' }}>
                     {loading ? 'Loading inventory data...' : 'No inventory records found.'}
                   </td>
                 </tr>
@@ -223,11 +223,11 @@ export default function InventoryList() {
                   return (
                     <tr key={item.id}>
                       <td>
-                        <code style={{ fontSize: '0.82rem', color: '#38bdf8', background: 'rgba(56, 189, 248, 0.08)', padding: '2px 6px', borderRadius: '4px' }}>
+                        <code style={{ fontSize: '0.82rem', color: 'var(--c-blue)', background: 'rgba(56, 189, 248, 0.08)', padding: '2px 6px', borderRadius: '4px' }}>
                           {item.product_sku || item.product?.sku}
                         </code>
                       </td>
-                      <td style={{ fontWeight: 600, color: '#f8fafc' }}>
+                      <td style={{ fontWeight: 600, color: 'var(--text)' }}>
                         <Link to={`/warehouse/inventory/${item.id}`} style={{ color: 'inherit', textDecoration: 'none' }}>
                           {item.product_name || item.product?.name}
                         </Link>
@@ -236,19 +236,19 @@ export default function InventoryList() {
                         <span style={{ fontSize: '0.85rem' }}>{item.warehouse_name || item.warehouse?.name}</span>
                       </td>
                       <td>
-                        <span style={{ fontSize: '0.82rem', color: '#94a3b8' }}>
+                        <span style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>
                           {item.bin_location || 'Aisle 1-A'}
                         </span>
                       </td>
-                      <td style={{ fontWeight: 700, color: '#fff' }}>
+                      <td style={{ fontWeight: 700, color: 'var(--text-strong)' }}>
                         {onHand}
                       </td>
-                      <td style={{ color: reserved > 0 ? '#fbbf24' : '#94a3b8' }}>
+                      <td style={{ color: reserved > 0 ? 'var(--c-amber-soft)' : 'var(--text-muted)' }}>
                         {reserved}
                       </td>
                       <td>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                          <span style={{ fontWeight: 700, color: isOut ? '#f87171' : isLow ? '#fbbf24' : '#34d399' }}>
+                          <span style={{ fontWeight: 700, color: isOut ? 'var(--c-red)' : isLow ? 'var(--c-amber-soft)' : 'var(--c-green)' }}>
                             {available}
                           </span>
                           {isOut ? (
@@ -313,7 +313,7 @@ export default function InventoryList() {
               </h3>
               <button
                 onClick={() => setActiveModal(null)}
-                style={{ background: 'transparent', border: 'none', color: '#94a3b8', cursor: 'pointer' }}
+                style={{ background: 'transparent', border: 'none', color: 'var(--text-muted)', cursor: 'pointer' }}
               >
                 <X size={18} />
               </button>
@@ -471,6 +471,6 @@ export default function InventoryList() {
           </div>
         </div>
       )}
-    </WarehouseLayout>
+    </PortalLayout>
   );
 }

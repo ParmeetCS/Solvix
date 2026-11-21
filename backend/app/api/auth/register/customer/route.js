@@ -41,7 +41,9 @@ export async function POST(request) {
 
     // Create user in Supabase Auth
     const adminSupa = createAdminClient();
-    const { data: authData, error: authError } = await adminSupa.auth.signUp({
+    // signUp may return a session when email confirmation is off; keep that client away from the database writes below.
+    const authClient = createAdminClient();
+    const { data: authData, error: authError } = await authClient.auth.signUp({
       email: body.email,
       password: body.password,
       options: {

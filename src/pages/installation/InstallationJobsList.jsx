@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
-import InstallationLayout from './InstallationLayout';
+import PortalLayout from '@/components/PortalLayout';
 import { installationApi } from '@/services/api';
 import {
   Wrench,
@@ -52,7 +52,7 @@ export default function InstallationJobsList() {
   }, [loadData]);
 
   return (
-    <InstallationLayout
+    <PortalLayout
       title="Installation Projects"
       subtitle="Track end-to-end solar execution from site arrival to digital signoff"
       actions={
@@ -75,7 +75,7 @@ export default function InstallationJobsList() {
       {/* Filter Bar */}
       <div className="inst-filter-bar">
         <div style={{ position: 'relative', flex: 1, minWidth: '220px' }}>
-          <Search size={15} style={{ position: 'absolute', left: 12, top: 11, color: '#64748b' }} />
+          <Search size={15} style={{ position: 'absolute', left: 12, top: 11, color: 'var(--text-dim)' }} />
           <input
             type="text"
             className="inst-input"
@@ -132,7 +132,7 @@ export default function InstallationJobsList() {
       </div>
 
       {error && (
-        <div style={{ background: 'rgba(239, 68, 68, 0.1)', border: '1px solid rgba(239, 68, 68, 0.3)', borderRadius: 8, padding: '12px 16px', color: '#f87171', marginBottom: 20 }}>
+        <div style={{ background: 'rgba(239, 68, 68, 0.1)', border: '1px solid rgba(239, 68, 68, 0.3)', borderRadius: 8, padding: '12px 16px', color: 'var(--c-red)', marginBottom: 20 }}>
           {error}
         </div>
       )}
@@ -157,13 +157,13 @@ export default function InstallationJobsList() {
             <tbody>
               {loading ? (
                 <tr>
-                  <td colSpan="9" style={{ textAlign: 'center', padding: '36px', color: '#94a3b8' }}>
+                  <td colSpan="9" style={{ textAlign: 'center', padding: '36px', color: 'var(--text-muted)' }}>
                     Loading installation projects...
                   </td>
                 </tr>
               ) : jobs.length === 0 ? (
                 <tr>
-                  <td colSpan="9" style={{ textAlign: 'center', padding: '36px', color: '#64748b' }}>
+                  <td colSpan="9" style={{ textAlign: 'center', padding: '36px', color: 'var(--text-dim)' }}>
                     No installation projects found matching the criteria.
                   </td>
                 </tr>
@@ -171,50 +171,50 @@ export default function InstallationJobsList() {
                 jobs.map(j => (
                   <tr key={j.id}>
                     <td>
-                      <span style={{ fontWeight: 600, color: '#f59e0b' }}>{j.installation_code}</span>
+                      <span style={{ fontWeight: 600, color: 'var(--c-amber)' }}>{j.installation_code}</span>
                     </td>
                     <td>
-                      <span style={{ color: '#cbd5e1' }}>{j.order_code}</span>
+                      <span style={{ color: 'var(--text-soft)' }}>{j.order_code}</span>
                     </td>
                     <td>
-                      <div style={{ fontWeight: 600, color: '#fff' }}>{j.customer_name}</div>
-                      <div style={{ fontSize: '0.75rem', color: '#94a3b8' }}>{j.city}</div>
+                      <div style={{ fontWeight: 600, color: 'var(--text-strong)' }}>{j.customer_name}</div>
+                      <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{j.city}</div>
                     </td>
                     <td>
-                      <span style={{ fontWeight: 600, color: '#38bdf8' }}>{j.system_capacity_kw} kW</span>
-                      <span style={{ fontSize: '0.75rem', color: '#64748b', marginLeft: 6, textTransform: 'capitalize' }}>
+                      <span style={{ fontWeight: 600, color: 'var(--c-blue)' }}>{j.system_capacity_kw} kW</span>
+                      <span style={{ fontSize: '0.75rem', color: 'var(--text-dim)', marginLeft: 6, textTransform: 'capitalize' }}>
                         ({j.system_type})
                       </span>
                     </td>
                     <td>
-                      <div style={{ color: '#f1f5f9' }}>{j.planned_installation_date || 'Unscheduled'}</div>
+                      <div style={{ color: 'var(--text)' }}>{j.planned_installation_date || 'Unscheduled'}</div>
                       {j.expected_completion_date && (
-                        <div style={{ fontSize: '0.72rem', color: '#64748b' }}>Due: {j.expected_completion_date}</div>
+                        <div style={{ fontSize: '0.72rem', color: 'var(--text-dim)' }}>Due: {j.expected_completion_date}</div>
                       )}
                     </td>
                     <td>
                       {(j.assigned_technicians || []).length > 0 ? (
                         <div>
-                          <div style={{ color: '#fff', fontWeight: 500 }}>
+                          <div style={{ color: 'var(--text-strong)', fontWeight: 500 }}>
                             {(j.assigned_technicians || []).find(a => a.is_primary)?.full_name || j.assigned_technicians[0].full_name}
                           </div>
                           {(j.assigned_technicians || []).length > 1 && (
-                            <div style={{ fontSize: '0.72rem', color: '#94a3b8' }}>
+                            <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>
                               +{(j.assigned_technicians || []).length - 1} assistant(s)
                             </div>
                           )}
                         </div>
                       ) : (
-                        <span style={{ color: '#f59e0b', fontSize: '0.78rem' }}>Unassigned</span>
+                        <span style={{ color: 'var(--c-amber)', fontSize: '0.78rem' }}>Unassigned</span>
                       )}
                     </td>
                     <td>
                       {j.equipment_verified ? (
-                        <span style={{ color: '#10b981', fontSize: '0.78rem', fontWeight: 600 }}>✓ Serials OK</span>
+                        <span style={{ color: 'var(--c-emerald)', fontSize: '0.78rem', fontWeight: 600 }}>✓ Serials OK</span>
                       ) : j.exception_recorded ? (
-                        <span style={{ color: '#f97316', fontSize: '0.78rem', fontWeight: 600 }}>⚠ Exception</span>
+                        <span style={{ color: 'var(--c-amber)', fontSize: '0.78rem', fontWeight: 600 }}>⚠ Exception</span>
                       ) : (
-                        <span style={{ color: '#64748b', fontSize: '0.78rem' }}>Pending</span>
+                        <span style={{ color: 'var(--text-dim)', fontSize: '0.78rem' }}>Pending</span>
                       )}
                     </td>
                     <td>
@@ -237,6 +237,6 @@ export default function InstallationJobsList() {
           </table>
         </div>
       </div>
-    </InstallationLayout>
+    </PortalLayout>
   );
 }

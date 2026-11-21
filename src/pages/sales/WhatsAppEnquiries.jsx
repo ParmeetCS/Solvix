@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import SalesLayout from './SalesLayout';
+import PortalLayout from '@/components/PortalLayout';
 import { salesApi } from '@/services/api';
 import {
   MessageSquare,
@@ -94,7 +94,7 @@ export default function WhatsAppEnquiries() {
   };
 
   return (
-    <SalesLayout
+    <PortalLayout
       title="WhatsApp Enquiry Management"
       subtitle="Centralized inbox for incoming solar enquiries with direct click-to-chat & lead conversion"
       actions={
@@ -110,7 +110,7 @@ export default function WhatsAppEnquiries() {
       <div
         className="crm-card"
         style={{
-          borderLeft: '4px solid #38bdf8',
+          borderLeft: '4px solid var(--c-blue)',
           background: 'rgba(56, 189, 248, 0.06)',
           display: 'flex',
           alignItems: 'flex-start',
@@ -118,17 +118,17 @@ export default function WhatsAppEnquiries() {
           padding: '16px 20px'
         }}
       >
-        <Info size={20} style={{ color: '#38bdf8', flexShrink: 0, marginTop: '2px' }} />
-        <div style={{ fontSize: '0.86rem', color: '#cbd5e1' }}>
-          <b style={{ color: '#38bdf8' }}>Architecture & Webhook Ready:</b> This module supports manual entry and click-to-chat links using standard E.164 phone formats.
+        <Info size={20} style={{ color: 'var(--c-blue)', flexShrink: 0, marginTop: '2px' }} />
+        <div style={{ fontSize: '0.86rem', color: 'var(--text-soft)' }}>
+          <b style={{ color: 'var(--c-blue)' }}>Architecture & Webhook Ready:</b> This module supports manual entry and click-to-chat links using standard E.164 phone formats.
           When WhatsApp Business API credentials (e.g. Meta Cloud API or Twilio) are connected in production, incoming webhooks route directly into this table without UI alterations.
         </div>
       </div>
 
       {/* Filter Bar */}
       <form onSubmit={handleSearchSubmit} className="crm-filter-bar">
-        <div className="crm-search-box" style={{ display: 'flex', alignItems: 'center', background: 'rgba(13,23,42,0.8)', border: '1px solid rgba(255,255,255,0.12)', borderRadius: '8px', padding: '0 10px' }}>
-          <Search size={16} style={{ color: '#94a3b8' }} />
+        <div className="crm-search-box" style={{ display: 'flex', alignItems: 'center', background: 'rgba(var(--surface-rgb), 0.8)', border: '1px solid rgba(var(--ink-rgb), 0.12)', borderRadius: '8px', padding: '0 10px' }}>
+          <Search size={16} style={{ color: 'var(--text-muted)' }} />
           <input
             type="text"
             className="crm-input"
@@ -160,13 +160,13 @@ export default function WhatsAppEnquiries() {
       {/* Enquiries List */}
       <div className="crm-card" style={{ padding: 0 }}>
         {loading ? (
-          <div style={{ padding: '40px', textAlign: 'center', color: '#94a3b8' }}>
+          <div style={{ padding: '40px', textAlign: 'center', color: 'var(--text-muted)' }}>
             Loading WhatsApp enquiries...
           </div>
         ) : error ? (
-          <div style={{ padding: '24px', color: '#f87171' }}>{error}</div>
+          <div style={{ padding: '24px', color: 'var(--c-red)' }}>{error}</div>
         ) : enquiries.length === 0 ? (
-          <div style={{ padding: '40px', textAlign: 'center', color: '#94a3b8' }}>
+          <div style={{ padding: '40px', textAlign: 'center', color: 'var(--text-muted)' }}>
             No WhatsApp enquiries recorded yet.
           </div>
         ) : (
@@ -186,16 +186,16 @@ export default function WhatsAppEnquiries() {
                 {enquiries.map((enq) => (
                   <tr key={enq.id}>
                     <td>
-                      <div style={{ fontWeight: '600', color: '#fff' }}>{enq.sender_name}</div>
-                      <div style={{ fontSize: '0.82rem', color: '#d8ee8e' }}>{enq.phone}</div>
+                      <div style={{ fontWeight: '600', color: 'var(--text-strong)' }}>{enq.sender_name}</div>
+                      <div style={{ fontSize: '0.82rem', color: 'var(--accent-text)' }}>{enq.phone}</div>
                     </td>
                     <td>
-                      <div style={{ fontSize: '0.86rem', color: '#e2e8f0', maxWidth: '380px' }}>
+                      <div style={{ fontSize: '0.86rem', color: 'var(--text-soft)', maxWidth: '380px' }}>
                         &ldquo;{enq.message}&rdquo;
                       </div>
                     </td>
                     <td>
-                      <div style={{ fontSize: '0.8rem', color: '#94a3b8' }}>
+                      <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
                         {new Date(enq.created_at).toLocaleString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
                       </div>
                     </td>
@@ -208,16 +208,16 @@ export default function WhatsAppEnquiries() {
                       {enq.lead ? (
                         <Link
                           to={`/sales/leads/${enq.lead.id}`}
-                          style={{ color: '#d8ee8e', fontSize: '0.84rem', fontWeight: 600 }}
+                          style={{ color: 'var(--accent-text)', fontSize: '0.84rem', fontWeight: 600 }}
                         >
                           Lead: {enq.lead.lead_code}
                         </Link>
                       ) : enq.customer ? (
-                        <span style={{ fontSize: '0.82rem', color: '#94a3b8' }}>
+                        <span style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>
                           Customer: {enq.customer.customer_code}
                         </span>
                       ) : (
-                        <span style={{ fontSize: '0.78rem', color: '#64748b' }}>Unlinked</span>
+                        <span style={{ fontSize: '0.78rem', color: 'var(--text-dim)' }}>Unlinked</span>
                       )}
                     </td>
                     <td>
@@ -255,7 +255,7 @@ export default function WhatsAppEnquiries() {
       {showNewModal && (
         <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.7)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 100 }}>
           <form onSubmit={handleCreateEnquiry} className="crm-card" style={{ width: '460px', maxWidth: '90%' }}>
-            <h3 style={{ color: '#fff', marginBottom: '14px', fontSize: '1.1rem' }}>Record WhatsApp Message</h3>
+            <h3 style={{ color: 'var(--text-strong)', marginBottom: '14px', fontSize: '1.1rem' }}>Record WhatsApp Message</h3>
 
             <div className="crm-form-group">
               <label className="crm-label">Sender / Customer Name *</label>
@@ -311,6 +311,6 @@ export default function WhatsAppEnquiries() {
           </form>
         </div>
       )}
-    </SalesLayout>
+    </PortalLayout>
   );
 }

@@ -51,11 +51,11 @@ export default function AdminOverview() {
       {loading && !data ? <div className="q-loading">Loading overview…</div> : data && (
         <>
           {people.pending_approvals > 0 && (
-            <Link to="/admin/people" className="crm-card" style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16, textDecoration: 'none', borderColor: '#d8ee8e' }}>
-              <UserCheck size={20} color="#d8ee8e" />
+            <Link to="/admin/people" className="crm-card" style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16, textDecoration: 'none', borderColor: 'var(--accent-text)' }}>
+              <UserCheck size={20} color="var(--accent-text)" />
               <div style={{ flex: 1 }}>
                 <b>{people.pending_approvals} employee{people.pending_approvals > 1 ? 's' : ''} waiting for approval</b>
-                <div style={{ fontSize: 13, color: '#94a3b8' }}>They cannot open a dashboard until you assign a department.</div>
+                <div style={{ fontSize: 13, color: 'var(--text-muted)' }}>They cannot open a dashboard until you assign a department.</div>
               </div>
               <ArrowRight size={16} />
             </Link>
@@ -76,8 +76,8 @@ export default function AdminOverview() {
 
           <div className="crm-stats-grid" style={{ marginBottom: 20 }}>
             <div className="crm-stat-box"><div className="crm-stat-label">Order value</div><div className="crm-stat-value">{formatCurrency(data.money.order_value)}</div><div className="crm-stat-meta">Active and completed orders</div></div>
-            <div className="crm-stat-box"><div className="crm-stat-label">Collected</div><div className="crm-stat-value" style={{ color: '#86efac' }}>{formatCurrency(data.money.collected)}</div><div className="crm-stat-meta">Payments recorded on orders</div></div>
-            <div className="crm-stat-box"><div className="crm-stat-label">Outstanding</div><div className="crm-stat-value" style={{ color: '#fbbf24' }}>{formatCurrency(data.money.outstanding)}</div><div className="crm-stat-meta">Balance still due</div></div>
+            <div className="crm-stat-box"><div className="crm-stat-label">Collected</div><div className="crm-stat-value" style={{ color: 'var(--c-green-soft)' }}>{formatCurrency(data.money.collected)}</div><div className="crm-stat-meta">Payments recorded on orders</div></div>
+            <div className="crm-stat-box"><div className="crm-stat-label">Outstanding</div><div className="crm-stat-value" style={{ color: 'var(--c-amber-soft)' }}>{formatCurrency(data.money.outstanding)}</div><div className="crm-stat-meta">Balance still due</div></div>
             <div className="crm-stat-box"><div className="crm-stat-label">Customers</div><div className="crm-stat-value">{people.customers}</div><div className="crm-stat-meta">{people.active_employees} active employees</div></div>
           </div>
 
@@ -96,8 +96,8 @@ export default function AdminOverview() {
                       {data.recent_enquiries.map((l) => (
                         <tr key={l.id}>
                           <td>
-                            <Link to={`/sales/leads/${l.id}`} style={{ color: '#d8ee8e', fontWeight: 600 }}>{l.customer_name}</Link>
-                            <div style={{ fontSize: 12, color: '#64748b' }}>{l.phone} · {formatDateTime(l.created_at)}</div>
+                            <Link to={`/sales/leads/${l.id}`} style={{ color: 'var(--accent-text)', fontWeight: 600 }}>{l.customer_name}</Link>
+                            <div style={{ fontSize: 12, color: 'var(--text-dim)' }}>{l.phone} · {formatDateTime(l.created_at)}</div>
                           </td>
                           <td style={{ textAlign: 'right' }}>
                             <span className="q-badge">{l.assigned_to ? 'Assigned' : 'Unassigned'}</span>
@@ -125,7 +125,7 @@ export default function AdminOverview() {
                         <tr key={a.id}>
                           <td>
                             {titleCase(String(a.action).replace(/_/g, ' ').toLowerCase())}
-                            <div style={{ fontSize: 12, color: '#64748b' }}>{a.actor_name || 'System'} · {formatDateTime(a.created_at)}</div>
+                            <div style={{ fontSize: 12, color: 'var(--text-dim)' }}>{a.actor_name || 'System'} · {formatDateTime(a.created_at)}</div>
                           </td>
                         </tr>
                       ))}

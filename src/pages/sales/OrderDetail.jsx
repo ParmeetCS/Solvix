@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import SalesLayout from './SalesLayout';
+import PortalLayout from '@/components/PortalLayout';
 import { quotationsApi } from '@/services/api';
 import {
   ArrowLeft,
@@ -168,7 +168,7 @@ export default function OrderDetail() {
   };
 
   return (
-    <SalesLayout
+    <PortalLayout
       title={order ? order.order_code : 'Order'}
       subtitle={order ? `${order.system_capacity_kw} kW ${order.system_type} order` : 'Loading order…'}
       actions={
@@ -230,7 +230,7 @@ export default function OrderDetail() {
             </div>
             <div className="q-summary-cell">
               <small>Balance due</small>
-              <b style={{ color: Number(order.balance_due) > 0 ? '#fbbf24' : '#86efac' }}>
+              <b style={{ color: Number(order.balance_due) > 0 ? 'var(--c-amber-soft)' : 'var(--c-green-soft)' }}>
                 {formatCurrency(order.balance_due)}
               </b>
             </div>
@@ -504,7 +504,7 @@ export default function OrderDetail() {
                     </>
                   )}
 
-                  <div style={{ borderTop: '1px solid rgba(255,255,255,0.08)', paddingTop: 12, marginTop: 4 }}>
+                  <div style={{ borderTop: '1px solid rgba(var(--ink-rgb), 0.08)', paddingTop: 12, marginTop: 4 }}>
                     {order.warehouse_handoff_at ? (
                       <div className="q-alert success">
                         <Warehouse size={14} style={{ verticalAlign: '-2px', marginRight: 6 }} />
@@ -561,6 +561,6 @@ export default function OrderDetail() {
           </div>
         </>
       )}
-    </SalesLayout>
+    </PortalLayout>
   );
 }

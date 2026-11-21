@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
+import PortalLayout from '@/components/PortalLayout';
 import { quotationsApi } from '@/services/api';
 import {
   Plus,
@@ -291,23 +292,16 @@ export default function AdminCatalogue() {
   const activePackages = packages.filter((pkg) => pkg.is_active).length;
 
   return (
-    <div className="q-admin-shell">
-      <header className="q-admin-topbar">
-        <div className="brand">
-          <Sun size={20} />
-          SOLVIX · Catalogue Administration
-        </div>
-        <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-          <button type="button" className="crm-btn crm-btn-secondary crm-btn-sm" onClick={load} disabled={loading}>
-            <RefreshCw size={14} /> Refresh
-          </button>
-          <Link to="/sales/dashboard" className="crm-btn crm-btn-secondary crm-btn-sm">
-            Sales workspace
-          </Link>
-        </div>
-      </header>
-
-      <main className="q-admin-body">
+    <PortalLayout
+      title="Product Catalogue"
+      subtitle="Products, packages and categories used to build quotations"
+      actions={
+        <button type="button" className="crm-btn crm-btn-secondary crm-btn-sm" onClick={load} disabled={loading}>
+          <RefreshCw size={14} /> Refresh
+        </button>
+      }
+    >
+      <>
         <div className="q-stats-grid">
           <div className="q-stat-card">
             <span className="q-stat-label">Products</span>
@@ -393,7 +387,7 @@ export default function AdminCatalogue() {
                     <tr key={product.id}>
                       <td>
                         <div style={{ fontWeight: 600 }}>{product.name}</div>
-                        <div style={{ fontSize: '0.72rem', color: '#64748b' }}>
+                        <div style={{ fontSize: '0.72rem', color: 'var(--text-dim)' }}>
                           {product.sku}
                           {product.brand ? ` · ${product.brand}` : ''}
                         </div>
@@ -468,7 +462,7 @@ export default function AdminCatalogue() {
                     <tr key={pkg.id}>
                       <td>
                         <div style={{ fontWeight: 600 }}>{pkg.name}</div>
-                        <div style={{ fontSize: '0.72rem', color: '#64748b' }}>{pkg.package_code}</div>
+                        <div style={{ fontSize: '0.72rem', color: 'var(--text-dim)' }}>{pkg.package_code}</div>
                       </td>
                       <td style={{ textTransform: 'capitalize' }}>{pkg.system_type}</td>
                       <td className="q-num">{pkg.capacity_kw} kW</td>
@@ -550,7 +544,7 @@ export default function AdminCatalogue() {
             </div>
           </section>
         )}
-      </main>
+      </>
 
       {productModal && (
         <div className="q-modal-backdrop" role="dialog" aria-modal="true">
@@ -697,7 +691,7 @@ export default function AdminCatalogue() {
                 <label>Applicable system types</label>
                 <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap' }}>
                   {SYSTEM_TYPES.map((systemType) => (
-                    <label key={systemType} style={{ display: 'flex', gap: 6, alignItems: 'center', color: '#cbd5e1', fontSize: '0.84rem' }}>
+                    <label key={systemType} style={{ display: 'flex', gap: 6, alignItems: 'center', color: 'var(--text-soft)', fontSize: '0.84rem' }}>
                       <input
                         type="checkbox"
                         checked={(productModal.form.system_types || []).includes(systemType)}
@@ -709,7 +703,7 @@ export default function AdminCatalogue() {
                 </div>
               </div>
               <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
-                <label style={{ display: 'flex', gap: 6, alignItems: 'center', color: '#cbd5e1', fontSize: '0.84rem' }}>
+                <label style={{ display: 'flex', gap: 6, alignItems: 'center', color: 'var(--text-soft)', fontSize: '0.84rem' }}>
                   <input
                     type="checkbox"
                     checked={productModal.form.is_active}
@@ -717,7 +711,7 @@ export default function AdminCatalogue() {
                   />
                   Active
                 </label>
-                <label style={{ display: 'flex', gap: 6, alignItems: 'center', color: '#cbd5e1', fontSize: '0.84rem' }}>
+                <label style={{ display: 'flex', gap: 6, alignItems: 'center', color: 'var(--text-soft)', fontSize: '0.84rem' }}>
                   <input
                     type="checkbox"
                     checked={productModal.form.is_quotable}
@@ -854,7 +848,7 @@ export default function AdminCatalogue() {
                         value={item.quantity}
                         onChange={(event) => updatePackageItem(index, 'quantity', event.target.value)}
                       />
-                      <label style={{ display: 'flex', gap: 5, alignItems: 'center', color: '#94a3b8', fontSize: '0.76rem' }}>
+                      <label style={{ display: 'flex', gap: 5, alignItems: 'center', color: 'var(--text-muted)', fontSize: '0.76rem' }}>
                         <input
                           type="checkbox"
                           checked={item.is_optional}
@@ -873,7 +867,7 @@ export default function AdminCatalogue() {
                 </div>
               </div>
 
-              <label style={{ display: 'flex', gap: 6, alignItems: 'center', color: '#cbd5e1', fontSize: '0.84rem' }}>
+              <label style={{ display: 'flex', gap: 6, alignItems: 'center', color: 'var(--text-soft)', fontSize: '0.84rem' }}>
                 <input
                   type="checkbox"
                   checked={packageModal.form.is_active}
@@ -943,6 +937,6 @@ export default function AdminCatalogue() {
           </div>
         </div>
       )}
-    </div>
+    </PortalLayout>
   );
 }

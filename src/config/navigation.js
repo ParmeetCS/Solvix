@@ -8,21 +8,21 @@ import {
 // Administrator menu, in workflow order: enquiry -> survey -> quotation/order ->
 // warehouse -> installation -> support -> finance, then company administration.
 const ADMIN = [
-  { label: 'Overview', path: '/admin/dashboard', icon: LayoutDashboard },
-  { label: 'Enquiries & Leads', path: '/sales/leads', icon: Users2 },
-  { label: 'Customers', path: '/sales/customers', icon: UserCheck },
-  { label: 'Site Surveys', path: '/survey/dashboard', icon: Compass },
-  { label: 'Quotations', path: '/sales/quotations', icon: FileText },
-  { label: 'Orders', path: '/sales/orders', icon: ShoppingCart },
-  { label: 'Product Catalogue', path: '/admin/catalogue', icon: Package },
-  { label: 'Warehouse & Inventory', path: '/warehouse/dashboard', icon: Boxes },
-  { label: 'Installations & Technicians', path: '/installation/dashboard', icon: Wrench },
-  { label: 'Warranty & Support', path: '/support/dashboard', icon: LifeBuoy },
-  { label: 'Finance & Invoices', path: '/finance/dashboard', icon: Coins },
-  { label: 'Subsidy & Documents', path: '/subsidy/dashboard', icon: Landmark },
-  { label: 'Reports & Analytics', path: '/admin/reports', icon: BarChart3 },
-  { label: 'People & Access', path: '/admin/people', icon: Users },
-  { label: 'Activity Log', path: '/admin/activity', icon: ScrollText },
+  { group: 'Home', label: 'Overview', path: '/admin/dashboard', icon: LayoutDashboard },
+  { group: 'Sales', label: 'Enquiries & Leads', path: '/sales/leads', icon: Users2 },
+  { group: 'Sales', label: 'Customers', path: '/sales/customers', icon: UserCheck },
+  { group: 'Sales', label: 'Site Surveys', path: '/survey/dashboard', icon: Compass },
+  { group: 'Sales', label: 'Quotations', path: '/sales/quotations', icon: FileText },
+  { group: 'Sales', label: 'Orders', path: '/sales/orders', icon: ShoppingCart },
+  { group: 'Sales', label: 'Product Catalogue', path: '/admin/catalogue', icon: Package },
+  { group: 'Operations', label: 'Warehouse & Inventory', path: '/warehouse/dashboard', icon: Boxes },
+  { group: 'Operations', label: 'Installations & Technicians', path: '/installation/dashboard', icon: Wrench },
+  { group: 'Operations', label: 'Warranty & Support', path: '/support/dashboard', icon: LifeBuoy },
+  { group: 'Money', label: 'Finance & Invoices', path: '/finance/dashboard', icon: Coins },
+  { group: 'Money', label: 'Subsidy & Documents', path: '/subsidy/dashboard', icon: Landmark },
+  { group: 'Company', label: 'Reports & Analytics', path: '/admin/reports', icon: BarChart3 },
+  { group: 'Company', label: 'People & Access', path: '/admin/people', icon: Users },
+  { group: 'Company', label: 'Activity Log', path: '/admin/activity', icon: ScrollText },
 ];
 
 const SALES = [

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import WarehouseLayout from './WarehouseLayout';
+import PortalLayout from '@/components/PortalLayout';
 import { warehouseApi } from '@/services/api/warehouse';
 import {
   Package,
@@ -62,7 +62,7 @@ export default function ProductsList() {
   };
 
   return (
-    <WarehouseLayout
+    <PortalLayout
       title="Products & Solar Equipment Catalog"
       subtitle="Manage solar panels, inverters, batteries, structures, cables and accessories"
       actions={
@@ -88,7 +88,7 @@ export default function ProductsList() {
       {/* Filter and Search Bar */}
       <div className="wh-filter-bar">
         <form onSubmit={handleSearchSubmit} className="wh-search-box">
-          <Search size={16} style={{ color: '#94a3b8' }} />
+          <Search size={16} style={{ color: 'var(--text-muted)' }} />
           <input
             type="text"
             placeholder="Search by SKU, product name, or manufacturer..."
@@ -132,7 +132,7 @@ export default function ProductsList() {
             <tbody>
               {products.length === 0 ? (
                 <tr>
-                  <td colSpan="10" style={{ textAlign: 'center', color: '#94a3b8', padding: '36px' }}>
+                  <td colSpan="10" style={{ textAlign: 'center', color: 'var(--text-muted)', padding: '36px' }}>
                     {loading ? 'Loading catalog items...' : 'No products found matching filters.'}
                   </td>
                 </tr>
@@ -144,11 +144,11 @@ export default function ProductsList() {
                   return (
                     <tr key={prod.id}>
                       <td>
-                        <code style={{ fontSize: '0.82rem', color: '#38bdf8', background: 'rgba(56, 189, 248, 0.08)', padding: '2px 6px', borderRadius: '4px' }}>
+                        <code style={{ fontSize: '0.82rem', color: 'var(--c-blue)', background: 'rgba(56, 189, 248, 0.08)', padding: '2px 6px', borderRadius: '4px' }}>
                           {prod.sku}
                         </code>
                       </td>
-                      <td style={{ fontWeight: 600, color: '#f8fafc' }}>
+                      <td style={{ fontWeight: 600, color: 'var(--text)' }}>
                         <Link to={`/warehouse/products/${prod.id}`} style={{ color: 'inherit', textDecoration: 'none' }}>
                           {prod.name}
                         </Link>
@@ -160,15 +160,15 @@ export default function ProductsList() {
                       </td>
                       <td>{prod.manufacturer || '-'}</td>
                       <td>₹{(prod.purchase_price || 0).toLocaleString()}</td>
-                      <td style={{ fontWeight: 600, color: '#34d399' }}>
+                      <td style={{ fontWeight: 600, color: 'var(--c-green)' }}>
                         ₹{(prod.selling_price || 0).toLocaleString()}
                       </td>
                       <td>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                          <span style={{ fontWeight: 700, color: isOut ? '#f87171' : isLow ? '#fbbf24' : '#fff' }}>
+                          <span style={{ fontWeight: 700, color: isOut ? 'var(--c-red)' : isLow ? 'var(--c-amber-soft)' : 'var(--text-strong)' }}>
                             {prod.total_stock || 0}
                           </span>
-                          <span style={{ fontSize: '0.75rem', color: '#94a3b8' }}>{prod.unit}</span>
+                          <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{prod.unit}</span>
                           {isOut ? (
                             <span className="wh-badge wh-badge-red" style={{ fontSize: '0.68rem', padding: '1px 5px' }}>Out</span>
                           ) : isLow ? (
@@ -202,6 +202,6 @@ export default function ProductsList() {
           </table>
         </div>
       </div>
-    </WarehouseLayout>
+    </PortalLayout>
   );
 }

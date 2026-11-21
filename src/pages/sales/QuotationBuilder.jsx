@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom';
-import SalesLayout from './SalesLayout';
+import PortalLayout from '@/components/PortalLayout';
 import { quotationsApi, salesApi } from '@/services/api';
 import {
   ArrowLeft,
@@ -368,7 +368,7 @@ export default function QuotationBuilder() {
   const selectedPackage = catalogue.packages.find((row) => row.id === form.package_id);
 
   return (
-    <SalesLayout
+    <PortalLayout
       title={isEdit ? 'Edit Quotation' : 'New Quotation'}
       subtitle="Configure the system, build the bill of materials and let the server price it"
       actions={
@@ -571,7 +571,7 @@ export default function QuotationBuilder() {
                                 {item.product_id ? (
                                   <>
                                     <div style={{ fontWeight: 600 }}>{item.line_item}</div>
-                                    <div style={{ fontSize: '0.7rem', color: '#64748b' }}>Catalogue product</div>
+                                    <div style={{ fontSize: '0.7rem', color: 'var(--text-dim)' }}>Catalogue product</div>
                                   </>
                                 ) : (
                                   <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
@@ -650,7 +650,7 @@ export default function QuotationBuilder() {
                 <div>
                   <div className="q-label" style={{ marginBottom: 8 }}>Add catalogue products</div>
                   <div className="q-search" style={{ marginBottom: 10 }}>
-                    <Search size={15} style={{ color: '#94a3b8' }} />
+                    <Search size={15} style={{ color: 'var(--text-muted)' }} />
                     <input
                       type="text"
                       placeholder="Search by name, SKU or brand…"
@@ -864,6 +864,6 @@ export default function QuotationBuilder() {
           </aside>
         </div>
       )}
-    </SalesLayout>
+    </PortalLayout>
   );
 }

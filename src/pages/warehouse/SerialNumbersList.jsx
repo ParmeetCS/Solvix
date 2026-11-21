@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import WarehouseLayout from './WarehouseLayout';
+import PortalLayout from '@/components/PortalLayout';
 import { warehouseApi } from '@/services/api/warehouse';
 import {
   QrCode,
@@ -71,7 +71,7 @@ export default function SerialNumbersList() {
   };
 
   return (
-    <WarehouseLayout
+    <PortalLayout
       title="Serial Numbers & QR Code Registry"
       subtitle="Unique equipment tracking for solar panels, inverters, and battery systems"
       actions={
@@ -89,7 +89,7 @@ export default function SerialNumbersList() {
     >
       <div className="wh-filter-bar">
         <form onSubmit={(e) => { e.preventDefault(); loadSerials(); }} className="wh-search-box">
-          <Search size={16} style={{ color: '#94a3b8' }} />
+          <Search size={16} style={{ color: 'var(--text-muted)' }} />
           <input
             type="text"
             placeholder="Search serial number, QR code, or product..."
@@ -131,7 +131,7 @@ export default function SerialNumbersList() {
             <tbody>
               {serials.length === 0 ? (
                 <tr>
-                  <td colSpan="7" style={{ textAlign: 'center', color: '#94a3b8', padding: '36px' }}>
+                  <td colSpan="7" style={{ textAlign: 'center', color: 'var(--text-muted)', padding: '36px' }}>
                     {loading ? 'Loading serial numbers...' : 'No serial records match the criteria.'}
                   </td>
                 </tr>
@@ -140,19 +140,19 @@ export default function SerialNumbersList() {
                   return (
                     <tr key={s.id}>
                       <td>
-                        <strong style={{ color: '#38bdf8', letterSpacing: '0.04em' }}>
+                        <strong style={{ color: 'var(--c-blue)', letterSpacing: '0.04em' }}>
                           {s.serial_number}
                         </strong>
                       </td>
                       <td>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                          <QrCode size={16} style={{ color: '#94a3b8' }} />
-                          <code style={{ fontSize: '0.75rem', color: '#cbd5e1' }}>
+                          <QrCode size={16} style={{ color: 'var(--text-muted)' }} />
+                          <code style={{ fontSize: '0.75rem', color: 'var(--text-soft)' }}>
                             {s.qr_code_payload ? s.qr_code_payload.substring(0, 24) + '...' : '-'}
                           </code>
                         </div>
                       </td>
-                      <td style={{ fontWeight: 500, color: '#f8fafc' }}>
+                      <td style={{ fontWeight: 500, color: 'var(--text)' }}>
                         {s.product?.name || s.product_name || s.product_id}
                       </td>
                       <td>{s.warehouse?.name || 'Main Regional Hub'}</td>
@@ -166,10 +166,10 @@ export default function SerialNumbersList() {
                           {s.status.replace('_', ' ')}
                         </span>
                       </td>
-                      <td style={{ fontSize: '0.82rem', color: '#94a3b8' }}>
+                      <td style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>
                         {new Date(s.created_at).toLocaleDateString()}
                       </td>
-                      <td style={{ fontSize: '0.82rem', color: s.dispatched_at ? '#34d399' : '#94a3b8' }}>
+                      <td style={{ fontSize: '0.82rem', color: s.dispatched_at ? 'var(--c-green)' : 'var(--text-muted)' }}>
                         {s.delivered_at ? `Delivered: ${new Date(s.delivered_at).toLocaleDateString()}` :
                          s.dispatched_at ? `Dispatched: ${new Date(s.dispatched_at).toLocaleDateString()}` : 'In Facility'}
                       </td>
@@ -188,12 +188,12 @@ export default function SerialNumbersList() {
           <div className="wh-modal" style={{ maxWidth: '580px' }}>
             <div className="wh-modal-header">
               <h3 style={{ margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <Scan size={18} style={{ color: '#38bdf8' }} />
+                <Scan size={18} style={{ color: 'var(--c-blue)' }} />
                 <span>QR / Serial Number Verification Scanner</span>
               </h3>
               <button
                 onClick={() => setLookupOpen(false)}
-                style={{ background: 'transparent', border: 'none', color: '#94a3b8', cursor: 'pointer' }}
+                style={{ background: 'transparent', border: 'none', color: 'var(--text-muted)', cursor: 'pointer' }}
               >
                 <X size={18} />
               </button>
@@ -227,9 +227,9 @@ export default function SerialNumbersList() {
               )}
 
               {lookupResult && (
-                <div style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '10px', padding: '16px' }}>
+                <div style={{ background: 'rgba(var(--ink-rgb), 0.03)', border: '1px solid rgba(var(--ink-rgb), 0.08)', borderRadius: '10px', padding: '16px' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
-                    <span style={{ fontWeight: 700, fontSize: '1.1rem', color: '#38bdf8' }}>
+                    <span style={{ fontWeight: 700, fontSize: '1.1rem', color: 'var(--c-blue)' }}>
                       {lookupResult.serial_number}
                     </span>
                     <span className={`wh-badge ${
@@ -243,28 +243,28 @@ export default function SerialNumbersList() {
 
                   <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px', fontSize: '0.85rem' }}>
                     <div>
-                      <span style={{ color: '#94a3b8' }}>Product: </span>
-                      <strong style={{ color: '#fff' }}>{lookupResult.product_name}</strong>
+                      <span style={{ color: 'var(--text-muted)' }}>Product: </span>
+                      <strong style={{ color: 'var(--text-strong)' }}>{lookupResult.product_name}</strong>
                     </div>
                     <div>
-                      <span style={{ color: '#94a3b8' }}>Warehouse: </span>
-                      <span style={{ color: '#fff' }}>{lookupResult.warehouse_name || 'Primary'}</span>
+                      <span style={{ color: 'var(--text-muted)' }}>Warehouse: </span>
+                      <span style={{ color: 'var(--text-strong)' }}>{lookupResult.warehouse_name || 'Primary'}</span>
                     </div>
                     <div>
-                      <span style={{ color: '#94a3b8' }}>Order Attached: </span>
-                      <span style={{ color: '#fff' }}>{lookupResult.order_number || 'None'}</span>
+                      <span style={{ color: 'var(--text-muted)' }}>Order Attached: </span>
+                      <span style={{ color: 'var(--text-strong)' }}>{lookupResult.order_number || 'None'}</span>
                     </div>
                     <div>
-                      <span style={{ color: '#94a3b8' }}>Dispatch Ref: </span>
-                      <span style={{ color: '#fff' }}>{lookupResult.dispatch_number || 'None'}</span>
+                      <span style={{ color: 'var(--text-muted)' }}>Dispatch Ref: </span>
+                      <span style={{ color: 'var(--text-strong)' }}>{lookupResult.dispatch_number || 'None'}</span>
                     </div>
                   </div>
 
                   {/* QR Code Graphic Box */}
                   <div style={{ marginTop: '16px', display: 'flex', justifyContent: 'center' }}>
                     <div className="qr-badge-box">
-                      <QrCode size={64} style={{ color: '#080e1b' }} />
-                      <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#080e1b' }}>
+                      <QrCode size={64} style={{ color: 'var(--on-fill)' }} />
+                      <span style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--on-fill)' }}>
                         {lookupResult.serial_number}
                       </span>
                     </div>
@@ -285,6 +285,6 @@ export default function SerialNumbersList() {
           </div>
         </div>
       )}
-    </WarehouseLayout>
+    </PortalLayout>
   );
 }

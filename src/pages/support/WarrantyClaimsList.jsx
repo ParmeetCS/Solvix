@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import SupportLayout from './SupportLayout';
+import PortalLayout from '@/components/PortalLayout';
 import { supportApi } from '@/services/api';
 import { useAuth } from '@/context/auth';
 import {
@@ -84,7 +84,7 @@ export default function WarrantyClaimsList() {
   };
 
   return (
-    <SupportLayout
+    <PortalLayout
       title="Warranty Claims & Eligibility Review"
       subtitle="Thorough evaluation of hardware claims against verified delivery dates and manufacturer terms"
     >
@@ -121,20 +121,20 @@ export default function WarrantyClaimsList() {
       {/* Claims Table */}
       {loading ? (
         <div style={{ display: 'flex', justifyContent: 'center', padding: '4rem 0' }}>
-          <Loader2 className="animate-spin" size={36} color="#d8ee8e" />
+          <Loader2 className="animate-spin" size={36} color="var(--accent-text)" />
         </div>
       ) : error ? (
-        <div className="support-card" style={{ borderColor: '#ef4444' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', color: '#f87171' }}>
+        <div className="support-card" style={{ borderColor: 'var(--c-red-2)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', color: 'var(--c-red)' }}>
             <AlertCircle size={20} />
             <span>{error}</span>
           </div>
         </div>
       ) : claims.length === 0 ? (
         <div className="support-card" style={{ textAlign: 'center', padding: '3rem 1rem' }}>
-          <FileCheck2 size={40} color="#64748b" style={{ margin: '0 auto 1rem auto' }} />
-          <h3 style={{ color: '#ffffff', margin: '0 0 0.5rem 0' }}>No warranty claims found</h3>
-          <p style={{ color: '#94a3b8', fontSize: '0.875rem' }}>
+          <FileCheck2 size={40} color="var(--text-dim)" style={{ margin: '0 auto 1rem auto' }} />
+          <h3 style={{ color: 'var(--text-strong)', margin: '0 0 0.5rem 0' }}>No warranty claims found</h3>
+          <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem' }}>
             There are currently no claims matching the selected filters.
           </p>
         </div>
@@ -158,9 +158,9 @@ export default function WarrantyClaimsList() {
               <tbody>
                 {claims.map((c) => (
                   <tr key={c.id}>
-                    <td style={{ fontWeight: 600, color: '#d8ee8e' }}>{c.claim_code}</td>
+                    <td style={{ fontWeight: 600, color: 'var(--accent-text)' }}>{c.claim_code}</td>
                     <td>
-                      <Link to={`/support/warranties/${c.warranty_id}`} style={{ color: '#38bdf8', textDecoration: 'none' }}>
+                      <Link to={`/support/warranties/${c.warranty_id}`} style={{ color: 'var(--c-blue)', textDecoration: 'none' }}>
                         {c.warranties?.warranty_code || 'Warranty'}
                       </Link>
                     </td>
@@ -169,7 +169,7 @@ export default function WarrantyClaimsList() {
                     <td style={{ maxWidth: '240px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                       {c.description}
                     </td>
-                    <td style={{ fontSize: '0.8125rem', color: '#94a3b8' }}>
+                    <td style={{ fontSize: '0.8125rem', color: 'var(--text-muted)' }}>
                       {new Date(c.submitted_at).toLocaleDateString()}
                     </td>
                     <td>
@@ -177,7 +177,7 @@ export default function WarrantyClaimsList() {
                         {c.status}
                       </span>
                     </td>
-                    <td style={{ fontSize: '0.8125rem', color: '#cbd5e1' }}>
+                    <td style={{ fontSize: '0.8125rem', color: 'var(--text-soft)' }}>
                       {c.profiles?.full_name || '—'}
                     </td>
                     <td>
@@ -194,7 +194,7 @@ export default function WarrantyClaimsList() {
                           Review Claim
                         </button>
                       ) : (
-                        <span style={{ fontSize: '0.75rem', color: '#94a3b8' }}>
+                        <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
                           {c.resolution ? 'Decided' : 'Pending'}
                         </span>
                       )}
@@ -206,8 +206,8 @@ export default function WarrantyClaimsList() {
           </div>
 
           {totalPages > 1 && (
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1rem 1.5rem', borderTop: '1px solid #1e293b' }}>
-              <span style={{ fontSize: '0.8125rem', color: '#94a3b8' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1rem 1.5rem', borderTop: '1px solid var(--surface-2)' }}>
+              <span style={{ fontSize: '0.8125rem', color: 'var(--text-muted)' }}>
                 Page {page} of {totalPages} ({totalCount} total)
               </span>
               <div style={{ display: 'flex', gap: '0.5rem' }}>
@@ -243,9 +243,9 @@ export default function WarrantyClaimsList() {
             </div>
             <form onSubmit={handleReviewSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
               {/* Claim Summary */}
-              <div style={{ background: '#0b1020', border: '1px solid #1e293b', borderRadius: '8px', padding: '1rem', fontSize: '0.8125rem' }}>
-                <div style={{ color: '#94a3b8', marginBottom: '0.35rem' }}>Claimed Issue & Diagnosis:</div>
-                <div style={{ color: '#ffffff', whiteSpace: 'pre-wrap', lineHeight: 1.5 }}>
+              <div style={{ background: 'var(--app-bg)', border: '1px solid var(--surface-2)', borderRadius: '8px', padding: '1rem', fontSize: '0.8125rem' }}>
+                <div style={{ color: 'var(--text-muted)', marginBottom: '0.35rem' }}>Claimed Issue & Diagnosis:</div>
+                <div style={{ color: 'var(--text-strong)', whiteSpace: 'pre-wrap', lineHeight: 1.5 }}>
                   {reviewingClaim.description}
                 </div>
               </div>
@@ -260,9 +260,9 @@ export default function WarrantyClaimsList() {
                       flex: 1,
                       padding: '0.75rem',
                       borderRadius: '8px',
-                      background: reviewDecision === 'approved' ? 'rgba(52, 211, 153, 0.15)' : '#0b1020',
-                      border: `1px solid ${reviewDecision === 'approved' ? '#34d399' : '#1e293b'}`,
-                      color: reviewDecision === 'approved' ? '#34d399' : '#94a3b8',
+                      background: reviewDecision === 'approved' ? 'rgba(52, 211, 153, 0.15)' : 'var(--app-bg)',
+                      border: `1px solid ${reviewDecision === 'approved' ? 'var(--c-green)' : 'var(--surface-2)'}`,
+                      color: reviewDecision === 'approved' ? 'var(--c-green)' : 'var(--text-muted)',
                       fontWeight: 600,
                       cursor: 'pointer',
                       display: 'flex',
@@ -282,9 +282,9 @@ export default function WarrantyClaimsList() {
                       flex: 1,
                       padding: '0.75rem',
                       borderRadius: '8px',
-                      background: reviewDecision === 'rejected' ? 'rgba(239, 68, 68, 0.15)' : '#0b1020',
-                      border: `1px solid ${reviewDecision === 'rejected' ? '#f87171' : '#1e293b'}`,
-                      color: reviewDecision === 'rejected' ? '#f87171' : '#94a3b8',
+                      background: reviewDecision === 'rejected' ? 'rgba(239, 68, 68, 0.15)' : 'var(--app-bg)',
+                      border: `1px solid ${reviewDecision === 'rejected' ? 'var(--c-red)' : 'var(--surface-2)'}`,
+                      color: reviewDecision === 'rejected' ? 'var(--c-red)' : 'var(--text-muted)',
                       fontWeight: 600,
                       cursor: 'pointer',
                       display: 'flex',
@@ -317,7 +317,7 @@ export default function WarrantyClaimsList() {
                 />
               </div>
 
-              <div style={{ background: '#0b1020', padding: '0.65rem', borderRadius: '6px', fontSize: '0.75rem', color: '#94a3b8' }}>
+              <div style={{ background: 'var(--app-bg)', padding: '0.65rem', borderRadius: '6px', fontSize: '0.75rem', color: 'var(--text-muted)' }}>
                 <strong>Prompt 10 Compliance:</strong> Claims are never automatically approved merely because a serial exists. Review must evaluate terms, delivery date, and physical evidence.
               </div>
 
@@ -334,6 +334,6 @@ export default function WarrantyClaimsList() {
           </div>
         </div>
       )}
-    </SupportLayout>
+    </PortalLayout>
   );
 }

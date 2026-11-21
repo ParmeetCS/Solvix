@@ -9,11 +9,11 @@ function Breakdown({ title, counts }) {
   const total = rows.reduce((s, [, n]) => s + n, 0);
   return (
     <div className="crm-card">
-      <div className="crm-card-header"><div className="crm-card-title">{title}</div><span style={{ color: '#64748b', fontSize: 13 }}>{total} total</span></div>
-      {rows.length === 0 ? <div style={{ color: '#64748b', fontSize: 13 }}>No records in this period.</div> : rows.map(([label, n]) => (
+      <div className="crm-card-header"><div className="crm-card-title">{title}</div><span style={{ color: 'var(--text-dim)', fontSize: 13 }}>{total} total</span></div>
+      {rows.length === 0 ? <div style={{ color: 'var(--text-dim)', fontSize: 13 }}>No records in this period.</div> : rows.map(([label, n]) => (
         <div key={label} style={{ margin: '8px 0' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 13 }}><span>{titleCase(label.replace(/_/g, ' '))}</span><b>{n}</b></div>
-          <div style={{ height: 6, borderRadius: 3, background: 'rgba(255,255,255,0.08)' }}>
+          <div style={{ height: 6, borderRadius: 3, background: 'rgba(var(--ink-rgb), 0.08)' }}>
             <div style={{ height: 6, borderRadius: 3, width: `${(n / total) * 100}%`, background: '#d8ee8e' }} />
           </div>
         </div>
@@ -64,8 +64,8 @@ export default function AdminReports() {
         <>
           <div className="crm-stats-grid" style={{ margin: '16px 0' }}>
             <div className="crm-stat-box"><div className="crm-stat-label">Order value</div><div className="crm-stat-value">{formatCurrency(data.money.order_value)}</div></div>
-            <div className="crm-stat-box"><div className="crm-stat-label">Collected on orders</div><div className="crm-stat-value" style={{ color: '#86efac' }}>{formatCurrency(data.money.collected)}</div></div>
-            <div className="crm-stat-box"><div className="crm-stat-label">Outstanding</div><div className="crm-stat-value" style={{ color: '#fbbf24' }}>{formatCurrency(data.money.outstanding)}</div></div>
+            <div className="crm-stat-box"><div className="crm-stat-label">Collected on orders</div><div className="crm-stat-value" style={{ color: 'var(--c-green-soft)' }}>{formatCurrency(data.money.collected)}</div></div>
+            <div className="crm-stat-box"><div className="crm-stat-label">Outstanding</div><div className="crm-stat-value" style={{ color: 'var(--c-amber-soft)' }}>{formatCurrency(data.money.outstanding)}</div></div>
             <div className="crm-stat-box"><div className="crm-stat-label">Invoiced</div><div className="crm-stat-value">{formatCurrency(data.invoiced)}</div><div className="crm-stat-meta">Issued invoices</div></div>
             <div className="crm-stat-box"><div className="crm-stat-label">Approved expenses</div><div className="crm-stat-value">{formatCurrency(data.expenses_approved)}</div></div>
             <div className="crm-stat-box"><div className="crm-stat-label">Lead conversion</div><div className="crm-stat-value">{conversion.toFixed(1)}%</div><div className="crm-stat-meta">{leads.converted || 0} of {leadTotal} leads</div></div>

@@ -128,6 +128,8 @@ export default function RoleLogin({ portal }) {
             </button>
           </div>
 
+          <div className="auth-forgot"><Link to="/forgot-password">Forgot your password?</Link></div>
+
           {error && <div className="auth-error" role="alert">{error}</div>}
 
           <button type="submit" className="auth-submit" disabled={busy}>
@@ -154,12 +156,12 @@ export default function RoleLogin({ portal }) {
   );
 }
 
-/** /login/employee - pick the right staff portal. */
+/** /login/employee - the single entry point for employees: sign in, or ask for access. */
 export function EmployeePortalChooser() {
   const options = [
-    ['sales', 'Sales team', 'Leads, quotations and orders'],
-    ['technician', 'Technicians', 'Assignments, surveys and installations'],
-    ['staff', 'Operations', 'Warehouse, support, accounts, subsidy'],
+    ['sales', 'Sales team', 'Leads, follow-ups, quotations and orders', Briefcase],
+    ['technician', 'Technicians', 'Assignments, site surveys and installations', Wrench],
+    ['staff', 'Operations', 'Warehouse, support, accounts and subsidy', Boxes],
   ];
   return (
     <div className="auth-page">
@@ -175,17 +177,29 @@ export function EmployeePortalChooser() {
             <p>Choose the portal for your department.</p>
           </div>
         </div>
+
         <div className="auth-choices">
-          {options.map(([p, name, desc]) => (
+          {options.map(([p, name, desc, Icon]) => (
             <Link key={p} to={LOGIN_PATHS[p]} className="auth-choice">
-              <strong>{name}</strong>
-              <span>{desc}</span>
+              <span className="auth-choice-icon"><Icon size={18} /></span>
+              <span className="auth-choice-text">
+                <strong>{name}</strong>
+                <span>{desc}</span>
+              </span>
+              <span className="auth-choice-arrow" aria-hidden="true">&rarr;</span>
             </Link>
           ))}
         </div>
-        <p className="auth-foot">
-          Administrator? <Link to={LOGIN_PATHS.admin}>Sign in here</Link>
-        </p>
+
+        <div className="auth-divider"><span>New employee?</span></div>
+        <Link to="/register/employee" className="auth-secondary">Request employee access</Link>
+        <p className="auth-note">An administrator approves your department before you can sign in.</p>
+
+        <div className="auth-switch">
+          <span>Not an employee?</span>
+          <Link to={LOGIN_PATHS.customer}>Customer sign in</Link>
+          <Link to={LOGIN_PATHS.admin}>Administrator</Link>
+        </div>
       </div>
     </div>
   );

@@ -104,7 +104,7 @@ export default function QuotationPreview({ bundle, className = '' }) {
         <tbody>
           {items.length === 0 ? (
             <tr>
-              <td colSpan={8} style={{ textAlign: 'center', color: '#64748b', padding: 18 }}>
+              <td colSpan={8} style={{ textAlign: 'center', color: 'var(--text-dim)', padding: 18 }}>
                 No bill-of-materials lines.
               </td>
             </tr>
@@ -115,12 +115,12 @@ export default function QuotationPreview({ bundle, className = '' }) {
                 <td>
                   {item.line_item}
                   {item.category_name && (
-                    <div style={{ fontSize: '0.68rem', color: '#64748b', marginTop: 2 }}>
+                    <div style={{ fontSize: '0.68rem', color: 'var(--text-dim)', marginTop: 2 }}>
                       {item.category_name}
                     </div>
                   )}
                   {item.notes && (
-                    <div style={{ fontSize: '0.68rem', color: '#64748b', marginTop: 2 }}>{item.notes}</div>
+                    <div style={{ fontSize: '0.68rem', color: 'var(--text-dim)', marginTop: 2 }}>{item.notes}</div>
                   )}
                 </td>
                 <td>{item.hsn_code || '—'}</td>

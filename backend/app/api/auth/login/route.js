@@ -40,7 +40,10 @@ export async function POST(request) {
       return jsonError('Server is not configured. Add Supabase credentials to backend/.env.local.', 500);
     }
 
-    const { data: authData, error: authError } = await adminSupa.auth.signInWithPassword({ email, password });
+    // Separate client for the password check: after signing in, a client acts as that user (and RLS hides
+    // their department), so it must never be reused for the service-role lookups below.
+    const authClient = createAdminClient();
+    const { data: authData, error: authError } = await authClient.auth.signInWithPassword({ email, password });
     if (authError || !authData?.user || !authData?.session) {
       return jsonError('Invalid email or password.', 401);
     }

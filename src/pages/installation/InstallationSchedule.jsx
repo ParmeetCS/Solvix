@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import InstallationLayout from './InstallationLayout';
+import PortalLayout from '@/components/PortalLayout';
 import { installationApi } from '@/services/api';
 import {
   Calendar,
@@ -81,7 +81,7 @@ export default function InstallationSchedule() {
   });
 
   return (
-    <InstallationLayout
+    <PortalLayout
       title="Installation Schedule & Timeline"
       subtitle="Comprehensive calendar of upcoming visits, dates, and technician deployment"
       actions={
@@ -92,7 +92,7 @@ export default function InstallationSchedule() {
     >
       {/* Date Filter Bar */}
       <div className="inst-filter-bar">
-        <label style={{ fontSize: '0.85rem', color: '#cbd5e1', fontWeight: 500 }}>
+        <label style={{ fontSize: '0.85rem', color: 'var(--text-soft)', fontWeight: 500 }}>
           Filter by Date:
         </label>
         <input
@@ -112,13 +112,13 @@ export default function InstallationSchedule() {
       </div>
 
       {error && (
-        <div style={{ background: 'rgba(239, 68, 68, 0.15)', border: '1px solid rgba(239, 68, 68, 0.3)', padding: '12px 16px', borderRadius: 8, color: '#f87171', marginBottom: 20 }}>
+        <div style={{ background: 'rgba(239, 68, 68, 0.15)', border: '1px solid rgba(239, 68, 68, 0.3)', padding: '12px 16px', borderRadius: 8, color: 'var(--c-red)', marginBottom: 20 }}>
           {error}
         </div>
       )}
 
       {notice && (
-        <div style={{ background: 'rgba(16, 185, 129, 0.15)', border: '1px solid rgba(16, 185, 129, 0.3)', padding: '12px 16px', borderRadius: 8, color: '#34d399', marginBottom: 20 }}>
+        <div style={{ background: 'rgba(16, 185, 129, 0.15)', border: '1px solid rgba(16, 185, 129, 0.3)', padding: '12px 16px', borderRadius: 8, color: 'var(--c-green)', marginBottom: 20 }}>
           {notice.message}
         </div>
       )}
@@ -126,54 +126,54 @@ export default function InstallationSchedule() {
       {/* Schedule Grid */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(360px, 1fr))', gap: '20px' }}>
         {filteredJobs.length === 0 ? (
-          <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '40px', color: '#64748b' }}>
+          <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '40px', color: 'var(--text-dim)' }}>
             No installations scheduled for this selection.
           </div>
         ) : (
           filteredJobs.map(job => (
             <div key={job.id} className="inst-card" style={{ marginBottom: 0, display: 'flex', flexDirection: 'column' }}>
               <div className="inst-card-header" style={{ padding: '14px 18px' }}>
-                <span style={{ fontWeight: 700, color: '#f59e0b' }}>{job.installation_code}</span>
+                <span style={{ fontWeight: 700, color: 'var(--c-amber)' }}>{job.installation_code}</span>
                 <span className={`inst-badge inst-badge-${job.status}`}>{job.status.replace('_', ' ')}</span>
               </div>
 
               <div style={{ padding: '18px', flex: 1, display: 'flex', flexDirection: 'column', gap: 10 }}>
-                <div style={{ fontSize: '1.05rem', fontWeight: 600, color: '#fff' }}>{job.customer_name}</div>
-                <div style={{ fontSize: '0.8rem', color: '#94a3b8', display: 'flex', alignItems: 'flex-start', gap: 6 }}>
-                  <MapPin size={14} style={{ flexShrink: 0, marginTop: 2, color: '#f59e0b' }} />
+                <div style={{ fontSize: '1.05rem', fontWeight: 600, color: 'var(--text-strong)' }}>{job.customer_name}</div>
+                <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', display: 'flex', alignItems: 'flex-start', gap: 6 }}>
+                  <MapPin size={14} style={{ flexShrink: 0, marginTop: 2, color: 'var(--c-amber)' }} />
                   <span>{job.site_address}</span>
                 </div>
 
-                <div style={{ background: 'rgba(15, 23, 42, 0.6)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: 8, padding: 10, marginTop: 4 }}>
+                <div style={{ background: 'rgba(var(--surface-rgb), 0.6)', border: '1px solid rgba(var(--ink-rgb), 0.06)', borderRadius: 8, padding: 10, marginTop: 4 }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8rem', marginBottom: 4 }}>
-                    <span style={{ color: '#94a3b8' }}>Planned Visit Date:</span>
-                    <strong style={{ color: '#38bdf8' }}>{job.planned_installation_date || 'Unscheduled'}</strong>
+                    <span style={{ color: 'var(--text-muted)' }}>Planned Visit Date:</span>
+                    <strong style={{ color: 'var(--c-blue)' }}>{job.planned_installation_date || 'Unscheduled'}</strong>
                   </div>
                   <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8rem' }}>
-                    <span style={{ color: '#94a3b8' }}>Capacity & Type:</span>
-                    <span style={{ color: '#fff' }}>{job.system_capacity_kw} kW ({job.system_type})</span>
+                    <span style={{ color: 'var(--text-muted)' }}>Capacity & Type:</span>
+                    <span style={{ color: 'var(--text-strong)' }}>{job.system_capacity_kw} kW ({job.system_type})</span>
                   </div>
                 </div>
 
                 <div>
-                  <div style={{ fontSize: '0.75rem', color: '#64748b', textTransform: 'uppercase', marginBottom: 4, fontWeight: 600 }}>
+                  <div style={{ fontSize: '0.75rem', color: 'var(--text-dim)', textTransform: 'uppercase', marginBottom: 4, fontWeight: 600 }}>
                     Assigned Technicians
                   </div>
                   {(job.assigned_technicians || []).length > 0 ? (
                     <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
                       {job.assigned_technicians.map((t, i) => (
-                        <span key={i} style={{ background: 'rgba(255,255,255,0.06)', color: '#cbd5e1', padding: '3px 8px', borderRadius: 4, fontSize: '0.75rem' }}>
+                        <span key={i} style={{ background: 'rgba(var(--ink-rgb), 0.06)', color: 'var(--text-soft)', padding: '3px 8px', borderRadius: 4, fontSize: '0.75rem' }}>
                           {t.full_name} ({t.role_on_job.replace('_', ' ')})
                         </span>
                       ))}
                     </div>
                   ) : (
-                    <span style={{ color: '#f59e0b', fontSize: '0.78rem' }}>No team assigned</span>
+                    <span style={{ color: 'var(--c-amber)', fontSize: '0.78rem' }}>No team assigned</span>
                   )}
                 </div>
               </div>
 
-              <div style={{ padding: '12px 18px', background: 'rgba(15, 23, 42, 0.4)', borderTop: '1px solid rgba(255, 255, 255, 0.06)', display: 'flex', justifyContent: 'space-between', gap: 8 }}>
+              <div style={{ padding: '12px 18px', background: 'rgba(var(--surface-rgb), 0.4)', borderTop: '1px solid rgba(var(--ink-rgb), 0.06)', display: 'flex', justifyContent: 'space-between', gap: 8 }}>
                 <button
                   onClick={() => handleOpenReschedule(job)}
                   className="inst-btn inst-btn-secondary inst-btn-sm"
@@ -195,14 +195,14 @@ export default function InstallationSchedule() {
       {/* Reschedule Modal */}
       {rescheduleJob && (
         <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(4px)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 100, padding: 16 }}>
-          <div style={{ background: '#0d172a', border: '1px solid rgba(255,255,255,0.15)', borderRadius: 14, width: '100%', maxWidth: 460, padding: 24, boxShadow: '0 20px 40px rgba(0,0,0,0.5)' }}>
-            <h3 style={{ margin: '0 0 16px 0', color: '#fff', fontSize: '1.15rem' }}>
+          <div style={{ background: 'var(--surface-solid)', border: '1px solid rgba(var(--ink-rgb), 0.15)', borderRadius: 14, width: '100%', maxWidth: 460, padding: 24, boxShadow: '0 20px 40px rgba(0,0,0,0.5)' }}>
+            <h3 style={{ margin: '0 0 16px 0', color: 'var(--text-strong)', fontSize: '1.15rem' }}>
               Reschedule Installation: {rescheduleJob.installation_code}
             </h3>
 
             <form onSubmit={handleRescheduleSubmit}>
               <div style={{ marginBottom: 16 }}>
-                <label style={{ display: 'block', fontSize: '0.82rem', color: '#cbd5e1', marginBottom: 6 }}>
+                <label style={{ display: 'block', fontSize: '0.82rem', color: 'var(--text-soft)', marginBottom: 6 }}>
                   New Installation Planned Date
                 </label>
                 <input
@@ -216,7 +216,7 @@ export default function InstallationSchedule() {
               </div>
 
               <div style={{ marginBottom: 20 }}>
-                <label style={{ display: 'block', fontSize: '0.82rem', color: '#cbd5e1', marginBottom: 6 }}>
+                <label style={{ display: 'block', fontSize: '0.82rem', color: 'var(--text-soft)', marginBottom: 6 }}>
                   Reason for Rescheduling
                 </label>
                 <textarea
@@ -249,6 +249,6 @@ export default function InstallationSchedule() {
           </div>
         </div>
       )}
-    </InstallationLayout>
+    </PortalLayout>
   );
 }

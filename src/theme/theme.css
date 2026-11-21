@@ -1,0 +1,110 @@
+/* =====================================================================
+   SOLVIX app theme (dashboards, sign-in, forms).
+   The light palette is the landing page's "morning" palette and the dark
+   palette is its "night" palette, so the whole product reads as one brand.
+   The theme is chosen with <html data-theme="light|dark">.
+   ===================================================================== */
+
+:root,
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  /* surfaces */
+  --app-bg: #080e1b;
+  --surface-solid: #0d172a;
+  --surface-2: #1e293b;
+  --bg-rgb: 8, 14, 27;
+  --surface-rgb: 13, 23, 42;
+  --ink-rgb: 255, 255, 255;          /* borders, hovers and dividers */
+
+  /* text */
+  --text-strong: #ffffff;
+  --text: #f1f5f9;
+  --text-soft: #cbd5e1;
+  --text-muted: #94a3b8;
+  --text-dim: #64748b;
+
+  /* brand accent */
+  --accent-text: #d8ee8e;
+  --accent-rgb: 216, 238, 142;
+
+  /* status colours used as text, borders and icons */
+  --c-blue: #38bdf8;
+  --c-green: #34d399;
+  --c-emerald: #10b981;
+  --c-green-soft: #86efac;
+  --c-red: #f87171;
+  --c-red-2: #ef4444;
+  --c-amber: #f59e0b;
+  --c-amber-soft: #fbbf24;
+  --c-violet: #c084fc;
+
+  /* text that sits ON a coloured fill never changes with the theme */
+  --on-fill: #080e1b;
+  --on-color: #ffffff;
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+
+  --app-bg: #f4f1e8;
+  --surface-solid: #fffdf7;
+  --surface-2: #e9e4d6;
+  --bg-rgb: 244, 241, 232;
+  --surface-rgb: 255, 253, 247;
+  --ink-rgb: 20, 32, 47;
+
+  --text-strong: #0f1b2a;
+  --text: #14202f;
+  --text-soft: #2c3a4b;
+  --text-muted: #4f5d6e;
+  --text-dim: #66748a;
+
+  --accent-text: #4f6f17;
+  --accent-rgb: 109, 143, 42;
+
+  --c-blue: #0369a1;
+  --c-green: #047857;
+  --c-emerald: #047857;
+  --c-green-soft: #15803d;
+  --c-red: #b91c1c;
+  --c-red-2: #b91c1c;
+  --c-amber: #b45309;
+  --c-amber-soft: #a16207;
+  --c-violet: #7e22ce;
+}
+
+/* Smooth switch, but never animate on first paint or for users who ask for less motion */
+html.theme-ready body,
+html.theme-ready .crm-layout,
+html.theme-ready .crm-sidebar,
+html.theme-ready .crm-card,
+html.theme-ready .crm-header {
+  transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+}
+@media (prefers-reduced-motion: reduce) {
+  html.theme-ready * { transition: none !important; }
+}
+
+/* ---- the toggle button ---- */
+.theme-toggle {
+  display: inline-grid; place-items: center; flex: none;
+  width: 36px; height: 36px; border-radius: 10px; cursor: pointer;
+  color: var(--text-soft);
+  background: rgba(var(--ink-rgb), 0.06);
+  border: 1px solid rgba(var(--ink-rgb), 0.12);
+}
+.theme-toggle:hover { background: rgba(var(--ink-rgb), 0.12); color: var(--text-strong); }
+.theme-toggle:focus-visible { outline: 2px solid var(--accent-text); outline-offset: 2px; }
+
+/* floating version used on pages without a header (sign-in, forms, errors) */
+.theme-toggle.is-floating {
+  position: fixed; top: 16px; right: 16px; z-index: 60;
+  background: rgba(var(--surface-rgb), 0.85); backdrop-filter: blur(6px);
+}
+/* never float over the dashboards (they have the button in their header) or the landing page (its own scene switch) */
+body:has(.crm-layout) .theme-toggle.is-floating,
+body:has(#hero) .theme-toggle.is-floating { display: none; }
+
+/* base page colours for pages that do not use a module stylesheet */
+body { background-color: var(--app-bg); color: var(--text); }

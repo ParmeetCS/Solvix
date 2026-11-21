@@ -1,11 +1,39 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTheme } from '../theme/theme';
 import '../App.css';
 
 // Public marketing site. Everything here (fonts, scripts, WebGL background) is
 // loaded only while this page is open, never on the dashboards.
 export default function Landing() {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const { theme, setTheme } = useTheme();
+
+  // The hero's Morning/Night switch is this page's light/dark control: keep it and the app theme in sync.
+  useEffect(() => {
+    const buttons = document.querySelectorAll('[data-t]');
+    const onPick = (e) => setTheme(+e.currentTarget.dataset.t === 0 ? 'light' : 'dark');
+    buttons.forEach((b) => b.addEventListener('click', onPick));
+    return () => buttons.forEach((b) => b.removeEventListener('click', onPick));
+  }, [setTheme]);
+  useEffect(() => {
+    // Move the scene to match the theme. The first attempt can land while the intro animation is
+    // still running (and be ignored), so retry until the scene has really switched.
+    const want = theme === 'light' ? 0 : 1;
+    let tries = 0;
+    const attempt = () => {
+      const k = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--k'));
+      const settled = k < 0.02 || k > 0.98;
+      const current = k < 0.5 ? 0 : 1;
+      if (settled && current === want) return true;
+      if (settled) document.querySelector('.toggle [data-t="' + want + '"]')?.click();
+      return false;
+    };
+    if (attempt()) return undefined;
+    const timer = setInterval(() => { if (attempt() || ++tries > 12) clearInterval(timer); }, 1200);
+    return () => clearInterval(timer);
+  }, [theme]);
+
   const navigate = useNavigate();
   const isHome = true; // this component only renders on "/"
 
@@ -475,6 +503,7 @@ void main(){
             <li><a href="#contact" onClick={() => setMobileOpen(false)}>Contact</a></li>
           </ul>
           <div className="side">
+            <a className="cta cta-signup" href="/login/customer" onClick={(e) => { e.preventDefault(); navigate('/login/customer'); setMobileOpen(false); }}>Sign In</a>
             <a className="cta cta-signup" href="/signup" onClick={(e) => { e.preventDefault(); navigate('/signup'); setMobileOpen(false); }}>Sign Up</a>
             <a className="cta" href="/get-quote" onClick={(e) => { e.preventDefault(); navigate('/get-quote'); setMobileOpen(false); }}>Get a Quote</a>
           </div>
@@ -487,7 +516,7 @@ void main(){
       {isHome && mobileOpen && (
         <div className="mobile-menu open" role="navigation" aria-label="Mobile menu">
           <button className="mobile-close" onClick={() => setMobileOpen(false)} aria-label="Close menu">
-            <span aria-hidden="true">\u2715</span>
+            <span aria-hidden="true">{'\u2715'}</span>
           </button>
           <nav>
             <a href="#" onClick={(e) => { e.preventDefault(); navigate('/'); setMobileOpen(false); }}>Home</a>
@@ -498,6 +527,7 @@ void main(){
             <a href="#contact" onClick={() => setMobileOpen(false)}>Contact</a>
           </nav>
           <div className="acct">
+            <a className="cta-btn cta-signup" href="/login/customer" onClick={(e) => { e.preventDefault(); navigate('/login/customer'); setMobileOpen(false); }}>Sign In</a>
             <a className="cta-btn cta-signup" href="/signup" onClick={(e) => { e.preventDefault(); navigate('/signup'); setMobileOpen(false); }}>Sign Up</a>
             <a className="cta-btn" href="/get-quote" onClick={(e) => { e.preventDefault(); navigate('/get-quote'); setMobileOpen(false); }}>Get a Quote</a>
           </div>
@@ -540,20 +570,20 @@ void main(){
                 <div className="ui">
                   <h1>
                     <span className="l1">
-                      <span className="w">0</span> <span className="w">Electricity</span> <span className="w">Bills</span>
+                      <span className="w">Every</span> <span className="w">solar</span> <span className="w">job,</span>
                     </span>
                     <span className="l2">
-                      <i><span className="w">for</span> <span className="w">the</span> <span className="w">next</span></i>{' '}
-                      <span className="y"><span className="w">7</span> <span className="w">Years</span></span>
+                      <i><span className="w">from</span></i>{' '}
+                      <span className="y"><span className="w">enquiry</span> <span className="w">to</span> <span className="w">report</span></span>
                     </span>
                   </h1>
                   <div className="dock">
                     <div className="toggle" role="group" aria-label="Time of day">
-                      <button data-t="0" aria-pressed="false"><b>Morning</b><small>0 for Electricity</small></button>
-                      <button data-t="1" aria-pressed="true"><b>Night</b><small>0 for Electricity</small></button>
+                      <button data-t="0" aria-pressed="false"><b>Morning</b><small>Surveys &amp; installs</small></button>
+                      <button data-t="1" aria-pressed="true"><b>Night</b><small>Reports &amp; follow-ups</small></button>
                     </div>
-                    <p className="cap">Forget the energy market, weather conditions and seasons. Our Smart <br />Controller guarantees
-                      you get no electricity bill for seven years.</p>
+                    <p className="cap">SOLVIX runs a solar business in one place: leads, site surveys, quotations, <br />stock, installations,
+                      warranty and service.</p>
                   </div>
                 </div>
               </main>
@@ -589,9 +619,9 @@ void main(){
               {/* Story */}
               <section className="sec story" id="story">
                 <div className="wrap">
-                  <span className="eyebrow" data-reveal="">Why SIMS</span>
+                  <span className="eyebrow" data-reveal="">Why SOLVIX</span>
                   <p className="big" id="storyText">Solar companies don&#39;t lose money on panels. They lose it in the gaps: a lead that
-                    went quiet, a quote built by hand, a part nobody can trace, a warranty nobody remembers. <em>SIMS closes every
+                    went quiet, a quote built by hand, a part nobody can trace, a warranty nobody remembers. <em>SOLVIX closes every
                       gap.</em></p>
                   <ul className="pains">
                     <li data-reveal="">Lost customer leads</li>
@@ -629,7 +659,7 @@ void main(){
                         <h3><small>CRM</small>Capture every enquiry. Never lose a lead.</h3>
                         <p>Every enquiry gets an owner, a status and a next step, so follow-ups happen on time.</p>
                         <ul className="tags">
-                          <li>Lead pipeline</li><li>Reminders</li><li>Customer history</li>
+                          <li>Lead pipeline</li><li>Follow-ups</li><li>Customer history</li>
                         </ul>
                       </div>
                     </article>
@@ -643,9 +673,9 @@ void main(){
                       </div>
                       <div>
                         <h3><small>Sales &amp; Quotations</small>Quotes that add up, every time.</h3>
-                        <p>Build quotations from live stock and pricing instead of hand-typed spreadsheets.</p>
+                        <p>Build quotations from a product catalogue and ready-made packages instead of hand-typed spreadsheets.</p>
                         <ul className="tags">
-                          <li>Templates</li><li>Versions</li><li>Approvals</li>
+                          <li>Packages</li><li>PDF quotes</li><li>Approvals</li>
                         </ul>
                       </div>
                     </article>
@@ -691,9 +721,9 @@ void main(){
                       </div>
                       <div>
                         <h3><small>Warranty &amp; Service</small>Warranties that remember themselves.</h3>
-                        <p>Warranty terms attach to the serial number, with reminders and service tickets to match.</p>
+                        <p>Warranty terms attach to the serial number, with service tickets and claims to match.</p>
                         <ul className="tags">
-                          <li>Warranty terms</li><li>Expiry alerts</li><li>Service tickets</li>
+                          <li>Warranty terms</li><li>Expiry dates</li><li>Service tickets</li>
                         </ul>
                       </div>
                     </article>
@@ -707,9 +737,9 @@ void main(){
                       </div>
                       <div>
                         <h3><small>Finance</small>See profit per project, not per guess.</h3>
-                        <p>Invoices, payments and project costs roll up into a margin you can trust.</p>
+                        <p>Record payments against every order and see what is still outstanding. Invoicing, expenses and project costing are being added.</p>
                         <ul className="tags">
-                          <li>Invoicing</li><li>Payments</li><li>Project costing</li>
+                          <li>Order payments</li><li>Balances</li><li>Revenue totals</li>
                         </ul>
                       </div>
                     </article>
@@ -722,9 +752,9 @@ void main(){
                       </div>
                       <div>
                         <h3><small>Analytics</small>Decisions from data, not hunches.</h3>
-                        <p>Dashboards for conversion, utilisation, stock and profitability, ready when management asks.</p>
+                        <p>Dashboards for the pipeline, orders, installations, support and revenue, ready when management asks.</p>
                         <ul className="tags">
-                          <li>Dashboards</li><li>Reports</li><li>Trends</li>
+                          <li>Dashboards</li><li>Reports</li><li>Date filters</li>
                         </ul>
                       </div>
                     </article>
@@ -754,7 +784,7 @@ void main(){
                     </li>
                     <li className="step"><span className="n">02</span>
                       <h3>Quotation</h3>
-                      <p>The system is sized and priced from live stock, then sent for approval and to the customer.</p>
+                      <p>Quotations are built from the catalogue and packages, approved, then sent to the customer to accept online.</p>
                       <ul className="tags"><li>Sales</li><li>Inventory</li></ul>
                     </li>
                     <li className="step"><span className="n">03</span>
@@ -769,7 +799,7 @@ void main(){
                     </li>
                     <li className="step"><span className="n">05</span>
                       <h3>Commissioning</h3>
-                      <p>The finished system is handed over and its documents land in the customer&#39;s portal.</p>
+                      <p>The finished system is handed over and the customer follows its status in their portal.</p>
                       <ul className="tags"><li>Projects</li><li>Customer portal</li></ul>
                     </li>
                     <li className="step"><span className="n">06</span>
@@ -806,10 +836,10 @@ void main(){
                       <h3>The whole business at a glance.</h3>
                       <p>Administrators see every project, every rupee and every risk, and control who can do what.</p>
                       <ul className="ticks">
-                        <li>Company-wide dashboards and project profitability</li>
-                        <li>User, role and permission management</li>
-                        <li>Approvals for quotations, purchases and discounts</li>
-                        <li>Audit trail across stock, pricing and payments</li>
+                        <li>Company-wide dashboards and reports</li>
+                        <li>Employee approvals and department access</li>
+                        <li>Approvals for quotations and site surveys</li>
+                        <li>An activity log across every module</li>
                       </ul>
                     </div>
                     <div className="mock">
@@ -887,7 +917,7 @@ void main(){
                         <li>Assigned installations and site checklists</li>
                         <li>Serial numbers recorded on site</li>
                         <li>Progress updates the office sees instantly</li>
-                        <li>Service issues raised from the field</li>
+                        <li>Site survey forms with photos</li>
                       </ul>
                     </div>
                     <div className="mock">
@@ -910,9 +940,9 @@ void main(){
                       <p>Customers follow their installation, find their documents and ask for service, all in one place.</p>
                       <ul className="ticks">
                         <li>Live installation progress</li>
-                        <li>Documents and warranty details on file</li>
+                        <li>Warranty details for installed equipment</li>
                         <li>Service requests with status updates</li>
-                        <li>Invoices and payment history</li>
+                        <li>Orders, quotations and payment balance</li>
                       </ul>
                     </div>
                     <div className="mock">
@@ -962,12 +992,12 @@ void main(){
                     </article>
                     <article className="solution-card">
                       <h3>Customer Support</h3>
-                      <p>Give customers live installation progress, documents, warranty details and service requests in one portal.</p>
+                      <p>Give customers live installation progress, warranty details and service requests in one portal.</p>
                       <a href="#roles">Customer portal &rarr;</a>
                     </article>
                     <article className="solution-card">
                       <h3>Accounts &amp; Finance</h3>
-                      <p>Roll up invoices, payments and project costs into margins you can trust, with per-project profitability.</p>
+                      <p>Record payments against orders and track outstanding balances. Invoice and expense tools are being added.</p>
                       <a href="#platform">Explore modules &rarr;</a>
                     </article>
                   </div>
@@ -979,21 +1009,7 @@ void main(){
                 <div className="wrap">
                   <span className="eyebrow" data-reveal="">Contact</span>
                   <h2 className="display" data-split="">Get in <em>touch.</em></h2>
-                  <p className="lead" data-reveal="">Reach the SOLVIX team. Project enquiries are handled through the quotation form below.</p>
-                  <div className="contact-grid">
-                    <div className="contact-item">
-                      <span className="label">General enquiries</span>
-                      <div className="value placeholder">[Email address]</div>
-                    </div>
-                    <div className="contact-item">
-                      <span className="label">Sales &amp; quotations</span>
-                      <div className="value placeholder">[Phone number]</div>
-                    </div>
-                    <div className="contact-item">
-                      <span className="label">Office</span>
-                      <div className="value placeholder">[Office address]</div>
-                    </div>
-                  </div>
+                  <p className="lead" data-reveal="">Planning a rooftop solar project? Send us the details and our team will get back to you.</p>
                   <p style={{ marginTop: 32, textAlign: 'center' }}>
                     <a className="btn primary mag" href="/get-quote" onClick={(e) => { e.preventDefault(); navigate('/get-quote'); }}>Submit an enquiry <svg style={{ width: 18, height: 18 }}><use href="#arrow" /></svg></a>
                   </p>
@@ -1004,7 +1020,7 @@ void main(){
               <section className="stats">
                 <div className="wrap stat-grid">
                   <div className="stat"><b data-count="7">7</b><span>Integrated modules</span></div>
-                  <div className="stat"><b data-count="4">4</b><span>Role-based portals</span></div>
+                  <div className="stat"><b data-count="5">5</b><span>Role-based portals</span></div>
                   <div className="stat"><b data-count="7">7</b><span>Lifecycle stages tracked</span></div>
                   <div className="stat"><b data-count="1">1</b><span>Source of truth</span></div>
                 </div>
@@ -1016,7 +1032,7 @@ void main(){
                   <div>
                     <span className="eyebrow" data-reveal="">Roadmap</span>
                     <h2 className="display" data-split="">Ready for <em>what&#39;s next.</em></h2>
-                    <p className="lead" data-reveal="">Clean, connected data is the foundation for the next layer: forecasting how much
+                    <p className="lead" data-reveal="">Planned next: with clean, connected data in place, the next layer is forecasting how much
                       each system will generate and flagging when it falls short.</p>
                     <ul className="chips" data-reveal="">
                       <li>Artificial intelligence</li>
@@ -1068,10 +1084,10 @@ void main(){
                 <div className="orb o2"></div>
                 <div className="wrap">
                   <h2 className="display" data-split="">Run your solar business like a <em>system.</em></h2>
-                  <p className="lead" data-reveal="">From the first enquiry to the final report, see how SIMS keeps every project, part
+                  <p className="lead" data-reveal="">From the first enquiry to the final report, see how SOLVIX keeps every project, part
                     and payment in one place.</p>
                   <div className="btns" data-reveal="">
-                    <a className="btn primary mag" href="#">Request a demo <svg><use href="#arrow" /></svg></a>
+                    <a className="btn primary mag" href="/get-quote" onClick={(e) => { e.preventDefault(); navigate('/get-quote'); }}>Get a quote <svg><use href="#arrow" /></svg></a>
                     <a className="btn ghost mag" href="#platform">Explore the modules</a>
                   </div>
                 </div>
@@ -1113,8 +1129,8 @@ void main(){
                     <div>
                       <h6>Get started</h6>
                       <ul>
-                        <li><a href="#demo">Request a demo</a></li>
-                        <li><a href="#demo">Instant quote</a></li>
+                        <li><a href="/get-quote" onClick={(e) => { e.preventDefault(); navigate('/get-quote'); }}>Get a quote</a></li>
+                        <li><a href="/login/customer" onClick={(e) => { e.preventDefault(); navigate('/login/customer'); }}>Sign in</a></li>
                       </ul>
                     </div>
                   </div>

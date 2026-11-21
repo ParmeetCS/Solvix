@@ -6,7 +6,7 @@ export async function OPTIONS() {
   return handleOptions();
 }
 
-const SYSTEM_TYPES = { 'on-grid': 'on-grid', 'off-grid': 'off-grid' };
+const SYSTEM_TYPES = { 'on-grid': 'on-grid', 'off-grid': 'off-grid', hybrid: 'hybrid' };
 const MAX_PER_HOUR_PER_PHONE = 3;
 
 const clean = (v, max = 500) => String(v ?? '').replace(/\s+/g, ' ').trim().slice(0, max);

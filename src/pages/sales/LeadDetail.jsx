@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import SalesLayout from './SalesLayout';
+import PortalLayout from '@/components/PortalLayout';
 import { salesApi } from '@/services/api';
 import {
   ArrowLeft,
@@ -199,7 +199,7 @@ export default function LeadDetail() {
   };
 
   return (
-    <SalesLayout
+    <PortalLayout
       title={lead ? `${lead.customer_name} (${lead.lead_code})` : 'Lead Details'}
       subtitle={lead ? `Status: ${lead.status?.replace('_', ' ')} • Source: ${lead.source}` : ''}
       actions={
@@ -238,11 +238,11 @@ export default function LeadDetail() {
       }
     >
       {loading ? (
-        <div className="crm-card" style={{ padding: '60px', textAlign: 'center', color: '#94a3b8' }}>
+        <div className="crm-card" style={{ padding: '60px', textAlign: 'center', color: 'var(--text-muted)' }}>
           Loading lead profile and history...
         </div>
       ) : error ? (
-        <div className="crm-card" style={{ color: '#f87171' }}>{error}</div>
+        <div className="crm-card" style={{ color: 'var(--c-red)' }}>{error}</div>
       ) : !lead ? (
         <div className="crm-card">Lead not found.</div>
       ) : (
@@ -251,16 +251,16 @@ export default function LeadDetail() {
             <div
               className="crm-card"
               style={{
-                borderColor: '#d8ee8e',
-                background: 'rgba(216,238,142,0.1)',
-                color: '#d8ee8e',
+                borderColor: 'var(--accent-text)',
+                background: 'rgba(var(--accent-rgb), 0.1)',
+                color: 'var(--accent-text)',
                 display: 'flex',
                 justifyContent: 'space-between',
                 alignItems: 'center'
               }}
             >
               <span>{actionSuccess}</span>
-              <button onClick={() => setActionSuccess(null)} style={{ color: '#fff', fontSize: '0.8rem' }}>✕</button>
+              <button onClick={() => setActionSuccess(null)} style={{ color: 'var(--text-strong)', fontSize: '0.8rem' }}>✕</button>
             </div>
           )}
 
@@ -269,7 +269,7 @@ export default function LeadDetail() {
             <div
               className="crm-card"
               style={{
-                borderColor: '#34d399',
+                borderColor: 'var(--c-green)',
                 background: 'rgba(16, 185, 129, 0.1)',
                 display: 'flex',
                 alignItems: 'center',
@@ -278,8 +278,8 @@ export default function LeadDetail() {
               }}
             >
               <div>
-                <h4 style={{ color: '#34d399', margin: 0, fontWeight: 600 }}>Lead is Qualified!</h4>
-                <p style={{ color: '#cbd5e1', fontSize: '0.84rem', margin: '4px 0 0' }}>
+                <h4 style={{ color: 'var(--c-green)', margin: 0, fontWeight: 600 }}>Lead is Qualified!</h4>
+                <p style={{ color: 'var(--text-soft)', fontSize: '0.84rem', margin: '4px 0 0' }}>
                   Handoff to technical team by initiating a Site Survey & Feasibility request.
                 </p>
               </div>
@@ -301,7 +301,7 @@ export default function LeadDetail() {
                 {lead.customer_id && (
                   <Link
                     to={`/sales/customers/${lead.customer_id}`}
-                    style={{ fontSize: '0.8rem', color: '#d8ee8e', display: 'flex', alignItems: 'center', gap: '4px' }}
+                    style={{ fontSize: '0.8rem', color: 'var(--accent-text)', display: 'flex', alignItems: 'center', gap: '4px' }}
                   >
                     Linked Customer <ExternalLink size={12} />
                   </Link>
@@ -309,12 +309,12 @@ export default function LeadDetail() {
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', fontSize: '0.9rem' }}>
                 <div>
-                  <div style={{ color: '#94a3b8', fontSize: '0.78rem' }}>FULL NAME</div>
-                  <div style={{ fontWeight: '600', color: '#fff' }}>{lead.customer_name}</div>
+                  <div style={{ color: 'var(--text-muted)', fontSize: '0.78rem' }}>FULL NAME</div>
+                  <div style={{ fontWeight: '600', color: 'var(--text-strong)' }}>{lead.customer_name}</div>
                 </div>
 
                 <div>
-                  <div style={{ color: '#94a3b8', fontSize: '0.78rem' }}>PHONE & WHATSAPP</div>
+                  <div style={{ color: 'var(--text-muted)', fontSize: '0.78rem' }}>PHONE & WHATSAPP</div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginTop: '2px' }}>
                     <span>{lead.phone}</span>
                     <a
@@ -330,12 +330,12 @@ export default function LeadDetail() {
                 </div>
 
                 <div>
-                  <div style={{ color: '#94a3b8', fontSize: '0.78rem' }}>EMAIL ADDRESS</div>
+                  <div style={{ color: 'var(--text-muted)', fontSize: '0.78rem' }}>EMAIL ADDRESS</div>
                   <div>{lead.email || 'Not provided'}</div>
                 </div>
 
                 <div>
-                  <div style={{ color: '#94a3b8', fontSize: '0.78rem' }}>INSTALLATION SITE ADDRESS</div>
+                  <div style={{ color: 'var(--text-muted)', fontSize: '0.78rem' }}>INSTALLATION SITE ADDRESS</div>
                   <div>{lead.address || 'Not specified'}</div>
                 </div>
               </div>
@@ -348,35 +348,35 @@ export default function LeadDetail() {
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', fontSize: '0.9rem' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                  <span style={{ color: '#94a3b8' }}>System Topology:</span>
+                  <span style={{ color: 'var(--text-muted)' }}>System Topology:</span>
                   <span style={{ fontWeight: '600', textTransform: 'capitalize' }}>{lead.system_type || 'on-grid'}</span>
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                  <span style={{ color: '#94a3b8' }}>Target Capacity:</span>
+                  <span style={{ color: 'var(--text-muted)' }}>Target Capacity:</span>
                   <span style={{ fontWeight: '600' }}>{lead.expected_capacity_kw ? `${lead.expected_capacity_kw} kW` : 'TBD'}</span>
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                  <span style={{ color: '#94a3b8' }}>Monthly Power Bill:</span>
+                  <span style={{ color: 'var(--text-muted)' }}>Monthly Power Bill:</span>
                   <span style={{ fontWeight: '600' }}>{lead.monthly_electricity_bill ? `₹ ${lead.monthly_electricity_bill}` : 'N/A'}</span>
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                  <span style={{ color: '#94a3b8' }}>Priority:</span>
-                  <span style={{ fontWeight: '600', textTransform: 'capitalize', color: lead.priority === 'urgent' ? '#f87171' : '#d8ee8e' }}>
+                  <span style={{ color: 'var(--text-muted)' }}>Priority:</span>
+                  <span style={{ fontWeight: '600', textTransform: 'capitalize', color: lead.priority === 'urgent' ? 'var(--c-red)' : 'var(--accent-text)' }}>
                     {lead.priority}
                   </span>
                 </div>
 
                 {lead.lost_reason && (
                   <div style={{ marginTop: '8px', padding: '10px', background: 'rgba(239, 68, 68, 0.1)', border: '1px solid rgba(239,68,68,0.2)', borderRadius: '6px' }}>
-                    <div style={{ color: '#f87171', fontSize: '0.75rem', fontWeight: 600 }}>REASON FOR LOST LEAD</div>
-                    <div style={{ color: '#fca5a5', fontSize: '0.85rem', marginTop: '2px' }}>{lead.lost_reason}</div>
+                    <div style={{ color: 'var(--c-red)', fontSize: '0.75rem', fontWeight: 600 }}>REASON FOR LOST LEAD</div>
+                    <div style={{ color: 'var(--c-red)', fontSize: '0.85rem', marginTop: '2px' }}>{lead.lost_reason}</div>
                   </div>
                 )}
 
                 {lead.notes && (
                   <div style={{ marginTop: '8px' }}>
-                    <div style={{ color: '#94a3b8', fontSize: '0.78rem' }}>INTERNAL NOTES</div>
-                    <p style={{ color: '#cbd5e1', fontSize: '0.85rem', marginTop: '2px' }}>{lead.notes}</p>
+                    <div style={{ color: 'var(--text-muted)', fontSize: '0.78rem' }}>INTERNAL NOTES</div>
+                    <p style={{ color: 'var(--text-soft)', fontSize: '0.85rem', marginTop: '2px' }}>{lead.notes}</p>
                   </div>
                 )}
               </div>
@@ -389,23 +389,23 @@ export default function LeadDetail() {
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', fontSize: '0.9rem' }}>
                 <div>
-                  <div style={{ color: '#94a3b8', fontSize: '0.78rem' }}>ASSIGNED SALES SPECIALIST</div>
-                  <div style={{ fontWeight: '600', color: '#fff' }}>
+                  <div style={{ color: 'var(--text-muted)', fontSize: '0.78rem' }}>ASSIGNED SALES SPECIALIST</div>
+                  <div style={{ fontWeight: '600', color: 'var(--text-strong)' }}>
                     {lead.assigned_profile?.full_name || lead.assigned_profile?.email || 'Unassigned'}
                   </div>
                   {lead.assigned_profile?.phone && (
-                    <div style={{ fontSize: '0.78rem', color: '#94a3b8' }}>{lead.assigned_profile.phone}</div>
+                    <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>{lead.assigned_profile.phone}</div>
                   )}
                 </div>
 
                 <div>
-                  <div style={{ color: '#94a3b8', fontSize: '0.78rem' }}>LEAD CREATED BY</div>
+                  <div style={{ color: 'var(--text-muted)', fontSize: '0.78rem' }}>LEAD CREATED BY</div>
                   <div>{lead.created_profile?.full_name || lead.created_profile?.email || 'System'}</div>
-                  <div style={{ fontSize: '0.75rem', color: '#64748b' }}>{new Date(lead.created_at).toLocaleString()}</div>
+                  <div style={{ fontSize: '0.75rem', color: 'var(--text-dim)' }}>{new Date(lead.created_at).toLocaleString()}</div>
                 </div>
 
                 <div>
-                  <div style={{ color: '#94a3b8', fontSize: '0.78rem' }}>CURRENT STAGE</div>
+                  <div style={{ color: 'var(--text-muted)', fontSize: '0.78rem' }}>CURRENT STAGE</div>
                   <span className={`crm-badge crm-badge-${lead.status}`} style={{ marginTop: '4px' }}>
                     {lead.status?.replace('_', ' ')}
                   </span>
@@ -429,7 +429,7 @@ export default function LeadDetail() {
               </div>
 
               {followUps.length === 0 ? (
-                <p style={{ color: '#64748b', fontSize: '0.88rem' }}>No follow-ups recorded.</p>
+                <p style={{ color: 'var(--text-dim)', fontSize: '0.88rem' }}>No follow-ups recorded.</p>
               ) : (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                   {followUps.map((fu) => (
@@ -437,27 +437,27 @@ export default function LeadDetail() {
                       key={fu.id}
                       style={{
                         padding: '12px',
-                        background: 'rgba(255,255,255,0.03)',
+                        background: 'rgba(var(--ink-rgb), 0.03)',
                         borderRadius: '8px',
-                        borderLeft: `3px solid ${fu.status === 'completed' ? '#34d399' : '#facc15'}`
+                        borderLeft: `3px solid ${fu.status === 'completed' ? 'var(--c-green)' : 'var(--c-amber-soft)'}`
                       }}
                     >
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                        <span style={{ fontWeight: 600, color: '#fff', textTransform: 'capitalize' }}>
+                        <span style={{ fontWeight: 600, color: 'var(--text-strong)', textTransform: 'capitalize' }}>
                           {fu.follow_up_type?.replace('_', ' ')}
                         </span>
                         <span className={`crm-badge crm-badge-${fu.status}`}>{fu.status}</span>
                       </div>
-                      <div style={{ fontSize: '0.8rem', color: '#94a3b8', marginTop: '2px' }}>
+                      <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '2px' }}>
                         Due: {new Date(fu.scheduled_at).toLocaleString()}
                       </div>
                       {fu.notes && (
-                        <div style={{ fontSize: '0.82rem', color: '#cbd5e1', marginTop: '4px' }}>
+                        <div style={{ fontSize: '0.82rem', color: 'var(--text-soft)', marginTop: '4px' }}>
                           Note: {fu.notes}
                         </div>
                       )}
                       {fu.outcome && (
-                        <div style={{ fontSize: '0.82rem', color: '#86efac', marginTop: '2px' }}>
+                        <div style={{ fontSize: '0.82rem', color: 'var(--c-green-soft)', marginTop: '2px' }}>
                           Outcome: {fu.outcome}
                         </div>
                       )}
@@ -480,7 +480,7 @@ export default function LeadDetail() {
               </div>
 
               {surveys.length === 0 ? (
-                <p style={{ color: '#64748b', fontSize: '0.88rem' }}>No site survey requests submitted yet.</p>
+                <p style={{ color: 'var(--text-dim)', fontSize: '0.88rem' }}>No site survey requests submitted yet.</p>
               ) : (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                   {surveys.map((srv) => (
@@ -488,16 +488,16 @@ export default function LeadDetail() {
                       key={srv.id}
                       style={{
                         padding: '12px',
-                        background: 'rgba(255,255,255,0.03)',
+                        background: 'rgba(var(--ink-rgb), 0.03)',
                         borderRadius: '8px',
-                        borderLeft: '3px solid #38bdf8'
+                        borderLeft: '3px solid var(--c-blue)'
                       }}
                     >
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                        <b style={{ color: '#38bdf8' }}>{srv.survey_code}</b>
+                        <b style={{ color: 'var(--c-blue)' }}>{srv.survey_code}</b>
                         <span className="crm-badge crm-badge-survey">{srv.feasibility_status}</span>
                       </div>
-                      <div style={{ fontSize: '0.8rem', color: '#94a3b8', marginTop: '2px' }}>
+                      <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '2px' }}>
                         Survey Date: {srv.survey_date ? new Date(srv.survey_date).toLocaleDateString() : 'Awaiting scheduling'}
                       </div>
                     </div>
@@ -520,7 +520,7 @@ export default function LeadDetail() {
             </div>
 
             {interactions.length === 0 ? (
-              <p style={{ color: '#64748b', fontSize: '0.88rem' }}>No interactions recorded yet.</p>
+              <p style={{ color: 'var(--text-dim)', fontSize: '0.88rem' }}>No interactions recorded yet.</p>
             ) : (
               <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                 {interactions.map((it) => (
@@ -528,22 +528,22 @@ export default function LeadDetail() {
                     key={it.id}
                     style={{
                       padding: '12px 16px',
-                      background: 'rgba(255,255,255,0.02)',
+                      background: 'rgba(var(--ink-rgb), 0.02)',
                       borderRadius: '8px',
-                      border: '1px solid rgba(255,255,255,0.05)'
+                      border: '1px solid rgba(var(--ink-rgb), 0.05)'
                     }}
                   >
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <span style={{ fontWeight: 600, color: '#fff' }}>{it.subject}</span>
-                      <span style={{ fontSize: '0.75rem', color: '#64748b' }}>
+                      <span style={{ fontWeight: 600, color: 'var(--text-strong)' }}>{it.subject}</span>
+                      <span style={{ fontSize: '0.75rem', color: 'var(--text-dim)' }}>
                         {new Date(it.occurred_at).toLocaleString()}
                       </span>
                     </div>
-                    <div style={{ fontSize: '0.78rem', color: '#94a3b8', marginTop: '2px', textTransform: 'capitalize' }}>
+                    <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', marginTop: '2px', textTransform: 'capitalize' }}>
                       Channel: {it.interaction_type} • By: {it.author?.full_name || it.author?.email || 'System'}
                     </div>
                     {it.summary && (
-                      <p style={{ fontSize: '0.85rem', color: '#cbd5e1', marginTop: '6px', whiteSpace: 'pre-wrap' }}>
+                      <p style={{ fontSize: '0.85rem', color: 'var(--text-soft)', marginTop: '6px', whiteSpace: 'pre-wrap' }}>
                         {it.summary}
                       </p>
                     )}
@@ -561,7 +561,7 @@ export default function LeadDetail() {
       {showStatusModal && (
         <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.7)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 100 }}>
           <form onSubmit={handleStatusChange} className="crm-card" style={{ width: '420px', maxWidth: '90%' }}>
-            <h3 style={{ color: '#fff', marginBottom: '16px', fontSize: '1.1rem' }}>Update Lead Status</h3>
+            <h3 style={{ color: 'var(--text-strong)', marginBottom: '16px', fontSize: '1.1rem' }}>Update Lead Status</h3>
             <div className="crm-form-group">
               <label className="crm-label">New Status</label>
               <select
@@ -609,7 +609,7 @@ export default function LeadDetail() {
       {showAssignModal && (
         <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.7)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 100 }}>
           <form onSubmit={handleAssign} className="crm-card" style={{ width: '440px', maxWidth: '90%' }}>
-            <h3 style={{ color: '#fff', marginBottom: '16px', fontSize: '1.1rem' }}>Assign / Reassign Lead</h3>
+            <h3 style={{ color: 'var(--text-strong)', marginBottom: '16px', fontSize: '1.1rem' }}>Assign / Reassign Lead</h3>
             <div className="crm-form-group">
               <label className="crm-label">Select Sales Specialist *</label>
               <select
@@ -653,7 +653,7 @@ export default function LeadDetail() {
       {showFollowUpModal && (
         <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.7)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 100 }}>
           <form onSubmit={handleCreateFollowUp} className="crm-card" style={{ width: '440px', maxWidth: '90%' }}>
-            <h3 style={{ color: '#fff', marginBottom: '16px', fontSize: '1.1rem' }}>Schedule Follow-up</h3>
+            <h3 style={{ color: 'var(--text-strong)', marginBottom: '16px', fontSize: '1.1rem' }}>Schedule Follow-up</h3>
             <div className="crm-form-group">
               <label className="crm-label">Follow-up Type</label>
               <select className="crm-select" value={fuType} onChange={(e) => setFuType(e.target.value)}>
@@ -702,7 +702,7 @@ export default function LeadDetail() {
       {showInteractionModal && (
         <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.7)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 100 }}>
           <form onSubmit={handleLogInteraction} className="crm-card" style={{ width: '460px', maxWidth: '90%' }}>
-            <h3 style={{ color: '#fff', marginBottom: '16px', fontSize: '1.1rem' }}>Log Customer Interaction</h3>
+            <h3 style={{ color: 'var(--text-strong)', marginBottom: '16px', fontSize: '1.1rem' }}>Log Customer Interaction</h3>
             <div className="crm-form-group">
               <label className="crm-label">Interaction Channel</label>
               <select className="crm-select" value={interType} onChange={(e) => setInterType(e.target.value)}>
@@ -753,8 +753,8 @@ export default function LeadDetail() {
       {showSurveyModal && (
         <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.7)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 100 }}>
           <form onSubmit={handleSurveyRequest} className="crm-card" style={{ width: '460px', maxWidth: '90%' }}>
-            <h3 style={{ color: '#fff', marginBottom: '16px', fontSize: '1.1rem' }}>Request Site Survey</h3>
-            <p style={{ color: '#94a3b8', fontSize: '0.84rem', marginBottom: '16px' }}>
+            <h3 style={{ color: 'var(--text-strong)', marginBottom: '16px', fontSize: '1.1rem' }}>Request Site Survey</h3>
+            <p style={{ color: 'var(--text-muted)', fontSize: '0.84rem', marginBottom: '16px' }}>
               Pass this lead to the technical survey team to assess roof feasibility, shadow profile, and wiring.
             </p>
 
@@ -789,6 +789,6 @@ export default function LeadDetail() {
           </form>
         </div>
       )}
-    </SalesLayout>
+    </PortalLayout>
   );
 }

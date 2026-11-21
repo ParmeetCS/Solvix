@@ -53,11 +53,11 @@ export default function FinanceDashboard() {
 
           <div className="crm-card" style={{ marginTop: 20 }}>
             <div className="crm-card-title">Project profitability</div>
-            <p style={{ color: '#94a3b8', fontSize: 13 }}>
+            <p style={{ color: 'var(--text-muted)', fontSize: 13 }}>
               Collected payments minus booked project costs (or recorded expenses where no project costs exist). Treat it as indicative until all costs are recorded.
             </p>
-            <div className="crm-stat-value" style={{ color: m.netProfit >= 0 ? '#86efac' : '#f87171' }}>
-              {formatCurrency(m.netProfit)} <span style={{ fontSize: 14, color: '#94a3b8' }}>({m.profitMarginPct}% margin)</span>
+            <div className="crm-stat-value" style={{ color: m.netProfit >= 0 ? 'var(--c-green-soft)' : 'var(--c-red)' }}>
+              {formatCurrency(m.netProfit)} <span style={{ fontSize: 14, color: 'var(--text-muted)' }}>({m.profitMarginPct}% margin)</span>
             </div>
           </div>
 

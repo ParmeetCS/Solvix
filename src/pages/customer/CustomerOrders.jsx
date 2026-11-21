@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import CustomerPortalLayout from './CustomerPortalLayout';
+import PortalLayout from '@/components/PortalLayout';
 import { quotationsApi } from '@/services/api';
 import { Eye, ShoppingCart, ChevronLeft, ChevronRight, AlertTriangle } from 'lucide-react';
 import {
@@ -36,7 +36,7 @@ export default function CustomerOrders() {
   }, [load]);
 
   return (
-    <CustomerPortalLayout title="My Orders" subtitle="Follow your order from confirmation to completion">
+    <PortalLayout title="My Orders" subtitle="Follow your order from confirmation to completion">
       {error && (
         <div className="q-alert error">
           <AlertTriangle size={15} style={{ verticalAlign: '-2px', marginRight: 6 }} />
@@ -72,21 +72,21 @@ export default function CustomerOrders() {
                 {orders.map((order) => (
                   <tr key={order.id}>
                     <td>
-                      <b style={{ color: '#d8ee8e' }}>{order.order_code}</b>
-                      <div style={{ fontSize: '0.72rem', color: '#64748b' }}>
+                      <b style={{ color: 'var(--accent-text)' }}>{order.order_code}</b>
+                      <div style={{ fontSize: '0.72rem', color: 'var(--text-dim)' }}>
                         {formatDate(order.created_at)}
                       </div>
                     </td>
                     <td>{order.quotation?.quotation_code || '—'}</td>
                     <td>
                       <div style={{ textTransform: 'capitalize' }}>{order.system_type?.replace('-', ' ')}</div>
-                      <div style={{ fontSize: '0.74rem', color: '#94a3b8' }}>
+                      <div style={{ fontSize: '0.74rem', color: 'var(--text-muted)' }}>
                         {formatNumber(order.system_capacity_kw)} kW
                       </div>
                     </td>
                     <td>{formatCurrency(order.total_amount)}</td>
                     <td>{formatCurrency(order.advance_paid)}</td>
-                    <td style={{ color: Number(order.balance_due) > 0 ? '#fbbf24' : '#86efac' }}>
+                    <td style={{ color: Number(order.balance_due) > 0 ? 'var(--c-amber-soft)' : 'var(--c-green-soft)' }}>
                       {formatCurrency(order.balance_due)}
                     </td>
                     <td>
@@ -118,10 +118,10 @@ export default function CustomerOrders() {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'space-between',
-              borderTop: '1px solid rgba(255,255,255,0.06)',
+              borderTop: '1px solid rgba(var(--ink-rgb), 0.06)',
             }}
           >
-            <span style={{ fontSize: '0.82rem', color: '#94a3b8' }}>
+            <span style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>
               Page {pagination.page} of {pagination.totalPages}
             </span>
             <div style={{ display: 'flex', gap: 8 }}>
@@ -143,6 +143,6 @@ export default function CustomerOrders() {
           </div>
         )}
       </div>
-    </CustomerPortalLayout>
+    </PortalLayout>
   );
 }

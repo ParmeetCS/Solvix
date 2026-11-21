@@ -3,11 +3,14 @@ import { Routes, Route, useNavigate } from 'react-router-dom';
 import './App.css';
 import RoleLogin, { EmployeePortalChooser } from './pages/auth/RoleLogin';
 import { RequireAuth, PublicOnly, PendingOnly } from './components/route-guards';
+import { ThemeToggle } from './theme/theme';
 
 // Each screen is downloaded only when it is opened.
 const Landing = lazy(() => import('./pages/Landing'));
 const SignUp = lazy(() => import('./components/SignUp'));
 const QuoteForm = lazy(() => import('./components/QuoteForm'));
+const ForgotPassword = lazy(() => import('./pages/auth/ForgotPassword'));
+const ResetPassword = lazy(() => import('./pages/auth/ResetPassword'));
 const NotFound = lazy(() => import('./pages/shared/NotFound'));
 const PendingApproval = lazy(() => import('./pages/pending-approval'));
 const AccessDenied = lazy(() => import('./pages/access-denied'));
@@ -94,7 +97,7 @@ export default function App() {
 
   return (
     <>
-      <Suspense fallback={<div style={{ minHeight: '100vh', display: 'grid', placeItems: 'center', background: '#0a1224', color: '#9fb0c8' }}>Loading…</div>}>
+      <Suspense fallback={<div style={{ minHeight: '100vh', display: 'grid', placeItems: 'center', background: 'var(--app-bg)', color: 'var(--text-muted)' }}>Loading…</div>}>
       <Routes>
         <Route path="/" element={<PublicOnly><Landing /></PublicOnly>} />
         {/* Public: a separate sign-in page for every user type */}
@@ -107,6 +110,8 @@ export default function App() {
         <Route path="/login/technician" element={<PublicOnly><RoleLogin portal="technician" /></PublicOnly>} />
         <Route path="/login/staff" element={<PublicOnly><RoleLogin portal="staff" /></PublicOnly>} />
         <Route path="/login/admin" element={<PublicOnly><RoleLogin portal="admin" /></PublicOnly>} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/login/employee" element={<PublicOnly><EmployeePortalChooser /></PublicOnly>} />
 
         {/* Signed-in utility pages */}
@@ -201,6 +206,7 @@ export default function App() {
         <Route path="*" element={<NotFound />} />
       </Routes>
       </Suspense>
+      <ThemeToggle floating />
     </>
   );
 }

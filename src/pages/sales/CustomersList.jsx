@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import SalesLayout from './SalesLayout';
+import PortalLayout from '@/components/PortalLayout';
 import { salesApi } from '@/services/api';
 import {
   UserCheck,
@@ -83,7 +83,7 @@ export default function CustomersList() {
   };
 
   return (
-    <SalesLayout
+    <PortalLayout
       title="Customer Accounts"
       subtitle="View verified solar customer profiles, installations, quotations and lifetime value"
       actions={
@@ -97,8 +97,8 @@ export default function CustomersList() {
     >
       {/* Search Bar */}
       <form onSubmit={handleSearchSubmit} className="crm-filter-bar">
-        <div className="crm-search-box" style={{ display: 'flex', alignItems: 'center', background: 'rgba(13,23,42,0.8)', border: '1px solid rgba(255,255,255,0.12)', borderRadius: '8px', padding: '0 10px' }}>
-          <Search size={16} style={{ color: '#94a3b8' }} />
+        <div className="crm-search-box" style={{ display: 'flex', alignItems: 'center', background: 'rgba(var(--surface-rgb), 0.8)', border: '1px solid rgba(var(--ink-rgb), 0.12)', borderRadius: '8px', padding: '0 10px' }}>
+          <Search size={16} style={{ color: 'var(--text-muted)' }} />
           <input
             type="text"
             className="crm-input"
@@ -117,13 +117,13 @@ export default function CustomersList() {
       {/* Customers Table */}
       <div className="crm-card" style={{ padding: 0 }}>
         {loading ? (
-          <div style={{ padding: '40px', textAlign: 'center', color: '#94a3b8' }}>
+          <div style={{ padding: '40px', textAlign: 'center', color: 'var(--text-muted)' }}>
             Loading customer accounts...
           </div>
         ) : error ? (
-          <div style={{ padding: '24px', color: '#f87171' }}>{error}</div>
+          <div style={{ padding: '24px', color: 'var(--c-red)' }}>{error}</div>
         ) : customers.length === 0 ? (
-          <div style={{ padding: '40px', textAlign: 'center', color: '#94a3b8' }}>
+          <div style={{ padding: '40px', textAlign: 'center', color: 'var(--text-muted)' }}>
             No customer profiles found. Qualified leads convert into customers.
           </div>
         ) : (
@@ -144,22 +144,22 @@ export default function CustomersList() {
                 {customers.map((c) => (
                   <tr key={c.id}>
                     <td>
-                      <b style={{ color: '#d8ee8e' }}>{c.customer_code}</b>
-                      <div style={{ fontSize: '0.72rem', color: '#64748b' }}>
+                      <b style={{ color: 'var(--accent-text)' }}>{c.customer_code}</b>
+                      <div style={{ fontSize: '0.72rem', color: 'var(--text-dim)' }}>
                         {new Date(c.created_at).toLocaleDateString()}
                       </div>
                     </td>
                     <td>
-                      <div style={{ fontWeight: 600, color: '#fff' }}>{c.contact_name}</div>
+                      <div style={{ fontWeight: 600, color: 'var(--text-strong)' }}>{c.contact_name}</div>
                       {c.company_name && (
-                        <div style={{ fontSize: '0.78rem', color: '#94a3b8' }}>
+                        <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>
                           {c.company_name}
                         </div>
                       )}
                     </td>
                     <td>
                       <div style={{ fontSize: '0.82rem' }}>{c.phone || 'No phone'}</div>
-                      <div style={{ fontSize: '0.76rem', color: '#94a3b8' }}>{c.email}</div>
+                      <div style={{ fontSize: '0.76rem', color: 'var(--text-muted)' }}>{c.email}</div>
                     </td>
                     <td style={{ textTransform: 'capitalize' }}>{c.customer_type}</td>
                     <td>
@@ -168,7 +168,7 @@ export default function CustomersList() {
                       </span>
                     </td>
                     <td>
-                      <span style={{ fontSize: '0.85rem', color: '#e2e8f0' }}>
+                      <span style={{ fontSize: '0.85rem', color: 'var(--text-soft)' }}>
                         {c.leads?.length || 0} lead(s)
                       </span>
                     </td>
@@ -192,7 +192,7 @@ export default function CustomersList() {
       {showModal && (
         <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.7)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 100 }}>
           <form onSubmit={handleCreateCustomer} className="crm-card" style={{ width: '480px', maxWidth: '90%' }}>
-            <h3 style={{ color: '#fff', marginBottom: '16px', fontSize: '1.1rem' }}>Register Customer Account</h3>
+            <h3 style={{ color: 'var(--text-strong)', marginBottom: '16px', fontSize: '1.1rem' }}>Register Customer Account</h3>
 
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
               <div className="crm-form-group">
@@ -296,6 +296,6 @@ export default function CustomersList() {
           </form>
         </div>
       )}
-    </SalesLayout>
+    </PortalLayout>
   );
 }

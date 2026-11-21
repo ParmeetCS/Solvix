@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import WarehouseLayout from './WarehouseLayout';
+import PortalLayout from '@/components/PortalLayout';
 import { warehouseApi } from '@/services/api/warehouse';
 import {
   Save,
@@ -152,7 +152,7 @@ export default function ProductForm() {
   };
 
   return (
-    <WarehouseLayout
+    <PortalLayout
       title={isEdit ? `Edit Product: ${formData.name || 'Catalog Item'}` : 'Register New Solar Product'}
       subtitle={isEdit ? `SKU: ${formData.sku}` : 'Add a solar panel, inverter, battery, or accessory to the master catalog'}
       actions={
@@ -180,7 +180,7 @@ export default function ProductForm() {
         <div className="wh-card">
           <div className="wh-card-header">
             <div className="wh-card-title">
-              <Package size={18} style={{ color: '#10b981' }} />
+              <Package size={18} style={{ color: 'var(--c-emerald)' }} />
               <span>General Product Specifications</span>
             </div>
           </div>
@@ -328,7 +328,7 @@ export default function ProductForm() {
                   checked={formData.requires_serial_number}
                   onChange={handleChange}
                 />
-                <span style={{ color: '#fff', fontSize: '0.88rem' }}>Requires Individual Serial Number Tracking</span>
+                <span style={{ color: 'var(--text-strong)', fontSize: '0.88rem' }}>Requires Individual Serial Number Tracking</span>
               </label>
             </div>
 
@@ -350,7 +350,7 @@ export default function ProductForm() {
         <div className="wh-card">
           <div className="wh-card-header">
             <div className="wh-card-title">
-              <Layers size={18} style={{ color: '#38bdf8' }} />
+              <Layers size={18} style={{ color: 'var(--c-blue)' }} />
               <span>Technical Data & Solar Ratings</span>
             </div>
           </div>
@@ -437,6 +437,6 @@ export default function ProductForm() {
           </button>
         </div>
       </form>
-    </WarehouseLayout>
+    </PortalLayout>
   );
 }

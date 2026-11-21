@@ -47,6 +47,7 @@ src/
   components/            route guards, shared layout, public forms
   config/navigation.js   sidebar menu for every user type
   context/auth.jsx       signed-in user
+  theme/                 light / dark mode (variables in theme.css, toggle button)
   services/api/          one API wrapper per module
 backend/
   app/api/auth           sign in, register, refresh
@@ -60,8 +61,12 @@ docs/                    workflow, authentication, module notes
 ## Tests
 
 ```
-cd backend && npm test        # business rules and access rules
+cd backend && npm test        # business rules and access rules (no database needed)
+cd backend && npm run e2e     # end-to-end API check against the running backend and your Supabase project
 ```
+
+`npm run e2e` creates temporary test accounts and records, checks sign-in, role access and the
+quote-to-order workflow, then deletes everything. Read the header of `backend/scripts/e2e-api.mjs` first.
 
 ## Documentation
 

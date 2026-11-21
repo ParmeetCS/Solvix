@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import SalesLayout from './SalesLayout';
+import PortalLayout from '@/components/PortalLayout';
 import { salesApi } from '@/services/api';
 import {
   UserPlus,
@@ -61,7 +61,7 @@ export default function LeadsList() {
   };
 
   return (
-    <SalesLayout
+    <PortalLayout
       title="Lead Management"
       subtitle="Track, qualify, and convert potential solar customers"
       actions={
@@ -73,8 +73,8 @@ export default function LeadsList() {
     >
       {/* Search & Filter Controls */}
       <form onSubmit={handleSearchSubmit} className="crm-filter-bar">
-        <div className="crm-search-box" style={{ display: 'flex', alignItems: 'center', background: 'rgba(13,23,42,0.8)', border: '1px solid rgba(255,255,255,0.12)', borderRadius: '8px', padding: '0 10px' }}>
-          <Search size={16} style={{ color: '#94a3b8' }} />
+        <div className="crm-search-box" style={{ display: 'flex', alignItems: 'center', background: 'rgba(var(--surface-rgb), 0.8)', border: '1px solid rgba(var(--ink-rgb), 0.12)', borderRadius: '8px', padding: '0 10px' }}>
+          <Search size={16} style={{ color: 'var(--text-muted)' }} />
           <input
             type="text"
             className="crm-input"
@@ -139,13 +139,13 @@ export default function LeadsList() {
       {/* Leads Table */}
       <div className="crm-card" style={{ padding: 0 }}>
         {loading ? (
-          <div style={{ padding: '40px', textAlign: 'center', color: '#94a3b8' }}>
+          <div style={{ padding: '40px', textAlign: 'center', color: 'var(--text-muted)' }}>
             Loading leads...
           </div>
         ) : error ? (
-          <div style={{ padding: '24px', color: '#f87171' }}>{error}</div>
+          <div style={{ padding: '24px', color: 'var(--c-red)' }}>{error}</div>
         ) : leads.length === 0 ? (
-          <div style={{ padding: '40px', textAlign: 'center', color: '#94a3b8' }}>
+          <div style={{ padding: '40px', textAlign: 'center', color: 'var(--text-muted)' }}>
             No leads found matching your criteria.
           </div>
         ) : (
@@ -168,25 +168,25 @@ export default function LeadsList() {
                 {leads.map((lead) => (
                   <tr key={lead.id}>
                     <td>
-                      <b style={{ color: '#d8ee8e' }}>{lead.lead_code}</b>
-                      <div style={{ fontSize: '0.72rem', color: '#64748b' }}>
+                      <b style={{ color: 'var(--accent-text)' }}>{lead.lead_code}</b>
+                      <div style={{ fontSize: '0.72rem', color: 'var(--text-dim)' }}>
                         {new Date(lead.created_at).toLocaleDateString()}
                       </div>
                     </td>
                     <td>
-                      <div style={{ fontWeight: '600', color: '#fff' }}>{lead.customer_name || 'Enquiry'}</div>
+                      <div style={{ fontWeight: '600', color: 'var(--text-strong)' }}>{lead.customer_name || 'Enquiry'}</div>
                       {lead.address && (
-                        <div style={{ fontSize: '0.75rem', color: '#94a3b8', maxWidth: '180px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                        <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', maxWidth: '180px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                           {lead.address}
                         </div>
                       )}
                     </td>
                     <td>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.82rem' }}>
-                        <Phone size={12} style={{ color: '#d8ee8e' }} /> {lead.phone}
+                        <Phone size={12} style={{ color: 'var(--accent-text)' }} /> {lead.phone}
                       </div>
                       {lead.email && (
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.76rem', color: '#94a3b8' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.76rem', color: 'var(--text-muted)' }}>
                           <Mail size={12} /> {lead.email}
                         </div>
                       )}
@@ -195,7 +195,7 @@ export default function LeadsList() {
                       <div style={{ fontSize: '0.82rem' }}>
                         {lead.expected_capacity_kw ? `${lead.expected_capacity_kw} kW` : 'Capacity TBD'}
                       </div>
-                      <div style={{ fontSize: '0.74rem', color: '#94a3b8', textTransform: 'capitalize' }}>
+                      <div style={{ fontSize: '0.74rem', color: 'var(--text-muted)', textTransform: 'capitalize' }}>
                         {lead.system_type || 'on-grid'}
                       </div>
                     </td>
@@ -210,7 +210,7 @@ export default function LeadsList() {
                         style={{
                           fontSize: '0.78rem',
                           fontWeight: '600',
-                          color: lead.priority === 'urgent' ? '#f87171' : lead.priority === 'high' ? '#fbbf24' : '#94a3b8',
+                          color: lead.priority === 'urgent' ? 'var(--c-red)' : lead.priority === 'high' ? 'var(--c-amber-soft)' : 'var(--text-muted)',
                           textTransform: 'capitalize'
                         }}
                       >
@@ -239,8 +239,8 @@ export default function LeadsList() {
 
         {/* Pagination Footer */}
         {pagination.totalPages > 1 && (
-          <div style={{ padding: '16px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
-            <span style={{ fontSize: '0.82rem', color: '#94a3b8' }}>
+          <div style={{ padding: '16px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderTop: '1px solid rgba(var(--ink-rgb), 0.06)' }}>
+            <span style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>
               Showing page {pagination.page} of {pagination.totalPages} ({pagination.total} total leads)
             </span>
             <div style={{ display: 'flex', gap: '8px' }}>
@@ -262,6 +262,6 @@ export default function LeadsList() {
           </div>
         )}
       </div>
-    </SalesLayout>
+    </PortalLayout>
   );
 }

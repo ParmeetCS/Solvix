@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import InstallationLayout from './InstallationLayout';
+import PortalLayout from '@/components/PortalLayout';
 import { installationApi } from '@/services/api';
 import {
   Users,
@@ -133,7 +133,7 @@ export default function InstallationAssignments() {
   const selectedJob = jobs.find(j => j.id === selectedJobId);
 
   return (
-    <InstallationLayout
+    <PortalLayout
       title="Team Assignments Cockpit"
       subtitle="Allocate lead technicians, assembly helpers, and prevent technician double-booking"
       actions={
@@ -143,13 +143,13 @@ export default function InstallationAssignments() {
       }
     >
       {notice && (
-        <div style={{ background: 'rgba(16, 185, 129, 0.15)', border: '1px solid rgba(16, 185, 129, 0.3)', padding: '12px 16px', borderRadius: 8, color: '#34d399', marginBottom: 20 }}>
+        <div style={{ background: 'rgba(16, 185, 129, 0.15)', border: '1px solid rgba(16, 185, 129, 0.3)', padding: '12px 16px', borderRadius: 8, color: 'var(--c-green)', marginBottom: 20 }}>
           {notice.message}
         </div>
       )}
 
       {error && (
-        <div style={{ background: 'rgba(239, 68, 68, 0.15)', border: '1px solid rgba(239, 68, 68, 0.3)', padding: '12px 16px', borderRadius: 8, color: '#f87171', marginBottom: 20 }}>
+        <div style={{ background: 'rgba(239, 68, 68, 0.15)', border: '1px solid rgba(239, 68, 68, 0.3)', padding: '12px 16px', borderRadius: 8, color: 'var(--c-red)', marginBottom: 20 }}>
           {error}
         </div>
       )}
@@ -159,12 +159,12 @@ export default function InstallationAssignments() {
         <div className="inst-card">
           <div className="inst-card-header">
             <span className="inst-card-title">
-              <Users size={18} color="#f59e0b" /> Assign Technicians to Project
+              <Users size={18} color="var(--c-amber)" /> Assign Technicians to Project
             </span>
           </div>
           <form onSubmit={handleSaveAssignment} style={{ padding: '24px' }}>
             <div style={{ marginBottom: 18 }}>
-              <label style={{ display: 'block', fontSize: '0.82rem', color: '#cbd5e1', marginBottom: 6, fontWeight: 500 }}>
+              <label style={{ display: 'block', fontSize: '0.82rem', color: 'var(--text-soft)', marginBottom: 6, fontWeight: 500 }}>
                 Target Installation Project
               </label>
               <select
@@ -182,17 +182,17 @@ export default function InstallationAssignments() {
             </div>
 
             {selectedJob && (
-              <div style={{ background: 'rgba(15, 23, 42, 0.6)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 8, padding: 14, marginBottom: 20, fontSize: '0.82rem' }}>
-                <div style={{ color: '#fff', fontWeight: 600, marginBottom: 4 }}>{selectedJob.customer_name}</div>
-                <div style={{ color: '#94a3b8', marginBottom: 4 }}>📍 {selectedJob.site_address}</div>
-                <div style={{ color: '#38bdf8' }}>⚡ System: {selectedJob.system_capacity_kw} kW {selectedJob.system_type}</div>
+              <div style={{ background: 'rgba(var(--surface-rgb), 0.6)', border: '1px solid rgba(var(--ink-rgb), 0.08)', borderRadius: 8, padding: 14, marginBottom: 20, fontSize: '0.82rem' }}>
+                <div style={{ color: 'var(--text-strong)', fontWeight: 600, marginBottom: 4 }}>{selectedJob.customer_name}</div>
+                <div style={{ color: 'var(--text-muted)', marginBottom: 4 }}>📍 {selectedJob.site_address}</div>
+                <div style={{ color: 'var(--c-blue)' }}>⚡ System: {selectedJob.system_capacity_kw} kW {selectedJob.system_type}</div>
               </div>
             )}
 
             {/* Technicians Selection List */}
             <div style={{ marginBottom: 20 }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
-                <label style={{ fontSize: '0.82rem', color: '#cbd5e1', fontWeight: 600 }}>
+                <label style={{ fontSize: '0.82rem', color: 'var(--text-soft)', fontWeight: 600 }}>
                   Assigned Personnel Team
                 </label>
                 <button
@@ -207,7 +207,7 @@ export default function InstallationAssignments() {
 
               <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
                 {assignments.map((item, idx) => (
-                  <div key={idx} style={{ display: 'flex', gap: 10, alignItems: 'center', background: 'rgba(15, 23, 42, 0.5)', padding: 10, borderRadius: 8, border: '1px solid rgba(255,255,255,0.06)' }}>
+                  <div key={idx} style={{ display: 'flex', gap: 10, alignItems: 'center', background: 'rgba(var(--surface-rgb), 0.5)', padding: 10, borderRadius: 8, border: '1px solid rgba(var(--ink-rgb), 0.06)' }}>
                     <select
                       className="inst-select"
                       style={{ flex: 2 }}
@@ -234,7 +234,7 @@ export default function InstallationAssignments() {
                       <option value="supervisor">Supervisor</option>
                     </select>
 
-                    <label style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: '0.75rem', color: '#94a3b8', cursor: 'pointer' }}>
+                    <label style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: '0.75rem', color: 'var(--text-muted)', cursor: 'pointer' }}>
                       <input
                         type="radio"
                         name="primary_lead"
@@ -248,7 +248,7 @@ export default function InstallationAssignments() {
                       <button
                         type="button"
                         onClick={() => handleRemoveTechnicianRow(idx)}
-                        style={{ background: 'transparent', border: 'none', color: '#ef4444', cursor: 'pointer', padding: 4 }}
+                        style={{ background: 'transparent', border: 'none', color: 'var(--c-red-2)', cursor: 'pointer', padding: 4 }}
                       >
                         <Trash2 size={16} />
                       </button>
@@ -261,7 +261,7 @@ export default function InstallationAssignments() {
             {/* Schedule Dates */}
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 18 }}>
               <div>
-                <label style={{ display: 'block', fontSize: '0.8rem', color: '#cbd5e1', marginBottom: 4 }}>
+                <label style={{ display: 'block', fontSize: '0.8rem', color: 'var(--text-soft)', marginBottom: 4 }}>
                   Planned Installation Date
                 </label>
                 <input
@@ -274,7 +274,7 @@ export default function InstallationAssignments() {
               </div>
 
               <div>
-                <label style={{ display: 'block', fontSize: '0.8rem', color: '#cbd5e1', marginBottom: 4 }}>
+                <label style={{ display: 'block', fontSize: '0.8rem', color: 'var(--text-soft)', marginBottom: 4 }}>
                   Expected Completion Date
                 </label>
                 <input
@@ -288,7 +288,7 @@ export default function InstallationAssignments() {
             </div>
 
             <div style={{ marginBottom: 20 }}>
-              <label style={{ display: 'block', fontSize: '0.8rem', color: '#cbd5e1', marginBottom: 4 }}>
+              <label style={{ display: 'block', fontSize: '0.8rem', color: 'var(--text-soft)', marginBottom: 4 }}>
                 Special Instructions / Assignment Notes
               </label>
               <textarea
@@ -316,7 +316,7 @@ export default function InstallationAssignments() {
         <div className="inst-card">
           <div className="inst-card-header">
             <span className="inst-card-title">
-              <Calendar size={18} color="#38bdf8" /> Current Project Assignments
+              <Calendar size={18} color="var(--c-blue)" /> Current Project Assignments
             </span>
           </div>
           <div style={{ padding: '20px', maxHeight: '600px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: 12 }}>
@@ -325,8 +325,8 @@ export default function InstallationAssignments() {
                 key={j.id}
                 onClick={() => setSelectedJobId(j.id)}
                 style={{
-                  background: selectedJobId === j.id ? 'rgba(245, 158, 11, 0.1)' : 'rgba(15, 23, 42, 0.6)',
-                  border: `1px solid ${selectedJobId === j.id ? '#f59e0b' : 'rgba(255, 255, 255, 0.08)'}`,
+                  background: selectedJobId === j.id ? 'rgba(245, 158, 11, 0.1)' : 'rgba(var(--surface-rgb), 0.6)',
+                  border: `1px solid ${selectedJobId === j.id ? 'var(--c-amber)' : 'rgba(var(--ink-rgb), 0.08)'}`,
                   borderRadius: 10,
                   padding: 14,
                   cursor: 'pointer',
@@ -334,19 +334,19 @@ export default function InstallationAssignments() {
                 }}
               >
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
-                  <span style={{ fontWeight: 600, color: '#f59e0b' }}>{j.installation_code}</span>
+                  <span style={{ fontWeight: 600, color: 'var(--c-amber)' }}>{j.installation_code}</span>
                   <span className={`inst-badge inst-badge-${j.status}`}>{j.status.replace('_', ' ')}</span>
                 </div>
-                <div style={{ fontWeight: 600, color: '#fff', fontSize: '0.9rem' }}>{j.customer_name}</div>
-                <div style={{ fontSize: '0.75rem', color: '#94a3b8', margin: '4px 0' }}>
+                <div style={{ fontWeight: 600, color: 'var(--text-strong)', fontSize: '0.9rem' }}>{j.customer_name}</div>
+                <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', margin: '4px 0' }}>
                   📅 {j.planned_installation_date || 'No date set'} • {j.system_capacity_kw} kW {j.system_type}
                 </div>
-                <div style={{ fontSize: '0.78rem', color: '#cbd5e1', marginTop: 8, borderTop: '1px solid rgba(255,255,255,0.06)', paddingTop: 6 }}>
+                <div style={{ fontSize: '0.78rem', color: 'var(--text-soft)', marginTop: 8, borderTop: '1px solid rgba(var(--ink-rgb), 0.06)', paddingTop: 6 }}>
                   <strong>Team:</strong>{' '}
                   {(j.assigned_technicians || []).length > 0 ? (
                     j.assigned_technicians.map(a => `${a.full_name} (${a.role_on_job.replace('_', ' ')})`).join(', ')
                   ) : (
-                    <span style={{ color: '#f59e0b' }}>Unassigned</span>
+                    <span style={{ color: 'var(--c-amber)' }}>Unassigned</span>
                   )}
                 </div>
               </div>
@@ -354,6 +354,6 @@ export default function InstallationAssignments() {
           </div>
         </div>
       </div>
-    </InstallationLayout>
+    </PortalLayout>
   );
 }

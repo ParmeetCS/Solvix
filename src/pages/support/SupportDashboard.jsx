@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import SupportLayout from './SupportLayout';
+import PortalLayout from '@/components/PortalLayout';
 import { supportApi } from '@/services/api';
 import {
   LifeBuoy,
@@ -44,7 +44,7 @@ export default function SupportDashboard() {
   const workload = data?.agentWorkload || [];
 
   return (
-    <SupportLayout
+    <PortalLayout
       title="Customer Support & Warranty Dashboard"
       subtitle="Real-time service tickets, warranty verification, and technician resolution metrics"
       actions={
@@ -61,11 +61,11 @@ export default function SupportDashboard() {
     >
       {loading ? (
         <div style={{ display: 'flex', justifyContent: 'center', padding: '4rem 0' }}>
-          <Loader2 className="animate-spin" size={36} color="#d8ee8e" />
+          <Loader2 className="animate-spin" size={36} color="var(--accent-text)" />
         </div>
       ) : error ? (
-        <div className="support-card" style={{ borderColor: '#ef4444' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', color: '#f87171' }}>
+        <div className="support-card" style={{ borderColor: 'var(--c-red-2)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', color: 'var(--c-red)' }}>
             <AlertCircle size={20} />
             <span>{error}</span>
           </div>
@@ -75,7 +75,7 @@ export default function SupportDashboard() {
           {/* Metrics Grid */}
           <div className="support-metrics-grid">
             <div className="support-metric-card">
-              <div className="support-metric-icon" style={{ background: 'rgba(56, 189, 248, 0.12)', color: '#38bdf8' }}>
+              <div className="support-metric-icon" style={{ background: 'rgba(56, 189, 248, 0.12)', color: 'var(--c-blue)' }}>
                 <Ticket size={24} />
               </div>
               <div className="support-metric-data">
@@ -85,7 +85,7 @@ export default function SupportDashboard() {
             </div>
 
             <div className="support-metric-card">
-              <div className="support-metric-icon" style={{ background: 'rgba(216, 238, 142, 0.12)', color: '#d8ee8e' }}>
+              <div className="support-metric-icon" style={{ background: 'rgba(var(--accent-rgb), 0.12)', color: 'var(--accent-text)' }}>
                 <LifeBuoy size={24} />
               </div>
               <div className="support-metric-data">
@@ -95,7 +95,7 @@ export default function SupportDashboard() {
             </div>
 
             <div className="support-metric-card">
-              <div className="support-metric-icon" style={{ background: 'rgba(168, 85, 247, 0.12)', color: '#c084fc' }}>
+              <div className="support-metric-icon" style={{ background: 'rgba(168, 85, 247, 0.12)', color: 'var(--c-violet)' }}>
                 <Users size={24} />
               </div>
               <div className="support-metric-data">
@@ -105,7 +105,7 @@ export default function SupportDashboard() {
             </div>
 
             <div className="support-metric-card">
-              <div className="support-metric-icon" style={{ background: 'rgba(251, 191, 36, 0.12)', color: '#fbbf24' }}>
+              <div className="support-metric-icon" style={{ background: 'rgba(251, 191, 36, 0.12)', color: 'var(--c-amber-soft)' }}>
                 <Clock size={24} />
               </div>
               <div className="support-metric-data">
@@ -115,7 +115,7 @@ export default function SupportDashboard() {
             </div>
 
             <div className="support-metric-card">
-              <div className="support-metric-icon" style={{ background: 'rgba(52, 211, 153, 0.12)', color: '#34d399' }}>
+              <div className="support-metric-icon" style={{ background: 'rgba(52, 211, 153, 0.12)', color: 'var(--c-green)' }}>
                 <CheckCircle2 size={24} />
               </div>
               <div className="support-metric-data">
@@ -125,7 +125,7 @@ export default function SupportDashboard() {
             </div>
 
             <div className="support-metric-card">
-              <div className="support-metric-icon" style={{ background: 'rgba(239, 68, 68, 0.12)', color: '#f87171' }}>
+              <div className="support-metric-icon" style={{ background: 'rgba(239, 68, 68, 0.12)', color: 'var(--c-red)' }}>
                 <AlertCircle size={24} />
               </div>
               <div className="support-metric-data">
@@ -135,7 +135,7 @@ export default function SupportDashboard() {
             </div>
 
             <div className="support-metric-card">
-              <div className="support-metric-icon" style={{ background: 'rgba(244, 63, 94, 0.12)', color: '#fb7185' }}>
+              <div className="support-metric-icon" style={{ background: 'rgba(244, 63, 94, 0.12)', color: 'var(--c-red)' }}>
                 <ShieldAlert size={24} />
               </div>
               <div className="support-metric-data">
@@ -151,7 +151,7 @@ export default function SupportDashboard() {
             <div className="support-card">
               <div className="support-card-header">
                 <h3 className="support-card-title">
-                  <AlertCircle size={18} color="#fbbf24" />
+                  <AlertCircle size={18} color="var(--c-amber-soft)" />
                   Ticket Priority Distribution
                 </h3>
               </div>
@@ -161,18 +161,18 @@ export default function SupportDashboard() {
                   const total = summary.totalTickets || 1;
                   const pct = Math.round((count / total) * 100);
                   const colors = {
-                    critical: '#f87171',
-                    high: '#fbbf24',
-                    medium: '#38bdf8',
-                    low: '#94a3b8'
+                    critical: 'var(--c-red)',
+                    high: 'var(--c-amber-soft)',
+                    medium: 'var(--c-blue)',
+                    low: 'var(--text-muted)'
                   };
                   return (
                     <div key={p}>
                       <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.875rem', marginBottom: '0.35rem' }}>
-                        <span style={{ textTransform: 'capitalize', fontWeight: 500, color: '#e2e8f0' }}>{p}</span>
-                        <span style={{ color: '#94a3b8' }}>{count} ({pct}%)</span>
+                        <span style={{ textTransform: 'capitalize', fontWeight: 500, color: 'var(--text-soft)' }}>{p}</span>
+                        <span style={{ color: 'var(--text-muted)' }}>{count} ({pct}%)</span>
                       </div>
-                      <div style={{ height: '8px', background: '#0b1020', borderRadius: '4px', overflow: 'hidden' }}>
+                      <div style={{ height: '8px', background: 'var(--app-bg)', borderRadius: '4px', overflow: 'hidden' }}>
                         <div
                           style={{
                             height: '100%',
@@ -193,31 +193,31 @@ export default function SupportDashboard() {
             <div className="support-card">
               <div className="support-card-header">
                 <h3 className="support-card-title">
-                  <Clock size={18} color="#38bdf8" />
+                  <Clock size={18} color="var(--c-blue)" />
                   Status Breakdown
                 </h3>
               </div>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '0.75rem' }}>
                 {[
-                  { key: 'open', label: 'Open', color: '#38bdf8' },
-                  { key: 'assigned', label: 'Assigned', color: '#c084fc' },
-                  { key: 'in_progress', label: 'In Progress', color: '#fbbf24' },
-                  { key: 'waiting_for_parts', label: 'Waiting for Parts', color: '#fb923c' },
-                  { key: 'resolved', label: 'Resolved', color: '#34d399' },
-                  { key: 'closed', label: 'Closed', color: '#94a3b8' }
+                  { key: 'open', label: 'Open', color: 'var(--c-blue)' },
+                  { key: 'assigned', label: 'Assigned', color: 'var(--c-violet)' },
+                  { key: 'in_progress', label: 'In Progress', color: 'var(--c-amber-soft)' },
+                  { key: 'waiting_for_parts', label: 'Waiting for Parts', color: 'var(--c-amber)' },
+                  { key: 'resolved', label: 'Resolved', color: 'var(--c-green)' },
+                  { key: 'closed', label: 'Closed', color: 'var(--text-muted)' }
                 ].map((s) => (
                   <div
                     key={s.key}
                     style={{
-                      background: '#0b1020',
-                      border: '1px solid #1e293b',
+                      background: 'var(--app-bg)',
+                      border: '1px solid var(--surface-2)',
                       borderRadius: '8px',
                       padding: '0.75rem 1rem',
                       display: 'flex',
                       flexDirection: 'column'
                     }}
                   >
-                    <span style={{ fontSize: '0.75rem', color: '#94a3b8' }}>{s.label}</span>
+                    <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{s.label}</span>
                     <span style={{ fontSize: '1.25rem', fontWeight: 700, color: s.color, marginTop: '0.25rem' }}>
                       {statuses[s.key] || 0}
                     </span>
@@ -231,7 +231,7 @@ export default function SupportDashboard() {
           <div className="support-card">
             <div className="support-card-header">
               <h3 className="support-card-title">
-                <Ticket size={18} color="#d8ee8e" />
+                <Ticket size={18} color="var(--accent-text)" />
                 Recent Service Tickets
               </h3>
               <Link to="/support/tickets" className="btn-secondary" style={{ padding: '0.4rem 0.85rem', fontSize: '0.8125rem' }}>
@@ -241,7 +241,7 @@ export default function SupportDashboard() {
             </div>
 
             {recentTickets.length === 0 ? (
-              <p style={{ color: '#94a3b8', textAlign: 'center', padding: '2rem 0' }}>
+              <p style={{ color: 'var(--text-muted)', textAlign: 'center', padding: '2rem 0' }}>
                 No support tickets found in the database.
               </p>
             ) : (
@@ -262,10 +262,10 @@ export default function SupportDashboard() {
                   <tbody>
                     {recentTickets.map((t) => (
                       <tr key={t.id}>
-                        <td style={{ fontWeight: 600, color: '#d8ee8e' }}>{t.ticket_number || t.ticket_code}</td>
+                        <td style={{ fontWeight: 600, color: 'var(--accent-text)' }}>{t.ticket_number || t.ticket_code}</td>
                         <td>{t.customers?.contact_name || 'Customer'}</td>
                         <td>
-                          <span style={{ fontSize: '0.75rem', color: '#94a3b8', background: '#0b1020', padding: '0.2rem 0.5rem', borderRadius: '4px' }}>
+                          <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', background: 'var(--app-bg)', padding: '0.2rem 0.5rem', borderRadius: '4px' }}>
                             {t.issue_category}
                           </span>
                         </td>
@@ -282,7 +282,7 @@ export default function SupportDashboard() {
                             {t.status.replace('_', ' ')}
                           </span>
                         </td>
-                        <td style={{ fontSize: '0.8125rem', color: '#94a3b8' }}>
+                        <td style={{ fontSize: '0.8125rem', color: 'var(--text-muted)' }}>
                           {new Date(t.created_at).toLocaleDateString()}
                         </td>
                         <td>
@@ -306,12 +306,12 @@ export default function SupportDashboard() {
           <div className="support-card">
             <div className="support-card-header">
               <h3 className="support-card-title">
-                <Users size={18} color="#c084fc" />
+                <Users size={18} color="var(--c-violet)" />
                 Support Agent & Technician Workload
               </h3>
             </div>
             {workload.length === 0 ? (
-              <p style={{ color: '#94a3b8', textAlign: 'center', padding: '1.5rem 0' }}>
+              <p style={{ color: 'var(--text-muted)', textAlign: 'center', padding: '1.5rem 0' }}>
                 No active ticket assignments recorded.
               </p>
             ) : (
@@ -320,8 +320,8 @@ export default function SupportDashboard() {
                   <div
                     key={agent.id}
                     style={{
-                      background: '#0b1020',
-                      border: '1px solid #1e293b',
+                      background: 'var(--app-bg)',
+                      border: '1px solid var(--surface-2)',
                       borderRadius: '10px',
                       padding: '1rem',
                       display: 'flex',
@@ -330,17 +330,17 @@ export default function SupportDashboard() {
                     }}
                   >
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <span style={{ fontWeight: 600, color: '#ffffff' }}>{agent.name}</span>
-                      <span style={{ fontSize: '0.75rem', color: '#94a3b8' }}>{agent.email}</span>
+                      <span style={{ fontWeight: 600, color: 'var(--text-strong)' }}>{agent.name}</span>
+                      <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{agent.email}</span>
                     </div>
                     <div style={{ display: 'flex', gap: '1rem', marginTop: '0.25rem' }}>
                       <div>
-                        <span style={{ fontSize: '0.75rem', color: '#94a3b8' }}>Assigned:</span>{' '}
-                        <span style={{ fontWeight: 700, color: '#fbbf24' }}>{agent.assignedCount}</span>
+                        <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Assigned:</span>{' '}
+                        <span style={{ fontWeight: 700, color: 'var(--c-amber-soft)' }}>{agent.assignedCount}</span>
                       </div>
                       <div>
-                        <span style={{ fontSize: '0.75rem', color: '#94a3b8' }}>Resolved:</span>{' '}
-                        <span style={{ fontWeight: 700, color: '#34d399' }}>{agent.resolvedCount}</span>
+                        <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Resolved:</span>{' '}
+                        <span style={{ fontWeight: 700, color: 'var(--c-green)' }}>{agent.resolvedCount}</span>
                       </div>
                     </div>
                   </div>
@@ -350,6 +350,6 @@ export default function SupportDashboard() {
           </div>
         </>
       )}
-    </SupportLayout>
+    </PortalLayout>
   );
 }

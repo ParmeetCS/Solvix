@@ -82,8 +82,8 @@ export default function AdminPeople() {
                         const c = choice[e.id] || {};
                         return (
                           <tr key={e.id}>
-                            <td><b>{e.full_name || '—'}</b><div style={{ fontSize: 12, color: '#64748b' }}>{e.email}</div></td>
-                            <td>{e.department_requested || '—'}<div style={{ fontSize: 12, color: '#64748b' }}>{formatDate(e.created_at)}</div></td>
+                            <td><b>{e.full_name || '—'}</b><div style={{ fontSize: 12, color: 'var(--text-dim)' }}>{e.email}</div></td>
+                            <td>{e.department_requested || '—'}<div style={{ fontSize: 12, color: 'var(--text-dim)' }}>{formatDate(e.created_at)}</div></td>
                             <td>
                               <select className="crm-input" value={c.department_id || ''} onChange={(ev) => setChoice({ ...choice, [e.id]: { ...c, department_id: ev.target.value } })}>
                                 <option value="">Choose…</option>
@@ -127,7 +127,7 @@ export default function AdminPeople() {
                     <tbody>
                       {staff.map((e) => (
                         <tr key={e.id}>
-                          <td><b>{e.full_name || '—'}</b><div style={{ fontSize: 12, color: '#64748b' }}>{e.email}</div></td>
+                          <td><b>{e.full_name || '—'}</b><div style={{ fontSize: 12, color: 'var(--text-dim)' }}>{e.email}</div></td>
                           <td>
                             <select className="crm-input" value={e.department_id || ''} disabled={busy === e.id}
                               onChange={(ev) => ev.target.value && act(e.id, { action: 'approve', department_id: ev.target.value }, 'Department updated.')}>
@@ -160,7 +160,7 @@ export default function AdminPeople() {
                     <thead><tr><th>Department</th><th>Code</th><th>Employees</th></tr></thead>
                     <tbody>
                       {(data?.departments || []).map((d) => (
-                        <tr key={d.id}><td><b>{d.name}</b><div style={{ fontSize: 12, color: '#64748b' }}>{d.description}</div></td><td>{d.code}</td><td>{d.employee_count}</td></tr>
+                        <tr key={d.id}><td><b>{d.name}</b><div style={{ fontSize: 12, color: 'var(--text-dim)' }}>{d.description}</div></td><td>{d.code}</td><td>{d.employee_count}</td></tr>
                       ))}
                     </tbody>
                   </table>

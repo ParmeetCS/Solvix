@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import WarehouseLayout from './WarehouseLayout';
+import PortalLayout from '@/components/PortalLayout';
 import { warehouseApi } from '@/services/api/warehouse';
 import {
   Truck,
@@ -52,7 +52,7 @@ export default function DispatchesList() {
   });
 
   return (
-    <WarehouseLayout
+    <PortalLayout
       title="Dispatches & Equipment Logistics"
       subtitle="Outbound shipments, carrier tracking numbers, and equipment delivery confirmations"
       actions={
@@ -70,7 +70,7 @@ export default function DispatchesList() {
     >
       <div className="wh-filter-bar">
         <div className="wh-search-box">
-          <Search size={16} style={{ color: '#94a3b8' }} />
+          <Search size={16} style={{ color: 'var(--text-muted)' }} />
           <input
             type="text"
             placeholder="Search dispatch #, tracking #, or carrier..."
@@ -112,7 +112,7 @@ export default function DispatchesList() {
             <tbody>
               {filtered.length === 0 ? (
                 <tr>
-                  <td colSpan="8" style={{ textAlign: 'center', color: '#94a3b8', padding: '36px' }}>
+                  <td colSpan="8" style={{ textAlign: 'center', color: 'var(--text-muted)', padding: '36px' }}>
                     {loading ? 'Loading dispatches...' : 'No dispatches found.'}
                   </td>
                 </tr>
@@ -124,22 +124,22 @@ export default function DispatchesList() {
                   return (
                     <tr key={d.id}>
                       <td>
-                        <strong style={{ color: '#38bdf8' }}>{d.dispatch_number}</strong>
+                        <strong style={{ color: 'var(--c-blue)' }}>{d.dispatch_number}</strong>
                       </td>
                       <td>
-                        <span style={{ fontSize: '0.85rem', color: '#cbd5e1' }}>
+                        <span style={{ fontSize: '0.85rem', color: 'var(--text-soft)' }}>
                           {d.order_number || d.order_id || 'Direct'}
                         </span>
                       </td>
                       <td>
-                        <div style={{ fontWeight: 600, color: '#f8fafc' }}>{d.customer_name || 'Client'}</div>
-                        <div style={{ fontSize: '0.78rem', color: '#94a3b8' }}>
+                        <div style={{ fontWeight: 600, color: 'var(--text)' }}>{d.customer_name || 'Client'}</div>
+                        <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>
                           {d.destination_city || d.shipping_address?.substring(0, 25) || '-'}
                         </div>
                       </td>
                       <td>{d.transporter_name || 'Logistics Provider'}</td>
                       <td>
-                        <code style={{ fontSize: '0.8rem', background: 'rgba(255,255,255,0.06)', padding: '2px 6px', borderRadius: '4px' }}>
+                        <code style={{ fontSize: '0.8rem', background: 'rgba(var(--ink-rgb), 0.06)', padding: '2px 6px', borderRadius: '4px' }}>
                           {d.tracking_number || 'N/A'}
                         </code>
                       </td>
@@ -172,6 +172,6 @@ export default function DispatchesList() {
           </table>
         </div>
       </div>
-    </WarehouseLayout>
+    </PortalLayout>
   );
 }

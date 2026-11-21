@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import SurveyLayout from './SurveyLayout';
+import PortalLayout from '@/components/PortalLayout';
 import { surveyApi } from '@/services/api';
 import {
   Calendar,
@@ -72,7 +72,7 @@ export default function SurveySchedule() {
   );
 
   return (
-    <SurveyLayout
+    <PortalLayout
       title="Field Survey Visit Schedule & Calendar"
       subtitle="Interactive visit timetable, route planning, and site appointment management"
       actions={
@@ -90,7 +90,7 @@ export default function SurveySchedule() {
           <div className="survey-card">
             <div className="survey-card-header">
               <h3>
-                <CalendarDays size={18} style={{ color: '#22d3ee' }} />
+                <CalendarDays size={18} style={{ color: 'var(--c-blue)' }} />
                 Filter Schedule Date
               </h3>
             </div>
@@ -139,7 +139,7 @@ export default function SurveySchedule() {
             </div>
 
             {selectedDaySurveys.length === 0 ? (
-              <p style={{ color: '#64748b', fontSize: '0.86rem', textAlign: 'center', padding: '20px 0' }}>
+              <p style={{ color: 'var(--text-dim)', fontSize: '0.86rem', textAlign: 'center', padding: '20px 0' }}>
                 No site visits scheduled on this date.
               </p>
             ) : (
@@ -149,23 +149,23 @@ export default function SurveySchedule() {
                     key={srv.id}
                     style={{
                       padding: '12px',
-                      background: 'rgba(255,255,255,0.03)',
-                      border: '1px solid rgba(255,255,255,0.08)',
+                      background: 'rgba(var(--ink-rgb), 0.03)',
+                      border: '1px solid rgba(var(--ink-rgb), 0.08)',
                       borderRadius: '8px'
                     }}
                   >
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <span style={{ fontWeight: 600, color: '#fff' }}>{srv.customer_name}</span>
-                      <span style={{ fontSize: '0.78rem', color: '#22d3ee' }}>
+                      <span style={{ fontWeight: 600, color: 'var(--text-strong)' }}>{srv.customer_name}</span>
+                      <span style={{ fontSize: '0.78rem', color: 'var(--c-blue)' }}>
                         {srv.scheduled_time || 'General'}
                       </span>
                     </div>
 
-                    <div style={{ fontSize: '0.8rem', color: '#94a3b8', marginTop: '4px', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                    <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '4px', display: 'flex', alignItems: 'center', gap: '4px' }}>
                       <MapPin size={12} /> {srv.site_address || srv.city}
                     </div>
 
-                    <div style={{ fontSize: '0.8rem', color: '#38bdf8', marginTop: '4px' }}>
+                    <div style={{ fontSize: '0.8rem', color: 'var(--c-blue)', marginTop: '4px' }}>
                       Surveyor: {srv.assigned_to_name || 'Unassigned'}
                     </div>
 
@@ -201,7 +201,7 @@ export default function SurveySchedule() {
         <div className="survey-card">
           <div className="survey-card-header">
             <h3>
-              <Clock size={18} style={{ color: '#38bdf8' }} />
+              <Clock size={18} style={{ color: 'var(--c-blue)' }} />
               All Scheduled Technical Visits ({scheduledSurveys.length})
             </h3>
           </div>
@@ -222,24 +222,24 @@ export default function SurveySchedule() {
                 {scheduledSurveys.map((srv) => (
                   <tr key={srv.id}>
                     <td>
-                      <div style={{ fontWeight: 600, color: '#22d3ee' }}>
+                      <div style={{ fontWeight: 600, color: 'var(--c-blue)' }}>
                         {srv.scheduled_date || srv.survey_date}
                       </div>
-                      <div style={{ fontSize: '0.75rem', color: '#94a3b8' }}>
+                      <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
                         {srv.scheduled_time || '10:00 AM - 12:00 PM'}
                       </div>
                     </td>
                     <td>
-                      <div style={{ fontWeight: 500, color: '#fff' }}>{srv.customer_name}</div>
-                      <div style={{ fontSize: '0.76rem', color: '#64748b' }}>{srv.survey_code}</div>
+                      <div style={{ fontWeight: 500, color: 'var(--text-strong)' }}>{srv.customer_name}</div>
+                      <div style={{ fontSize: '0.76rem', color: 'var(--text-dim)' }}>{srv.survey_code}</div>
                     </td>
                     <td>
-                      <div style={{ fontSize: '0.82rem', color: '#cbd5e1' }}>
+                      <div style={{ fontSize: '0.82rem', color: 'var(--text-soft)' }}>
                         {srv.site_address || srv.city}
                       </div>
                     </td>
                     <td>
-                      <div style={{ color: '#38bdf8', fontWeight: 500, fontSize: '0.84rem' }}>
+                      <div style={{ color: 'var(--c-blue)', fontWeight: 500, fontSize: '0.84rem' }}>
                         {srv.assigned_to_name || 'Unassigned'}
                       </div>
                     </td>
@@ -281,7 +281,7 @@ export default function SurveySchedule() {
       {rescheduleSurvey && (
         <div className="survey-modal-overlay">
           <div className="survey-modal-content">
-            <h3 style={{ color: '#fff', margin: '0 0 16px 0' }}>
+            <h3 style={{ color: 'var(--text-strong)', margin: '0 0 16px 0' }}>
               Reschedule Visit: {rescheduleSurvey.survey_code}
             </h3>
             <form onSubmit={handleRescheduleSubmit}>
@@ -340,6 +340,6 @@ export default function SurveySchedule() {
           </div>
         </div>
       )}
-    </SurveyLayout>
+    </PortalLayout>
   );
 }

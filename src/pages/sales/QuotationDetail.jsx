@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import SalesLayout from './SalesLayout';
+import PortalLayout from '@/components/PortalLayout';
 import QuotationPreview from '@/components/quotation/QuotationPreview';
 import { useAuth } from '@/context/auth';
 import { quotationsApi } from '@/services/api';
@@ -135,7 +135,7 @@ export default function QuotationDetail() {
   const canEdit = status === 'draft' || (status === 'pending_approval' && isManager);
 
   return (
-    <SalesLayout
+    <PortalLayout
       title={quotation ? quotation.quotation_code : 'Quotation'}
       subtitle={quotation ? `${quotation.system_capacity_kw} kW ${quotation.system_type} system` : 'Loading quotation…'}
       actions={
@@ -261,7 +261,7 @@ export default function QuotationDetail() {
                   <span className="q-panel-title">Internal notes</span>
                 </div>
                 <div className="q-panel-body">
-                  <p style={{ color: '#cbd5e1', whiteSpace: 'pre-wrap', margin: 0 }}>{quotation.internal_notes}</p>
+                  <p style={{ color: 'var(--text-soft)', whiteSpace: 'pre-wrap', margin: 0 }}>{quotation.internal_notes}</p>
                 </div>
               </div>
             )}
@@ -333,7 +333,7 @@ export default function QuotationDetail() {
                     value={comment}
                     onChange={(event) => setComment(event.target.value)}
                   />
-                  <label style={{ display: 'flex', alignItems: 'center', gap: 8, color: '#94a3b8', fontSize: '0.8rem' }}>
+                  <label style={{ display: 'flex', alignItems: 'center', gap: 8, color: 'var(--text-muted)', fontSize: '0.8rem' }}>
                     <input
                       type="checkbox"
                       checked={internalComment}
@@ -381,6 +381,6 @@ export default function QuotationDetail() {
           </aside>
         </div>
       )}
-    </SalesLayout>
+    </PortalLayout>
   );
 }

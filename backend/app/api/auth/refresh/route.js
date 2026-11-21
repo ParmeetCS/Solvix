@@ -11,8 +11,8 @@ export async function POST(request) {
     const { refresh_token } = await request.json().catch(() => ({}));
     if (!refresh_token) return jsonError('refresh_token is required.', 400);
 
-    const adminSupa = createAdminClient();
-    const { data, error } = await adminSupa.auth.refreshSession({ refresh_token });
+    const authClient = createAdminClient();
+    const { data, error } = await authClient.auth.refreshSession({ refresh_token });
     if (error || !data?.session) {
       return jsonError('Session expired. Please sign in again.', 401);
     }

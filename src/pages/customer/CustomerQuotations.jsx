@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import CustomerPortalLayout from './CustomerPortalLayout';
+import PortalLayout from '@/components/PortalLayout';
 import { quotationsApi } from '@/services/api';
 import { Eye, FileText, Download, ChevronLeft, ChevronRight, AlertTriangle } from 'lucide-react';
 import {
@@ -50,7 +50,7 @@ export default function CustomerQuotations() {
   };
 
   return (
-    <CustomerPortalLayout
+    <PortalLayout
       title="My Quotations"
       subtitle="Review, download and respond to your SOLVIX solar quotations"
     >
@@ -87,18 +87,18 @@ export default function CustomerQuotations() {
                 {quotations.map((quotation) => (
                   <tr key={quotation.id}>
                     <td>
-                      <b style={{ color: '#d8ee8e' }}>{quotation.quotation_code}</b>
-                      <div style={{ fontSize: '0.72rem', color: '#64748b' }}>
+                      <b style={{ color: 'var(--accent-text)' }}>{quotation.quotation_code}</b>
+                      <div style={{ fontSize: '0.72rem', color: 'var(--text-dim)' }}>
                         Issued {formatDate(quotation.created_at)}
                       </div>
                     </td>
                     <td>
                       <div style={{ textTransform: 'capitalize' }}>{quotation.system_type?.replace('-', ' ')}</div>
-                      <div style={{ fontSize: '0.74rem', color: '#94a3b8' }}>
+                      <div style={{ fontSize: '0.74rem', color: 'var(--text-muted)' }}>
                         {formatNumber(quotation.system_capacity_kw)} kW
                       </div>
                     </td>
-                    <td style={{ fontWeight: 600, color: '#fff' }}>{formatCurrency(quotation.total_amount)}</td>
+                    <td style={{ fontWeight: 600, color: 'var(--text-strong)' }}>{formatCurrency(quotation.total_amount)}</td>
                     <td>
                       <span className={`q-badge ${statusClass(quotation.status)}`}>
                         {statusLabel(quotation.status)}
@@ -143,10 +143,10 @@ export default function CustomerQuotations() {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'space-between',
-              borderTop: '1px solid rgba(255,255,255,0.06)',
+              borderTop: '1px solid rgba(var(--ink-rgb), 0.06)',
             }}
           >
-            <span style={{ fontSize: '0.82rem', color: '#94a3b8' }}>
+            <span style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>
               Page {pagination.page} of {pagination.totalPages}
             </span>
             <div style={{ display: 'flex', gap: 8 }}>
@@ -168,6 +168,6 @@ export default function CustomerQuotations() {
           </div>
         )}
       </div>
-    </CustomerPortalLayout>
+    </PortalLayout>
   );
 }

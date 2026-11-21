@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
-import WarehouseLayout from './WarehouseLayout';
+import PortalLayout from '@/components/PortalLayout';
 import { warehouseApi } from '@/services/api/warehouse';
 import {
   Truck,
@@ -173,7 +173,7 @@ export default function NewDispatch() {
   };
 
   return (
-    <WarehouseLayout
+    <PortalLayout
       title="Create New Dispatch Shipment"
       subtitle="Prepare shipping manifest, vehicle details, carrier tracking, and authorize stock deduction"
       actions={
@@ -201,7 +201,7 @@ export default function NewDispatch() {
         <div className="wh-card">
           <div className="wh-card-header">
             <div className="wh-card-title">
-              <Truck size={18} style={{ color: '#10b981' }} />
+              <Truck size={18} style={{ color: 'var(--c-emerald)' }} />
               <span>Logistics & Shipment Details</span>
             </div>
           </div>
@@ -383,7 +383,7 @@ export default function NewDispatch() {
                         <button
                           type="button"
                           onClick={() => removeItemRow(idx)}
-                          style={{ background: 'transparent', border: 'none', color: '#f87171', cursor: 'pointer' }}
+                          style={{ background: 'transparent', border: 'none', color: 'var(--c-red)', cursor: 'pointer' }}
                         >
                           <Trash2 size={16} />
                         </button>
@@ -415,6 +415,6 @@ export default function NewDispatch() {
           </button>
         </div>
       </form>
-    </WarehouseLayout>
+    </PortalLayout>
   );
 }

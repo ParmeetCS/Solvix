@@ -79,7 +79,9 @@ export async function requireSurveyAccess(request, { requireManage = false, targ
     (deptCode.includes('survey') && (roleCode.includes('manager') || roleCode.includes('head') || roleCode.includes('lead')));
   const isSurveyor = isAdmin || isSurveyManager || 
     deptCode.includes('survey') || deptName.includes('survey') || 
-    roleCode.includes('survey') || roleCode.includes('engineer');
+    roleCode.includes('survey') || roleCode.includes('engineer') ||
+    // Field technicians perform the site surveys (workflow step 3)
+    deptCode.includes('install') || deptCode.includes('technic') || deptCode.includes('operat');
   const isSales = isAdmin || deptCode.includes('sales') || deptName.includes('sales') || deptName.includes('crm');
 
   // Authorization check

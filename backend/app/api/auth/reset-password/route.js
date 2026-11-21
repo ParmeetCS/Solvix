@@ -1,45 +1,36 @@
-import { jsonResponse, jsonError, handleOptions, corsHeaders } from '@/lib/utils';
-import { createAdminClient } from '@/lib/supabase/client';
+import { jsonResponse, jsonError, handleOptions } from '@/lib/utils';
+import { createAdminClient, createClientFromToken } from '@/lib/supabase/client';
+import { forgetToken } from '@/lib/supabase/auth';
 
-export async function GET() {
-  return jsonResponse({ name: 'SOLVIX Auth API', version: '1.0.0' }, {
-    message: 'SOLVIX Auth v1',
-    headers: corsHeaders(),
-  });
-}
-
-// Handle CORS preflight for /api/auth/*
 export async function OPTIONS() {
   return handleOptions();
 }
 
-// POST /api/auth/reset-password
+/**
+ * POST /api/auth/reset-password { access_token, new_password }
+ *
+ * `access_token` is the token Supabase puts in the link of the recovery email. The account whose
+ * password changes is the one that token belongs to, verified with Supabase. It is never taken from
+ * the request body, so a caller cannot reset someone else's password.
+ */
 export async function POST(request) {
   try {
-    const body = await request.json();
+    const body = await request.json().catch(() => ({}));
+    const accessToken = String(body.access_token || '');
+    const newPassword = String(body.new_password || '');
 
-    const { token, new_password, user_id } = body;
+    if (!accessToken) return jsonError('This reset link is invalid. Request a new one.', 400);
+    if (newPassword.length < 8) return jsonError('Your new password must be at least 8 characters.', 400);
 
-    if (!token) {
-      return jsonError('Reset token is required', 400);
-    }
+    const { data, error } = await createClientFromToken(accessToken).auth.getUser();
+    if (error || !data?.user) return jsonError('This reset link is invalid or has expired. Request a new one.', 401);
 
-    if (!new_password || new_password.length < 6) {
-      return jsonError('New password must be at least 6 characters', 400);
-    }
+    const admin = createAdminClient();
+    const { error: updateError } = await admin.auth.admin.updateUserById(data.user.id, { password: newPassword });
+    if (updateError) return jsonError('Could not change the password: ' + updateError.message, 400);
 
-    const adminSupa = createAdminClient();
-    // Update the user's password using the magic link token
-    const { error } = await adminSupa.auth.updateUserById(user_id, new_password);
-
-    if (error) {
-      return jsonError('Failed to reset password: ' + error.message, 400);
-    }
-
-    return jsonResponse({
-      message: 'Password has been reset successfully. You can now log in with your new password.',
-    }, { status: 200, message: 'Password reset successful' });
-
+    forgetToken(accessToken);
+    return jsonResponse({}, { message: 'Your password has been changed. You can now sign in.' });
   } catch (error) {
     return jsonError('Internal server error: ' + error.message, 500);
   }

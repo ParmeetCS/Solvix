@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import SalesLayout from './SalesLayout';
+import PortalLayout from '@/components/PortalLayout';
 import { salesApi } from '@/services/api';
 import {
   UserPlus,
@@ -88,7 +88,7 @@ export default function NewLead() {
   };
 
   return (
-    <SalesLayout
+    <PortalLayout
       title="Create New Solar Lead"
       subtitle="Enter potential customer requirements with real-time duplicate checking"
       actions={
@@ -103,18 +103,18 @@ export default function NewLead() {
           <div
             className="crm-card"
             style={{
-              borderColor: '#f59e0b',
+              borderColor: 'var(--c-amber)',
               background: 'rgba(245, 158, 11, 0.08)',
               marginBottom: '24px'
             }}
           >
             <div style={{ display: 'flex', alignItems: 'flex-start', gap: '14px' }}>
-              <AlertTriangle size={24} style={{ color: '#f59e0b', flexShrink: 0 }} />
+              <AlertTriangle size={24} style={{ color: 'var(--c-amber)', flexShrink: 0 }} />
               <div style={{ flex: 1 }}>
-                <h3 style={{ color: '#f59e0b', fontSize: '1.05rem', margin: 0, fontWeight: 600 }}>
+                <h3 style={{ color: 'var(--c-amber)', fontSize: '1.05rem', margin: 0, fontWeight: 600 }}>
                   Potential Duplicate Lead Detected
                 </h3>
-                <p style={{ color: '#cbd5e1', fontSize: '0.88rem', margin: '6px 0 12px' }}>
+                <p style={{ color: 'var(--text-soft)', fontSize: '0.88rem', margin: '6px 0 12px' }}>
                   {duplicateWarning.message} Existing lead(s) with matching contact info:
                 </p>
 
@@ -171,9 +171,9 @@ export default function NewLead() {
           <div
             className="crm-card"
             style={{
-              borderColor: '#f87171',
+              borderColor: 'var(--c-red)',
               background: 'rgba(248, 113, 113, 0.08)',
-              color: '#f87171',
+              color: 'var(--c-red)',
               marginBottom: '20px'
             }}
           >
@@ -370,6 +370,6 @@ export default function NewLead() {
           </div>
         </form>
       </div>
-    </SalesLayout>
+    </PortalLayout>
   );
 }

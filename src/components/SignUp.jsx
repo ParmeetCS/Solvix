@@ -3,31 +3,42 @@ import { postJson } from '../api';
 
 /* ─── Design tokens matching the landing page night theme ──────────────── */
 const T = {
-  bg:       '#0a1224',
-  card:     'rgba(16, 27, 51, 0.72)',
-  line:     'rgba(255,255,255,0.11)',
-  ink:      '#ffffff',
-  muted:    '#9fb0c8',
-  accent:   '#d8ee8e',
+  bg:       'var(--app-bg)',
+  card:     'rgba(var(--surface-rgb), 0.72)',
+  line:     'rgba(var(--ink-rgb), 0.11)',
+  ink:      'var(--text-strong)',
+  muted:    'var(--text-muted)',
+  accent:   'var(--accent-text)',
   accentDk: '#6d8f2a',
-  input:    'rgba(255,255,255,0.045)',
-  inputBd:  'rgba(255,255,255,0.10)',
-  focus:    'rgba(216,238,142,0.55)',
-  err:      '#f87171',
+  input:    'rgba(var(--ink-rgb), 0.045)',
+  inputBd:  'rgba(var(--ink-rgb), 0.10)',
+  focus:    'rgba(var(--accent-rgb), 0.55)',
+  err:      'var(--c-red)',
   errBg:    'rgba(248,113,113,0.10)',
-  ok:       '#86efac',
+  ok:       'var(--c-green-soft)',
   okBg:     'rgba(134,239,172,0.10)',
 };
 
+// Same names as the departments in the database, so an administrator can approve
+// the request without translating it. "portal" tells the employee where they will sign in.
 const DEPARTMENTS = [
   'Sales & CRM',
-  'Quotations & Sizing',
-  'Inventory & Supply',
-  'Field & Installation',
-  'Warranty & Service',
-  'Finance & Accounting',
-  'Executive & Admin',
+  'Site Survey & Engineering',
+  'Installation & Technical Operations',
+  'Warehouse & Logistics',
+  'Support & Warranty',
+  'Accounts & Finance',
+  'Subsidy & Documentation',
 ];
+const DEPARTMENT_PORTAL = {
+  'Sales & CRM': 'the Sales portal',
+  'Site Survey & Engineering': 'the Technician portal',
+  'Installation & Technical Operations': 'the Technician portal',
+  'Warehouse & Logistics': 'the Operations portal',
+  'Support & Warranty': 'the Operations portal',
+  'Accounts & Finance': 'the Operations portal',
+  'Subsidy & Documentation': 'the Operations portal',
+};
 
 /* ─── Shared input style object ────────────────────────────────────────── */
 const inputStyle = {
@@ -78,7 +89,7 @@ function PasswordInput({ id, value, onChange, placeholder = '••••••�
           ...inputStyle,
           paddingRight: '42px',
           borderColor: focused ? T.accentDk : T.inputBd,
-          boxShadow: focused ? `0 0 0 3px rgba(216,238,142,0.14)` : 'none',
+          boxShadow: focused ? `0 0 0 3px rgba(var(--accent-rgb), 0.14)` : 'none',
         }}
       />
       <button
@@ -133,7 +144,7 @@ function TextInput({ id, type = 'text', value, onChange, placeholder, autoComple
       style={{
         ...inputStyle,
         borderColor: focused ? T.accentDk : T.inputBd,
-        boxShadow: focused ? `0 0 0 3px rgba(216,238,142,0.14)` : 'none',
+        boxShadow: focused ? `0 0 0 3px rgba(var(--accent-rgb), 0.14)` : 'none',
       }}
     />
   );
@@ -156,7 +167,7 @@ function FocusSelect({ id, value, onChange, children }) {
           cursor: 'pointer',
           paddingRight: '36px',
           borderColor: focused ? T.accentDk : T.inputBd,
-          boxShadow: focused ? `0 0 0 3px rgba(216,238,142,0.14)` : 'none',
+          boxShadow: focused ? `0 0 0 3px rgba(var(--accent-rgb), 0.14)` : 'none',
         }}
       >
         {children}
@@ -185,6 +196,7 @@ export default function SignUp({ navigate, initialRole = 'customer', initialMode
   const [errors, setErrors]               = useState({});
   const [submitting, setSubmitting]       = useState(false);
   const [message, setMessage]             = useState(null);
+  const [submitted, setSubmitted]         = useState(false);
 
   /* ── Validation ────────────────────────────────────────────────────── */
   const validate = () => {
@@ -235,11 +247,7 @@ export default function SignUp({ navigate, initialRole = 'customer', initialMode
           });
           setTimeout(() => navigate('/login/customer', { replace: true }), 1200);
         } else {
-          setMessage({
-            kind: 'ok',
-            text: 'Employee registration submitted! An Administrator must approve your department before you can sign in to a dashboard.',
-          });
-          setTimeout(() => navigate('/login/employee', { replace: true }), 1800);
+          setSubmitted(true);
         }
       }
     } catch (err) {
@@ -276,7 +284,7 @@ export default function SignUp({ navigate, initialRole = 'customer', initialMode
       padding: '100px 20px 60px',
       position: 'relative',
       zIndex: 0,
-      background: '#0a1224',
+      background: 'var(--app-bg)',
     }}>
       <div style={{ width: '100%', maxWidth: '480px' }}>
 
@@ -312,7 +320,7 @@ export default function SignUp({ navigate, initialRole = 'customer', initialMode
             display: 'flex', alignItems: 'center', justifyContent: 'center',
           }}>
             <svg width="16" height="16" viewBox="0 0 17 17" fill="none">
-              <path d="M9.5 2L4 9.5H8.5L7.5 15L13 7.5H8.5L9.5 2Z" fill="#0a1224"/>
+              <path d="M9.5 2L4 9.5H8.5L7.5 15L13 7.5H8.5L9.5 2Z" fill="var(--app-bg)"/>
             </svg>
           </span>
           <span style={{ fontWeight: 700, fontSize: '14px', letterSpacing: '0.12em', color: T.ink }}>SOLVIX</span>
@@ -340,7 +348,7 @@ export default function SignUp({ navigate, initialRole = 'customer', initialMode
           style={{
             display: 'grid',
             gridTemplateColumns: '1fr 1fr',
-            background: 'rgba(255,255,255,0.03)',
+            background: 'rgba(var(--ink-rgb), 0.03)',
             border: `1px solid ${T.line}`,
             borderRadius: '12px',
             padding: '4px',
@@ -380,7 +388,7 @@ export default function SignUp({ navigate, initialRole = 'customer', initialMode
                 fontFamily: 'inherit',
                 transition: 'all 0.2s',
                 ...(role === tab.value
-                  ? { background: T.accent, color: '#0a1224', boxShadow: '0 2px 10px rgba(0,0,0,0.3)' }
+                  ? { background: T.accent, color: 'var(--on-fill)', boxShadow: '0 2px 10px rgba(0,0,0,0.3)' }
                   : { background: 'transparent', color: T.muted }),
               }}
             >
@@ -410,7 +418,7 @@ export default function SignUp({ navigate, initialRole = 'customer', initialMode
           }}>
             <span style={{ fontSize: '15px', fontWeight: 600, color: T.ink }}>
               {isSignUp
-                ? (role === 'customer' ? 'Customer Sign Up' : 'Employee Onboarding')
+                ? (role === 'customer' ? 'Customer Sign Up' : 'Request employee access')
                 : (role === 'customer' ? 'Customer Sign In' : 'Employee Sign In')}
             </span>
             <button
@@ -429,10 +437,32 @@ export default function SignUp({ navigate, initialRole = 'customer', initialMode
                 padding: 0,
               }}
             >
-              {isSignUp ? 'Already have an account? Sign in' : 'New here? Create account'}
+              {isSignUp ? (role === 'employee' ? 'Already approved? Sign in' : 'Already have an account? Sign in') : 'New here? Create account'}
             </button>
           </div>
 
+          {submitted && role === 'employee' ? (
+            <div style={{ textAlign: 'center', padding: '8px 0 4px' }}>
+              <div style={{ fontSize: '40px', lineHeight: 1, marginBottom: '12px' }} aria-hidden="true">&#10003;</div>
+              <h2 style={{ fontSize: '20px', fontWeight: 600, color: T.ink, margin: '0 0 8px' }}>Request sent</h2>
+              <p style={{ fontSize: '14px', color: T.muted, lineHeight: 1.6, margin: '0 0 6px' }}>
+                An administrator will review your request and assign your department.
+              </p>
+              <p style={{ fontSize: '14px', color: T.muted, lineHeight: 1.6, margin: '0 0 20px' }}>
+                Once approved, sign in with the email and password you just chose.
+              </p>
+              <button
+                type="button"
+                onClick={() => navigate('/login/employee', { replace: true })}
+                style={{
+                  width: '100%', padding: '13px 16px', borderRadius: '10px', border: 'none', cursor: 'pointer',
+                  background: T.accent, color: 'var(--on-fill)', fontWeight: 700, fontSize: '15px', fontFamily: 'inherit',
+                }}
+              >
+                Go to employee sign in
+              </button>
+            </div>
+          ) : (
           <form onSubmit={handleSubmit} noValidate style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
 
             {/* Full name — signup only */}
@@ -462,7 +492,7 @@ export default function SignUp({ navigate, initialRole = 'customer', initialMode
                 <TextInput
                   id="auth-phone" type="tel" value={phone}
                   onChange={e => setPhone(e.target.value)}
-                  placeholder="+1 (555) 000-0000" autoComplete="tel"
+                  placeholder="+91 98765 43210" autoComplete="tel"
                 />
               </Field>
             )}
@@ -475,7 +505,7 @@ export default function SignUp({ navigate, initialRole = 'customer', initialMode
                   onChange={e => setDepartment(e.target.value)}
                 >
                   {DEPARTMENTS.map(d => (
-                    <option key={d} value={d} style={{ background: '#101b33', color: '#fff' }}>{d}</option>
+                    <option key={d} value={d} style={{ background: 'var(--surface-solid)', color: 'var(--text-strong)' }}>{d}</option>
                   ))}
                 </FocusSelect>
               </Field>
@@ -539,8 +569,8 @@ export default function SignUp({ navigate, initialRole = 'customer', initialMode
                 padding: '13px',
                 borderRadius: '99px',
                 border: 'none',
-                background: submitting ? 'rgba(216,238,142,0.6)' : T.accent,
-                color: '#0a1224',
+                background: submitting ? 'rgba(var(--accent-rgb), 0.6)' : T.accent,
+                color: 'var(--on-fill)',
                 fontSize: '15px',
                 fontWeight: 700,
                 fontFamily: 'inherit',
@@ -562,7 +592,7 @@ export default function SignUp({ navigate, initialRole = 'customer', initialMode
             {/* Footer hint */}
             {isSignUp && role === 'employee' && (
               <p style={{ fontSize: '12px', color: T.muted, textAlign: 'center', lineHeight: 1.5 }}>
-                Employee registration is verified by Solvix Administrator. Access permissions are provisioned according to your department.
+                An administrator reviews every request and assigns your department. You can sign in as soon as it is approved.
               </p>
             )}
             {isSignUp && role === 'customer' && (
@@ -571,6 +601,7 @@ export default function SignUp({ navigate, initialRole = 'customer', initialMode
               </p>
             )}
           </form>
+          )}
         </div>
       </div>
     </div>

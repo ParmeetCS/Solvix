@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import WarehouseLayout from './WarehouseLayout';
+import PortalLayout from '@/components/PortalLayout';
 import { warehouseApi } from '@/services/api/warehouse';
 import {
   FileSpreadsheet,
@@ -138,7 +138,7 @@ export default function NewPurchaseOrder() {
   };
 
   return (
-    <WarehouseLayout
+    <PortalLayout
       title="Create Purchase Order"
       subtitle="Issue a procurement order to equipment vendors & manufacturers"
       actions={
@@ -166,7 +166,7 @@ export default function NewPurchaseOrder() {
         <div className="wh-card">
           <div className="wh-card-header">
             <div className="wh-card-title">
-              <FileSpreadsheet size={18} style={{ color: '#10b981' }} />
+              <FileSpreadsheet size={18} style={{ color: 'var(--c-emerald)' }} />
               <span>Purchase Order Details</span>
             </div>
           </div>
@@ -311,7 +311,7 @@ export default function NewPurchaseOrder() {
                           required
                         />
                       </td>
-                      <td style={{ fontWeight: 600, color: '#34d399' }}>
+                      <td style={{ fontWeight: 600, color: 'var(--c-green)' }}>
                         ₹{lineTotal.toLocaleString()}
                       </td>
                       <td>
@@ -319,7 +319,7 @@ export default function NewPurchaseOrder() {
                           <button
                             type="button"
                             onClick={() => removeItemRow(idx)}
-                            style={{ background: 'transparent', border: 'none', color: '#f87171', cursor: 'pointer' }}
+                            style={{ background: 'transparent', border: 'none', color: 'var(--c-red)', cursor: 'pointer' }}
                           >
                             <Trash2 size={16} />
                           </button>
@@ -332,7 +332,7 @@ export default function NewPurchaseOrder() {
             </table>
           </div>
 
-          <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '16px', fontSize: '1.1rem', fontWeight: 700, color: '#fff' }}>
+          <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '16px', fontSize: '1.1rem', fontWeight: 700, color: 'var(--text-strong)' }}>
             <span>Estimated Total: ₹{calculateTotal().toLocaleString()}</span>
           </div>
         </div>
@@ -356,6 +356,6 @@ export default function NewPurchaseOrder() {
           </button>
         </div>
       </form>
-    </WarehouseLayout>
+    </PortalLayout>
   );
 }

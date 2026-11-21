@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import SurveyLayout from './SurveyLayout';
+import PortalLayout from '@/components/PortalLayout';
 import FeasibilityReportModal from './FeasibilityReportModal';
 import { surveyApi } from '@/services/api';
 import {
@@ -95,7 +95,7 @@ export default function SurveyApprovals() {
   const rejectedSurveys = surveys.filter(s => s.status === 'rejected');
 
   return (
-    <SurveyLayout
+    <PortalLayout
       title="Site Survey Technical Approvals Queue"
       subtitle="Review completed inspection reports, authorize solar feasibility, and advance approved sites to Sales Quotations"
       actions={
@@ -109,27 +109,27 @@ export default function SurveyApprovals() {
     >
       {/* Overview Stat Badges */}
       <div className="survey-stats-grid" style={{ marginBottom: '10px' }}>
-        <div className="survey-stat-box" style={{ borderLeft: '3px solid #ec4899' }}>
+        <div className="survey-stat-box" style={{ borderLeft: '3px solid var(--c-violet)' }}>
           <span className="survey-stat-label">Awaiting Technical Review</span>
-          <span className="survey-stat-value" style={{ color: '#f472b6' }}>{pendingReview.length}</span>
+          <span className="survey-stat-value" style={{ color: 'var(--c-violet)' }}>{pendingReview.length}</span>
           <span className="survey-stat-meta">Needs engineer sign-off</span>
         </div>
 
-        <div className="survey-stat-box" style={{ borderLeft: '3px solid #f97316' }}>
+        <div className="survey-stat-box" style={{ borderLeft: '3px solid var(--c-amber)' }}>
           <span className="survey-stat-label">Revisits In Progress</span>
-          <span className="survey-stat-value" style={{ color: '#fb923c' }}>{revisitRequired.length}</span>
+          <span className="survey-stat-value" style={{ color: 'var(--c-amber)' }}>{revisitRequired.length}</span>
           <span className="survey-stat-meta">Awaiting site resolution</span>
         </div>
 
-        <div className="survey-stat-box" style={{ borderLeft: '3px solid #10b981' }}>
+        <div className="survey-stat-box" style={{ borderLeft: '3px solid var(--c-emerald)' }}>
           <span className="survey-stat-label">Approved & Ready for Quote</span>
-          <span className="survey-stat-value" style={{ color: '#34d399' }}>{approvedSurveys.length}</span>
+          <span className="survey-stat-value" style={{ color: 'var(--c-green)' }}>{approvedSurveys.length}</span>
           <span className="survey-stat-meta">Handed off to Sales</span>
         </div>
 
-        <div className="survey-stat-box" style={{ borderLeft: '3px solid #ef4444' }}>
+        <div className="survey-stat-box" style={{ borderLeft: '3px solid var(--c-red-2)' }}>
           <span className="survey-stat-label">Rejected Feasibility</span>
-          <span className="survey-stat-value" style={{ color: '#f87171' }}>{rejectedSurveys.length}</span>
+          <span className="survey-stat-value" style={{ color: 'var(--c-red)' }}>{rejectedSurveys.length}</span>
           <span className="survey-stat-meta">Unsuitable / blocked</span>
         </div>
       </div>
@@ -138,19 +138,19 @@ export default function SurveyApprovals() {
       <div className="survey-card">
         <div className="survey-card-header">
           <h3>
-            <ShieldCheck size={18} style={{ color: '#ec4899' }} />
+            <ShieldCheck size={18} style={{ color: 'var(--c-violet)' }} />
             Submitted Surveys Awaiting Technical Review ({pendingReview.length})
           </h3>
-          <span style={{ fontSize: '0.8rem', color: '#94a3b8' }}>High Priority Queue</span>
+          <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>High Priority Queue</span>
         </div>
 
         {loading ? (
-          <div style={{ padding: '40px', textAlign: 'center', color: '#94a3b8' }}>
+          <div style={{ padding: '40px', textAlign: 'center', color: 'var(--text-muted)' }}>
             Loading review queue...
           </div>
         ) : pendingReview.length === 0 ? (
-          <div style={{ textAlign: 'center', padding: '40px', color: '#64748b' }}>
-            <CheckCircle2 size={36} style={{ margin: '0 auto 10px auto', opacity: 0.5, color: '#34d399' }} />
+          <div style={{ textAlign: 'center', padding: '40px', color: 'var(--text-dim)' }}>
+            <CheckCircle2 size={36} style={{ margin: '0 auto 10px auto', opacity: 0.5, color: 'var(--c-green)' }} />
             <p>All submitted site surveys have been reviewed! No surveys pending technical verification.</p>
           </div>
         ) : (
@@ -172,36 +172,36 @@ export default function SurveyApprovals() {
                     <td>
                       <Link
                         to={`/survey/requests/${srv.id}`}
-                        style={{ color: '#38bdf8', fontWeight: 600, textDecoration: 'none' }}
+                        style={{ color: 'var(--c-blue)', fontWeight: 600, textDecoration: 'none' }}
                       >
                         {srv.survey_code}
                       </Link>
-                      <div style={{ fontSize: '0.74rem', color: '#94a3b8' }}>
+                      <div style={{ fontSize: '0.74rem', color: 'var(--text-muted)' }}>
                         Priority: <b style={{ textTransform: 'capitalize' }}>{srv.priority}</b>
                       </div>
                     </td>
                     <td>
-                      <div style={{ fontWeight: 500, color: '#fff' }}>{srv.customer_name}</div>
-                      <div style={{ fontSize: '0.78rem', color: '#94a3b8' }}>{srv.site_address || srv.city}</div>
+                      <div style={{ fontWeight: 500, color: 'var(--text-strong)' }}>{srv.customer_name}</div>
+                      <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>{srv.site_address || srv.city}</div>
                     </td>
                     <td>
-                      <div style={{ fontSize: '0.84rem', color: '#e2e8f0', textTransform: 'capitalize' }}>
+                      <div style={{ fontSize: '0.84rem', color: 'var(--text-soft)', textTransform: 'capitalize' }}>
                         {srv.roof_type?.replace('_', ' ')} Roof &bull; {srv.available_installation_area_sqm || 0} m² area
                       </div>
-                      <div style={{ fontSize: '0.76rem', color: '#94a3b8' }}>
+                      <div style={{ fontSize: '0.76rem', color: 'var(--text-muted)' }}>
                         Surveyor: {srv.assigned_to_name}
                       </div>
                     </td>
                     <td>
-                      <div style={{ fontWeight: 700, color: '#34d399', fontSize: '0.95rem' }}>
+                      <div style={{ fontWeight: 700, color: 'var(--c-green)', fontSize: '0.95rem' }}>
                         {srv.recommended_capacity_kw || 10} kWp
                       </div>
-                      <div style={{ fontSize: '0.76rem', color: '#cbd5e1', textTransform: 'uppercase' }}>
+                      <div style={{ fontSize: '0.76rem', color: 'var(--text-soft)', textTransform: 'uppercase' }}>
                         {srv.recommended_system_type || 'On-Grid'}
                       </div>
                     </td>
                     <td>
-                      <span style={{ fontSize: '0.82rem', color: '#cbd5e1' }}>
+                      <span style={{ fontSize: '0.82rem', color: 'var(--text-soft)' }}>
                         {srv.completed_at ? new Date(srv.completed_at).toLocaleDateString() : 'Recent'}
                       </span>
                     </td>
@@ -238,10 +238,10 @@ export default function SurveyApprovals() {
       <div className="survey-card" style={{ marginTop: '20px' }}>
         <div className="survey-card-header">
           <h3>
-            <CheckCircle2 size={18} style={{ color: '#34d399' }} />
+            <CheckCircle2 size={18} style={{ color: 'var(--c-green)' }} />
             Approved Site Feasibility Records ({approvedSurveys.length})
           </h3>
-          <span style={{ fontSize: '0.8rem', color: '#34d399' }}>Available to Quotation Workflow</span>
+          <span style={{ fontSize: '0.8rem', color: 'var(--c-green)' }}>Available to Quotation Workflow</span>
         </div>
 
         <div className="survey-table-wrapper">
@@ -262,22 +262,22 @@ export default function SurveyApprovals() {
                   <td>
                     <Link
                       to={`/survey/requests/${srv.id}`}
-                      style={{ color: '#38bdf8', fontWeight: 600, textDecoration: 'none' }}
+                      style={{ color: 'var(--c-blue)', fontWeight: 600, textDecoration: 'none' }}
                     >
                       {srv.survey_code}
                     </Link>
                   </td>
                   <td>
-                    <div style={{ fontWeight: 500, color: '#fff' }}>{srv.customer_name}</div>
-                    <div style={{ fontSize: '0.78rem', color: '#94a3b8' }}>{srv.site_address || srv.city}</div>
+                    <div style={{ fontWeight: 500, color: 'var(--text-strong)' }}>{srv.customer_name}</div>
+                    <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>{srv.site_address || srv.city}</div>
                   </td>
                   <td>
-                    <span style={{ fontWeight: 600, color: '#34d399' }}>
+                    <span style={{ fontWeight: 600, color: 'var(--c-green)' }}>
                       {srv.recommended_capacity_kw || 10} kWp ({srv.recommended_system_type?.toUpperCase()})
                     </span>
                   </td>
                   <td>
-                    <span style={{ color: '#fff' }}>
+                    <span style={{ color: 'var(--text-strong)' }}>
                       ₹{Math.round((srv.recommended_capacity_kw || 10) * 42000).toLocaleString('en-IN')}
                     </span>
                   </td>
@@ -313,12 +313,12 @@ export default function SurveyApprovals() {
       {reviewSurvey && (
         <div className="survey-modal-overlay">
           <div className="survey-modal-content" style={{ maxWidth: '640px' }}>
-            <h3 style={{ color: '#fff', margin: '0 0 16px 0', display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <ShieldCheck size={20} style={{ color: '#38bdf8' }} />
+            <h3 style={{ color: 'var(--text-strong)', margin: '0 0 16px 0', display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <ShieldCheck size={20} style={{ color: 'var(--c-blue)' }} />
               Technical Review: {reviewSurvey.survey_code}
             </h3>
 
-            <div style={{ background: 'rgba(255,255,255,0.03)', padding: '12px 16px', borderRadius: '8px', marginBottom: '16px', fontSize: '0.86rem' }}>
+            <div style={{ background: 'rgba(var(--ink-rgb), 0.03)', padding: '12px 16px', borderRadius: '8px', marginBottom: '16px', fontSize: '0.86rem' }}>
               <div><b>Customer:</b> {reviewSurvey.customer_name}</div>
               <div><b>Site:</b> {reviewSurvey.site_address || reviewSurvey.city}</div>
               <div><b>Surveyor Proposed:</b> {reviewSurvey.recommended_capacity_kw || 10} kWp ({reviewSurvey.recommended_system_type || 'on-grid'})</div>
@@ -337,9 +337,9 @@ export default function SurveyApprovals() {
                     style={{
                       padding: '12px',
                       borderRadius: '8px',
-                      border: `2px solid ${reviewAction === 'approve' ? '#10b981' : 'rgba(255,255,255,0.1)'}`,
-                      background: reviewAction === 'approve' ? 'rgba(16, 185, 129, 0.15)' : 'rgba(255,255,255,0.02)',
-                      color: reviewAction === 'approve' ? '#34d399' : '#cbd5e1',
+                      border: `2px solid ${reviewAction === 'approve' ? 'var(--c-emerald)' : 'rgba(var(--ink-rgb), 0.1)'}`,
+                      background: reviewAction === 'approve' ? 'rgba(16, 185, 129, 0.15)' : 'rgba(var(--ink-rgb), 0.02)',
+                      color: reviewAction === 'approve' ? 'var(--c-green)' : 'var(--text-soft)',
                       cursor: 'pointer',
                       fontWeight: 600,
                       fontSize: '0.86rem'
@@ -357,9 +357,9 @@ export default function SurveyApprovals() {
                     style={{
                       padding: '12px',
                       borderRadius: '8px',
-                      border: `2px solid ${reviewAction === 'revisit' ? '#f97316' : 'rgba(255,255,255,0.1)'}`,
-                      background: reviewAction === 'revisit' ? 'rgba(249, 115, 22, 0.15)' : 'rgba(255,255,255,0.02)',
-                      color: reviewAction === 'revisit' ? '#fb923c' : '#cbd5e1',
+                      border: `2px solid ${reviewAction === 'revisit' ? 'var(--c-amber)' : 'rgba(var(--ink-rgb), 0.1)'}`,
+                      background: reviewAction === 'revisit' ? 'rgba(249, 115, 22, 0.15)' : 'rgba(var(--ink-rgb), 0.02)',
+                      color: reviewAction === 'revisit' ? 'var(--c-amber)' : 'var(--text-soft)',
                       cursor: 'pointer',
                       fontWeight: 600,
                       fontSize: '0.86rem'
@@ -377,9 +377,9 @@ export default function SurveyApprovals() {
                     style={{
                       padding: '12px',
                       borderRadius: '8px',
-                      border: `2px solid ${reviewAction === 'reject' ? '#ef4444' : 'rgba(255,255,255,0.1)'}`,
-                      background: reviewAction === 'reject' ? 'rgba(239, 68, 68, 0.15)' : 'rgba(255,255,255,0.02)',
-                      color: reviewAction === 'reject' ? '#f87171' : '#cbd5e1',
+                      border: `2px solid ${reviewAction === 'reject' ? 'var(--c-red-2)' : 'rgba(var(--ink-rgb), 0.1)'}`,
+                      background: reviewAction === 'reject' ? 'rgba(239, 68, 68, 0.15)' : 'rgba(var(--ink-rgb), 0.02)',
+                      color: reviewAction === 'reject' ? 'var(--c-red)' : 'var(--text-soft)',
                       cursor: 'pointer',
                       fontWeight: 600,
                       fontSize: '0.86rem'
@@ -391,7 +391,7 @@ export default function SurveyApprovals() {
               </div>
 
               {reviewAction === 'approve' && (
-                <div style={{ background: 'rgba(16, 185, 129, 0.08)', padding: '10px 14px', borderRadius: '6px', marginBottom: '16px', fontSize: '0.82rem', color: '#34d399' }}>
+                <div style={{ background: 'rgba(16, 185, 129, 0.08)', padding: '10px 14px', borderRadius: '6px', marginBottom: '16px', fontSize: '0.82rem', color: 'var(--c-green)' }}>
                   ✓ Approving this survey verifies structural & electrical viability. This survey and its technical data will immediately become available to the Sales Quotation workflow.
                 </div>
               )}
@@ -460,6 +460,6 @@ export default function SurveyApprovals() {
           onClose={() => setShowReportModal(false)}
         />
       )}
-    </SurveyLayout>
+    </PortalLayout>
   );
 }

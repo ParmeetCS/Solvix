@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { AlertTriangle, MapPin } from 'lucide-react';
-import CustomerPortalLayout from './CustomerPortalLayout';
+import PortalLayout from '@/components/PortalLayout';
 import { customerApi } from '@/services/api';
 import { formatDate, formatDateTime, titleCase } from '@/lib/quotation';
 
@@ -20,7 +20,7 @@ export default function CustomerInstallation() {
   }, []);
 
   return (
-    <CustomerPortalLayout title="Installation Tracking" subtitle="Follow the installation of your solar system">
+    <PortalLayout title="Installation Tracking" subtitle="Follow the installation of your solar system">
       {error && <div className="q-alert error"><AlertTriangle size={15} style={{ verticalAlign: '-2px', marginRight: 6 }} />{error}</div>}
       {loading ? (
         <div className="q-loading">Loading installations…</div>
@@ -36,15 +36,15 @@ export default function CustomerInstallation() {
           return (
             <div key={i.id} className="crm-card" style={{ marginBottom: 16 }}>
               <div className="crm-card-header">
-                <div className="crm-card-title">{i.installation_code} <span style={{ color: '#64748b', fontWeight: 400 }}>· Order {i.orders?.order_code || '—'}</span></div>
+                <div className="crm-card-title">{i.installation_code} <span style={{ color: 'var(--text-dim)', fontWeight: 400 }}>· Order {i.orders?.order_code || '—'}</span></div>
                 <span className="q-badge">{titleCase(i.status.replace(/_/g, ' '))}</span>
               </div>
               {!stopped && (
                 <div style={{ display: 'flex', gap: 8, margin: '12px 0 18px' }}>
                   {STEPS.map((s, n) => (
                     <div key={s} style={{ flex: 1 }}>
-                      <div style={{ height: 6, borderRadius: 3, background: n <= idx ? '#d8ee8e' : 'rgba(255,255,255,0.1)' }} />
-                      <div style={{ fontSize: 12, marginTop: 6, color: n <= idx ? '#d8ee8e' : '#64748b' }}>{titleCase(s.replace('_', ' '))}</div>
+                      <div style={{ height: 6, borderRadius: 3, background: n <= idx ? '#d8ee8e' : 'rgba(var(--ink-rgb), 0.1)' }} />
+                      <div style={{ fontSize: 12, marginTop: 6, color: n <= idx ? 'var(--accent-text)' : 'var(--text-dim)' }}>{titleCase(s.replace('_', ' '))}</div>
                     </div>
                   ))}
                 </div>
@@ -59,6 +59,6 @@ export default function CustomerInstallation() {
           );
         })
       )}
-    </CustomerPortalLayout>
+    </PortalLayout>
   );
 }

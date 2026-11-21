@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import CustomerPortalLayout from './CustomerPortalLayout';
+import PortalLayout from '@/components/PortalLayout';
 import { quotationsApi } from '@/services/api';
 import { ArrowLeft, FileText, AlertTriangle, Package } from 'lucide-react';
 import {
@@ -41,7 +41,7 @@ export default function CustomerOrderDetail() {
   const items = bundle?.items || [];
 
   return (
-    <CustomerPortalLayout
+    <PortalLayout
       title={order ? order.order_code : 'Order'}
       subtitle={order ? `${order.system_capacity_kw} kW ${order.system_type} solar system` : 'Loading order…'}
       actions={
@@ -93,7 +93,7 @@ export default function CustomerOrderDetail() {
             </div>
             <div className="q-summary-cell">
               <small>Balance due</small>
-              <b style={{ color: Number(order.balance_due) > 0 ? '#fbbf24' : '#86efac' }}>
+              <b style={{ color: Number(order.balance_due) > 0 ? 'var(--c-amber-soft)' : 'var(--c-green-soft)' }}>
                 {formatCurrency(order.balance_due)}
               </b>
             </div>
@@ -229,6 +229,6 @@ export default function CustomerOrderDetail() {
           </div>
         </>
       )}
-    </CustomerPortalLayout>
+    </PortalLayout>
   );
 }

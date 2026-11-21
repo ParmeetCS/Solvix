@@ -1,0 +1,86 @@
+/* Shared chrome for every signed-in screen. Loaded after the module stylesheets,
+   so these rules make the sidebar, header and spacing identical everywhere. */
+
+.crm-layout { align-items: flex-start; }
+
+/* Sidebar: full height, only the menu scrolls, user card stays pinned. */
+.crm-sidebar {
+  flex: none;
+  z-index: 30;
+}
+.crm-brand { flex: none; margin-bottom: 20px; }
+.crm-nav {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  gap: 2px;
+  margin: 0 -8px;
+  padding: 0 8px 12px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(var(--ink-rgb), 0.15) transparent;
+}
+.crm-nav-entry { display: flex; flex-direction: column; }
+.crm-nav-group {
+  margin: 14px 8px 6px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+.crm-nav-entry:first-child .crm-nav-group { margin-top: 0; }
+.crm-nav-item {
+  border: 1px solid transparent;
+  padding: 9px 12px;
+  line-height: 1.25;
+}
+.crm-nav-item span { overflow-wrap: anywhere; }
+.crm-user-card { flex: none; margin-top: 8px; }
+.crm-signout {
+  display: grid; place-items: center; flex: none;
+  width: 30px; height: 30px; border-radius: 8px; border: 0; cursor: pointer;
+  background: transparent; color: var(--text-muted);
+}
+.crm-signout:hover { background: rgba(var(--ink-rgb), 0.08); color: var(--text-strong); }
+
+/* Main column */
+.crm-main { flex: 1 1 0; min-width: 0; overflow: visible; }
+.crm-header {
+  min-height: 70px; height: auto; padding: 12px 32px; gap: 16px;
+  justify-content: flex-start;
+}
+.crm-title-section { flex: 1 1 auto; min-width: 0; text-align: left; }
+.crm-title-section h1 { text-align: left; line-height: 1.2; }
+.crm-header-actions { flex: none; display: flex; flex-wrap: wrap; justify-content: flex-end; }
+.crm-body { padding: 28px 32px 48px; max-width: 1500px; }
+
+/* Controls: filter bars always lay out in a row and wrap */
+.crm-filter-bar, .q-filter-bar, .survey-filter-bar, .inst-filter-bar, .warehouse-filter-bar {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 10px;
+}
+.crm-filter-bar > input, .crm-filter-bar > select,
+.q-filter-bar > select, .q-filter-bar > input { flex: 0 1 200px; min-width: 150px; width: auto; }
+.crm-filter-bar > input[type="text"], .crm-filter-bar > input:not([type]), .crm-filter-bar > .crm-search-box,
+.q-filter-bar > .q-search { flex: 1 1 260px; }
+
+/* Mobile */
+.crm-menu-btn, .crm-menu-close { display: none; }
+.crm-backdrop { display: none; }
+
+@media (max-width: 900px) {
+  .crm-sidebar {
+    position: fixed; left: 0; top: 0; bottom: 0; height: 100dvh;
+    transform: translateX(-100%); transition: transform 0.2s ease;
+    box-shadow: 0 0 40px rgba(0, 0, 0, 0.5);
+  }
+  .crm-sidebar.is-open { transform: none; }
+  .crm-backdrop { display: block; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.5); z-index: 25; }
+  .crm-menu-btn, .crm-menu-close {
+    display: grid; place-items: center; width: 36px; height: 36px; border-radius: 8px; border: 0;
+    background: rgba(var(--ink-rgb), 0.06); color: var(--text-strong); cursor: pointer; flex: none;
+  }
+  .crm-menu-close { margin-left: auto; }
+  .crm-header { padding: 10px 16px; flex-wrap: wrap; }
+  .crm-body { padding: 18px 16px 40px; }
+  .crm-stats-grid { grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)) !important; }
+}

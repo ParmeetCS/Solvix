@@ -53,7 +53,7 @@ export default function SubsidyDashboard() {
           </div>
           <div className="crm-card" style={{ marginTop: 20 }}>
             <div className="crm-card-title">Amounts</div>
-            <p style={{ color: '#94a3b8', fontSize: 13 }}>
+            <p style={{ color: 'var(--text-muted)', fontSize: 13 }}>
               Applied: {formatCurrency(data.financials?.totalApplied)} · Approved by authority: {formatCurrency(data.financials?.totalApproved)}.
               Scheme rules and eligibility must be verified against current official requirements by authorised staff.
             </p>

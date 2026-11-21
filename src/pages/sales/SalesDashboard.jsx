@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import SalesLayout from './SalesLayout';
+import PortalLayout from '@/components/PortalLayout';
 import { salesApi } from '@/services/api';
 import {
   Users,
@@ -58,7 +58,7 @@ export default function SalesDashboard() {
   const performance = data?.employeePerformance || [];
 
   return (
-    <SalesLayout
+    <PortalLayout
       title="Sales & CRM Dashboard"
       subtitle="Real-time solar lead generation, pipeline progress & follow-up tracking"
       actions={
@@ -78,11 +78,11 @@ export default function SalesDashboard() {
     >
       {loading ? (
         <div className="crm-card" style={{ textAlign: 'center', padding: '60px' }}>
-          <p style={{ color: '#94a3b8' }}>Loading sales analytics from database...</p>
+          <p style={{ color: 'var(--text-muted)' }}>Loading sales analytics from database...</p>
         </div>
       ) : error ? (
-        <div className="crm-card" style={{ border: '1px solid #f87171', background: 'rgba(248,113,113,0.08)' }}>
-          <p style={{ color: '#f87171' }}>{error}</p>
+        <div className="crm-card" style={{ border: '1px solid var(--c-red)', background: 'rgba(248,113,113,0.08)' }}>
+          <p style={{ color: 'var(--c-red)' }}>{error}</p>
           <button onClick={loadDashboard} className="crm-btn crm-btn-secondary crm-btn-sm" style={{ marginTop: '12px' }}>
             Try Again
           </button>
@@ -99,19 +99,19 @@ export default function SalesDashboard() {
 
             <div className="crm-stat-box">
               <span className="crm-stat-label">New Enquiries</span>
-              <span className="crm-stat-value" style={{ color: '#60a5fa' }}>{summary.newLeads}</span>
+              <span className="crm-stat-value" style={{ color: 'var(--c-blue)' }}>{summary.newLeads}</span>
               <span className="crm-stat-meta">Awaiting first contact</span>
             </div>
 
             <div className="crm-stat-box">
               <span className="crm-stat-label">Contacted</span>
-              <span className="crm-stat-value" style={{ color: '#c084fc' }}>{summary.contactedLeads}</span>
+              <span className="crm-stat-value" style={{ color: 'var(--c-violet)' }}>{summary.contactedLeads}</span>
               <span className="crm-stat-meta">In conversation</span>
             </div>
 
             <div className={`crm-stat-box ${summary.followUpsDueToday > 0 ? 'urgent' : ''}`}>
               <span className="crm-stat-label">Follow-ups Today</span>
-              <span className="crm-stat-value" style={{ color: summary.followUpsDueToday > 0 ? '#facc15' : '#fff' }}>
+              <span className="crm-stat-value" style={{ color: summary.followUpsDueToday > 0 ? 'var(--c-amber-soft)' : 'var(--text-strong)' }}>
                 {summary.followUpsDueToday}
               </span>
               <span className="crm-stat-meta">
@@ -121,25 +121,25 @@ export default function SalesDashboard() {
 
             <div className="crm-stat-box success">
               <span className="crm-stat-label">Qualified Leads</span>
-              <span className="crm-stat-value" style={{ color: '#34d399' }}>{summary.qualifiedLeads}</span>
+              <span className="crm-stat-value" style={{ color: 'var(--c-green)' }}>{summary.qualifiedLeads}</span>
               <span className="crm-stat-meta">Ready for site survey</span>
             </div>
 
             <div className="crm-stat-box">
               <span className="crm-stat-label">Quotation / Survey</span>
-              <span className="crm-stat-value" style={{ color: '#38bdf8' }}>{summary.quotationPending}</span>
+              <span className="crm-stat-value" style={{ color: 'var(--c-blue)' }}>{summary.quotationPending}</span>
               <span className="crm-stat-meta">Proposals pending</span>
             </div>
 
             <div className="crm-stat-box success">
               <span className="crm-stat-label">Converted</span>
-              <span className="crm-stat-value" style={{ color: '#d8ee8e' }}>{summary.convertedLeads}</span>
+              <span className="crm-stat-value" style={{ color: 'var(--accent-text)' }}>{summary.convertedLeads}</span>
               <span className="crm-stat-meta">Customer accounts created</span>
             </div>
 
             <div className="crm-stat-box">
               <span className="crm-stat-label">Lost</span>
-              <span className="crm-stat-value" style={{ color: '#f87171' }}>{summary.lostLeads}</span>
+              <span className="crm-stat-value" style={{ color: 'var(--c-red)' }}>{summary.lostLeads}</span>
               <span className="crm-stat-meta">Closed unfulfilled</span>
             </div>
           </div>
@@ -148,31 +148,31 @@ export default function SalesDashboard() {
           <div className="crm-card">
             <div className="crm-card-header">
               <span className="crm-card-title">Lead Pipeline Stage Breakdown</span>
-              <span style={{ fontSize: '0.8rem', color: '#94a3b8' }}>Live conversion flow</span>
+              <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Live conversion flow</span>
             </div>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: '12px' }}>
               {[
-                { label: 'New', count: pipeline.new || 0, color: '#60a5fa' },
-                { label: 'Contacted', count: pipeline.contacted || 0, color: '#c084fc' },
-                { label: 'Follow-up Req.', count: pipeline.follow_up_required || 0, color: '#facc15' },
-                { label: 'Qualified', count: pipeline.qualified || 0, color: '#34d399' },
-                { label: 'Survey Req.', count: pipeline.survey_requested || 0, color: '#fbbf24' },
-                { label: 'Quotation Sent', count: pipeline.quotation_sent || 0, color: '#38bdf8' },
-                { label: 'Converted', count: pipeline.converted || 0, color: '#d8ee8e' },
-                { label: 'Lost', count: pipeline.lost || 0, color: '#f87171' },
+                { label: 'New', count: pipeline.new || 0, color: 'var(--c-blue)' },
+                { label: 'Contacted', count: pipeline.contacted || 0, color: 'var(--c-violet)' },
+                { label: 'Follow-up Req.', count: pipeline.follow_up_required || 0, color: 'var(--c-amber-soft)' },
+                { label: 'Qualified', count: pipeline.qualified || 0, color: 'var(--c-green)' },
+                { label: 'Survey Req.', count: pipeline.survey_requested || 0, color: 'var(--c-amber-soft)' },
+                { label: 'Quotation Sent', count: pipeline.quotation_sent || 0, color: 'var(--c-blue)' },
+                { label: 'Converted', count: pipeline.converted || 0, color: 'var(--accent-text)' },
+                { label: 'Lost', count: pipeline.lost || 0, color: 'var(--c-red)' },
               ].map((stage, i) => (
                 <div
                   key={i}
                   style={{
-                    background: 'rgba(255,255,255,0.03)',
-                    border: '1px solid rgba(255,255,255,0.06)',
+                    background: 'rgba(var(--ink-rgb), 0.03)',
+                    border: '1px solid rgba(var(--ink-rgb), 0.06)',
                     borderRadius: '8px',
                     padding: '12px 14px',
                     borderTop: `3px solid ${stage.color}`
                   }}
                 >
-                  <div style={{ fontSize: '0.75rem', color: '#94a3b8', textTransform: 'uppercase' }}>{stage.label}</div>
-                  <div style={{ fontSize: '1.4rem', fontWeight: '700', color: '#fff', marginTop: '4px' }}>{stage.count}</div>
+                  <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase' }}>{stage.label}</div>
+                  <div style={{ fontSize: '1.4rem', fontWeight: '700', color: 'var(--text-strong)', marginTop: '4px' }}>{stage.count}</div>
                 </div>
               ))}
             </div>
@@ -183,12 +183,12 @@ export default function SalesDashboard() {
             <div className="crm-card">
               <div className="crm-card-header">
                 <span className="crm-card-title">Recent Leads</span>
-                <Link to="/sales/leads" style={{ fontSize: '0.82rem', color: '#d8ee8e', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                <Link to="/sales/leads" style={{ fontSize: '0.82rem', color: 'var(--accent-text)', display: 'flex', alignItems: 'center', gap: '4px' }}>
                   View All <ArrowRight size={14} />
                 </Link>
               </div>
               {recentLeads.length === 0 ? (
-                <p style={{ color: '#64748b', fontSize: '0.9rem' }}>No recent leads recorded yet.</p>
+                <p style={{ color: 'var(--text-dim)', fontSize: '0.9rem' }}>No recent leads recorded yet.</p>
               ) : (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                   {recentLeads.map(l => (
@@ -197,7 +197,7 @@ export default function SalesDashboard() {
                       onClick={() => navigate(`/sales/leads/${l.id}`)}
                       style={{
                         padding: '12px',
-                        background: 'rgba(255,255,255,0.03)',
+                        background: 'rgba(var(--ink-rgb), 0.03)',
                         borderRadius: '8px',
                         display: 'flex',
                         alignItems: 'center',
@@ -206,12 +206,12 @@ export default function SalesDashboard() {
                         border: '1px solid transparent',
                         transition: 'all 0.15s ease'
                       }}
-                      onMouseEnter={e => e.currentTarget.style.borderColor = 'rgba(216,238,142,0.3)'}
+                      onMouseEnter={e => e.currentTarget.style.borderColor = 'rgba(var(--accent-rgb), 0.3)'}
                       onMouseLeave={e => e.currentTarget.style.borderColor = 'transparent'}
                     >
                       <div>
-                        <div style={{ fontWeight: '600', color: '#fff' }}>{l.customer_name || 'Unnamed Enquiry'}</div>
-                        <div style={{ fontSize: '0.78rem', color: '#94a3b8' }}>
+                        <div style={{ fontWeight: '600', color: 'var(--text-strong)' }}>{l.customer_name || 'Unnamed Enquiry'}</div>
+                        <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>
                           {l.lead_code} • {l.phone} • {l.source}
                         </div>
                       </div>
@@ -228,12 +228,12 @@ export default function SalesDashboard() {
             <div className="crm-card">
               <div className="crm-card-header">
                 <span className="crm-card-title">Upcoming Follow-ups</span>
-                <Link to="/sales/follow-ups" style={{ fontSize: '0.82rem', color: '#d8ee8e', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                <Link to="/sales/follow-ups" style={{ fontSize: '0.82rem', color: 'var(--accent-text)', display: 'flex', alignItems: 'center', gap: '4px' }}>
                   View Schedule <ArrowRight size={14} />
                 </Link>
               </div>
               {upcomingFollowUps.length === 0 ? (
-                <p style={{ color: '#64748b', fontSize: '0.9rem' }}>No upcoming follow-ups scheduled.</p>
+                <p style={{ color: 'var(--text-dim)', fontSize: '0.9rem' }}>No upcoming follow-ups scheduled.</p>
               ) : (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                   {upcomingFollowUps.map(fu => (
@@ -241,7 +241,7 @@ export default function SalesDashboard() {
                       key={fu.id}
                       style={{
                         padding: '12px',
-                        background: 'rgba(255,255,255,0.03)',
+                        background: 'rgba(var(--ink-rgb), 0.03)',
                         borderRadius: '8px',
                         display: 'flex',
                         alignItems: 'center',
@@ -249,14 +249,14 @@ export default function SalesDashboard() {
                       }}
                     >
                       <div>
-                        <div style={{ fontWeight: '600', color: '#fff' }}>
+                        <div style={{ fontWeight: '600', color: 'var(--text-strong)' }}>
                           {fu.leads?.customer_name || 'Customer'}
                         </div>
-                        <div style={{ fontSize: '0.78rem', color: '#94a3b8' }}>
+                        <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>
                           {fu.follow_up_type?.replace('_', ' ')} • {new Date(fu.scheduled_at).toLocaleString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
                         </div>
                         {fu.notes && (
-                          <div style={{ fontSize: '0.75rem', color: '#cbd5e1', marginTop: '4px' }}>
+                          <div style={{ fontSize: '0.75rem', color: 'var(--text-soft)', marginTop: '4px' }}>
                             &ldquo;{fu.notes}&rdquo;
                           </div>
                         )}
@@ -283,17 +283,17 @@ export default function SalesDashboard() {
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                 {Object.keys(sources).length === 0 ? (
-                  <p style={{ color: '#64748b' }}>No sources recorded yet.</p>
+                  <p style={{ color: 'var(--text-dim)' }}>No sources recorded yet.</p>
                 ) : (
                   Object.entries(sources).map(([src, count]) => {
                     const pct = summary.totalLeads > 0 ? ((count / summary.totalLeads) * 100).toFixed(0) : 0;
                     return (
                       <div key={src}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', marginBottom: '4px' }}>
-                          <span style={{ textTransform: 'capitalize', color: '#e2e8f0' }}>{src.replace('_', ' ')}</span>
-                          <span style={{ color: '#94a3b8' }}>{count} ({pct}%)</span>
+                          <span style={{ textTransform: 'capitalize', color: 'var(--text-soft)' }}>{src.replace('_', ' ')}</span>
+                          <span style={{ color: 'var(--text-muted)' }}>{count} ({pct}%)</span>
                         </div>
-                        <div style={{ height: '6px', background: 'rgba(255,255,255,0.08)', borderRadius: '999px', overflow: 'hidden' }}>
+                        <div style={{ height: '6px', background: 'rgba(var(--ink-rgb), 0.08)', borderRadius: '999px', overflow: 'hidden' }}>
                           <div style={{ width: `${pct}%`, height: '100%', background: '#d8ee8e' }} />
                         </div>
                       </div>
@@ -324,8 +324,8 @@ export default function SalesDashboard() {
                         <tr key={idx}>
                           <td style={{ fontWeight: '600' }}>{p.name}</td>
                           <td>{p.totalAssigned}</td>
-                          <td style={{ color: '#34d399' }}>{p.convertedCount}</td>
-                          <td><b style={{ color: '#d8ee8e' }}>{p.conversionRate}%</b></td>
+                          <td style={{ color: 'var(--c-green)' }}>{p.convertedCount}</td>
+                          <td><b style={{ color: 'var(--accent-text)' }}>{p.conversionRate}%</b></td>
                         </tr>
                       ))}
                     </tbody>
@@ -336,6 +336,6 @@ export default function SalesDashboard() {
           </div>
         </>
       )}
-    </SalesLayout>
+    </PortalLayout>
   );
 }

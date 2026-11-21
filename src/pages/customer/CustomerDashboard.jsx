@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { AlertTriangle, ShoppingCart, FileText, MapPin, ShieldCheck, Hammer, ArrowRight } from 'lucide-react';
-import CustomerPortalLayout from './CustomerPortalLayout';
+import PortalLayout from '@/components/PortalLayout';
 import { customerApi } from '@/services/api';
 import { useAuth } from '@/context/auth';
 import { formatCurrency, formatDate, statusClass, statusLabel, titleCase } from '@/lib/quotation';
@@ -63,7 +63,7 @@ export default function CustomerDashboard() {
   ];
 
   return (
-    <CustomerPortalLayout
+    <PortalLayout
       title={`Welcome${user?.full_name ? `, ${user.full_name.split(' ')[0]}` : ''}`}
       subtitle="Your solar project at a glance"
       actions={<button className="crm-btn crm-btn-secondary crm-btn-sm" onClick={load}>Refresh</button>}
@@ -94,8 +94,8 @@ export default function CustomerDashboard() {
               <div className="crm-card-header"><div className="crm-card-title">Payments across your orders</div></div>
               <div className="crm-stats-grid">
                 <div className="crm-stat-box"><div className="crm-stat-label">Order value</div><div className="crm-stat-value">{formatCurrency(orderValue)}</div></div>
-                <div className="crm-stat-box"><div className="crm-stat-label">Paid</div><div className="crm-stat-value" style={{ color: '#86efac' }}>{formatCurrency(paid)}</div></div>
-                <div className="crm-stat-box"><div className="crm-stat-label">Balance due</div><div className="crm-stat-value" style={{ color: balance > 0 ? '#fbbf24' : '#86efac' }}>{formatCurrency(balance)}</div></div>
+                <div className="crm-stat-box"><div className="crm-stat-label">Paid</div><div className="crm-stat-value" style={{ color: 'var(--c-green-soft)' }}>{formatCurrency(paid)}</div></div>
+                <div className="crm-stat-box"><div className="crm-stat-label">Balance due</div><div className="crm-stat-value" style={{ color: balance > 0 ? 'var(--c-amber-soft)' : 'var(--c-green-soft)' }}>{formatCurrency(balance)}</div></div>
               </div>
             </div>
           )}
@@ -114,7 +114,7 @@ export default function CustomerDashboard() {
                   <tbody>
                     {orders.slice(0, 5).map((o) => (
                       <tr key={o.id}>
-                        <td><Link to={`/customer/orders/${o.id}`} style={{ color: '#d8ee8e', fontWeight: 600 }}>{o.order_code}</Link><div style={{ fontSize: '0.72rem', color: '#64748b' }}>{formatDate(o.created_at)}</div></td>
+                        <td><Link to={`/customer/orders/${o.id}`} style={{ color: 'var(--accent-text)', fontWeight: 600 }}>{o.order_code}</Link><div style={{ fontSize: '0.72rem', color: 'var(--text-dim)' }}>{formatDate(o.created_at)}</div></td>
                         <td>{o.system_capacity_kw ? `${Number(o.system_capacity_kw)} kW ${titleCase(o.system_type || '')}` : '—'}</td>
                         <td>{formatCurrency(o.total_amount)}</td>
                         <td>{formatCurrency(o.balance_due)}</td>
@@ -128,7 +128,7 @@ export default function CustomerDashboard() {
           </div>
         </>
       )}
-    </CustomerPortalLayout>
+    </PortalLayout>
   );
 }
 

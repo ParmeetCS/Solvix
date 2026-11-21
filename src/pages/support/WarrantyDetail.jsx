@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import SupportLayout from './SupportLayout';
+import PortalLayout from '@/components/PortalLayout';
 import { supportApi } from '@/services/api';
 import { useAuth } from '@/context/auth';
 import {
@@ -81,7 +81,7 @@ export default function WarrantyDetail() {
   const product = serial?.products;
 
   return (
-    <SupportLayout
+    <PortalLayout
       title={`Warranty Certificate: ${w.warranty_code || ''}`}
       subtitle="Complete warranty coverage details, delivery milestone verification, and claim records"
       actions={
@@ -101,11 +101,11 @@ export default function WarrantyDetail() {
     >
       {loading ? (
         <div style={{ display: 'flex', justifyContent: 'center', padding: '4rem 0' }}>
-          <Loader2 className="animate-spin" size={36} color="#d8ee8e" />
+          <Loader2 className="animate-spin" size={36} color="var(--accent-text)" />
         </div>
       ) : error ? (
-        <div className="support-card" style={{ borderColor: '#ef4444' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', color: '#f87171' }}>
+        <div className="support-card" style={{ borderColor: 'var(--c-red-2)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', color: 'var(--c-red)' }}>
             <AlertCircle size={20} />
             <span>{error}</span>
           </div>
@@ -114,12 +114,12 @@ export default function WarrantyDetail() {
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', maxWidth: '900px', margin: '0 auto' }}>
           {/* Main Certificate Card */}
           <div className="support-card">
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '1rem', borderBottom: '1px solid #1e293b', paddingBottom: '1rem', marginBottom: '1.25rem' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '1rem', borderBottom: '1px solid var(--surface-2)', paddingBottom: '1rem', marginBottom: '1.25rem' }}>
               <div>
-                <span style={{ fontSize: '0.75rem', color: '#94a3b8', textTransform: 'uppercase' }}>
+                <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase' }}>
                   Warranty Certificate
                 </span>
-                <h2 style={{ fontSize: '1.5rem', color: '#ffffff', margin: '0.25rem 0 0 0' }}>
+                <h2 style={{ fontSize: '1.5rem', color: 'var(--text-strong)', margin: '0.25rem 0 0 0' }}>
                   {w.warranty_code}
                 </h2>
               </div>
@@ -132,35 +132,35 @@ export default function WarrantyDetail() {
 
             {/* Core Details Grid */}
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1.25rem', marginBottom: '1.5rem' }}>
-              <div style={{ background: '#0b1020', border: '1px solid #1e293b', borderRadius: '8px', padding: '1rem' }}>
-                <span style={{ fontSize: '0.75rem', color: '#94a3b8' }}>Equipment Serial</span>
-                <div style={{ fontSize: '1rem', fontWeight: 600, color: '#38bdf8', marginTop: '0.25rem' }}>
+              <div style={{ background: 'var(--app-bg)', border: '1px solid var(--surface-2)', borderRadius: '8px', padding: '1rem' }}>
+                <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Equipment Serial</span>
+                <div style={{ fontSize: '1rem', fontWeight: 600, color: 'var(--c-blue)', marginTop: '0.25rem' }}>
                   {serial?.serial_number || '—'}
                 </div>
               </div>
 
-              <div style={{ background: '#0b1020', border: '1px solid #1e293b', borderRadius: '8px', padding: '1rem' }}>
-                <span style={{ fontSize: '0.75rem', color: '#94a3b8' }}>Product & Model</span>
-                <div style={{ fontSize: '1rem', fontWeight: 600, color: '#ffffff', marginTop: '0.25rem' }}>
+              <div style={{ background: 'var(--app-bg)', border: '1px solid var(--surface-2)', borderRadius: '8px', padding: '1rem' }}>
+                <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Product & Model</span>
+                <div style={{ fontSize: '1rem', fontWeight: 600, color: 'var(--text-strong)', marginTop: '0.25rem' }}>
                   {product?.name || 'Solar PV Component'}
                 </div>
-                <div style={{ fontSize: '0.75rem', color: '#94a3b8' }}>SKU: {product?.sku}</div>
+                <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>SKU: {product?.sku}</div>
               </div>
 
-              <div style={{ background: '#0b1020', border: '1px solid #1e293b', borderRadius: '8px', padding: '1rem' }}>
-                <span style={{ fontSize: '0.75rem', color: '#94a3b8' }}>Customer</span>
-                <div style={{ fontSize: '1rem', fontWeight: 600, color: '#ffffff', marginTop: '0.25rem' }}>
+              <div style={{ background: 'var(--app-bg)', border: '1px solid var(--surface-2)', borderRadius: '8px', padding: '1rem' }}>
+                <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Customer</span>
+                <div style={{ fontSize: '1rem', fontWeight: 600, color: 'var(--text-strong)', marginTop: '0.25rem' }}>
                   {w.customers?.contact_name || 'Customer'}
                 </div>
-                <div style={{ fontSize: '0.75rem', color: '#94a3b8' }}>{w.customers?.phone || w.customers?.email}</div>
+                <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{w.customers?.phone || w.customers?.email}</div>
               </div>
 
-              <div style={{ background: '#0b1020', border: '1px solid #1e293b', borderRadius: '8px', padding: '1rem' }}>
-                <span style={{ fontSize: '0.75rem', color: '#94a3b8' }}>Duration & Type</span>
-                <div style={{ fontSize: '1rem', fontWeight: 600, color: '#d8ee8e', marginTop: '0.25rem' }}>
+              <div style={{ background: 'var(--app-bg)', border: '1px solid var(--surface-2)', borderRadius: '8px', padding: '1rem' }}>
+                <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Duration & Type</span>
+                <div style={{ fontSize: '1rem', fontWeight: 600, color: 'var(--accent-text)', marginTop: '0.25rem' }}>
                   {w.duration_years} Years
                 </div>
-                <div style={{ fontSize: '0.75rem', color: '#94a3b8', textTransform: 'capitalize' }}>
+                <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'capitalize' }}>
                   {w.warranty_type?.replace('_', ' ')}
                 </div>
               </div>
@@ -168,26 +168,26 @@ export default function WarrantyDetail() {
 
             {/* Delivery Milestone Verification Box */}
             <div style={{ background: 'rgba(56, 189, 248, 0.06)', border: '1px solid rgba(56, 189, 248, 0.25)', borderRadius: '10px', padding: '1.25rem', marginBottom: '1.5rem' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#38bdf8', fontWeight: 600, marginBottom: '0.5rem' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--c-blue)', fontWeight: 600, marginBottom: '0.5rem' }}>
                 <Truck size={18} />
                 <span>Delivery Milestone Verification (Section H Rule)</span>
               </div>
-              <p style={{ margin: '0 0 0.75rem 0', color: '#cbd5e1', fontSize: '0.8125rem' }}>
+              <p style={{ margin: '0 0 0.75rem 0', color: 'var(--text-soft)', fontSize: '0.8125rem' }}>
                 Verified against logistics records: The warranty clock started on <strong>{w.start_date}</strong> (equipment delivery date).
               </p>
-              <div style={{ display: 'flex', gap: '2rem', fontSize: '0.8125rem', color: '#94a3b8' }}>
-                <div>Warranty Start Date: <strong style={{ color: '#ffffff' }}>{w.start_date}</strong></div>
-                <div>Warranty Expiration Date: <strong style={{ color: w.computed_status === 'expired' ? '#f87171' : '#ffffff' }}>{w.expiry_date}</strong></div>
+              <div style={{ display: 'flex', gap: '2rem', fontSize: '0.8125rem', color: 'var(--text-muted)' }}>
+                <div>Warranty Start Date: <strong style={{ color: 'var(--text-strong)' }}>{w.start_date}</strong></div>
+                <div>Warranty Expiration Date: <strong style={{ color: w.computed_status === 'expired' ? 'var(--c-red)' : 'var(--text-strong)' }}>{w.expiry_date}</strong></div>
                 {delivery?.delivered_at && (
-                  <div>Logistics Timestamp: <strong style={{ color: '#ffffff' }}>{new Date(delivery.delivered_at).toLocaleString()}</strong></div>
+                  <div>Logistics Timestamp: <strong style={{ color: 'var(--text-strong)' }}>{new Date(delivery.delivered_at).toLocaleString()}</strong></div>
                 )}
               </div>
             </div>
 
             {/* Warranty Terms */}
             <div>
-              <h4 style={{ fontSize: '0.875rem', color: '#94a3b8', margin: '0 0 0.5rem 0' }}>Warranty Terms & Conditions</h4>
-              <div style={{ background: '#0b1020', border: '1px solid #1e293b', borderRadius: '8px', padding: '1rem', color: '#cbd5e1', fontSize: '0.875rem', lineHeight: 1.6 }}>
+              <h4 style={{ fontSize: '0.875rem', color: 'var(--text-muted)', margin: '0 0 0.5rem 0' }}>Warranty Terms & Conditions</h4>
+              <div style={{ background: 'var(--app-bg)', border: '1px solid var(--surface-2)', borderRadius: '8px', padding: '1rem', color: 'var(--text-soft)', fontSize: '0.875rem', lineHeight: 1.6 }}>
                 {w.terms || 'Standard Solvix Manufacturer Warranty terms apply.'}
               </div>
             </div>
@@ -197,13 +197,13 @@ export default function WarrantyDetail() {
           <div className="support-card">
             <div className="support-card-header">
               <h3 className="support-card-title">
-                <FileCheck2 size={18} color="#d8ee8e" />
+                <FileCheck2 size={18} color="var(--accent-text)" />
                 Claims History for this Warranty
               </h3>
             </div>
 
             {claims.length === 0 ? (
-              <p style={{ color: '#94a3b8', textAlign: 'center', padding: '1.5rem 0' }}>
+              <p style={{ color: 'var(--text-muted)', textAlign: 'center', padding: '1.5rem 0' }}>
                 No warranty claims have been filed against this warranty certificate.
               </p>
             ) : (
@@ -222,7 +222,7 @@ export default function WarrantyDetail() {
                   <tbody>
                     {claims.map((c) => (
                       <tr key={c.id}>
-                        <td style={{ fontWeight: 600, color: '#d8ee8e' }}>{c.claim_code}</td>
+                        <td style={{ fontWeight: 600, color: 'var(--accent-text)' }}>{c.claim_code}</td>
                         <td style={{ textTransform: 'capitalize' }}>{c.claim_type}</td>
                         <td style={{ maxWidth: '240px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                           {c.description}
@@ -232,10 +232,10 @@ export default function WarrantyDetail() {
                             {c.status}
                           </span>
                         </td>
-                        <td style={{ fontSize: '0.8125rem', color: '#94a3b8' }}>
+                        <td style={{ fontSize: '0.8125rem', color: 'var(--text-muted)' }}>
                           {new Date(c.submitted_at).toLocaleDateString()}
                         </td>
-                        <td style={{ fontSize: '0.8125rem', color: '#cbd5e1' }}>
+                        <td style={{ fontSize: '0.8125rem', color: 'var(--text-soft)' }}>
                           {c.resolution || 'Pending review'}
                         </td>
                       </tr>
@@ -305,6 +305,6 @@ export default function WarrantyDetail() {
           </div>
         </div>
       )}
-    </SupportLayout>
+    </PortalLayout>
   );
 }

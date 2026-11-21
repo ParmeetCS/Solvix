@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { AlertTriangle, Hammer } from 'lucide-react';
-import CustomerPortalLayout from './CustomerPortalLayout';
+import PortalLayout from '@/components/PortalLayout';
 import { customerApi } from '@/services/api';
 import { formatDateTime, titleCase } from '@/lib/quotation';
 
@@ -54,7 +54,7 @@ export default function CustomerServiceRequests() {
   };
 
   return (
-    <CustomerPortalLayout title="Service Requests" subtitle="Report a problem and follow its progress">
+    <PortalLayout title="Service Requests" subtitle="Report a problem and follow its progress">
       {error && <div className="q-alert error"><AlertTriangle size={15} style={{ verticalAlign: '-2px', marginRight: 6 }} />{error}</div>}
 
       <div className="crm-card" style={{ marginBottom: 20 }}>
@@ -94,7 +94,7 @@ export default function CustomerServiceRequests() {
               <tbody>
                 {tickets.map((t) => (
                   <tr key={t.id}>
-                    <td><b style={{ color: '#d8ee8e' }}>{t.ticket_code || t.ticket_number}</b><div style={{ fontSize: '0.78rem' }}>{t.subject}</div></td>
+                    <td><b style={{ color: 'var(--accent-text)' }}>{t.ticket_code || t.ticket_number}</b><div style={{ fontSize: '0.78rem' }}>{t.subject}</div></td>
                     <td>{titleCase(t.priority || '')}</td>
                     <td><span className="q-badge">{titleCase(String(t.status).replace(/_/g, ' '))}</span></td>
                     <td>{formatDateTime(t.created_at)}</td>
@@ -105,6 +105,6 @@ export default function CustomerServiceRequests() {
           </div>
         )}
       </div>
-    </CustomerPortalLayout>
+    </PortalLayout>
   );
 }

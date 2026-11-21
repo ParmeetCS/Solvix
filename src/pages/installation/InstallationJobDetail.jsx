@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import InstallationLayout from './InstallationLayout';
+import PortalLayout from '@/components/PortalLayout';
 import { installationApi } from '@/services/api';
 import {
   Wrench,
@@ -122,7 +122,7 @@ export default function InstallationJobDetail() {
     if (activeTab === 'report' && canvasRef.current) {
       const canvas = canvasRef.current;
       const ctx = canvas.getContext('2d');
-      ctx.strokeStyle = '#10b981';
+      ctx.strokeStyle = 'var(--c-emerald)';
       ctx.lineWidth = 2.5;
       ctx.lineCap = 'round';
     }
@@ -302,18 +302,18 @@ export default function InstallationJobDetail() {
 
   if (loading) {
     return (
-      <InstallationLayout title="Installation Details">
-        <div style={{ textAlign: 'center', padding: '40px', color: '#94a3b8' }}>
+      <PortalLayout title="Installation Details">
+        <div style={{ textAlign: 'center', padding: '40px', color: 'var(--text-muted)' }}>
           Loading project details...
         </div>
-      </InstallationLayout>
+      </PortalLayout>
     );
   }
 
   if (error && !job) {
     return (
-      <InstallationLayout title="Installation Details">
-        <div style={{ background: 'rgba(239, 68, 68, 0.15)', border: '1px solid rgba(239, 68, 68, 0.3)', padding: 16, borderRadius: 8, color: '#f87171' }}>
+      <PortalLayout title="Installation Details">
+        <div style={{ background: 'rgba(239, 68, 68, 0.15)', border: '1px solid rgba(239, 68, 68, 0.3)', padding: 16, borderRadius: 8, color: 'var(--c-red)' }}>
           {error}
         </div>
         <div style={{ marginTop: 16 }}>
@@ -321,7 +321,7 @@ export default function InstallationJobDetail() {
             <ArrowLeft size={14} /> Back to Projects
           </Link>
         </div>
-      </InstallationLayout>
+      </PortalLayout>
     );
   }
 
@@ -331,7 +331,7 @@ export default function InstallationJobDetail() {
   const progressPercent = totalTasksCount > 0 ? Math.round((completedTasksCount / totalTasksCount) * 100) : 0;
 
   return (
-    <InstallationLayout
+    <PortalLayout
       title={`${job.installation_code} — ${job.customer_name}`}
       subtitle={`Order: ${job.order_code} • ${job.system_capacity_kw} kW ${job.system_type.toUpperCase()} • Status: ${job.status.toUpperCase()}`}
       actions={
@@ -347,46 +347,46 @@ export default function InstallationJobDetail() {
     >
       {/* Top Banner Notice */}
       {notice && (
-        <div style={{ background: 'rgba(16, 185, 129, 0.15)', border: '1px solid rgba(16, 185, 129, 0.3)', padding: '12px 16px', borderRadius: 8, color: '#34d399', marginBottom: 20 }}>
+        <div style={{ background: 'rgba(16, 185, 129, 0.15)', border: '1px solid rgba(16, 185, 129, 0.3)', padding: '12px 16px', borderRadius: 8, color: 'var(--c-green)', marginBottom: 20 }}>
           {notice.message}
         </div>
       )}
 
       {error && (
-        <div style={{ background: 'rgba(239, 68, 68, 0.15)', border: '1px solid rgba(239, 68, 68, 0.3)', padding: '12px 16px', borderRadius: 8, color: '#f87171', marginBottom: 20 }}>
+        <div style={{ background: 'rgba(239, 68, 68, 0.15)', border: '1px solid rgba(239, 68, 68, 0.3)', padding: '12px 16px', borderRadius: 8, color: 'var(--c-red)', marginBottom: 20 }}>
           {error}
         </div>
       )}
 
       {/* Quick Summary Pill Bar */}
-      <div style={{ background: '#0d172a', border: '1px solid rgba(255, 255, 255, 0.08)', borderRadius: 12, padding: '16px 20px', marginBottom: 20, display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 14 }}>
+      <div style={{ background: 'var(--surface-solid)', border: '1px solid rgba(var(--ink-rgb), 0.08)', borderRadius: 12, padding: '16px 20px', marginBottom: 20, display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 14 }}>
         <div style={{ display: 'flex', gap: 24, alignItems: 'center', flexWrap: 'wrap' }}>
           <div>
-            <div style={{ fontSize: '0.72rem', color: '#64748b', textTransform: 'uppercase' }}>Current Stage</div>
+            <div style={{ fontSize: '0.72rem', color: 'var(--text-dim)', textTransform: 'uppercase' }}>Current Stage</div>
             <span className={`inst-badge inst-badge-${job.status}`}>{job.status.replace('_', ' ')}</span>
           </div>
           <div>
-            <div style={{ fontSize: '0.72rem', color: '#64748b', textTransform: 'uppercase' }}>Checklist Progress</div>
-            <strong style={{ color: progressPercent === 100 ? '#10b981' : '#f59e0b', fontSize: '1rem' }}>
+            <div style={{ fontSize: '0.72rem', color: 'var(--text-dim)', textTransform: 'uppercase' }}>Checklist Progress</div>
+            <strong style={{ color: progressPercent === 100 ? 'var(--c-emerald)' : 'var(--c-amber)', fontSize: '1rem' }}>
               {completedTasksCount} / {totalTasksCount} ({progressPercent}%)
             </strong>
           </div>
           <div>
-            <div style={{ fontSize: '0.72rem', color: '#64748b', textTransform: 'uppercase' }}>Equipment Verification</div>
-            <span style={{ fontSize: '0.85rem', fontWeight: 600, color: job.equipment_verified ? '#10b981' : job.exception_recorded ? '#f97316' : '#f59e0b' }}>
+            <div style={{ fontSize: '0.72rem', color: 'var(--text-dim)', textTransform: 'uppercase' }}>Equipment Verification</div>
+            <span style={{ fontSize: '0.85rem', fontWeight: 600, color: job.equipment_verified ? 'var(--c-emerald)' : job.exception_recorded ? 'var(--c-amber)' : 'var(--c-amber)' }}>
               {job.equipment_verified ? '✓ Verified' : job.exception_recorded ? '⚠ Exception Approved' : 'Pending Verification'}
             </span>
           </div>
           <div>
-            <div style={{ fontSize: '0.72rem', color: '#64748b', textTransform: 'uppercase' }}>Customer Signoff</div>
-            <span style={{ fontSize: '0.85rem', fontWeight: 600, color: job.customer_signature ? '#10b981' : '#64748b' }}>
+            <div style={{ fontSize: '0.72rem', color: 'var(--text-dim)', textTransform: 'uppercase' }}>Customer Signoff</div>
+            <span style={{ fontSize: '0.85rem', fontWeight: 600, color: job.customer_signature ? 'var(--c-emerald)' : 'var(--text-dim)' }}>
               {job.customer_signature ? '✓ Signed & Verified' : 'Awaiting Completion'}
             </span>
           </div>
         </div>
 
         {job.status === 'completed' && (
-          <div style={{ background: 'rgba(16, 185, 129, 0.15)', border: '1px solid rgba(16, 185, 129, 0.3)', borderRadius: 8, padding: '6px 14px', color: '#34d399', fontSize: '0.82rem', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 6 }}>
+          <div style={{ background: 'rgba(16, 185, 129, 0.15)', border: '1px solid rgba(16, 185, 129, 0.3)', borderRadius: 8, padding: '6px 14px', color: 'var(--c-green)', fontSize: '0.82rem', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 6 }}>
             <ShieldCheck size={16} /> Commissioned & Closed
           </div>
         )}
@@ -438,22 +438,22 @@ export default function InstallationJobDetail() {
           {/* Customer & Site Details */}
           <div className="inst-card">
             <div className="inst-card-header">
-              <span className="inst-card-title"><Users size={16} color="#f59e0b" /> Customer & Site Information</span>
+              <span className="inst-card-title"><Users size={16} color="var(--c-amber)" /> Customer & Site Information</span>
             </div>
             <div style={{ padding: '20px', display: 'flex', flexDirection: 'column', gap: 10, fontSize: '0.85rem' }}>
-              <div><strong>Client Name:</strong> <span style={{ color: '#fff' }}>{job.customer_name}</span></div>
-              <div><strong>Site Address:</strong> <span style={{ color: '#94a3b8' }}>{job.site_address}</span></div>
-              <div><strong>Contact Phone:</strong> <span style={{ color: '#38bdf8' }}>{job.contact_phone}</span></div>
-              <div><strong>Contact Email:</strong> <span style={{ color: '#38bdf8' }}>{job.contact_email}</span></div>
-              <div><strong>Order Reference:</strong> <span style={{ color: '#f59e0b' }}>{job.order_code}</span></div>
-              <div><strong>System Capacity:</strong> <strong style={{ color: '#34d399' }}>{job.system_capacity_kw} kW {job.system_type}</strong></div>
+              <div><strong>Client Name:</strong> <span style={{ color: 'var(--text-strong)' }}>{job.customer_name}</span></div>
+              <div><strong>Site Address:</strong> <span style={{ color: 'var(--text-muted)' }}>{job.site_address}</span></div>
+              <div><strong>Contact Phone:</strong> <span style={{ color: 'var(--c-blue)' }}>{job.contact_phone}</span></div>
+              <div><strong>Contact Email:</strong> <span style={{ color: 'var(--c-blue)' }}>{job.contact_email}</span></div>
+              <div><strong>Order Reference:</strong> <span style={{ color: 'var(--c-amber)' }}>{job.order_code}</span></div>
+              <div><strong>System Capacity:</strong> <strong style={{ color: 'var(--c-green)' }}>{job.system_capacity_kw} kW {job.system_type}</strong></div>
             </div>
           </div>
 
           {/* Survey & Delivery Notes */}
           <div className="inst-card">
             <div className="inst-card-header">
-              <span className="inst-card-title"><ShieldCheck size={16} color="#38bdf8" /> Survey & Delivery Milestones</span>
+              <span className="inst-card-title"><ShieldCheck size={16} color="var(--c-blue)" /> Survey & Delivery Milestones</span>
             </div>
             <div style={{ padding: '20px', display: 'flex', flexDirection: 'column', gap: 10, fontSize: '0.85rem' }}>
               {job.survey_info ? (
@@ -463,14 +463,14 @@ export default function InstallationJobDetail() {
                   <div><strong>Sanctioned Load:</strong> {job.survey_info.sanctioned_load_kw} kW</div>
                 </>
               ) : (
-                <div style={{ color: '#64748b' }}>Site survey details integrated from Order {job.order_code}</div>
+                <div style={{ color: 'var(--text-dim)' }}>Site survey details integrated from Order {job.order_code}</div>
               )}
 
               {job.delivery_info && (
-                <div style={{ marginTop: 10, paddingTop: 10, borderTop: '1px solid rgba(255,255,255,0.06)' }}>
-                  <div><strong>Dispatch Code:</strong> <span style={{ color: '#34d399' }}>{job.delivery_info.dispatch_code}</span></div>
+                <div style={{ marginTop: 10, paddingTop: 10, borderTop: '1px solid rgba(var(--ink-rgb), 0.06)' }}>
+                  <div><strong>Dispatch Code:</strong> <span style={{ color: 'var(--c-green)' }}>{job.delivery_info.dispatch_code}</span></div>
                   <div><strong>Delivery Date:</strong> {job.delivery_info.delivery_date}</div>
-                  <div style={{ color: '#94a3b8', fontSize: '0.8rem', marginTop: 4 }}>
+                  <div style={{ color: 'var(--text-muted)', fontSize: '0.8rem', marginTop: 4 }}>
                     <em>"{job.delivery_info.delivery_notes}"</em>
                   </div>
                 </div>
@@ -481,30 +481,30 @@ export default function InstallationJobDetail() {
           {/* Assigned Technicians Team */}
           <div className="inst-card" style={{ gridColumn: '1 / -1' }}>
             <div className="inst-card-header">
-              <span className="inst-card-title"><Wrench size={16} color="#f59e0b" /> Assigned Technical Team</span>
+              <span className="inst-card-title"><Wrench size={16} color="var(--c-amber)" /> Assigned Technical Team</span>
               <Link to="/installation/assignments" className="inst-btn inst-btn-secondary inst-btn-sm">
                 Change Assignment
               </Link>
             </div>
             <div style={{ padding: '20px' }}>
               {(job.assigned_technicians || []).length === 0 ? (
-                <div style={{ color: '#f59e0b', fontSize: '0.85rem' }}>
+                <div style={{ color: 'var(--c-amber)', fontSize: '0.85rem' }}>
                   No technicians currently assigned. Please visit Team Assignments to assign lead installer.
                 </div>
               ) : (
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '14px' }}>
                   {job.assigned_technicians.map((t, idx) => (
-                    <div key={idx} style={{ background: 'rgba(15, 23, 42, 0.6)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 8, padding: 12 }}>
+                    <div key={idx} style={{ background: 'rgba(var(--surface-rgb), 0.6)', border: '1px solid rgba(var(--ink-rgb), 0.08)', borderRadius: 8, padding: 12 }}>
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                        <div style={{ fontWeight: 600, color: '#fff' }}>{t.full_name}</div>
+                        <div style={{ fontWeight: 600, color: 'var(--text-strong)' }}>{t.full_name}</div>
                         {t.is_primary && (
                           <span className="inst-badge inst-badge-completed">Lead Technician</span>
                         )}
                       </div>
-                      <div style={{ fontSize: '0.78rem', color: '#94a3b8', marginTop: 4 }}>
+                      <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', marginTop: 4 }}>
                         Role: {t.role_on_job.replace('_', ' ')} • Code: {t.employee_code}
                       </div>
-                      <div style={{ fontSize: '0.78rem', color: '#38bdf8', marginTop: 2 }}>
+                      <div style={{ fontSize: '0.78rem', color: 'var(--c-blue)', marginTop: 2 }}>
                         📞 {t.phone}
                       </div>
                     </div>
@@ -521,7 +521,7 @@ export default function InstallationJobDetail() {
         <div className="inst-card">
           <div className="inst-card-header">
             <span className="inst-card-title">
-              <Barcode size={18} color="#f59e0b" /> Equipment Serial Number Verification on Site
+              <Barcode size={18} color="var(--c-amber)" /> Equipment Serial Number Verification on Site
             </span>
             <button
               onClick={handleVerifyAllSerials}
@@ -533,7 +533,7 @@ export default function InstallationJobDetail() {
           </div>
 
           <div style={{ padding: '20px' }}>
-            <div style={{ background: 'rgba(15, 23, 42, 0.6)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 8, padding: '14px 18px', marginBottom: 20, fontSize: '0.82rem', color: '#94a3b8' }}>
+            <div style={{ background: 'rgba(var(--surface-rgb), 0.6)', border: '1px solid rgba(var(--ink-rgb), 0.08)', borderRadius: 8, padding: '14px 18px', marginBottom: 20, fontSize: '0.82rem', color: 'var(--text-muted)' }}>
               <strong>Warehouse Delivery Milestone:</strong>
               {' '}Physical serial numbers delivered from Warehouse must be scanned or verified before commencement of mounting work. In accordance with system policy, manufacturer warranty starts from actual equipment delivery date, NOT completion date.
             </div>
@@ -541,12 +541,12 @@ export default function InstallationJobDetail() {
             {/* Equipment Items List */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
               {(job.equipment_items || []).map((eq, i) => (
-                <div key={eq.id || i} style={{ background: 'rgba(15, 23, 42, 0.8)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 10, padding: 16 }}>
+                <div key={eq.id || i} style={{ background: 'rgba(var(--surface-rgb), 0.8)', border: '1px solid rgba(var(--ink-rgb), 0.08)', borderRadius: 10, padding: 16 }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 10 }}>
                     <div>
-                      <div style={{ fontWeight: 600, color: '#fff', fontSize: '0.95rem' }}>{eq.product_name}</div>
-                      <div style={{ fontSize: '0.75rem', color: '#64748b' }}>SKU: {eq.sku} • Qty: {eq.quantity} units</div>
-                      <div style={{ fontSize: '0.75rem', color: '#34d399', marginTop: 2 }}>
+                      <div style={{ fontWeight: 600, color: 'var(--text-strong)', fontSize: '0.95rem' }}>{eq.product_name}</div>
+                      <div style={{ fontSize: '0.75rem', color: 'var(--text-dim)' }}>SKU: {eq.sku} • Qty: {eq.quantity} units</div>
+                      <div style={{ fontSize: '0.75rem', color: 'var(--c-green)', marginTop: 2 }}>
                         🛡️ Warranty Start Date: <strong>{eq.warranty_start_date || 'From Delivery'}</strong> ({eq.warranty_duration_years} Years)
                       </div>
                     </div>
@@ -559,15 +559,15 @@ export default function InstallationJobDetail() {
                     </div>
                   </div>
 
-                  <div style={{ marginTop: 12, paddingTop: 10, borderTop: '1px solid rgba(255,255,255,0.06)', display: 'flex', flexWrap: 'wrap', gap: 8, alignItems: 'center' }}>
-                    <span style={{ fontSize: '0.75rem', color: '#94a3b8' }}>Expected Serial Numbers:</span>
+                  <div style={{ marginTop: 12, paddingTop: 10, borderTop: '1px solid rgba(var(--ink-rgb), 0.06)', display: 'flex', flexWrap: 'wrap', gap: 8, alignItems: 'center' }}>
+                    <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Expected Serial Numbers:</span>
                     {(eq.expected_serials || []).map((sn, sIdx) => {
                       const isVer = (eq.verified_serials || []).includes(sn);
                       return (
                         <span key={sIdx} style={{
-                          background: isVer ? 'rgba(16, 185, 129, 0.15)' : 'rgba(255, 255, 255, 0.05)',
-                          color: isVer ? '#34d399' : '#cbd5e1',
-                          border: `1px solid ${isVer ? 'rgba(16, 185, 129, 0.3)' : 'rgba(255, 255, 255, 0.1)'}`,
+                          background: isVer ? 'rgba(16, 185, 129, 0.15)' : 'rgba(var(--ink-rgb), 0.05)',
+                          color: isVer ? 'var(--c-green)' : 'var(--text-soft)',
+                          border: `1px solid ${isVer ? 'rgba(16, 185, 129, 0.3)' : 'rgba(var(--ink-rgb), 0.1)'}`,
                           padding: '3px 8px',
                           borderRadius: 4,
                           fontSize: '0.75rem',
@@ -583,11 +583,11 @@ export default function InstallationJobDetail() {
             </div>
 
             {/* Exceptions & Damage Recording */}
-            <div style={{ marginTop: 24, paddingTop: 20, borderTop: '1px solid rgba(255,255,255,0.08)' }}>
-              <h4 style={{ margin: '0 0 12px 0', color: '#fff', fontSize: '0.92rem' }}>Defect or Exception Management</h4>
+            <div style={{ marginTop: 24, paddingTop: 20, borderTop: '1px solid rgba(var(--ink-rgb), 0.08)' }}>
+              <h4 style={{ margin: '0 0 12px 0', color: 'var(--text-strong)', fontSize: '0.92rem' }}>Defect or Exception Management</h4>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 14 }}>
                 <div>
-                  <label style={{ display: 'block', fontSize: '0.8rem', color: '#94a3b8', marginBottom: 4 }}>Missing Items (if any)</label>
+                  <label style={{ display: 'block', fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: 4 }}>Missing Items (if any)</label>
                   <input
                     type="text"
                     className="inst-input"
@@ -598,7 +598,7 @@ export default function InstallationJobDetail() {
                   />
                 </div>
                 <div>
-                  <label style={{ display: 'block', fontSize: '0.8rem', color: '#94a3b8', marginBottom: 4 }}>Damaged Packaging / Parts</label>
+                  <label style={{ display: 'block', fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: 4 }}>Damaged Packaging / Parts</label>
                   <input
                     type="text"
                     className="inst-input"
@@ -611,7 +611,7 @@ export default function InstallationJobDetail() {
               </div>
 
               <div style={{ marginTop: 14 }}>
-                <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: '0.82rem', color: '#f59e0b', cursor: 'pointer' }}>
+                <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: '0.82rem', color: 'var(--c-amber)', cursor: 'pointer' }}>
                   <input
                     type="checkbox"
                     checked={allowException}
@@ -640,10 +640,10 @@ export default function InstallationJobDetail() {
         <div className="inst-card">
           <div className="inst-card-header">
             <span className="inst-card-title">
-              <CheckCircle2 size={18} color="#10b981" /> 11 Technical Installation Milestones
+              <CheckCircle2 size={18} color="var(--c-emerald)" /> 11 Technical Installation Milestones
             </span>
-            <span style={{ fontSize: '0.82rem', color: '#94a3b8' }}>
-              Progress: <strong style={{ color: '#34d399' }}>{completedTasksCount}/{totalTasksCount} Completed</strong>
+            <span style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>
+              Progress: <strong style={{ color: 'var(--c-green)' }}>{completedTasksCount}/{totalTasksCount} Completed</strong>
             </span>
           </div>
 
@@ -674,7 +674,7 @@ export default function InstallationJobDetail() {
                     <div className="inst-check-title">
                       {idx + 1}. {task.task_name}
                       {task.is_required && (
-                        <span style={{ color: '#ef4444', marginLeft: 4 }}>*</span>
+                        <span style={{ color: 'var(--c-red-2)', marginLeft: 4 }}>*</span>
                       )}
                     </div>
                     <div className="inst-check-desc">{task.notes}</div>
@@ -686,7 +686,7 @@ export default function InstallationJobDetail() {
                     )}
 
                     {task.completed_at && (
-                      <div style={{ fontSize: '0.72rem', color: '#64748b', marginTop: 4 }}>
+                      <div style={{ fontSize: '0.72rem', color: 'var(--text-dim)', marginTop: 4 }}>
                         Completed by: {task.completed_by || 'Technician'} at {new Date(task.completed_at).toLocaleString()}
                       </div>
                     )}
@@ -712,20 +712,20 @@ export default function InstallationJobDetail() {
         <div className="inst-card">
           <div className="inst-card-header">
             <span className="inst-card-title">
-              <Camera size={18} color="#f59e0b" /> Photographic Evidence & Quality Records
+              <Camera size={18} color="var(--c-amber)" /> Photographic Evidence & Quality Records
             </span>
           </div>
 
           <div style={{ padding: '20px' }}>
             {/* Upload Form */}
-            <form onSubmit={handlePhotoUpload} style={{ background: 'rgba(15, 23, 42, 0.6)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 10, padding: 18, marginBottom: 24 }}>
-              <div style={{ fontWeight: 600, color: '#fff', fontSize: '0.9rem', marginBottom: 12 }}>
+            <form onSubmit={handlePhotoUpload} style={{ background: 'rgba(var(--surface-rgb), 0.6)', border: '1px solid rgba(var(--ink-rgb), 0.08)', borderRadius: 10, padding: 18, marginBottom: 24 }}>
+              <div style={{ fontWeight: 600, color: 'var(--text-strong)', fontSize: '0.9rem', marginBottom: 12 }}>
                 Upload Photographic Evidence
               </div>
 
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 12, marginBottom: 14 }}>
                 <div>
-                  <label style={{ display: 'block', fontSize: '0.78rem', color: '#94a3b8', marginBottom: 4 }}>Photo Category</label>
+                  <label style={{ display: 'block', fontSize: '0.78rem', color: 'var(--text-muted)', marginBottom: 4 }}>Photo Category</label>
                   <select
                     className="inst-select"
                     style={{ width: '100%' }}
@@ -743,7 +743,7 @@ export default function InstallationJobDetail() {
                 </div>
 
                 <div style={{ gridColumn: 'span 2' }}>
-                  <label style={{ display: 'block', fontSize: '0.78rem', color: '#94a3b8', marginBottom: 4 }}>Image URL or Storage Path</label>
+                  <label style={{ display: 'block', fontSize: '0.78rem', color: 'var(--text-muted)', marginBottom: 4 }}>Image URL or Storage Path</label>
                   <input
                     type="text"
                     className="inst-input"
@@ -756,7 +756,7 @@ export default function InstallationJobDetail() {
                 </div>
 
                 <div style={{ gridColumn: '1 / -1' }}>
-                  <label style={{ display: 'block', fontSize: '0.78rem', color: '#94a3b8', marginBottom: 4 }}>Caption & Observations</label>
+                  <label style={{ display: 'block', fontSize: '0.78rem', color: 'var(--text-muted)', marginBottom: 4 }}>Caption & Observations</label>
                   <input
                     type="text"
                     className="inst-input"
@@ -780,13 +780,13 @@ export default function InstallationJobDetail() {
             {/* Gallery Grid */}
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: 16 }}>
               {(job.photos || []).length === 0 ? (
-                <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '30px', color: '#64748b' }}>
+                <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '30px', color: 'var(--text-dim)' }}>
                   No photos uploaded for this project yet.
                 </div>
               ) : (
                 job.photos.map(p => (
-                  <div key={p.id} style={{ background: '#020617', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 10, overflow: 'hidden' }}>
-                    <div style={{ height: 160, background: '#0f172a', overflow: 'hidden' }}>
+                  <div key={p.id} style={{ background: 'var(--app-bg)', border: '1px solid rgba(var(--ink-rgb), 0.08)', borderRadius: 10, overflow: 'hidden' }}>
+                    <div style={{ height: 160, background: 'var(--surface-solid)', overflow: 'hidden' }}>
                       <img
                         src={p.storage_path}
                         alt={p.caption || 'Installation photo'}
@@ -798,10 +798,10 @@ export default function InstallationJobDetail() {
                       <span className="inst-badge inst-badge-scheduled" style={{ marginBottom: 6 }}>
                         {p.photo_type.replace('_', ' ')}
                       </span>
-                      <div style={{ fontSize: '0.82rem', color: '#fff', fontWeight: 500, margin: '4px 0' }}>
+                      <div style={{ fontSize: '0.82rem', color: 'var(--text-strong)', fontWeight: 500, margin: '4px 0' }}>
                         {p.caption || 'Evidence Photo'}
                       </div>
-                      <div style={{ fontSize: '0.72rem', color: '#64748b' }}>
+                      <div style={{ fontSize: '0.72rem', color: 'var(--text-dim)' }}>
                         Uploaded: {new Date(p.uploaded_at).toLocaleDateString()}
                       </div>
                     </div>
@@ -818,7 +818,7 @@ export default function InstallationJobDetail() {
         <div className="inst-card">
           <div className="inst-card-header">
             <span className="inst-card-title">
-              <Zap size={18} color="#f59e0b" /> Structured Testing & Commissioning Protocol
+              <Zap size={18} color="var(--c-amber)" /> Structured Testing & Commissioning Protocol
             </span>
           </div>
 
@@ -833,7 +833,7 @@ export default function InstallationJobDetail() {
 
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 16, marginBottom: 20 }}>
               <div>
-                <label style={{ display: 'block', fontSize: '0.8rem', color: '#cbd5e1', marginBottom: 4, fontWeight: 500 }}>
+                <label style={{ display: 'block', fontSize: '0.8rem', color: 'var(--text-soft)', marginBottom: 4, fontWeight: 500 }}>
                   Inverter Model *
                 </label>
                 <input
@@ -847,7 +847,7 @@ export default function InstallationJobDetail() {
               </div>
 
               <div>
-                <label style={{ display: 'block', fontSize: '0.8rem', color: '#cbd5e1', marginBottom: 4, fontWeight: 500 }}>
+                <label style={{ display: 'block', fontSize: '0.8rem', color: 'var(--text-soft)', marginBottom: 4, fontWeight: 500 }}>
                   Inverter Serial Number *
                 </label>
                 <input
@@ -861,7 +861,7 @@ export default function InstallationJobDetail() {
               </div>
 
               <div>
-                <label style={{ display: 'block', fontSize: '0.8rem', color: '#cbd5e1', marginBottom: 4, fontWeight: 500 }}>
+                <label style={{ display: 'block', fontSize: '0.8rem', color: 'var(--text-soft)', marginBottom: 4, fontWeight: 500 }}>
                   Inverter Firmware Version
                 </label>
                 <input
@@ -874,14 +874,14 @@ export default function InstallationJobDetail() {
               </div>
 
               <div>
-                <label style={{ display: 'block', fontSize: '0.8rem', color: '#f59e0b', marginBottom: 4, fontWeight: 600 }}>
+                <label style={{ display: 'block', fontSize: '0.8rem', color: 'var(--c-amber)', marginBottom: 4, fontWeight: 600 }}>
                   Earthing Resistance (Ohms) * [&lt; 2.0 Ohm]
                 </label>
                 <input
                   type="number"
                   step="0.01"
                   className="inst-input"
-                  style={{ width: '100%', borderColor: '#f59e0b' }}
+                  style={{ width: '100%', borderColor: 'var(--c-amber)' }}
                   required
                   placeholder="e.g. 1.65"
                   value={commData.earthing_resistance_ohm}
@@ -890,7 +890,7 @@ export default function InstallationJobDetail() {
               </div>
 
               <div>
-                <label style={{ display: 'block', fontSize: '0.8rem', color: '#cbd5e1', marginBottom: 4, fontWeight: 500 }}>
+                <label style={{ display: 'block', fontSize: '0.8rem', color: 'var(--text-soft)', marginBottom: 4, fontWeight: 500 }}>
                   DC String 1 Voc (Volts)
                 </label>
                 <input
@@ -905,7 +905,7 @@ export default function InstallationJobDetail() {
               </div>
 
               <div>
-                <label style={{ display: 'block', fontSize: '0.8rem', color: '#cbd5e1', marginBottom: 4, fontWeight: 500 }}>
+                <label style={{ display: 'block', fontSize: '0.8rem', color: 'var(--text-soft)', marginBottom: 4, fontWeight: 500 }}>
                   DC String 1 Isc (Amps)
                 </label>
                 <input
@@ -920,7 +920,7 @@ export default function InstallationJobDetail() {
               </div>
 
               <div>
-                <label style={{ display: 'block', fontSize: '0.8rem', color: '#cbd5e1', marginBottom: 4, fontWeight: 500 }}>
+                <label style={{ display: 'block', fontSize: '0.8rem', color: 'var(--text-soft)', marginBottom: 4, fontWeight: 500 }}>
                   AC Grid Voltage (Volts)
                 </label>
                 <input
@@ -933,7 +933,7 @@ export default function InstallationJobDetail() {
               </div>
 
               <div>
-                <label style={{ display: 'block', fontSize: '0.8rem', color: '#cbd5e1', marginBottom: 4, fontWeight: 500 }}>
+                <label style={{ display: 'block', fontSize: '0.8rem', color: 'var(--text-soft)', marginBottom: 4, fontWeight: 500 }}>
                   Insulation Resistance Test Result *
                 </label>
                 <input
@@ -949,7 +949,7 @@ export default function InstallationJobDetail() {
             </div>
 
             <div style={{ marginBottom: 16 }}>
-              <label style={{ display: 'block', fontSize: '0.8rem', color: '#cbd5e1', marginBottom: 4, fontWeight: 500 }}>
+              <label style={{ display: 'block', fontSize: '0.8rem', color: 'var(--text-soft)', marginBottom: 4, fontWeight: 500 }}>
                 Test Observations & Anti-Islanding Verification
               </label>
               <textarea
@@ -963,7 +963,7 @@ export default function InstallationJobDetail() {
             </div>
 
             <div style={{ marginBottom: 20 }}>
-              <label style={{ display: 'block', fontSize: '0.8rem', color: '#cbd5e1', marginBottom: 4, fontWeight: 500 }}>
+              <label style={{ display: 'block', fontSize: '0.8rem', color: 'var(--text-soft)', marginBottom: 4, fontWeight: 500 }}>
                 Certifying Technician Remarks
               </label>
               <textarea
@@ -994,13 +994,13 @@ export default function InstallationJobDetail() {
           <div className="inst-card">
             <div className="inst-card-header">
               <span className="inst-card-title">
-                <PenTool size={18} color="#10b981" /> Customer Digital Handover Signoff
+                <PenTool size={18} color="var(--c-emerald)" /> Customer Digital Handover Signoff
               </span>
             </div>
 
             <div style={{ padding: '20px' }}>
               <div style={{ marginBottom: 14 }}>
-                <label style={{ display: 'block', fontSize: '0.8rem', color: '#cbd5e1', marginBottom: 4 }}>
+                <label style={{ display: 'block', fontSize: '0.8rem', color: 'var(--text-soft)', marginBottom: 4 }}>
                   Signing Customer Name
                 </label>
                 <input
@@ -1013,7 +1013,7 @@ export default function InstallationJobDetail() {
               </div>
 
               <div style={{ marginBottom: 12 }}>
-                <label style={{ display: 'block', fontSize: '0.78rem', color: '#94a3b8', marginBottom: 6 }}>
+                <label style={{ display: 'block', fontSize: '0.78rem', color: 'var(--text-muted)', marginBottom: 6 }}>
                   Draw Signature (Touch / Mouse):
                 </label>
                 <div className="inst-sig-container">
@@ -1042,7 +1042,7 @@ export default function InstallationJobDetail() {
                 </div>
               </div>
 
-              <div style={{ background: 'rgba(15, 23, 42, 0.6)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: 8, padding: 12, marginBottom: 16, fontSize: '0.78rem', color: '#cbd5e1' }}>
+              <div style={{ background: 'rgba(var(--surface-rgb), 0.6)', border: '1px solid rgba(var(--ink-rgb), 0.06)', borderRadius: 8, padding: 12, marginBottom: 16, fontSize: '0.78rem', color: 'var(--text-soft)' }}>
                 <label style={{ display: 'flex', alignItems: 'flex-start', gap: 8, cursor: 'pointer' }}>
                   <input
                     type="checkbox"
@@ -1072,36 +1072,36 @@ export default function InstallationJobDetail() {
           <div className="inst-card">
             <div className="inst-card-header">
               <span className="inst-card-title">
-                <ShieldCheck size={18} color="#f59e0b" /> Completion Prerequisites & Final Seal
+                <ShieldCheck size={18} color="var(--c-amber)" /> Completion Prerequisites & Final Seal
               </span>
             </div>
 
             <div style={{ padding: '20px' }}>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginBottom: 20 }}>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: 10, borderRadius: 8, background: 'rgba(15, 23, 42, 0.6)' }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: 10, borderRadius: 8, background: 'rgba(var(--surface-rgb), 0.6)' }}>
                   <span>1. Equipment Serials Verified</span>
-                  <span style={{ color: (job.equipment_verified || job.exception_recorded) ? '#10b981' : '#f59e0b', fontWeight: 600 }}>
+                  <span style={{ color: (job.equipment_verified || job.exception_recorded) ? 'var(--c-emerald)' : 'var(--c-amber)', fontWeight: 600 }}>
                     {(job.equipment_verified || job.exception_recorded) ? '✓ Ready' : 'Pending'}
                   </span>
                 </div>
 
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: 10, borderRadius: 8, background: 'rgba(15, 23, 42, 0.6)' }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: 10, borderRadius: 8, background: 'rgba(var(--surface-rgb), 0.6)' }}>
                   <span>2. All Required Checklist Tasks</span>
-                  <span style={{ color: progressPercent === 100 ? '#10b981' : '#f59e0b', fontWeight: 600 }}>
+                  <span style={{ color: progressPercent === 100 ? 'var(--c-emerald)' : 'var(--c-amber)', fontWeight: 600 }}>
                     {progressPercent === 100 ? '✓ All Done' : `${completedTasksCount}/${totalTasksCount}`}
                   </span>
                 </div>
 
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: 10, borderRadius: 8, background: 'rgba(15, 23, 42, 0.6)' }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: 10, borderRadius: 8, background: 'rgba(var(--surface-rgb), 0.6)' }}>
                   <span>3. Commissioning Readings</span>
-                  <span style={{ color: job.commissioning_data ? '#10b981' : '#f59e0b', fontWeight: 600 }}>
+                  <span style={{ color: job.commissioning_data ? 'var(--c-emerald)' : 'var(--c-amber)', fontWeight: 600 }}>
                     {job.commissioning_data ? '✓ Recorded' : 'Pending'}
                   </span>
                 </div>
 
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: 10, borderRadius: 8, background: 'rgba(15, 23, 42, 0.6)' }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: 10, borderRadius: 8, background: 'rgba(var(--surface-rgb), 0.6)' }}>
                   <span>4. Customer Handover Signature</span>
-                  <span style={{ color: job.customer_signature ? '#10b981' : '#f59e0b', fontWeight: 600 }}>
+                  <span style={{ color: job.customer_signature ? 'var(--c-emerald)' : 'var(--c-amber)', fontWeight: 600 }}>
                     {job.customer_signature ? '✓ Verified' : 'Pending Signature'}
                   </span>
                 </div>
@@ -1109,13 +1109,13 @@ export default function InstallationJobDetail() {
 
               {job.completion_report ? (
                 <div style={{ background: 'rgba(16, 185, 129, 0.08)', border: '1px solid rgba(16, 185, 129, 0.3)', borderRadius: 10, padding: 16, marginBottom: 16 }}>
-                  <div style={{ fontWeight: 600, color: '#34d399', marginBottom: 8 }}>Official Completion Report Compiled</div>
-                  <pre style={{ whiteSpace: 'pre-wrap', fontFamily: 'monospace', fontSize: '0.75rem', color: '#cbd5e1', margin: 0 }}>
+                  <div style={{ fontWeight: 600, color: 'var(--c-green)', marginBottom: 8 }}>Official Completion Report Compiled</div>
+                  <pre style={{ whiteSpace: 'pre-wrap', fontFamily: 'monospace', fontSize: '0.75rem', color: 'var(--text-soft)', margin: 0 }}>
                     {job.completion_report}
                   </pre>
                 </div>
               ) : (
-                <div style={{ marginBottom: 16, fontSize: '0.8rem', color: '#94a3b8' }}>
+                <div style={{ marginBottom: 16, fontSize: '0.8rem', color: 'var(--text-muted)' }}>
                   Once all 4 verification milestones are satisfied, clicking below compiles the formal engineering completion report, seals the project, transitions status to <strong>COMPLETED</strong>, and enables post-installation warranty and service workflows.
                 </div>
               )}
@@ -1133,6 +1133,6 @@ export default function InstallationJobDetail() {
           </div>
         </div>
       )}
-    </InstallationLayout>
+    </PortalLayout>
   );
 }

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import SurveyLayout from './SurveyLayout';
+import PortalLayout from '@/components/PortalLayout';
 import { surveyApi } from '@/services/api';
 import {
   FileText,
@@ -263,7 +263,7 @@ export default function SurveyInspectionForm() {
   ];
 
   return (
-    <SurveyLayout
+    <PortalLayout
       title="Digital Site Survey & Field Inspection Form"
       subtitle="Complete technical measurements, structural observations, and solar capacity recommendations"
       actions={
@@ -287,12 +287,12 @@ export default function SurveyInspectionForm() {
     >
       {/* Alert Messages */}
       {successMsg && (
-        <div className="survey-card" style={{ borderColor: '#10b981', background: 'rgba(16, 185, 129, 0.1)', color: '#34d399', padding: '12px 16px' }}>
+        <div className="survey-card" style={{ borderColor: 'var(--c-emerald)', background: 'rgba(16, 185, 129, 0.1)', color: 'var(--c-green)', padding: '12px 16px' }}>
           {successMsg}
         </div>
       )}
       {error && (
-        <div className="survey-card" style={{ borderColor: '#ef4444', background: 'rgba(239, 68, 68, 0.1)', color: '#f87171', padding: '12px 16px' }}>
+        <div className="survey-card" style={{ borderColor: 'var(--c-red-2)', background: 'rgba(239, 68, 68, 0.1)', color: 'var(--c-red)', padding: '12px 16px' }}>
           {error}
         </div>
       )}
@@ -315,10 +315,10 @@ export default function SurveyInspectionForm() {
             onClick={() => setCurrentStep(step.number)}
             style={{
               background: currentStep === step.number ? 'rgba(56, 189, 248, 0.2)' : 'transparent',
-              border: `1px solid ${currentStep === step.number ? '#38bdf8' : 'rgba(255,255,255,0.08)'}`,
+              border: `1px solid ${currentStep === step.number ? 'var(--c-blue)' : 'rgba(var(--ink-rgb), 0.08)'}`,
               borderRadius: '8px',
               padding: '8px 14px',
-              color: currentStep === step.number ? '#38bdf8' : '#94a3b8',
+              color: currentStep === step.number ? 'var(--c-blue)' : 'var(--text-muted)',
               cursor: 'pointer',
               whiteSpace: 'nowrap',
               fontSize: '0.84rem',
@@ -333,8 +333,8 @@ export default function SurveyInspectionForm() {
                 width: '18px',
                 height: '18px',
                 borderRadius: '50%',
-                background: currentStep === step.number ? '#38bdf8' : 'rgba(255,255,255,0.1)',
-                color: currentStep === step.number ? '#080e1b' : '#cbd5e1',
+                background: currentStep === step.number ? 'var(--c-blue)' : 'rgba(var(--ink-rgb), 0.1)',
+                color: currentStep === step.number ? 'var(--app-bg)' : 'var(--text-soft)',
                 fontSize: '0.72rem',
                 display: 'inline-flex',
                 alignItems: 'center',
@@ -356,10 +356,10 @@ export default function SurveyInspectionForm() {
           <div className="survey-card">
             <div className="survey-card-header">
               <h3>
-                <Home size={18} style={{ color: '#38bdf8' }} />
+                <Home size={18} style={{ color: 'var(--c-blue)' }} />
                 1. Customer & Property Information
               </h3>
-              <span style={{ fontSize: '0.8rem', color: '#94a3b8' }}>Verified on-site by surveyor</span>
+              <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Verified on-site by surveyor</span>
             </div>
 
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '16px' }}>
@@ -461,10 +461,10 @@ export default function SurveyInspectionForm() {
           <div className="survey-card">
             <div className="survey-card-header">
               <h3>
-                <Layers size={18} style={{ color: '#d8ee8e' }} />
+                <Layers size={18} style={{ color: 'var(--accent-text)' }} />
                 2. Roof Assessment & Usable Space
               </h3>
-              <span style={{ fontSize: '0.8rem', color: '#94a3b8' }}>Measurements & Horizon Shading</span>
+              <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Measurements & Horizon Shading</span>
             </div>
 
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '16px' }}>
@@ -603,10 +603,10 @@ export default function SurveyInspectionForm() {
           <div className="survey-card">
             <div className="survey-card-header">
               <h3>
-                <Zap size={18} style={{ color: '#f59e0b' }} />
+                <Zap size={18} style={{ color: 'var(--c-amber)' }} />
                 3. Electrical Assessment & Grid Connection
               </h3>
-              <span style={{ fontSize: '0.8rem', color: '#94a3b8' }}>Panel compatibility & earthing check</span>
+              <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Panel compatibility & earthing check</span>
             </div>
 
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '16px' }}>
@@ -733,10 +733,10 @@ export default function SurveyInspectionForm() {
           <div className="survey-card">
             <div className="survey-card-header">
               <h3>
-                <CheckCircle2 size={18} style={{ color: '#34d399' }} />
+                <CheckCircle2 size={18} style={{ color: 'var(--c-green)' }} />
                 4. Installation Feasibility & Sizing Recommendations
               </h3>
-              <span style={{ fontSize: '0.8rem', color: '#94a3b8' }}>Transparent engineering modeling</span>
+              <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Transparent engineering modeling</span>
             </div>
 
             {/* Calculated Estimates Insight Box */}
@@ -749,24 +749,24 @@ export default function SurveyInspectionForm() {
                 marginBottom: '20px'
               }}
             >
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#38bdf8', fontWeight: 600, marginBottom: '8px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--c-blue)', fontWeight: 600, marginBottom: '8px' }}>
                 <Info size={16} /> Engineering Estimation Preview (Assumptions Documented)
               </div>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '12px', fontSize: '0.85rem' }}>
                 <div>
-                  <span style={{ color: '#94a3b8' }}>Recommended Capacity:</span>
-                  <div style={{ fontSize: '1.2rem', fontWeight: 700, color: '#34d399' }}>{suggestedKw} kWp</div>
+                  <span style={{ color: 'var(--text-muted)' }}>Recommended Capacity:</span>
+                  <div style={{ fontSize: '1.2rem', fontWeight: 700, color: 'var(--c-green)' }}>{suggestedKw} kWp</div>
                 </div>
                 <div>
-                  <span style={{ color: '#94a3b8' }}>Estimated Generation:</span>
-                  <div style={{ fontSize: '1.2rem', fontWeight: 700, color: '#fff' }}>~{estAnnualGeneration.toLocaleString()} kWh/yr</div>
+                  <span style={{ color: 'var(--text-muted)' }}>Estimated Generation:</span>
+                  <div style={{ fontSize: '1.2rem', fontWeight: 700, color: 'var(--text-strong)' }}>~{estAnnualGeneration.toLocaleString()} kWh/yr</div>
                 </div>
                 <div>
-                  <span style={{ color: '#94a3b8' }}>Turnkey Benchmark Cost:</span>
-                  <div style={{ fontSize: '1.2rem', fontWeight: 700, color: '#fff' }}>₹{estCost.toLocaleString('en-IN')}</div>
+                  <span style={{ color: 'var(--text-muted)' }}>Turnkey Benchmark Cost:</span>
+                  <div style={{ fontSize: '1.2rem', fontWeight: 700, color: 'var(--text-strong)' }}>₹{estCost.toLocaleString('en-IN')}</div>
                 </div>
               </div>
-              <div style={{ fontSize: '0.75rem', color: '#94a3b8', marginTop: '10px' }}>
+              <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '10px' }}>
                 * Standard rule: 1 kWp crystalline silicon modules requires ~10 sqm unshaded roof. Daily solar insolation: 4.8 PSH/day. Performance ratio: 78%.
               </div>
             </div>
@@ -864,23 +864,23 @@ export default function SurveyInspectionForm() {
           <div className="survey-card">
             <div className="survey-card-header">
               <h3>
-                <Camera size={18} style={{ color: '#38bdf8' }} />
+                <Camera size={18} style={{ color: 'var(--c-blue)' }} />
                 5. Photographic Evidence & Final Submission
               </h3>
-              <span style={{ fontSize: '0.8rem', color: '#94a3b8' }}>Attach evidence before submitting</span>
+              <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Attach evidence before submitting</span>
             </div>
 
             {/* Quick Photo Uploader Inline */}
             <div
               style={{
                 padding: '16px',
-                background: 'rgba(255,255,255,0.03)',
+                background: 'rgba(var(--ink-rgb), 0.03)',
                 border: '1px dashed rgba(56, 189, 248, 0.3)',
                 borderRadius: '8px',
                 marginBottom: '20px'
               }}
             >
-              <h4 style={{ margin: '0 0 12px 0', color: '#38bdf8', fontSize: '0.92rem' }}>
+              <h4 style={{ margin: '0 0 12px 0', color: 'var(--c-blue)', fontSize: '0.92rem' }}>
                 Upload Photograph or Supporting Document
               </h4>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '12px' }}>
@@ -934,12 +934,12 @@ export default function SurveyInspectionForm() {
             </div>
 
             {/* Attached Photos Gallery */}
-            <h4 style={{ color: '#fff', fontSize: '0.95rem', marginBottom: '12px' }}>
+            <h4 style={{ color: 'var(--text-strong)', fontSize: '0.95rem', marginBottom: '12px' }}>
               Attached Photos ({formData.photos.length})
             </h4>
 
             {formData.photos.length === 0 ? (
-              <p style={{ color: '#64748b', fontSize: '0.85rem', marginBottom: '24px' }}>
+              <p style={{ color: 'var(--text-dim)', fontSize: '0.85rem', marginBottom: '24px' }}>
                 No photographs attached yet. Photographs help technical reviewers verify roof condition and cable runs.
               </p>
             ) : (
@@ -961,7 +961,7 @@ export default function SurveyInspectionForm() {
             {/* Bottom Actions: Save Draft vs Submit */}
             <div
               style={{
-                borderTop: '1px solid rgba(255,255,255,0.08)',
+                borderTop: '1px solid rgba(var(--ink-rgb), 0.08)',
                 paddingTop: '20px',
                 display: 'flex',
                 justifyContent: 'space-between',
@@ -1001,6 +1001,6 @@ export default function SurveyInspectionForm() {
           </div>
         )}
       </form>
-    </SurveyLayout>
+    </PortalLayout>
   );
 }

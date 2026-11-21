@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import WarehouseLayout from './WarehouseLayout';
+import PortalLayout from '@/components/PortalLayout';
 import { warehouseApi } from '@/services/api/warehouse';
 import {
   FileSpreadsheet,
@@ -101,7 +101,7 @@ export default function PurchaseOrdersList() {
   };
 
   return (
-    <WarehouseLayout
+    <PortalLayout
       title="Purchase Orders & Goods Receiving"
       subtitle="Procurement orders, supplier tracking, verified goods receipt, and stock increment"
       actions={
@@ -113,7 +113,7 @@ export default function PurchaseOrdersList() {
     >
       <div className="wh-filter-bar">
         <div className="wh-search-box">
-          <Search size={16} style={{ color: '#94a3b8' }} />
+          <Search size={16} style={{ color: 'var(--text-muted)' }} />
           <input
             type="text"
             placeholder="Search PO number or supplier..."
@@ -155,7 +155,7 @@ export default function PurchaseOrdersList() {
             <tbody>
               {purchaseOrders.length === 0 ? (
                 <tr>
-                  <td colSpan="8" style={{ textAlign: 'center', color: '#94a3b8', padding: '36px' }}>
+                  <td colSpan="8" style={{ textAlign: 'center', color: 'var(--text-muted)', padding: '36px' }}>
                     {loading ? 'Loading purchase orders...' : 'No purchase orders found.'}
                   </td>
                 </tr>
@@ -167,15 +167,15 @@ export default function PurchaseOrdersList() {
                   return (
                     <tr key={po.id}>
                       <td>
-                        <strong style={{ color: '#38bdf8' }}>{po.po_number}</strong>
+                        <strong style={{ color: 'var(--c-blue)' }}>{po.po_number}</strong>
                       </td>
-                      <td style={{ fontWeight: 500, color: '#f8fafc' }}>
+                      <td style={{ fontWeight: 500, color: 'var(--text)' }}>
                         {po.supplier_name}
                       </td>
                       <td>{po.warehouse?.name || 'Primary Facility'}</td>
                       <td>{new Date(po.order_date || po.created_at).toLocaleDateString()}</td>
                       <td>{po.items?.length || 0} line items</td>
-                      <td style={{ fontWeight: 600, color: '#34d399' }}>
+                      <td style={{ fontWeight: 600, color: 'var(--c-green)' }}>
                         ₹{(po.total_amount || 0).toLocaleString()}
                       </td>
                       <td>
@@ -219,7 +219,7 @@ export default function PurchaseOrdersList() {
               </h3>
               <button
                 onClick={() => setSelectedPO(null)}
-                style={{ background: 'transparent', border: 'none', color: '#94a3b8', cursor: 'pointer' }}
+                style={{ background: 'transparent', border: 'none', color: 'var(--text-muted)', cursor: 'pointer' }}
               >
                 <X size={18} />
               </button>
@@ -240,7 +240,7 @@ export default function PurchaseOrdersList() {
                   </div>
                 )}
 
-                <div style={{ fontSize: '0.85rem', color: '#94a3b8', marginBottom: '16px' }}>
+                <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '16px' }}>
                   Verify physically arrived quantities against supplier challan. Stock will be immediately updated upon confirmation.
                 </div>
 
@@ -259,11 +259,11 @@ export default function PurchaseOrdersList() {
                         const remaining = Math.max(0, item.quantity_ordered - (item.quantity_received || 0));
                         return (
                           <tr key={item.product_id}>
-                            <td style={{ fontWeight: 500, color: '#f8fafc' }}>
+                            <td style={{ fontWeight: 500, color: 'var(--text)' }}>
                               {item.product_name}
                             </td>
                             <td>{item.quantity_ordered}</td>
-                            <td style={{ color: (item.quantity_received || 0) > 0 ? '#34d399' : '#94a3b8' }}>
+                            <td style={{ color: (item.quantity_received || 0) > 0 ? 'var(--c-green)' : 'var(--text-muted)' }}>
                               {item.quantity_received || 0}
                             </td>
                             <td>
@@ -321,6 +321,6 @@ export default function PurchaseOrdersList() {
           </div>
         </div>
       )}
-    </WarehouseLayout>
+    </PortalLayout>
   );
 }

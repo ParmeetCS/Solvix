@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import CustomerPortalLayout from './CustomerPortalLayout';
+import PortalLayout from '@/components/PortalLayout';
 import QuotationPreview from '@/components/quotation/QuotationPreview';
 import { quotationsApi } from '@/services/api';
 import {
@@ -114,7 +114,7 @@ export default function CustomerQuotationDetail() {
   };
 
   return (
-    <CustomerPortalLayout
+    <PortalLayout
       title={quotation ? quotation.quotation_code : 'Quotation'}
       subtitle={quotation ? `${quotation.system_capacity_kw} kW ${quotation.system_type} solar system` : 'Loading…'}
       actions={
@@ -300,6 +300,6 @@ export default function CustomerQuotationDetail() {
           </aside>
         </div>
       )}
-    </CustomerPortalLayout>
+    </PortalLayout>
   );
 }

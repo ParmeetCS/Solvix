@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import SupportLayout from './SupportLayout';
+import PortalLayout from '@/components/PortalLayout';
 import { supportApi } from '@/services/api';
 import { useAuth } from '@/context/auth';
 import {
@@ -134,7 +134,7 @@ export default function NewTicket() {
   ];
 
   return (
-    <SupportLayout
+    <PortalLayout
       title="Create Service Ticket"
       subtitle="Log a new customer inquiry, warranty service request, or technical maintenance job"
       actions={
@@ -147,7 +147,7 @@ export default function NewTicket() {
       <div style={{ maxWidth: '800px', margin: '0 auto' }}>
         <form onSubmit={handleSubmit} className="support-card" style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
           {error && (
-            <div style={{ background: 'rgba(239, 68, 68, 0.1)', border: '1px solid #ef4444', borderRadius: '8px', padding: '1rem', display: 'flex', gap: '0.75rem', color: '#f87171' }}>
+            <div style={{ background: 'rgba(239, 68, 68, 0.1)', border: '1px solid var(--c-red-2)', borderRadius: '8px', padding: '1rem', display: 'flex', gap: '0.75rem', color: 'var(--c-red)' }}>
               <AlertCircle size={20} />
               <span>{error}</span>
             </div>
@@ -205,7 +205,7 @@ export default function NewTicket() {
                 onClick={handleVerifySerial}
                 disabled={verifying || !formData.equipment_serial_number.trim()}
               >
-                {verifying ? <Loader2 size={16} className="animate-spin" /> : <ShieldCheck size={16} color="#d8ee8e" />}
+                {verifying ? <Loader2 size={16} className="animate-spin" /> : <ShieldCheck size={16} color="var(--accent-text)" />}
                 <span>Verify Warranty</span>
               </button>
             </div>
@@ -213,16 +213,16 @@ export default function NewTicket() {
             {/* Quick serial suggestions */}
             {serials.length > 0 && (
               <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginTop: '0.35rem' }}>
-                <span style={{ fontSize: '0.75rem', color: '#64748b' }}>Registered Serials:</span>
+                <span style={{ fontSize: '0.75rem', color: 'var(--text-dim)' }}>Registered Serials:</span>
                 {serials.slice(0, 4).map((s) => (
                   <button
                     key={s.id}
                     type="button"
                     style={{
-                      background: '#0b1020',
-                      border: '1px solid #1e293b',
+                      background: 'var(--app-bg)',
+                      border: '1px solid var(--surface-2)',
                       borderRadius: '4px',
-                      color: '#38bdf8',
+                      color: 'var(--c-blue)',
                       fontSize: '0.75rem',
                       padding: '0.15rem 0.5rem',
                       cursor: 'pointer'
@@ -251,11 +251,11 @@ export default function NewTicket() {
               >
                 {verificationResult.found ? (
                   <div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#34d399', fontWeight: 600 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--c-green)', fontWeight: 600 }}>
                       <CheckCircle2 size={18} />
                       <span>Registry Match: {verificationResult.product?.name || 'Solar Equipment'}</span>
                     </div>
-                    <div style={{ marginTop: '0.5rem', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '0.5rem', color: '#cbd5e1', fontSize: '0.8125rem' }}>
+                    <div style={{ marginTop: '0.5rem', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '0.5rem', color: 'var(--text-soft)', fontSize: '0.8125rem' }}>
                       <div>Delivery Date: <strong>{verificationResult.delivery?.delivered_at ? new Date(verificationResult.delivery.delivered_at).toLocaleDateString() : 'Verified on site'}</strong></div>
                       <div>Warranty Clock: <strong>Starts from Delivery Date</strong></div>
                       <div>Duration: <strong>{verificationResult.verification?.warranty_duration_years} Years</strong></div>
@@ -264,7 +264,7 @@ export default function NewTicket() {
                     </div>
                   </div>
                 ) : (
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#f87171' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--c-red)' }}>
                     <AlertCircle size={18} />
                     <span>{verificationResult.message}</span>
                   </div>
@@ -342,7 +342,7 @@ export default function NewTicket() {
             </div>
           )}
 
-          <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.75rem', marginTop: '1rem', borderTop: '1px solid #1e293b', paddingTop: '1.25rem' }}>
+          <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.75rem', marginTop: '1rem', borderTop: '1px solid var(--surface-2)', paddingTop: '1.25rem' }}>
             <Link to="/support/tickets" className="btn-secondary">
               Cancel
             </Link>
@@ -353,6 +353,6 @@ export default function NewTicket() {
           </div>
         </form>
       </div>
-    </SupportLayout>
+    </PortalLayout>
   );
 }

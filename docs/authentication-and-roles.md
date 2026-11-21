@@ -48,8 +48,22 @@ Signing out in one tab signs out all tabs.
 All dashboards use the same Supabase database, but each module's API only answers to its own
 department (plus admins) and customers only ever receive their own records.
 
+## Forgot password
+
+`/forgot-password` asks Supabase to email a recovery link; `/reset-password` receives it. The account that changes is the one the
+link's token belongs to, verified with Supabase on the server, so a password can never be reset by guessing a user id.
+
+Supabase setup (Authentication -> URL Configuration): add `http://localhost:5173/reset-password` (and your production URL) to
+**Redirect URLs**. Supabase's built-in email sender allows only a few emails per hour; for real use connect your own SMTP
+(Authentication -> Emails -> SMTP Settings).
+
+## Light and dark mode
+
+Every page has a sun/moon button (in the dashboard header, floating on sign-in and form pages). The choice is saved in the browser and
+the first visit follows the device setting. On the landing page the hero's Morning/Night switch is the same control: Morning is light
+mode, Night is dark mode. Colours come from CSS variables in `src/theme/theme.css` (light = the landing page's morning palette).
+
 ## Not built yet
 
-The Finance and Subsidy screens are compact dashboards only. Invoice, payment, expense,
-technician-payment, report and subsidy-application pages are not built, although their API routes
-and database functions exist and are tested at the database level.
+The Finance and Subsidy screens are compact dashboards only. Invoice, payment, expense, technician-payment, report and
+subsidy-application pages are not built, although their API routes and database functions exist and are tested at the database level.

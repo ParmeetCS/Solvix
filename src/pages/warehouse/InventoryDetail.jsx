@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import WarehouseLayout from './WarehouseLayout';
+import PortalLayout from '@/components/PortalLayout';
 import { warehouseApi } from '@/services/api/warehouse';
 import {
   Layers,
@@ -43,7 +43,7 @@ export default function InventoryDetail() {
   const movements = data?.movements || [];
 
   return (
-    <WarehouseLayout
+    <PortalLayout
       title={`Inventory Details: ${inv?.product?.name || 'Stock Item'}`}
       subtitle={`Warehouse: ${inv?.warehouse?.name || '-'} | SKU: ${inv?.product?.sku || '-'}`}
       actions={
@@ -74,7 +74,7 @@ export default function InventoryDetail() {
               <div className="wh-kpi-label">Quantity On Hand</div>
               <div className="wh-kpi-val">{inv?.quantity_on_hand ?? 0}</div>
             </div>
-            <div className="wh-kpi-icon" style={{ background: 'rgba(56, 189, 248, 0.15)', color: '#38bdf8' }}>
+            <div className="wh-kpi-icon" style={{ background: 'rgba(56, 189, 248, 0.15)', color: 'var(--c-blue)' }}>
               <Layers size={22} />
             </div>
           </div>
@@ -84,11 +84,11 @@ export default function InventoryDetail() {
           <div className="wh-kpi-card-inner">
             <div>
               <div className="wh-kpi-label">Quantity Reserved</div>
-              <div className="wh-kpi-val" style={{ color: (inv?.quantity_reserved || 0) > 0 ? '#fbbf24' : '#fff' }}>
+              <div className="wh-kpi-val" style={{ color: (inv?.quantity_reserved || 0) > 0 ? 'var(--c-amber-soft)' : 'var(--text-strong)' }}>
                 {inv?.quantity_reserved ?? 0}
               </div>
             </div>
-            <div className="wh-kpi-icon" style={{ background: 'rgba(245, 158, 11, 0.15)', color: '#fbbf24' }}>
+            <div className="wh-kpi-icon" style={{ background: 'rgba(245, 158, 11, 0.15)', color: 'var(--c-amber-soft)' }}>
               <Clock size={22} />
             </div>
           </div>
@@ -98,11 +98,11 @@ export default function InventoryDetail() {
           <div className="wh-kpi-card-inner">
             <div>
               <div className="wh-kpi-label">Available for Orders</div>
-              <div className="wh-kpi-val" style={{ color: '#34d399' }}>
+              <div className="wh-kpi-val" style={{ color: 'var(--c-green)' }}>
                 {inv?.quantity_available ?? ((inv?.quantity_on_hand || 0) - (inv?.quantity_reserved || 0))}
               </div>
             </div>
-            <div className="wh-kpi-icon" style={{ background: 'rgba(16, 185, 129, 0.15)', color: '#34d399' }}>
+            <div className="wh-kpi-icon" style={{ background: 'rgba(16, 185, 129, 0.15)', color: 'var(--c-green)' }}>
               <Layers size={22} />
             </div>
           </div>
@@ -116,7 +116,7 @@ export default function InventoryDetail() {
                 {inv?.bin_location || 'Aisle 1-A'}
               </div>
             </div>
-            <div className="wh-kpi-icon" style={{ background: 'rgba(168, 85, 247, 0.15)', color: '#c084fc' }}>
+            <div className="wh-kpi-icon" style={{ background: 'rgba(168, 85, 247, 0.15)', color: 'var(--c-violet)' }}>
               <Warehouse size={22} />
             </div>
           </div>
@@ -127,7 +127,7 @@ export default function InventoryDetail() {
       <div className="wh-card">
         <div className="wh-card-header">
           <div className="wh-card-title">
-            <Clock size={18} style={{ color: '#10b981' }} />
+            <Clock size={18} style={{ color: 'var(--c-emerald)' }} />
             <span>Stock Movement Audit Trail for this Item</span>
           </div>
         </div>
@@ -146,7 +146,7 @@ export default function InventoryDetail() {
             <tbody>
               {movements.length === 0 ? (
                 <tr>
-                  <td colSpan="5" style={{ textAlign: 'center', color: '#94a3b8', padding: '30px' }}>
+                  <td colSpan="5" style={{ textAlign: 'center', color: 'var(--text-muted)', padding: '30px' }}>
                     No recorded movements for this item yet.
                   </td>
                 </tr>
@@ -155,7 +155,7 @@ export default function InventoryDetail() {
                   const isPositive = mov.movement_type === 'stock_in' || mov.quantity > 0;
                   return (
                     <tr key={mov.id}>
-                      <td style={{ fontSize: '0.82rem', color: '#94a3b8' }}>
+                      <td style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>
                         {new Date(mov.created_at).toLocaleString()}
                       </td>
                       <td>
@@ -167,15 +167,15 @@ export default function InventoryDetail() {
                           {mov.movement_type.replace('_', ' ')}
                         </span>
                       </td>
-                      <td style={{ fontWeight: 600, color: isPositive ? '#34d399' : '#f87171' }}>
+                      <td style={{ fontWeight: 600, color: isPositive ? 'var(--c-green)' : 'var(--c-red)' }}>
                         {isPositive ? `+${mov.quantity}` : `-${Math.abs(mov.quantity)}`}
                       </td>
                       <td>
-                        <code style={{ fontSize: '0.78rem', background: 'rgba(255,255,255,0.06)', padding: '2px 6px', borderRadius: '4px' }}>
+                        <code style={{ fontSize: '0.78rem', background: 'rgba(var(--ink-rgb), 0.06)', padding: '2px 6px', borderRadius: '4px' }}>
                           {mov.reference_type ? `${mov.reference_type}: ${mov.reference_id || '-'}` : '-'}
                         </code>
                       </td>
-                      <td style={{ fontSize: '0.82rem', color: '#94a3b8' }}>{mov.notes || '-'}</td>
+                      <td style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>{mov.notes || '-'}</td>
                     </tr>
                   );
                 })
@@ -184,6 +184,6 @@ export default function InventoryDetail() {
           </table>
         </div>
       </div>
-    </WarehouseLayout>
+    </PortalLayout>
   );
 }

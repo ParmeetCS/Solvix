@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import SalesLayout from './SalesLayout';
+import PortalLayout from '@/components/PortalLayout';
 import { salesApi } from '@/services/api';
 import {
   CalendarClock,
@@ -76,7 +76,7 @@ export default function FollowUpsList() {
   const now = new Date();
 
   return (
-    <SalesLayout
+    <PortalLayout
       title="Follow-up & Task Reminders"
       subtitle="Ensure timely customer outreach and call outcome logging"
       actions={
@@ -109,13 +109,13 @@ export default function FollowUpsList() {
       {/* Follow-up Cards Table */}
       <div className="crm-card" style={{ padding: 0 }}>
         {loading ? (
-          <div style={{ padding: '40px', textAlign: 'center', color: '#94a3b8' }}>
+          <div style={{ padding: '40px', textAlign: 'center', color: 'var(--text-muted)' }}>
             Loading follow-up tasks...
           </div>
         ) : error ? (
-          <div style={{ padding: '24px', color: '#f87171' }}>{error}</div>
+          <div style={{ padding: '24px', color: 'var(--c-red)' }}>{error}</div>
         ) : followUps.length === 0 ? (
-          <div style={{ padding: '40px', textAlign: 'center', color: '#94a3b8' }}>
+          <div style={{ padding: '40px', textAlign: 'center', color: 'var(--text-muted)' }}>
             No follow-ups found for filter &ldquo;{filter}&rdquo;.
           </div>
         ) : (
@@ -140,10 +140,10 @@ export default function FollowUpsList() {
                   return (
                     <tr key={fu.id} style={{ background: isOverdue ? 'rgba(248, 113, 113, 0.04)' : undefined }}>
                       <td>
-                        <div style={{ fontWeight: '600', color: isOverdue ? '#f87171' : '#fff' }}>
+                        <div style={{ fontWeight: '600', color: isOverdue ? 'var(--c-red)' : 'var(--text-strong)' }}>
                           {sched.toLocaleDateString([], { month: 'short', day: 'numeric', year: 'numeric' })}
                         </div>
-                        <div style={{ fontSize: '0.78rem', color: isOverdue ? '#fca5a5' : '#94a3b8', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                        <div style={{ fontSize: '0.78rem', color: isOverdue ? 'var(--c-red)' : 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '4px' }}>
                           <Clock size={12} />
                           {sched.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                           {isOverdue && ' (Overdue)'}
@@ -152,11 +152,11 @@ export default function FollowUpsList() {
                       <td>
                         <Link
                           to={`/sales/leads/${fu.lead?.id}`}
-                          style={{ fontWeight: '600', color: '#d8ee8e' }}
+                          style={{ fontWeight: '600', color: 'var(--accent-text)' }}
                         >
                           {fu.lead?.customer_name || 'Customer'}
                         </Link>
-                        <div style={{ fontSize: '0.75rem', color: '#94a3b8' }}>
+                        <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
                           {fu.lead?.lead_code}
                         </div>
                       </td>
@@ -173,12 +173,12 @@ export default function FollowUpsList() {
                       </td>
                       <td>
                         {fu.notes && (
-                          <div style={{ fontSize: '0.82rem', color: '#cbd5e1' }}>
+                          <div style={{ fontSize: '0.82rem', color: 'var(--text-soft)' }}>
                             {fu.notes}
                           </div>
                         )}
                         {fu.outcome && (
-                          <div style={{ fontSize: '0.8rem', color: '#86efac', marginTop: '2px' }}>
+                          <div style={{ fontSize: '0.8rem', color: 'var(--c-green-soft)', marginTop: '2px' }}>
                             Outcome: {fu.outcome}
                           </div>
                         )}
@@ -212,7 +212,7 @@ export default function FollowUpsList() {
                             </button>
                           </div>
                         ) : (
-                          <span style={{ fontSize: '0.78rem', color: '#64748b' }}>Finished</span>
+                          <span style={{ fontSize: '0.78rem', color: 'var(--text-dim)' }}>Finished</span>
                         )}
                       </td>
                     </tr>
@@ -228,10 +228,10 @@ export default function FollowUpsList() {
       {activeItem && (
         <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.7)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 100 }}>
           <form onSubmit={handleActionSubmit} className="crm-card" style={{ width: '440px', maxWidth: '90%' }}>
-            <h3 style={{ color: '#fff', marginBottom: '12px', fontSize: '1.1rem' }}>
+            <h3 style={{ color: 'var(--text-strong)', marginBottom: '12px', fontSize: '1.1rem' }}>
               {modalMode === 'complete' ? 'Complete Follow-up Task' : 'Reschedule Follow-up'}
             </h3>
-            <p style={{ color: '#94a3b8', fontSize: '0.84rem', marginBottom: '16px' }}>
+            <p style={{ color: 'var(--text-muted)', fontSize: '0.84rem', marginBottom: '16px' }}>
               Lead: <b>{activeItem.lead?.customer_name}</b> ({activeItem.lead?.phone})
             </p>
 
@@ -285,6 +285,6 @@ export default function FollowUpsList() {
           </form>
         </div>
       )}
-    </SalesLayout>
+    </PortalLayout>
   );
 }

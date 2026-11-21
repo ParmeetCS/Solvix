@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import SupportLayout from './SupportLayout';
+import PortalLayout from '@/components/PortalLayout';
 import { supportApi } from '@/services/api';
 import { useAuth } from '@/context/auth';
 import {
@@ -263,7 +263,7 @@ export default function TicketDetail() {
   const feedback = ticketData?.feedback;
 
   return (
-    <SupportLayout
+    <PortalLayout
       title={`Ticket ${t.ticket_number || t.ticket_code || ''}`}
       subtitle={`Created on ${t.created_at ? new Date(t.created_at).toLocaleDateString() : ''} · Category: ${t.issue_category || 'Other'}`}
       actions={
@@ -296,11 +296,11 @@ export default function TicketDetail() {
     >
       {loading ? (
         <div style={{ display: 'flex', justifyContent: 'center', padding: '4rem 0' }}>
-          <Loader2 className="animate-spin" size={36} color="#d8ee8e" />
+          <Loader2 className="animate-spin" size={36} color="var(--accent-text)" />
         </div>
       ) : error ? (
-        <div className="support-card" style={{ borderColor: '#ef4444' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', color: '#f87171' }}>
+        <div className="support-card" style={{ borderColor: 'var(--c-red-2)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', color: 'var(--c-red)' }}>
             <AlertCircle size={20} />
             <span>{error}</span>
           </div>
@@ -311,12 +311,12 @@ export default function TicketDetail() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
             {/* Header Card */}
             <div className="support-card">
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '1rem', borderBottom: '1px solid #1e293b', paddingBottom: '1rem', marginBottom: '1rem' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '1rem', borderBottom: '1px solid var(--surface-2)', paddingBottom: '1rem', marginBottom: '1rem' }}>
                 <div>
-                  <span style={{ fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em', color: '#94a3b8' }}>
+                  <span style={{ fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--text-muted)' }}>
                     {t.issue_category}
                   </span>
-                  <h2 style={{ fontSize: '1.25rem', color: '#ffffff', margin: '0.25rem 0 0 0' }}>
+                  <h2 style={{ fontSize: '1.25rem', color: 'var(--text-strong)', margin: '0.25rem 0 0 0' }}>
                     {t.display_subject || t.subject}
                   </h2>
                 </div>
@@ -333,8 +333,8 @@ export default function TicketDetail() {
 
               {/* Status Selector for quick update */}
               {!isCustomer && (
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', background: '#0b1020', padding: '0.75rem 1rem', borderRadius: '8px', marginBottom: '1.25rem', border: '1px solid #1e293b' }}>
-                  <span style={{ fontSize: '0.8125rem', color: '#94a3b8' }}>Change Status:</span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', background: 'var(--app-bg)', padding: '0.75rem 1rem', borderRadius: '8px', marginBottom: '1.25rem', border: '1px solid var(--surface-2)' }}>
+                  <span style={{ fontSize: '0.8125rem', color: 'var(--text-muted)' }}>Change Status:</span>
                   <select
                     className="support-select"
                     style={{ padding: '0.35rem 0.75rem', fontSize: '0.8125rem' }}
@@ -353,8 +353,8 @@ export default function TicketDetail() {
 
               {/* Description */}
               <div>
-                <h4 style={{ fontSize: '0.875rem', color: '#94a3b8', margin: '0 0 0.5rem 0' }}>Issue Description</h4>
-                <div style={{ background: '#0b1020', padding: '1rem', borderRadius: '8px', border: '1px solid #1e293b', color: '#e2e8f0', fontSize: '0.875rem', lineHeight: 1.6, whiteSpace: 'pre-wrap' }}>
+                <h4 style={{ fontSize: '0.875rem', color: 'var(--text-muted)', margin: '0 0 0.5rem 0' }}>Issue Description</h4>
+                <div style={{ background: 'var(--app-bg)', padding: '1rem', borderRadius: '8px', border: '1px solid var(--surface-2)', color: 'var(--text-soft)', fontSize: '0.875rem', lineHeight: 1.6, whiteSpace: 'pre-wrap' }}>
                   {t.description}
                 </div>
               </div>
@@ -365,7 +365,7 @@ export default function TicketDetail() {
               <div className="support-card">
                 <div className="support-card-header">
                   <h3 className="support-card-title">
-                    <Wrench size={18} color="#fbbf24" />
+                    <Wrench size={18} color="var(--c-amber-soft)" />
                     Technician Investigation & Repair
                   </h3>
                 </div>
@@ -374,18 +374,18 @@ export default function TicketDetail() {
                     <div
                       key={r.id}
                       style={{
-                        background: '#0b1020',
-                        border: '1px solid #1e293b',
+                        background: 'var(--app-bg)',
+                        border: '1px solid var(--surface-2)',
                         borderRadius: '8px',
                         padding: '1rem'
                       }}
                     >
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
                         <div>
-                          <strong style={{ color: '#ffffff' }}>
+                          <strong style={{ color: 'var(--text-strong)' }}>
                             {r.technicians?.profiles?.full_name || r.technicians?.employee_code || 'Technician'}
                           </strong>
-                          <span style={{ fontSize: '0.75rem', color: '#94a3b8', marginLeft: '0.5rem' }}>
+                          <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginLeft: '0.5rem' }}>
                             Assigned {new Date(r.assigned_at).toLocaleDateString()}
                           </span>
                         </div>
@@ -410,7 +410,7 @@ export default function TicketDetail() {
                       </div>
 
                       {r.notes && (
-                        <div style={{ fontSize: '0.8125rem', color: '#cbd5e1', whiteSpace: 'pre-wrap', background: '#111927', padding: '0.5rem 0.75rem', borderRadius: '6px' }}>
+                        <div style={{ fontSize: '0.8125rem', color: 'var(--text-soft)', whiteSpace: 'pre-wrap', background: 'var(--surface-solid)', padding: '0.5rem 0.75rem', borderRadius: '6px' }}>
                           {r.notes}
                         </div>
                       )}
@@ -425,7 +425,7 @@ export default function TicketDetail() {
               <div className="support-card">
                 <div className="support-card-header">
                   <h3 className="support-card-title">
-                    <RotateCcw size={18} color="#38bdf8" />
+                    <RotateCcw size={18} color="var(--c-blue)" />
                     Equipment Replacement History
                   </h3>
                 </div>
@@ -434,18 +434,18 @@ export default function TicketDetail() {
                     <div
                       key={rp.id}
                       style={{
-                        background: '#0b1020',
-                        border: '1px solid #1e293b',
+                        background: 'var(--app-bg)',
+                        border: '1px solid var(--surface-2)',
                         borderRadius: '8px',
                         padding: '1rem',
                         fontSize: '0.875rem'
                       }}
                     >
-                      <div style={{ display: 'flex', justifyContent: 'space-between', color: '#ffffff', fontWeight: 600, marginBottom: '0.5rem' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', color: 'var(--text-strong)', fontWeight: 600, marginBottom: '0.5rem' }}>
                         <span>Replaced {rp.old_serial?.serial_number || 'Original Unit'} ➔ {rp.new_serial?.serial_number || 'New Unit'}</span>
-                        <span style={{ fontSize: '0.75rem', color: '#94a3b8' }}>{new Date(rp.replaced_at).toLocaleDateString()}</span>
+                        <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{new Date(rp.replaced_at).toLocaleDateString()}</span>
                       </div>
-                      <div style={{ color: '#cbd5e1', fontSize: '0.8125rem' }}>
+                      <div style={{ color: 'var(--text-soft)', fontSize: '0.8125rem' }}>
                         {rp.replacement_reason}
                       </div>
                     </div>
@@ -458,7 +458,7 @@ export default function TicketDetail() {
             <div className="support-card">
               <div className="support-card-header">
                 <h3 className="support-card-title">
-                  <MessageSquare size={18} color="#38bdf8" />
+                  <MessageSquare size={18} color="var(--c-blue)" />
                   Activity & Communication Timeline
                 </h3>
               </div>
@@ -472,7 +472,7 @@ export default function TicketDetail() {
                       <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                         <span className="timeline-author">{u.profiles?.full_name || 'System / Specialist'}</span>
                         {u.is_internal && (
-                          <span style={{ fontSize: '0.7rem', background: 'rgba(251, 191, 36, 0.15)', color: '#fbbf24', padding: '0.15rem 0.4rem', borderRadius: '4px', display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                          <span style={{ fontSize: '0.7rem', background: 'rgba(251, 191, 36, 0.15)', color: 'var(--c-amber-soft)', padding: '0.15rem 0.4rem', borderRadius: '4px', display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
                             <Lock size={10} /> Internal Note
                           </span>
                         )}
@@ -485,7 +485,7 @@ export default function TicketDetail() {
               </div>
 
               {/* Add Note Form */}
-              <form onSubmit={handleAddUpdate} style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', borderTop: '1px solid #1e293b', paddingTop: '1.25rem' }}>
+              <form onSubmit={handleAddUpdate} style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', borderTop: '1px solid var(--surface-2)', paddingTop: '1.25rem' }}>
                 <textarea
                   className="support-form-textarea"
                   rows={3}
@@ -497,7 +497,7 @@ export default function TicketDetail() {
 
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                   {!isCustomer ? (
-                    <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.8125rem', color: '#cbd5e1', cursor: 'pointer' }}>
+                    <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.8125rem', color: 'var(--text-soft)', cursor: 'pointer' }}>
                       <input
                         type="checkbox"
                         checked={isInternal}
@@ -519,34 +519,34 @@ export default function TicketDetail() {
             <div className="support-card">
               <div className="support-card-header">
                 <h3 className="support-card-title">
-                  <Star size={18} color="#fbbf24" />
+                  <Star size={18} color="var(--c-amber-soft)" />
                   Customer Feedback & Resolution Rating
                 </h3>
               </div>
 
               {feedbackSubmitted || feedback ? (
-                <div style={{ background: '#0b1020', border: '1px solid #1e293b', borderRadius: '8px', padding: '1.25rem' }}>
+                <div style={{ background: 'var(--app-bg)', border: '1px solid var(--surface-2)', borderRadius: '8px', padding: '1.25rem' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
                     {[1, 2, 3, 4, 5].map((star) => (
                       <Star
                         key={star}
                         size={20}
-                        color={(feedback?.rating || feedbackRating) >= star ? '#fbbf24' : '#64748b'}
-                        fill={(feedback?.rating || feedbackRating) >= star ? '#fbbf24' : 'none'}
+                        color={(feedback?.rating || feedbackRating) >= star ? 'var(--c-amber-soft)' : 'var(--text-dim)'}
+                        fill={(feedback?.rating || feedbackRating) >= star ? 'var(--c-amber-soft)' : 'none'}
                       />
                     ))}
-                    <span style={{ fontWeight: 700, color: '#ffffff', marginLeft: '0.5rem' }}>
+                    <span style={{ fontWeight: 700, color: 'var(--text-strong)', marginLeft: '0.5rem' }}>
                       {feedback?.rating || feedbackRating} / 5 Stars
                     </span>
                   </div>
-                  <p style={{ color: '#cbd5e1', fontSize: '0.875rem', margin: 0 }}>
+                  <p style={{ color: 'var(--text-soft)', fontSize: '0.875rem', margin: 0 }}>
                     "{feedback?.comment || feedbackComment || 'No additional comment provided.'}"
                   </p>
                 </div>
               ) : (
                 <form onSubmit={handleSubmitFeedback} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                   <div>
-                    <label style={{ fontSize: '0.875rem', color: '#cbd5e1', display: 'block', marginBottom: '0.5rem' }}>
+                    <label style={{ fontSize: '0.875rem', color: 'var(--text-soft)', display: 'block', marginBottom: '0.5rem' }}>
                       How would you rate the resolution and service quality?
                     </label>
                     <div style={{ display: 'flex', gap: '0.5rem' }}>
@@ -555,19 +555,19 @@ export default function TicketDetail() {
                           key={s}
                           type="button"
                           style={{
-                            background: feedbackRating >= s ? 'rgba(251, 191, 36, 0.15)' : '#0b1020',
-                            border: `1px solid ${feedbackRating >= s ? '#fbbf24' : '#1e293b'}`,
+                            background: feedbackRating >= s ? 'rgba(251, 191, 36, 0.15)' : 'var(--app-bg)',
+                            border: `1px solid ${feedbackRating >= s ? 'var(--c-amber-soft)' : 'var(--surface-2)'}`,
                             borderRadius: '8px',
                             padding: '0.5rem 0.75rem',
                             display: 'flex',
                             alignItems: 'center',
                             gap: '0.35rem',
-                            color: feedbackRating >= s ? '#fbbf24' : '#94a3b8',
+                            color: feedbackRating >= s ? 'var(--c-amber-soft)' : 'var(--text-muted)',
                             cursor: 'pointer'
                           }}
                           onClick={() => setFeedbackRating(s)}
                         >
-                          <Star size={16} fill={feedbackRating >= s ? '#fbbf24' : 'none'} />
+                          <Star size={16} fill={feedbackRating >= s ? 'var(--c-amber-soft)' : 'none'} />
                           <span>{s}</span>
                         </button>
                       ))}
@@ -600,9 +600,9 @@ export default function TicketDetail() {
               <div className="support-card-header">
                 <h3 className="support-card-title">
                   {warrantyInfo?.is_valid ? (
-                    <ShieldCheck size={18} color="#34d399" />
+                    <ShieldCheck size={18} color="var(--c-green)" />
                   ) : (
-                    <ShieldAlert size={18} color="#f87171" />
+                    <ShieldAlert size={18} color="var(--c-red)" />
                   )}
                   Warranty Verification
                 </h3>
@@ -611,35 +611,35 @@ export default function TicketDetail() {
               {warrantyInfo ? (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', fontSize: '0.8125rem' }}>
                   <div>
-                    <span style={{ color: '#94a3b8' }}>Serial Number:</span>
-                    <div style={{ color: '#ffffff', fontWeight: 600, fontSize: '0.875rem' }}>
+                    <span style={{ color: 'var(--text-muted)' }}>Serial Number:</span>
+                    <div style={{ color: 'var(--text-strong)', fontWeight: 600, fontSize: '0.875rem' }}>
                       {warrantyInfo.serial_number}
                     </div>
                   </div>
 
                   <div>
-                    <span style={{ color: '#94a3b8' }}>Equipment:</span>
-                    <div style={{ color: '#e2e8f0' }}>{warrantyInfo.product?.name || 'Solar PV Hardware'}</div>
+                    <span style={{ color: 'var(--text-muted)' }}>Equipment:</span>
+                    <div style={{ color: 'var(--text-soft)' }}>{warrantyInfo.product?.name || 'Solar PV Hardware'}</div>
                   </div>
 
                   <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <span style={{ color: '#94a3b8' }}>Warranty Start:</span>
-                    <strong style={{ color: '#ffffff' }}>{warrantyInfo.start_date || 'Delivery date'}</strong>
+                    <span style={{ color: 'var(--text-muted)' }}>Warranty Start:</span>
+                    <strong style={{ color: 'var(--text-strong)' }}>{warrantyInfo.start_date || 'Delivery date'}</strong>
                   </div>
 
                   <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <span style={{ color: '#94a3b8' }}>Warranty Expiry:</span>
-                    <strong style={{ color: '#ffffff' }}>{warrantyInfo.expiry_date}</strong>
+                    <span style={{ color: 'var(--text-muted)' }}>Warranty Expiry:</span>
+                    <strong style={{ color: 'var(--text-strong)' }}>{warrantyInfo.expiry_date}</strong>
                   </div>
 
-                  <div style={{ borderTop: '1px solid #1e293b', paddingTop: '0.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <span style={{ color: '#94a3b8' }}>Coverage Status:</span>
+                  <div style={{ borderTop: '1px solid var(--surface-2)', paddingTop: '0.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <span style={{ color: 'var(--text-muted)' }}>Coverage Status:</span>
                     <span className={`badge badge-warranty-${warrantyInfo.computed_status}`}>
                       {warrantyInfo.computed_status}
                     </span>
                   </div>
 
-                  <div style={{ background: '#0b1020', padding: '0.65rem', borderRadius: '6px', fontSize: '0.75rem', color: '#94a3b8', lineHeight: 1.4 }}>
+                  <div style={{ background: 'var(--app-bg)', padding: '0.65rem', borderRadius: '6px', fontSize: '0.75rem', color: 'var(--text-muted)', lineHeight: 1.4 }}>
                     <strong>Verification Rule:</strong> Warranty starts from equipment delivery date, verified directly against warehouse dispatch records.
                   </div>
 
@@ -654,7 +654,7 @@ export default function TicketDetail() {
                   )}
                 </div>
               ) : (
-                <div style={{ color: '#94a3b8', fontSize: '0.8125rem', textAlign: 'center', padding: '1rem 0' }}>
+                <div style={{ color: 'var(--text-muted)', fontSize: '0.8125rem', textAlign: 'center', padding: '1rem 0' }}>
                   No serial number identified in this ticket.
                 </div>
               )}
@@ -664,30 +664,30 @@ export default function TicketDetail() {
             <div className="support-card">
               <div className="support-card-header">
                 <h3 className="support-card-title">
-                  <User size={18} color="#d8ee8e" />
+                  <User size={18} color="var(--accent-text)" />
                   Customer Information
                 </h3>
               </div>
 
               <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', fontSize: '0.8125rem' }}>
                 <div>
-                  <span style={{ color: '#94a3b8' }}>Name:</span>
-                  <div style={{ color: '#ffffff', fontWeight: 600, fontSize: '0.9375rem' }}>
+                  <span style={{ color: 'var(--text-muted)' }}>Name:</span>
+                  <div style={{ color: 'var(--text-strong)', fontWeight: 600, fontSize: '0.9375rem' }}>
                     {t.customers?.contact_name || 'Customer'}
                   </div>
                 </div>
 
                 {t.customers?.phone && (
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                    <Phone size={14} color="#38bdf8" />
-                    <span style={{ color: '#e2e8f0' }}>{t.customers.phone}</span>
+                    <Phone size={14} color="var(--c-blue)" />
+                    <span style={{ color: 'var(--text-soft)' }}>{t.customers.phone}</span>
                   </div>
                 )}
 
                 {t.customers?.email && (
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                    <Mail size={14} color="#38bdf8" />
-                    <span style={{ color: '#e2e8f0' }}>{t.customers.email}</span>
+                    <Mail size={14} color="var(--c-blue)" />
+                    <span style={{ color: 'var(--text-soft)' }}>{t.customers.email}</span>
                   </div>
                 )}
               </div>
@@ -697,18 +697,18 @@ export default function TicketDetail() {
             <div className="support-card">
               <div className="support-card-header">
                 <h3 className="support-card-title">
-                  <User size={18} color="#c084fc" />
+                  <User size={18} color="var(--c-violet)" />
                   Assigned Support Staff
                 </h3>
               </div>
 
               {t.assigned_profile ? (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
-                  <span style={{ fontWeight: 600, color: '#ffffff' }}>{t.assigned_profile.full_name}</span>
-                  <span style={{ fontSize: '0.8125rem', color: '#94a3b8' }}>{t.assigned_profile.email}</span>
+                  <span style={{ fontWeight: 600, color: 'var(--text-strong)' }}>{t.assigned_profile.full_name}</span>
+                  <span style={{ fontSize: '0.8125rem', color: 'var(--text-muted)' }}>{t.assigned_profile.email}</span>
                 </div>
               ) : (
-                <div style={{ color: '#94a3b8', fontSize: '0.8125rem' }}>
+                <div style={{ color: 'var(--text-muted)', fontSize: '0.8125rem' }}>
                   Unassigned. Currently in the open triage pool.
                 </div>
               )}
@@ -794,7 +794,7 @@ export default function TicketDetail() {
               </div>
 
               <div className="support-form-group">
-                <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#cbd5e1', fontSize: '0.875rem' }}>
+                <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--text-soft)', fontSize: '0.875rem' }}>
                   <input
                     type="checkbox"
                     checked={isWarrantyCovered}
@@ -957,7 +957,7 @@ export default function TicketDetail() {
                 />
               </div>
 
-              <div style={{ background: '#0b1020', padding: '0.75rem', borderRadius: '6px', fontSize: '0.75rem', color: '#94a3b8' }}>
+              <div style={{ background: 'var(--app-bg)', padding: '0.75rem', borderRadius: '6px', fontSize: '0.75rem', color: 'var(--text-muted)' }}>
                 <strong>Integrity Rule:</strong> Original serial numbers are never deleted or overwritten; the decommissioned unit status is permanently marked as warranty replacement.
               </div>
 
@@ -974,6 +974,6 @@ export default function TicketDetail() {
           </div>
         </div>
       )}
-    </SupportLayout>
+    </PortalLayout>
   );
 }

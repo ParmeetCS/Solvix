@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { AlertTriangle, ShieldCheck } from 'lucide-react';
-import CustomerPortalLayout from './CustomerPortalLayout';
+import PortalLayout from '@/components/PortalLayout';
 import { customerApi } from '@/services/api';
 import { formatDate, titleCase } from '@/lib/quotation';
 
@@ -18,7 +18,7 @@ export default function CustomerWarranty() {
   }, []);
 
   return (
-    <CustomerPortalLayout title="Warranty" subtitle="Warranty coverage for the equipment installed at your site">
+    <PortalLayout title="Warranty" subtitle="Warranty coverage for the equipment installed at your site">
       {error && <div className="q-alert error"><AlertTriangle size={15} style={{ verticalAlign: '-2px', marginRight: 6 }} />{error}</div>}
       <div className="crm-card" style={{ padding: 0 }}>
         {loading ? (
@@ -37,7 +37,7 @@ export default function CustomerWarranty() {
                   const product = w.equipment_serial_numbers?.products;
                   return (
                     <tr key={w.id}>
-                      <td><b style={{ color: '#d8ee8e' }}>{w.warranty_code}</b><div style={{ fontSize: '0.72rem', color: '#64748b' }}>{titleCase(w.warranty_type || '')}</div></td>
+                      <td><b style={{ color: 'var(--accent-text)' }}>{w.warranty_code}</b><div style={{ fontSize: '0.72rem', color: 'var(--text-dim)' }}>{titleCase(w.warranty_type || '')}</div></td>
                       <td>{product?.name || '—'}</td>
                       <td>{w.equipment_serial_numbers?.serial_number || '—'}</td>
                       <td>{formatDate(w.start_date)} – {formatDate(w.expiry_date)}</td>
@@ -50,9 +50,9 @@ export default function CustomerWarranty() {
           </div>
         )}
       </div>
-      <p style={{ fontSize: 12, color: '#64748b', marginTop: 12 }}>
+      <p style={{ fontSize: 12, color: 'var(--text-dim)', marginTop: 12 }}>
         Coverage terms are those recorded on each warranty and the manufacturer's documentation. To report a fault, raise a service request.
       </p>
-    </CustomerPortalLayout>
+    </PortalLayout>
   );
 }

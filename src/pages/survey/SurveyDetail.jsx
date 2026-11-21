@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import SurveyLayout from './SurveyLayout';
+import PortalLayout from '@/components/PortalLayout';
 import FeasibilityReportModal from './FeasibilityReportModal';
 import { surveyApi } from '@/services/api';
 import {
@@ -227,7 +227,7 @@ export default function SurveyDetail() {
   const approvals = data?.approvals || [];
 
   return (
-    <SurveyLayout
+    <PortalLayout
       title={survey ? `${survey.survey_code} — ${survey.customer_name}` : 'Survey Request Details'}
       subtitle={survey ? `Site: ${survey.site_address || survey.city} · Registered ${new Date(survey.created_at).toLocaleDateString()}` : 'Loading...'}
       actions={
@@ -254,15 +254,15 @@ export default function SurveyDetail() {
       }
     >
       {loading ? (
-        <div className="survey-card" style={{ padding: '60px', textAlign: 'center', color: '#94a3b8' }}>
+        <div className="survey-card" style={{ padding: '60px', textAlign: 'center', color: 'var(--text-muted)' }}>
           Loading survey record and technical attachments...
         </div>
       ) : error ? (
-        <div className="survey-card" style={{ borderColor: '#ef4444', color: '#f87171' }}>
+        <div className="survey-card" style={{ borderColor: 'var(--c-red-2)', color: 'var(--c-red)' }}>
           {error}
         </div>
       ) : !survey ? (
-        <div className="survey-card" style={{ textAlign: 'center', color: '#94a3b8' }}>
+        <div className="survey-card" style={{ textAlign: 'center', color: 'var(--text-muted)' }}>
           Survey request not found.
         </div>
       ) : (
@@ -277,29 +277,29 @@ export default function SurveyDetail() {
               justifyContent: 'space-between',
               flexWrap: 'wrap',
               gap: '16px',
-              background: 'rgba(15, 23, 42, 0.95)'
+              background: 'rgba(var(--surface-rgb), 0.95)'
             }}
           >
             <div style={{ display: 'flex', alignItems: 'center', gap: '14px', flexWrap: 'wrap' }}>
               <div>
-                <span style={{ fontSize: '0.78rem', color: '#94a3b8' }}>Lifecycle Status:</span>
+                <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>Lifecycle Status:</span>
                 <div style={{ marginTop: '2px' }}>{getStatusBadge(survey.status)}</div>
               </div>
-              <div style={{ borderLeft: '1px solid rgba(255,255,255,0.1)', paddingLeft: '14px' }}>
-                <span style={{ fontSize: '0.78rem', color: '#94a3b8' }}>Priority:</span>
+              <div style={{ borderLeft: '1px solid rgba(var(--ink-rgb), 0.1)', paddingLeft: '14px' }}>
+                <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>Priority:</span>
                 <div style={{ marginTop: '2px', textTransform: 'capitalize', fontWeight: 600 }} className={`survey-priority-${survey.priority || 'medium'}`}>
                   {survey.priority || 'medium'}
                 </div>
               </div>
-              <div style={{ borderLeft: '1px solid rgba(255,255,255,0.1)', paddingLeft: '14px' }}>
-                <span style={{ fontSize: '0.78rem', color: '#94a3b8' }}>Assigned Surveyor:</span>
-                <div style={{ marginTop: '2px', fontWeight: 600, color: '#38bdf8' }}>
+              <div style={{ borderLeft: '1px solid rgba(var(--ink-rgb), 0.1)', paddingLeft: '14px' }}>
+                <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>Assigned Surveyor:</span>
+                <div style={{ marginTop: '2px', fontWeight: 600, color: 'var(--c-blue)' }}>
                   {survey.assigned_to_name || 'Unassigned'}
                 </div>
               </div>
-              <div style={{ borderLeft: '1px solid rgba(255,255,255,0.1)', paddingLeft: '14px' }}>
-                <span style={{ fontSize: '0.78rem', color: '#94a3b8' }}>Visit Date:</span>
-                <div style={{ marginTop: '2px', color: '#22d3ee' }}>
+              <div style={{ borderLeft: '1px solid rgba(var(--ink-rgb), 0.1)', paddingLeft: '14px' }}>
+                <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>Visit Date:</span>
+                <div style={{ marginTop: '2px', color: 'var(--c-blue)' }}>
                   {survey.scheduled_date || 'Awaiting date'}
                 </div>
               </div>
@@ -377,29 +377,29 @@ export default function SurveyDetail() {
                   <h3>Customer & Property Information</h3>
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', fontSize: '0.88rem' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '8px', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
-                    <span style={{ color: '#94a3b8' }}>Client Name:</span>
-                    <span style={{ fontWeight: 600, color: '#fff' }}>{survey.customer_name}</span>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '8px', borderBottom: '1px solid rgba(var(--ink-rgb), 0.06)' }}>
+                    <span style={{ color: 'var(--text-muted)' }}>Client Name:</span>
+                    <span style={{ fontWeight: 600, color: 'var(--text-strong)' }}>{survey.customer_name}</span>
                   </div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '8px', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
-                    <span style={{ color: '#94a3b8' }}>Contact Phone:</span>
-                    <span style={{ color: '#38bdf8' }}>{survey.contact_phone || 'N/A'}</span>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '8px', borderBottom: '1px solid rgba(var(--ink-rgb), 0.06)' }}>
+                    <span style={{ color: 'var(--text-muted)' }}>Contact Phone:</span>
+                    <span style={{ color: 'var(--c-blue)' }}>{survey.contact_phone || 'N/A'}</span>
                   </div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '8px', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
-                    <span style={{ color: '#94a3b8' }}>Email Address:</span>
-                    <span style={{ color: '#cbd5e1' }}>{survey.contact_email || 'N/A'}</span>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '8px', borderBottom: '1px solid rgba(var(--ink-rgb), 0.06)' }}>
+                    <span style={{ color: 'var(--text-muted)' }}>Email Address:</span>
+                    <span style={{ color: 'var(--text-soft)' }}>{survey.contact_email || 'N/A'}</span>
                   </div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '8px', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
-                    <span style={{ color: '#94a3b8' }}>Site Address:</span>
-                    <span style={{ color: '#fff', textAlign: 'right' }}>{survey.site_address || 'TBD'}</span>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '8px', borderBottom: '1px solid rgba(var(--ink-rgb), 0.06)' }}>
+                    <span style={{ color: 'var(--text-muted)' }}>Site Address:</span>
+                    <span style={{ color: 'var(--text-strong)', textAlign: 'right' }}>{survey.site_address || 'TBD'}</span>
                   </div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '8px', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
-                    <span style={{ color: '#94a3b8' }}>City & State:</span>
-                    <span style={{ color: '#fff' }}>{survey.city}, {survey.state || 'India'}</span>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '8px', borderBottom: '1px solid rgba(var(--ink-rgb), 0.06)' }}>
+                    <span style={{ color: 'var(--text-muted)' }}>City & State:</span>
+                    <span style={{ color: 'var(--text-strong)' }}>{survey.city}, {survey.state || 'India'}</span>
                   </div>
                   <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <span style={{ color: '#94a3b8' }}>Property Type:</span>
-                    <span style={{ color: '#fff', textTransform: 'capitalize' }}>{survey.property_type || 'Residential'}</span>
+                    <span style={{ color: 'var(--text-muted)' }}>Property Type:</span>
+                    <span style={{ color: 'var(--text-strong)', textTransform: 'capitalize' }}>{survey.property_type || 'Residential'}</span>
                   </div>
                 </div>
               </div>
@@ -410,29 +410,29 @@ export default function SurveyDetail() {
                   <h3>Electricity & Tariff Profile</h3>
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', fontSize: '0.88rem' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '8px', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
-                    <span style={{ color: '#94a3b8' }}>Connection Type:</span>
-                    <span style={{ fontWeight: 600, color: '#fff', textTransform: 'capitalize' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '8px', borderBottom: '1px solid rgba(var(--ink-rgb), 0.06)' }}>
+                    <span style={{ color: 'var(--text-muted)' }}>Connection Type:</span>
+                    <span style={{ fontWeight: 600, color: 'var(--text-strong)', textTransform: 'capitalize' }}>
                       {survey.electricity_connection_type?.replace('_', ' ') || 'Three Phase'}
                     </span>
                   </div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '8px', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
-                    <span style={{ color: '#94a3b8' }}>Monthly Electricity Bill:</span>
-                    <span style={{ fontWeight: 600, color: '#34d399' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '8px', borderBottom: '1px solid rgba(var(--ink-rgb), 0.06)' }}>
+                    <span style={{ color: 'var(--text-muted)' }}>Monthly Electricity Bill:</span>
+                    <span style={{ fontWeight: 600, color: 'var(--c-green)' }}>
                       ₹{Number(survey.monthly_electricity_bill || 0).toLocaleString('en-IN')}
                     </span>
                   </div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '8px', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
-                    <span style={{ color: '#94a3b8' }}>Sanctioned Load:</span>
-                    <span style={{ color: '#fff' }}>{survey.sanctioned_load_kw || 10} kW</span>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '8px', borderBottom: '1px solid rgba(var(--ink-rgb), 0.06)' }}>
+                    <span style={{ color: 'var(--text-muted)' }}>Sanctioned Load:</span>
+                    <span style={{ color: 'var(--text-strong)' }}>{survey.sanctioned_load_kw || 10} kW</span>
                   </div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '8px', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
-                    <span style={{ color: '#94a3b8' }}>Consumer No:</span>
-                    <span style={{ color: '#fff' }}>{survey.consumer_number || 'N/A'}</span>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '8px', borderBottom: '1px solid rgba(var(--ink-rgb), 0.06)' }}>
+                    <span style={{ color: 'var(--text-muted)' }}>Consumer No:</span>
+                    <span style={{ color: 'var(--text-strong)' }}>{survey.consumer_number || 'N/A'}</span>
                   </div>
                   <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <span style={{ color: '#94a3b8' }}>Grid Stability:</span>
-                    <span style={{ color: '#fff', textTransform: 'capitalize' }}>{survey.grid_availability || 'Stable'}</span>
+                    <span style={{ color: 'var(--text-muted)' }}>Grid Stability:</span>
+                    <span style={{ color: 'var(--text-strong)', textTransform: 'capitalize' }}>{survey.grid_availability || 'Stable'}</span>
                   </div>
                 </div>
               </div>
@@ -448,36 +448,36 @@ export default function SurveyDetail() {
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', fontSize: '0.88rem' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <span style={{ color: '#94a3b8' }}>Roof Type:</span>
-                    <span style={{ color: '#fff', fontWeight: 600, textTransform: 'capitalize' }}>
+                    <span style={{ color: 'var(--text-muted)' }}>Roof Type:</span>
+                    <span style={{ color: 'var(--text-strong)', fontWeight: 600, textTransform: 'capitalize' }}>
                       {survey.roof_type?.replace('_', ' ') || 'RCC Flat'}
                     </span>
                   </div>
                   <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <span style={{ color: '#94a3b8' }}>Total Measured Area:</span>
-                    <span style={{ color: '#fff' }}>{survey.roof_area_sqm || 0} m²</span>
+                    <span style={{ color: 'var(--text-muted)' }}>Total Measured Area:</span>
+                    <span style={{ color: 'var(--text-strong)' }}>{survey.roof_area_sqm || 0} m²</span>
                   </div>
                   <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <span style={{ color: '#94a3b8' }}>Available Installation Area:</span>
-                    <span style={{ color: '#38bdf8', fontWeight: 600 }}>{survey.available_installation_area_sqm || 0} m²</span>
+                    <span style={{ color: 'var(--text-muted)' }}>Available Installation Area:</span>
+                    <span style={{ color: 'var(--c-blue)', fontWeight: 600 }}>{survey.available_installation_area_sqm || 0} m²</span>
                   </div>
                   <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <span style={{ color: '#94a3b8' }}>Orientation & Tilt:</span>
-                    <span style={{ color: '#fff', textTransform: 'capitalize' }}>
+                    <span style={{ color: 'var(--text-muted)' }}>Orientation & Tilt:</span>
+                    <span style={{ color: 'var(--text-strong)', textTransform: 'capitalize' }}>
                       {survey.roof_direction || 'South'} ({survey.roof_tilt_degrees || 0}°)
                     </span>
                   </div>
                   <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <span style={{ color: '#94a3b8' }}>Shading Assessment:</span>
-                    <span style={{ color: '#fff', textTransform: 'capitalize' }}>{survey.shading_conditions || 'None'}</span>
+                    <span style={{ color: 'var(--text-muted)' }}>Shading Assessment:</span>
+                    <span style={{ color: 'var(--text-strong)', textTransform: 'capitalize' }}>{survey.shading_conditions || 'None'}</span>
                   </div>
                   <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <span style={{ color: '#94a3b8' }}>Roof Condition:</span>
-                    <span style={{ color: '#fff', textTransform: 'capitalize' }}>{survey.roof_condition || 'Good'}</span>
+                    <span style={{ color: 'var(--text-muted)' }}>Roof Condition:</span>
+                    <span style={{ color: 'var(--text-strong)', textTransform: 'capitalize' }}>{survey.roof_condition || 'Good'}</span>
                   </div>
-                  <div style={{ marginTop: '8px', padding: '10px', background: 'rgba(255,255,255,0.03)', borderRadius: '6px' }}>
-                    <span style={{ fontSize: '0.8rem', color: '#94a3b8', display: 'block' }}>Structural Concerns:</span>
-                    <span style={{ fontSize: '0.84rem', color: '#cbd5e1' }}>{survey.structural_concerns || 'None reported.'}</span>
+                  <div style={{ marginTop: '8px', padding: '10px', background: 'rgba(var(--ink-rgb), 0.03)', borderRadius: '6px' }}>
+                    <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)', display: 'block' }}>Structural Concerns:</span>
+                    <span style={{ fontSize: '0.84rem', color: 'var(--text-soft)' }}>{survey.structural_concerns || 'None reported.'}</span>
                   </div>
                 </div>
               </div>
@@ -488,28 +488,28 @@ export default function SurveyDetail() {
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', fontSize: '0.88rem' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <span style={{ color: '#94a3b8' }}>Recommended Capacity:</span>
-                    <span style={{ color: '#34d399', fontWeight: 700, fontSize: '1.05rem' }}>
+                    <span style={{ color: 'var(--text-muted)' }}>Recommended Capacity:</span>
+                    <span style={{ color: 'var(--c-green)', fontWeight: 700, fontSize: '1.05rem' }}>
                       {survey.recommended_capacity_kw || 10} kWp
                     </span>
                   </div>
                   <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <span style={{ color: '#94a3b8' }}>Recommended System Type:</span>
-                    <span style={{ color: '#fff', fontWeight: 600, textTransform: 'uppercase' }}>
+                    <span style={{ color: 'var(--text-muted)' }}>Recommended System Type:</span>
+                    <span style={{ color: 'var(--text-strong)', fontWeight: 600, textTransform: 'uppercase' }}>
                       {survey.recommended_system_type || 'On-Grid'}
                     </span>
                   </div>
                   <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <span style={{ color: '#94a3b8' }}>Estimated Usable Roof:</span>
-                    <span style={{ color: '#fff' }}>{survey.estimated_usable_area_sqm || 100} m²</span>
+                    <span style={{ color: 'var(--text-muted)' }}>Estimated Usable Roof:</span>
+                    <span style={{ color: 'var(--text-strong)' }}>{survey.estimated_usable_area_sqm || 100} m²</span>
                   </div>
                   <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <span style={{ color: '#94a3b8' }}>Cable Run Distance:</span>
-                    <span style={{ color: '#fff' }}>{survey.cable_distance_m || 20} meters</span>
+                    <span style={{ color: 'var(--text-muted)' }}>Cable Run Distance:</span>
+                    <span style={{ color: 'var(--text-strong)' }}>{survey.cable_distance_m || 20} meters</span>
                   </div>
-                  <div style={{ marginTop: '8px', padding: '10px', background: 'rgba(255,255,255,0.03)', borderRadius: '6px' }}>
-                    <span style={{ fontSize: '0.8rem', color: '#94a3b8', display: 'block' }}>Constraints & Special Notes:</span>
-                    <span style={{ fontSize: '0.84rem', color: '#cbd5e1' }}>
+                  <div style={{ marginTop: '8px', padding: '10px', background: 'rgba(var(--ink-rgb), 0.03)', borderRadius: '6px' }}>
+                    <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)', display: 'block' }}>Constraints & Special Notes:</span>
+                    <span style={{ fontSize: '0.84rem', color: 'var(--text-soft)' }}>
                       {survey.potential_constraints || survey.additional_requirements || 'Standard rooftop mounting with ballasted clamps.'}
                     </span>
                   </div>
@@ -523,7 +523,7 @@ export default function SurveyDetail() {
             <div className="survey-card">
               <div className="survey-card-header">
                 <h3>
-                  <Camera size={18} style={{ color: '#38bdf8' }} />
+                  <Camera size={18} style={{ color: 'var(--c-blue)' }} />
                   Photographic Evidence & Site Documentation ({photos.length})
                 </h3>
                 <button
@@ -535,7 +535,7 @@ export default function SurveyDetail() {
               </div>
 
               {photos.length === 0 ? (
-                <div style={{ textAlign: 'center', padding: '40px', color: '#64748b' }}>
+                <div style={{ textAlign: 'center', padding: '40px', color: 'var(--text-dim)' }}>
                   <Camera size={36} style={{ margin: '0 auto 12px auto', opacity: 0.5 }} />
                   <p>No photographs uploaded yet. Field surveyors can attach roof, electrical panel, and site images.</p>
                 </div>
@@ -551,7 +551,7 @@ export default function SurveyDetail() {
                       <div className="survey-photo-meta">
                         <div className="survey-photo-caption">{p.caption}</div>
                         <div className="survey-photo-desc">{p.description || 'Verified site photograph'}</div>
-                        <div style={{ marginTop: '8px', display: 'flex', justifyContent: 'space-between', fontSize: '0.74rem', color: '#64748b' }}>
+                        <div style={{ marginTop: '8px', display: 'flex', justifyContent: 'space-between', fontSize: '0.74rem', color: 'var(--text-dim)' }}>
                           <span style={{ textTransform: 'capitalize' }}>Category: {p.photo_type}</span>
                           <span>{new Date(p.uploaded_at).toLocaleDateString()}</span>
                         </div>
@@ -568,7 +568,7 @@ export default function SurveyDetail() {
             <div className="survey-card">
               <div className="survey-card-header">
                 <h3>
-                  <ShieldCheck size={18} style={{ color: '#10b981' }} />
+                  <ShieldCheck size={18} style={{ color: 'var(--c-emerald)' }} />
                   Technical Review & Approval History
                 </h3>
                 <Link
@@ -580,7 +580,7 @@ export default function SurveyDetail() {
               </div>
 
               {approvals.length === 0 ? (
-                <div style={{ textAlign: 'center', padding: '30px', color: '#94a3b8' }}>
+                <div style={{ textAlign: 'center', padding: '30px', color: 'var(--text-muted)' }}>
                   No approval actions recorded yet. If the survey is submitted, technical reviewers can approve or request revisions.
                 </div>
               ) : (
@@ -590,15 +590,15 @@ export default function SurveyDetail() {
                       key={app.id}
                       style={{
                         padding: '16px',
-                        background: 'rgba(255,255,255,0.02)',
-                        border: '1px solid rgba(255,255,255,0.08)',
+                        background: 'rgba(var(--ink-rgb), 0.02)',
+                        border: '1px solid rgba(var(--ink-rgb), 0.08)',
                         borderRadius: '8px'
                       }}
                     >
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                         <div>
-                          <span style={{ fontWeight: 600, color: '#fff' }}>Reviewer: {app.reviewer_name}</span>
-                          <span style={{ fontSize: '0.78rem', color: '#94a3b8', marginLeft: '10px' }}>
+                          <span style={{ fontWeight: 600, color: 'var(--text-strong)' }}>Reviewer: {app.reviewer_name}</span>
+                          <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)', marginLeft: '10px' }}>
                             {new Date(app.reviewed_at).toLocaleString()}
                           </span>
                         </div>
@@ -606,7 +606,7 @@ export default function SurveyDetail() {
                           {app.status}
                         </span>
                       </div>
-                      <p style={{ margin: '8px 0 0 0', fontSize: '0.86rem', color: '#cbd5e1' }}>
+                      <p style={{ margin: '8px 0 0 0', fontSize: '0.86rem', color: 'var(--text-soft)' }}>
                         {app.comments}
                       </p>
                     </div>
@@ -621,13 +621,13 @@ export default function SurveyDetail() {
             <div className="survey-card">
               <div className="survey-card-header">
                 <h3>
-                  <Clock size={18} style={{ color: '#38bdf8' }} />
+                  <Clock size={18} style={{ color: 'var(--c-blue)' }} />
                   Assignment & Activity Audit Log
                 </h3>
               </div>
 
               {history.length === 0 ? (
-                <div style={{ textAlign: 'center', padding: '30px', color: '#94a3b8' }}>
+                <div style={{ textAlign: 'center', padding: '30px', color: 'var(--text-muted)' }}>
                   Loading timeline logs...
                 </div>
               ) : (
@@ -635,13 +635,13 @@ export default function SurveyDetail() {
                   {history.map((ev) => (
                     <div key={ev.id} style={{ position: 'relative' }}>
                       <div style={{ position: 'absolute', left: '-22px', top: '4px', width: '10px', height: '10px', borderRadius: '50%', background: '#38bdf8' }} />
-                      <div style={{ fontSize: '0.88rem', fontWeight: 600, color: '#fff' }}>
+                      <div style={{ fontSize: '0.88rem', fontWeight: 600, color: 'var(--text-strong)' }}>
                         {ev.action?.replace(/_/g, ' ')}
                       </div>
-                      <div style={{ fontSize: '0.8rem', color: '#cbd5e1', marginTop: '2px' }}>
+                      <div style={{ fontSize: '0.8rem', color: 'var(--text-soft)', marginTop: '2px' }}>
                         {ev.details}
                       </div>
-                      <div style={{ fontSize: '0.74rem', color: '#64748b', marginTop: '2px' }}>
+                      <div style={{ fontSize: '0.74rem', color: 'var(--text-dim)', marginTop: '2px' }}>
                         By {ev.actor_name} &bull; {new Date(ev.timestamp).toLocaleString()}
                       </div>
                     </div>
@@ -656,7 +656,7 @@ export default function SurveyDetail() {
           {showAssignModal && (
             <div className="survey-modal-overlay">
               <div className="survey-modal-content">
-                <h3 style={{ color: '#fff', margin: '0 0 16px 0' }}>Assign Surveyor</h3>
+                <h3 style={{ color: 'var(--text-strong)', margin: '0 0 16px 0' }}>Assign Surveyor</h3>
                 <form onSubmit={handleAssignSubmit}>
                   <div className="survey-form-group">
                     <label className="survey-label">Field Engineer</label>
@@ -734,7 +734,7 @@ export default function SurveyDetail() {
           {showScheduleModal && (
             <div className="survey-modal-overlay">
               <div className="survey-modal-content">
-                <h3 style={{ color: '#fff', margin: '0 0 16px 0' }}>Schedule Site Visit</h3>
+                <h3 style={{ color: 'var(--text-strong)', margin: '0 0 16px 0' }}>Schedule Site Visit</h3>
                 <form onSubmit={handleScheduleSubmit}>
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
                     <div className="survey-form-group">
@@ -797,10 +797,10 @@ export default function SurveyDetail() {
           {showUploadModal && (
             <div className="survey-modal-overlay">
               <div className="survey-modal-content">
-                <h3 style={{ color: '#fff', margin: '0 0 16px 0' }}>Upload Site Photograph</h3>
+                <h3 style={{ color: 'var(--text-strong)', margin: '0 0 16px 0' }}>Upload Site Photograph</h3>
                 <form onSubmit={handlePhotoUpload}>
                   {uploadError && (
-                    <div style={{ color: '#f87171', marginBottom: '12px', fontSize: '0.85rem' }}>
+                    <div style={{ color: 'var(--c-red)', marginBottom: '12px', fontSize: '0.85rem' }}>
                       {uploadError}
                     </div>
                   )}
@@ -889,6 +889,6 @@ export default function SurveyDetail() {
           )}
         </>
       )}
-    </SurveyLayout>
+    </PortalLayout>
   );
 }

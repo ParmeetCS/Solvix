@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import SurveyLayout from './SurveyLayout';
+import PortalLayout from '@/components/PortalLayout';
 import { surveyApi } from '@/services/api';
 import {
   ClipboardList,
@@ -143,7 +143,7 @@ export default function SurveyRequestsList() {
   };
 
   return (
-    <SurveyLayout
+    <PortalLayout
       title="Survey Requests Pipeline"
       subtitle="Manage technical site inspections, assign field engineers, and track survey lifecycle"
       actions={
@@ -167,7 +167,7 @@ export default function SurveyRequestsList() {
       <div className="survey-card" style={{ padding: '16px 20px' }}>
         <form onSubmit={handleSearchSubmit} style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', alignItems: 'center' }}>
           <div style={{ position: 'relative', flex: '1 1 240px' }}>
-            <Search size={16} style={{ position: 'absolute', left: '12px', top: '12px', color: '#94a3b8' }} />
+            <Search size={16} style={{ position: 'absolute', left: '12px', top: '12px', color: 'var(--text-muted)' }} />
             <input
               type="text"
               placeholder="Search by code, customer, phone, or location..."
@@ -219,13 +219,13 @@ export default function SurveyRequestsList() {
       {/* Main Table */}
       <div className="survey-card" style={{ padding: 0 }}>
         {loading ? (
-          <div style={{ padding: '60px', textAlign: 'center', color: '#94a3b8' }}>
+          <div style={{ padding: '60px', textAlign: 'center', color: 'var(--text-muted)' }}>
             Loading site survey requests...
           </div>
         ) : error ? (
-          <div style={{ padding: '30px', color: '#f87171' }}>{error}</div>
+          <div style={{ padding: '30px', color: 'var(--c-red)' }}>{error}</div>
         ) : surveys.length === 0 ? (
-          <div style={{ padding: '60px', textAlign: 'center', color: '#64748b' }}>
+          <div style={{ padding: '60px', textAlign: 'center', color: 'var(--text-dim)' }}>
             No survey requests match your current filters.
           </div>
         ) : (
@@ -249,25 +249,25 @@ export default function SurveyRequestsList() {
                     <td>
                       <Link
                         to={`/survey/requests/${srv.id}`}
-                        style={{ fontWeight: 600, color: '#38bdf8', textDecoration: 'none' }}
+                        style={{ fontWeight: 600, color: 'var(--c-blue)', textDecoration: 'none' }}
                       >
                         {srv.survey_code}
                       </Link>
-                      <div style={{ fontSize: '0.75rem', color: '#64748b' }}>
+                      <div style={{ fontSize: '0.75rem', color: 'var(--text-dim)' }}>
                         {new Date(srv.created_at).toLocaleDateString()}
                       </div>
                     </td>
                     <td>
-                      <div style={{ fontWeight: 500, color: '#fff' }}>{srv.customer_name}</div>
-                      <div style={{ fontSize: '0.78rem', color: '#94a3b8' }}>
+                      <div style={{ fontWeight: 500, color: 'var(--text-strong)' }}>{srv.customer_name}</div>
+                      <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>
                         {srv.contact_phone || 'No phone'}
                       </div>
                     </td>
                     <td>
-                      <div style={{ fontSize: '0.84rem', color: '#cbd5e1' }}>
+                      <div style={{ fontSize: '0.84rem', color: 'var(--text-soft)' }}>
                         {srv.site_address || srv.city}
                       </div>
-                      <div style={{ fontSize: '0.75rem', color: '#64748b', textTransform: 'capitalize' }}>
+                      <div style={{ fontSize: '0.75rem', color: 'var(--text-dim)', textTransform: 'capitalize' }}>
                         {srv.property_type || 'Residential'}
                       </div>
                     </td>
@@ -278,7 +278,7 @@ export default function SurveyRequestsList() {
                     </td>
                     <td>
                       {srv.assigned_to_name ? (
-                        <div style={{ fontSize: '0.85rem', color: '#e2e8f0' }}>
+                        <div style={{ fontSize: '0.85rem', color: 'var(--text-soft)' }}>
                           {srv.assigned_to_name}
                         </div>
                       ) : (
@@ -296,14 +296,14 @@ export default function SurveyRequestsList() {
                     </td>
                     <td>
                       {srv.scheduled_date ? (
-                        <div style={{ fontSize: '0.82rem', color: '#22d3ee' }}>
+                        <div style={{ fontSize: '0.82rem', color: 'var(--c-blue)' }}>
                           {srv.scheduled_date}
-                          <div style={{ fontSize: '0.74rem', color: '#94a3b8' }}>
+                          <div style={{ fontSize: '0.74rem', color: 'var(--text-muted)' }}>
                             {srv.scheduled_time || 'General'}
                           </div>
                         </div>
                       ) : (
-                        <span style={{ fontSize: '0.78rem', color: '#64748b' }}>Unscheduled</span>
+                        <span style={{ fontSize: '0.78rem', color: 'var(--text-dim)' }}>Unscheduled</span>
                       )}
                     </td>
                     <td>{getStatusBadge(srv.status)}</td>
@@ -337,10 +337,10 @@ export default function SurveyRequestsList() {
       {assignModalSurvey && (
         <div className="survey-modal-overlay">
           <div className="survey-modal-content">
-            <h3 style={{ color: '#fff', margin: '0 0 16px 0' }}>
+            <h3 style={{ color: 'var(--text-strong)', margin: '0 0 16px 0' }}>
               Assign Survey: {assignModalSurvey.survey_code}
             </h3>
-            <p style={{ color: '#94a3b8', fontSize: '0.85rem', marginBottom: '20px' }}>
+            <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginBottom: '20px' }}>
               Assign field engineer for site survey at <b>{assignModalSurvey.customer_name}</b> ({assignModalSurvey.site_address || assignModalSurvey.city}).
             </p>
 
@@ -421,7 +421,7 @@ export default function SurveyRequestsList() {
       {showNewModal && (
         <div className="survey-modal-overlay">
           <div className="survey-modal-content">
-            <h3 style={{ color: '#fff', margin: '0 0 16px 0' }}>Create Site Survey Request</h3>
+            <h3 style={{ color: 'var(--text-strong)', margin: '0 0 16px 0' }}>Create Site Survey Request</h3>
             <form onSubmit={handleCreateRequest}>
               <div className="survey-form-group">
                 <label className="survey-label">Customer / Company Name</label>
@@ -514,6 +514,6 @@ export default function SurveyRequestsList() {
           </div>
         </div>
       )}
-    </SurveyLayout>
+    </PortalLayout>
   );
 }

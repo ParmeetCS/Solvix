@@ -41,7 +41,7 @@ export async function GET(request) {
           id,
           order_code,
           system_capacity_kw,
-          total_price
+          total_amount
         ),
         subsidy_documents (
           id,

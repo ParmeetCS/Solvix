@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import SalesLayout from './SalesLayout';
+import PortalLayout from '@/components/PortalLayout';
 import { quotationsApi } from '@/services/api';
 import {
   Plus,
@@ -116,7 +116,7 @@ export default function QuotationsList() {
   ];
 
   return (
-    <SalesLayout
+    <PortalLayout
       title="Quotations"
       subtitle="Build, approve and track solar quotations from survey to order"
       actions={
@@ -157,7 +157,7 @@ export default function QuotationsList() {
 
       <form className="q-filter-bar" onSubmit={handleSearch}>
         <div className="q-search">
-          <Search size={16} style={{ color: '#94a3b8' }} />
+          <Search size={16} style={{ color: 'var(--text-muted)' }} />
           <input
             type="text"
             placeholder="Search quotation code, customer or address…"
@@ -215,26 +215,26 @@ export default function QuotationsList() {
                 {quotations.map((quotation) => (
                   <tr key={quotation.id}>
                     <td>
-                      <b style={{ color: '#d8ee8e' }}>{quotation.quotation_code}</b>
-                      <div style={{ fontSize: '0.72rem', color: '#64748b' }}>
+                      <b style={{ color: 'var(--accent-text)' }}>{quotation.quotation_code}</b>
+                      <div style={{ fontSize: '0.72rem', color: 'var(--text-dim)' }}>
                         {quotation.approval_required ? 'Approval required' : 'Standard'}
                       </div>
                     </td>
                     <td>
-                      <div style={{ fontWeight: 600, color: '#fff' }}>
+                      <div style={{ fontWeight: 600, color: 'var(--text-strong)' }}>
                         {quotation.customer?.company_name || quotation.customer?.contact_name || 'Customer'}
                       </div>
-                      <div style={{ fontSize: '0.74rem', color: '#94a3b8' }}>
+                      <div style={{ fontSize: '0.74rem', color: 'var(--text-muted)' }}>
                         {quotation.customer?.customer_code || quotation.customer?.phone || '—'}
                       </div>
                     </td>
                     <td>
                       <div style={{ textTransform: 'capitalize' }}>{quotation.system_type?.replace('-', ' ')}</div>
-                      <div style={{ fontSize: '0.74rem', color: '#94a3b8' }}>
+                      <div style={{ fontSize: '0.74rem', color: 'var(--text-muted)' }}>
                         {formatNumber(quotation.system_capacity_kw)} kW
                       </div>
                     </td>
-                    <td style={{ fontWeight: 600, color: '#fff' }}>{formatCurrency(quotation.total_amount)}</td>
+                    <td style={{ fontWeight: 600, color: 'var(--text-strong)' }}>{formatCurrency(quotation.total_amount)}</td>
                     <td>
                       <span className={`q-badge ${statusClass(quotation.status)}`}>
                         {statusLabel(quotation.status)}
@@ -261,10 +261,10 @@ export default function QuotationsList() {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'space-between',
-              borderTop: '1px solid rgba(255,255,255,0.06)',
+              borderTop: '1px solid rgba(var(--ink-rgb), 0.06)',
             }}
           >
-            <span style={{ fontSize: '0.82rem', color: '#94a3b8' }}>
+            <span style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>
               Page {pagination.page} of {pagination.totalPages} ({pagination.total} quotations)
             </span>
             <div style={{ display: 'flex', gap: 8 }}>
@@ -305,6 +305,6 @@ export default function QuotationsList() {
           <b>{(summary?.rejected ?? 0) + (summary?.expired ?? 0)}</b>
         </div>
       </div>
-    </SalesLayout>
+    </PortalLayout>
   );
 }

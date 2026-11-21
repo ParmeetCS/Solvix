@@ -6,7 +6,7 @@ const styles = `
 
   .solvix-quote-root {
     min-height: 100vh;
-    background: #0F1623;
+    background: var(--surface-solid);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -25,7 +25,7 @@ const styles = `
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    color: #6B7A99;
+    color: var(--text-dim);
     font-size: 13px;
     font-weight: 500;
     text-decoration: none;
@@ -33,7 +33,7 @@ const styles = `
     margin-bottom: 32px;
     transition: color 0.15s;
   }
-  .solvix-back:hover { color: #E8EDF5; }
+  .solvix-back:hover { color: var(--text-soft); }
   .solvix-back svg { flex-shrink: 0; }
 
   /* ── Brand mark ── */
@@ -57,7 +57,7 @@ const styles = `
   .solvix-name {
     font-size: 17px;
     font-weight: 700;
-    color: #E8EDF5;
+    color: var(--text-soft);
     letter-spacing: 0.08em;
   }
 
@@ -65,14 +65,14 @@ const styles = `
   .solvix-heading {
     font-size: 26px;
     font-weight: 600;
-    color: #E8EDF5;
+    color: var(--text-soft);
     margin: 0 0 6px;
     letter-spacing: -0.02em;
     line-height: 1.2;
   }
   .solvix-subheading {
     font-size: 14px;
-    color: #6B7A99;
+    color: var(--text-dim);
     margin: 0 0 32px;
     line-height: 1.5;
     max-width: 380px;
@@ -80,7 +80,7 @@ const styles = `
 
   /* ── Form surface ── */
   .solvix-form-surface {
-    background: #1A2438;
+    background: var(--surface-solid);
     border: 1px solid #263150;
     border-radius: 14px;
     padding: 28px;
@@ -94,12 +94,12 @@ const styles = `
     display: block;
     font-size: 12px;
     font-weight: 600;
-    color: #8A98B8;
+    color: var(--text-muted);
     letter-spacing: 0.04em;
     margin-bottom: 7px;
   }
   .solvix-required {
-    color: #F87171;
+    color: var(--c-red);
     margin-left: 4px;
   }
   .solvix-input,
@@ -107,22 +107,22 @@ const styles = `
   .solvix-textarea {
     width: 100%;
     box-sizing: border-box;
-    background: #0F1623;
+    background: var(--surface-solid);
     border: 1px solid #263150;
     border-radius: 8px;
     padding: 11px 14px;
     font-size: 15px;
     font-family: inherit;
-    color: #E8EDF5;
+    color: var(--text-soft);
     outline: none;
     transition: border-color 0.15s, box-shadow 0.15s;
   }
   .solvix-input::placeholder,
-  .solvix-textarea::placeholder { color: #3A4A6B; }
+  .solvix-textarea::placeholder { color: var(--text-dim); }
   .solvix-input:focus,
   .solvix-select:focus,
   .solvix-textarea:focus {
-    border-color: #4B9EFF;
+    border-color: var(--c-blue);
     box-shadow: 0 0 0 3px rgba(75, 158, 255, 0.12);
   }
   .solvix-select {
@@ -152,7 +152,7 @@ const styles = `
   .solvix-btn-primary {
     width: 100%;
     background: #4B9EFF;
-    color: #0F1623;
+    color: var(--on-fill);
     border: none;
     border-radius: 8px;
     padding: 12px;
@@ -183,12 +183,12 @@ const styles = `
   .solvix-message.ok {
     background: rgba(52, 211, 153, 0.1);
     border: 1px solid rgba(52, 211, 153, 0.25);
-    color: #34D399;
+    color: var(--c-green);
   }
   .solvix-message.error {
     background: rgba(248, 113, 113, 0.1);
     border: 1px solid rgba(248, 113, 113, 0.25);
-    color: #F87171;
+    color: var(--c-red);
   }
 `;
 
@@ -206,8 +206,8 @@ export default function QuoteForm({ navigate }) {
   const [submitting, setSubmitting] = useState(false);
   const [message, setMessage] = useState(null);
 
-  const systemTypes = ['On-Grid', 'Off-Grid', 'Not Sure'];
-  const capacities = ['1 kW', '2 kW', '3 kW', '4 kW', '5 kW', 'Not Sure'];
+  const systemTypes = ['On-Grid', 'Off-Grid', 'Hybrid', 'Not Sure'];
+  const capacities = ['1 kW', '2 kW', '3 kW', '4 kW', '5 kW', '6 kW', '8 kW', '10 kW', 'More than 10 kW', 'Not Sure'];
 
   const handleChange = (key) => (e) => setForm((prev) => ({ ...prev, [key]: e.target.value }));
 
@@ -252,7 +252,7 @@ export default function QuoteForm({ navigate }) {
               <span className="solvix-icon">
                 {/* Lightning bolt icon */}
                 <svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M9.5 2L4 9.5H8.5L7.5 15L13 7.5H8.5L9.5 2Z" fill="#0F1623"/>
+                  <path d="M9.5 2L4 9.5H8.5L7.5 15L13 7.5H8.5L9.5 2Z" fill="var(--surface-solid)"/>
                 </svg>
               </span>
               <span className="solvix-name">SOLVIX</span>
@@ -297,7 +297,7 @@ export default function QuoteForm({ navigate }) {
                   type="tel"
                   required
                   autoComplete="tel"
-                  placeholder="+1 (555) 000-0000"
+                  placeholder="+91 98765 43210"
                   value={form.phone}
                   onChange={handleChange('phone')}
                 />
@@ -331,7 +331,7 @@ export default function QuoteForm({ navigate }) {
                   type="text"
                   required
                   autoComplete="street-address"
-                  placeholder="123 Solar Street"
+                  placeholder="House no., street, city, PIN code"
                   value={form.address}
                   onChange={handleChange('address')}
                 />
@@ -371,7 +371,7 @@ export default function QuoteForm({ navigate }) {
                   id="quote-monthly-bill"
                   className="solvix-input"
                   type="text"
-                  placeholder="e.g. $150/month"
+                  placeholder="e.g. ₹4,500 per month"
                   value={form.monthlyBill}
                   onChange={handleChange('monthlyBill')}
                 />
