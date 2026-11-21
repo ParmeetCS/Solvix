@@ -1,23 +1,19 @@
 import { useState, useEffect } from 'react';
+import { Routes, Route, useNavigate } from 'react-router-dom';
 import './App.css';
 import SignUp from './components/SignUp';
 import CustomerLogin from './components/CustomerLogin';
 import EmployeeLogin from './components/EmployeeLogin';
 import QuoteForm from './components/QuoteForm';
+import RegisterCustomer from './pages/auth/RegisterCustomer';
+import RegisterEmployee from './pages/auth/RegisterEmployee';
+import NotFound from './pages/shared/NotFound';
 
 export default function App() {
-  const [route, setRoute] = useState(window.location.pathname);
   const [mobileOpen, setMobileOpen] = useState(false);
-
-  const navigate = (to) => {
-    if (to === window.location.pathname) return;
-    window.history.pushState(null, '', to);
-    setRoute(to);
-    setMobileOpen(false);
-  };
+  const navigate = useNavigate();
 
   const onPopState = () => {
-    setRoute(window.location.pathname);
     setMobileOpen(false);
   };
 
@@ -510,9 +506,10 @@ void main(){
         </div>
       )}
 
-      {route === '/' ? (
-        <>
-          {/* HERO */}
+      <Routes>
+        <Route path="/" element={
+          <>
+            {/* HERO */}
           <div className="hero-pin" id="heroPin">
             <main className="hero" id="hero">
               <div className="layer sky">

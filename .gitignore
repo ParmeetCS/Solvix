@@ -22,3 +22,23 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Environment files (never commit actual secrets)
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env.example is tracked; .env.* overrides are ignored
+
+# Next.js
+backend/.next
+backend/out
+backend/build
+
+# TypeScript / cache
+*.tsbuildinfo
+.eslint.cache
+
+# OS
+Thumbs.db
