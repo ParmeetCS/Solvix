@@ -300,6 +300,20 @@ void main(){
         });
       });
 
+      mm.add('(min-width:721px)', () => {
+        const sticky = document.querySelector('.flow-side .sticky');
+        if (sticky) {
+          ScrollTrigger.create({
+            trigger: '.flow-grid',
+            start: 'top top+=110',
+            end: () => `bottom ${sticky.offsetHeight + 140}px`,
+            pin: sticky,
+            pinSpacing: false,
+            invalidateOnRefresh: true,
+          });
+        }
+      });
+
       const no = $('stepNo');
       const setNo = i => {
         if (no) {

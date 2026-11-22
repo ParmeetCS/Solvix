@@ -107,7 +107,6 @@ export default function App() {
 
   return (
     <>
-      <ErrorBoundary key={location.pathname}>
       <Suspense fallback={<div style={{ minHeight: '100vh', display: 'grid', placeItems: 'center', background: 'var(--app-bg)', color: 'var(--text-muted)' }}>Loading…</div>}>
       <Routes>
         <Route path="/" element={<PublicOnly><Landing /></PublicOnly>} />

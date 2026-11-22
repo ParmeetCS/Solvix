@@ -913,6 +913,7 @@ html.lenis body {
 
 .flow-side {
   position: relative;
+  align-self: stretch;
   height: 100%;
 }
 
