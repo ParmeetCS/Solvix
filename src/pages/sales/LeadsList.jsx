@@ -202,7 +202,7 @@ export default function LeadsList() {
                     <td style={{ textTransform: 'capitalize' }}>{lead.source}</td>
                     <td>
                       <span className={`crm-badge crm-badge-${lead.status}`}>
-                        {lead.status?.replace('_', ' ')}
+                        {String(lead.status || '').replace('_', ' ')}
                       </span>
                     </td>
                     <td>

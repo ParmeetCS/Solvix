@@ -33,12 +33,29 @@ export async function GET(request) {
           `)
           .order('name', { ascending: true });
 
-        if (status && status !== 'all') query = query.eq('status', status);
         if (search) query = query.or(`name.ilike.%${search}%,sku.ilike.%${search}%,manufacturer.ilike.%${search}%`);
 
         const { data: prods, error } = await query;
         if (!error && prods && prods.length > 0) {
-          return jsonResponse({ products: prods });
+          // The pages expect flat, memory-store style fields (category as text, status, prices).
+          const SERIAL_CATEGORIES = ['solar_panels', 'solar_inverters', 'batteries'];
+          const products = prods
+            .map((r) => ({
+              ...r,
+              category_id: r.category?.id ?? r.category_id ?? null,
+              category_name: r.category?.name || 'General',
+              category: r.category?.code || (typeof r.category === 'string' ? r.category : ''),
+              manufacturer: r.manufacturer || r.brand || '',
+              purchase_price: Number(r.purchase_price ?? r.base_price ?? 0),
+              selling_price: Number(r.selling_price ?? r.base_price ?? 0),
+              status: r.status || (r.is_active === false ? 'inactive' : 'active'),
+              min_stock_threshold: Number(r.min_stock_threshold ?? r.min_stock_level ?? 0),
+              requires_serial_number: r.requires_serial_number ?? SERIAL_CATEGORIES.includes(r.category?.code),
+              warranty_months: r.warranty_months ?? Number(r.warranty_years || 0) * 12,
+            }))
+            .filter((r) => (!category || category === 'all' || r.category === category || r.category_id === category)
+              && (status === '' || status === 'all' || r.status === status));
+          return jsonResponse({ products });
         }
       } catch (e) {
         // Fall back

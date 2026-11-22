@@ -36,6 +36,8 @@ export default function SerialRegistration() {
   // Batch form
   const [batchProductId, setBatchProductId] = useState('');
   const [batchWarehouseId, setBatchWarehouseId] = useState('');
+  const [singleLocation, setSingleLocation] = useState('');
+  const [batchLocation, setBatchLocation] = useState('');
   const [batchText, setBatchText] = useState('');
 
   useEffect(() => {
@@ -64,6 +66,14 @@ export default function SerialRegistration() {
     init();
   }, []);
 
+  // A warehouse can be chosen from the list or typed by hand (value "__manual__", or no list at all).
+  const MANUAL = '__manual__';
+  const locationFor = (warehouseId, typed) => {
+    if (!warehouseId || warehouseId === MANUAL) return typed.trim();
+    const w = warehouses.find((x) => x.id === warehouseId);
+    return w ? w.name : typed.trim();
+  };
+
   const handleScanned = (text) => {
     const code = String(text || '').trim();
     if (!code) return;
@@ -90,7 +100,11 @@ export default function SerialRegistration() {
 
     try {
       setLoading(true);
-      const res = await warehouseApi.registerSerialNumbers(singleForm);
+      const res = await warehouseApi.registerSerialNumbers({
+        ...singleForm,
+        warehouse_id: singleForm.warehouse_id === MANUAL ? '' : singleForm.warehouse_id,
+        current_location: locationFor(singleForm.warehouse_id, singleLocation) || undefined,
+      });
       if (res && res.success) {
         setSuccess(`Serial number ${singleForm.serial_number} registered successfully!`);
         setTimeout(() => {
@@ -123,7 +137,8 @@ export default function SerialRegistration() {
 
     const batch = lines.map(sn => ({
       product_id: batchProductId,
-      warehouse_id: batchWarehouseId,
+      warehouse_id: batchWarehouseId === MANUAL ? '' : batchWarehouseId,
+      current_location: locationFor(batchWarehouseId, batchLocation) || undefined,
       serial_number: sn
     }));
 
@@ -223,16 +238,28 @@ export default function SerialRegistration() {
 
               <div className="wh-form-group">
                 <label>Location / Warehouse *</label>
-                <select
-                  className="wh-select"
-                  value={singleForm.warehouse_id}
-                  onChange={(e) => setSingleForm({ ...singleForm, warehouse_id: e.target.value })}
-                  required
-                >
-                  {warehouses.map(w => (
-                    <option key={w.id} value={w.id}>{w.name} ({w.code})</option>
-                  ))}
-                </select>
+                {warehouses.length > 0 && (
+                  <select
+                    className="wh-select"
+                    value={singleForm.warehouse_id}
+                    onChange={(e) => setSingleForm({ ...singleForm, warehouse_id: e.target.value })}
+                  >
+                    {warehouses.map(w => (
+                      <option key={w.id} value={w.id}>{w.name} ({w.code})</option>
+                    ))}
+                    <option value={MANUAL}>Other (type it below)</option>
+                  </select>
+                )}
+                {(warehouses.length === 0 || singleForm.warehouse_id === MANUAL) && (
+                  <input
+                    type="text"
+                    className="wh-input"
+                    style={{ marginTop: warehouses.length > 0 ? 8 : 0 }}
+                    placeholder="Type the warehouse or location, e.g. Delhi Central Warehouse"
+                    value={singleLocation}
+                    onChange={(e) => setSingleLocation(e.target.value)}
+                  />
+                )}
               </div>
 
               <div className="wh-form-group span-2">
@@ -324,16 +351,28 @@ export default function SerialRegistration() {
 
               <div className="wh-form-group">
                 <label>Target Facility / Warehouse *</label>
-                <select
-                  className="wh-select"
-                  value={batchWarehouseId}
-                  onChange={(e) => setBatchWarehouseId(e.target.value)}
-                  required
-                >
-                  {warehouses.map(w => (
-                    <option key={w.id} value={w.id}>{w.name} ({w.code})</option>
-                  ))}
-                </select>
+                {warehouses.length > 0 && (
+                  <select
+                    className="wh-select"
+                    value={batchWarehouseId}
+                    onChange={(e) => setBatchWarehouseId(e.target.value)}
+                  >
+                    {warehouses.map(w => (
+                      <option key={w.id} value={w.id}>{w.name} ({w.code})</option>
+                    ))}
+                    <option value={MANUAL}>Other (type it below)</option>
+                  </select>
+                )}
+                {(warehouses.length === 0 || batchWarehouseId === MANUAL) && (
+                  <input
+                    type="text"
+                    className="wh-input"
+                    style={{ marginTop: warehouses.length > 0 ? 8 : 0 }}
+                    placeholder="Type the warehouse or location"
+                    value={batchLocation}
+                    onChange={(e) => setBatchLocation(e.target.value)}
+                  />
+                )}
               </div>
 
               <div className="wh-form-group span-2">

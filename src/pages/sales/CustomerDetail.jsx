@@ -169,7 +169,7 @@ export default function CustomerDetail() {
                         <td style={{ textTransform: 'capitalize' }}>{l.source}</td>
                         <td>
                           <span className={`crm-badge crm-badge-${l.status}`}>
-                            {l.status?.replace('_', ' ')}
+                            {String(l.status || '').replace('_', ' ')}
                           </span>
                         </td>
                         <td>{new Date(l.created_at).toLocaleDateString()}</td>

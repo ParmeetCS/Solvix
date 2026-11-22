@@ -335,7 +335,7 @@ export default function InstallationAssignments() {
               >
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
                   <span style={{ fontWeight: 600, color: 'var(--c-amber)' }}>{j.installation_code}</span>
-                  <span className={`inst-badge inst-badge-${j.status}`}>{j.status.replace('_', ' ')}</span>
+                  <span className={`inst-badge inst-badge-${j.status}`}>{String(j.status || '').replace('_', ' ')}</span>
                 </div>
                 <div style={{ fontWeight: 600, color: 'var(--text-strong)', fontSize: '0.9rem' }}>{j.customer_name}</div>
                 <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', margin: '4px 0' }}>
@@ -344,7 +344,7 @@ export default function InstallationAssignments() {
                 <div style={{ fontSize: '0.78rem', color: 'var(--text-soft)', marginTop: 8, borderTop: '1px solid rgba(var(--ink-rgb), 0.06)', paddingTop: 6 }}>
                   <strong>Team:</strong>{' '}
                   {(j.assigned_technicians || []).length > 0 ? (
-                    j.assigned_technicians.map(a => `${a.full_name} (${a.role_on_job.replace('_', ' ')})`).join(', ')
+                    j.assigned_technicians.map(a => `${a.full_name} (${String(a.role_on_job || '').replace('_', ' ')})`).join(', ')
                   ) : (
                     <span style={{ color: 'var(--c-amber)' }}>Unassigned</span>
                   )}

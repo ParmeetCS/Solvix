@@ -363,7 +363,7 @@ export default function InstallationJobDetail() {
         <div style={{ display: 'flex', gap: 24, alignItems: 'center', flexWrap: 'wrap' }}>
           <div>
             <div style={{ fontSize: '0.72rem', color: 'var(--text-dim)', textTransform: 'uppercase' }}>Current Stage</div>
-            <span className={`inst-badge inst-badge-${job.status}`}>{job.status.replace('_', ' ')}</span>
+            <span className={`inst-badge inst-badge-${job.status}`}>{String(job.status || '').replace('_', ' ')}</span>
           </div>
           <div>
             <div style={{ fontSize: '0.72rem', color: 'var(--text-dim)', textTransform: 'uppercase' }}>Checklist Progress</div>
@@ -502,7 +502,7 @@ export default function InstallationJobDetail() {
                         )}
                       </div>
                       <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', marginTop: 4 }}>
-                        Role: {t.role_on_job.replace('_', ' ')} • Code: {t.employee_code}
+                        Role: {String(t.role_on_job || '').replace('_', ' ')} • Code: {t.employee_code}
                       </div>
                       <div style={{ fontSize: '0.78rem', color: 'var(--c-blue)', marginTop: 2 }}>
                         📞 {t.phone}

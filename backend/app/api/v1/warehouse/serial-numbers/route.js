@@ -41,12 +41,29 @@ export async function POST(request) {
       return jsonError(authResult.error, authResult.status);
     }
 
-    const { profile } = authResult;
+    const { profile, adminClient } = authResult;
     const body = await request.json();
+
+    // Look the product up in the database so serials can be registered for catalogue products.
+    async function withProduct(item) {
+      if (!adminClient || !item?.product_id) return item;
+      try {
+        const { data } = await adminClient
+          .from('products')
+          .select('id, sku, name, brand, warranty_years, category:category_id ( name, code )')
+          .eq('id', item.product_id)
+          .maybeSingle();
+        if (!data) return item;
+        return { ...item, product_snapshot: { id: data.id, sku: data.sku, name: data.name, manufacturer: data.brand || '', warranty_years: data.warranty_years || 5 } };
+      } catch {
+        return item;
+      }
+    }
 
     // Check if batch registration
     if (Array.isArray(body.batch)) {
-      const batchResult = await warehouseStore.registerBatchSerials(body.batch, profile);
+      const batch = await Promise.all(body.batch.map(withProduct));
+      const batchResult = await warehouseStore.registerBatchSerials(batch, profile);
       await logWarehouseActivity({
         actorId: profile.id,
         action: 'SERIALS_BATCH_REGISTERED',
@@ -60,7 +77,7 @@ export async function POST(request) {
       return jsonError('Serial number and Product ID are required.', 400);
     }
 
-    const serialRecord = await warehouseStore.registerSerialNumber(body, profile);
+    const serialRecord = await warehouseStore.registerSerialNumber(await withProduct(body), profile);
 
     await logWarehouseActivity({
       actorId: profile.id,

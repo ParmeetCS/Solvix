@@ -134,7 +134,7 @@ export default function InstallationSchedule() {
             <div key={job.id} className="inst-card" style={{ marginBottom: 0, display: 'flex', flexDirection: 'column' }}>
               <div className="inst-card-header" style={{ padding: '14px 18px' }}>
                 <span style={{ fontWeight: 700, color: 'var(--c-amber)' }}>{job.installation_code}</span>
-                <span className={`inst-badge inst-badge-${job.status}`}>{job.status.replace('_', ' ')}</span>
+                <span className={`inst-badge inst-badge-${job.status}`}>{String(job.status || '').replace('_', ' ')}</span>
               </div>
 
               <div style={{ padding: '18px', flex: 1, display: 'flex', flexDirection: 'column', gap: 10 }}>
@@ -163,7 +163,7 @@ export default function InstallationSchedule() {
                     <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
                       {job.assigned_technicians.map((t, i) => (
                         <span key={i} style={{ background: 'rgba(var(--ink-rgb), 0.06)', color: 'var(--text-soft)', padding: '3px 8px', borderRadius: 4, fontSize: '0.75rem' }}>
-                          {t.full_name} ({t.role_on_job.replace('_', ' ')})
+                          {t.full_name} ({String(t.role_on_job || '').replace('_', ' ')})
                         </span>
                       ))}
                     </div>

@@ -326,7 +326,7 @@ export default function TicketDetail() {
                     Priority: {t.priority}
                   </span>
                   <span className={`badge badge-${t.status}`}>
-                    Status: {t.status?.replace('_', ' ')}
+                    Status: {String(t.status || '').replace('_', ' ')}
                   </span>
                 </div>
               </div>

@@ -122,7 +122,7 @@ export default function TechnicianDashboard() {
                     <span style={{ fontWeight: 700, color: 'var(--c-amber)', fontSize: '0.95rem' }}>{job.installation_code}</span>
                     <div style={{ fontSize: '1.05rem', fontWeight: 700, color: 'var(--text-strong)', marginTop: 2 }}>{job.customer_name}</div>
                   </div>
-                  <span className={`inst-badge inst-badge-${job.status}`}>{job.status.replace('_', ' ')}</span>
+                  <span className={`inst-badge inst-badge-${job.status}`}>{String(job.status || '').replace('_', ' ')}</span>
                 </div>
 
                 <div style={{ fontSize: '0.82rem', color: 'var(--text-muted)', marginBottom: 12, display: 'flex', alignItems: 'flex-start', gap: 6 }}>
@@ -166,7 +166,7 @@ export default function TechnicianDashboard() {
               <div key={job.id} className="tech-mobile-job-card">
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
                   <span style={{ fontWeight: 600, color: 'var(--c-amber)' }}>{job.installation_code}</span>
-                  <span className={`inst-badge inst-badge-${job.status}`}>{job.status.replace('_', ' ')}</span>
+                  <span className={`inst-badge inst-badge-${job.status}`}>{String(job.status || '').replace('_', ' ')}</span>
                 </div>
                 <div style={{ fontWeight: 600, color: 'var(--text-strong)', fontSize: '0.95rem' }}>{job.customer_name}</div>
                 <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', margin: '4px 0 10px 0' }}>📍 {job.city} • {job.system_capacity_kw} kW</div>
@@ -225,7 +225,7 @@ export default function TechnicianDashboard() {
               <div key={job.id} style={{ background: 'var(--surface-solid)', border: '1px solid rgba(var(--ink-rgb), 0.08)', borderRadius: 10, padding: 14 }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 }}>
                   <span style={{ fontWeight: 600, color: 'var(--c-amber)' }}>{job.installation_code}</span>
-                  <span className={`inst-badge inst-badge-${job.status}`}>{job.status.replace('_', ' ')}</span>
+                  <span className={`inst-badge inst-badge-${job.status}`}>{String(job.status || '').replace('_', ' ')}</span>
                 </div>
                 <div style={{ fontWeight: 600, color: 'var(--text-strong)', fontSize: '0.9rem' }}>{job.customer_name}</div>
                 <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', margin: '4px 0' }}>

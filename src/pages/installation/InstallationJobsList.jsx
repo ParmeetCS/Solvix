@@ -219,7 +219,7 @@ export default function InstallationJobsList() {
                     </td>
                     <td>
                       <span className={`inst-badge inst-badge-${j.status}`}>
-                        {j.status.replace('_', ' ')}
+                        {String(j.status || '').replace('_', ' ')}
                       </span>
                     </td>
                     <td>

@@ -183,7 +183,7 @@ export default function PurchaseOrdersList() {
                           isFullyReceived ? 'wh-badge-green' :
                           isPartial ? 'wh-badge-yellow' : 'wh-badge-blue'
                         }`}>
-                          {po.status.replace('_', ' ')}
+                          {String(po.status || '').replace('_', ' ')}
                         </span>
                       </td>
                       <td>

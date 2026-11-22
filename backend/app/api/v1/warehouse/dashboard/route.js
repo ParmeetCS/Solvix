@@ -21,12 +21,13 @@ export async function GET(request) {
 
     if (adminClient) {
       try {
-        const [prodRes, invRes, poRes, dispRes, snRes] = await Promise.all([
+        const [prodRes, invRes, poRes, dispRes, snRes, whRes] = await Promise.all([
           adminClient.from('products').select('id', { count: 'exact' }).eq('is_active', true),
           adminClient.from('inventory').select('*'),
           adminClient.from('purchase_orders').select('*').in('status', ['approved', 'partially_received']),
           adminClient.from('dispatches').select('*').in('status', ['prepared', 'in_transit']),
-          adminClient.from('equipment_serial_numbers').select('id', { count: 'exact' })
+          adminClient.from('equipment_serial_numbers').select('id', { count: 'exact' }),
+          adminClient.from('warehouses').select('id, name, code, city, is_active').eq('is_active', true).order('name', { ascending: true })
         ]);
 
         if (prodRes.count !== null && invRes.data) {
@@ -58,7 +59,7 @@ export async function GET(request) {
             low_stock_alerts: [],
             recentMovements: [],
             recent_movements: [],
-            warehouses: []
+            warehouses: whRes?.data || []
           });
         }
       } catch (e) {

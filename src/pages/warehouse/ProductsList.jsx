@@ -155,7 +155,7 @@ export default function ProductsList() {
                       </td>
                       <td>
                         <span className="wh-badge wh-badge-blue" style={{ textTransform: 'capitalize' }}>
-                          {(prod.category || '').replace('_', ' ')}
+                          {String((prod.category && typeof prod.category === 'object' ? (prod.category.name || prod.category.code) : prod.category) || prod.category_name || '').replace('_', ' ')}
                         </span>
                       </td>
                       <td>{prod.manufacturer || '-'}</td>

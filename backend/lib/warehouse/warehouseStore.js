@@ -712,7 +712,8 @@ export const warehouseStore = {
       throw new Error(`Serial number "${snClean}" is already registered in the system.`);
     }
 
-    const prod = memoryProducts.find(p => p.id === serialData.product_id);
+    // Products can live in the database while this store is in memory: accept a snapshot of the product.
+    const prod = memoryProducts.find(p => p.id === serialData.product_id) || serialData.product_snapshot;
     if (!prod) throw new Error('Product not found for serial number registration.');
 
     const qrData = `SOLVIX:SN:${snClean}:PROD:${prod.sku}`;

@@ -201,7 +201,7 @@ export default function LeadDetail() {
   return (
     <PortalLayout
       title={lead ? `${lead.customer_name} (${lead.lead_code})` : 'Lead Details'}
-      subtitle={lead ? `Status: ${lead.status?.replace('_', ' ')} • Source: ${lead.source}` : ''}
+      subtitle={lead ? `Status: ${String(lead.status || '').replace('_', ' ')} • Source: ${lead.source}` : ''}
       actions={
         <div style={{ display: 'flex', gap: '8px' }}>
           <Link to="/sales/leads" className="crm-btn crm-btn-secondary crm-btn-sm">
@@ -407,7 +407,7 @@ export default function LeadDetail() {
                 <div>
                   <div style={{ color: 'var(--text-muted)', fontSize: '0.78rem' }}>CURRENT STAGE</div>
                   <span className={`crm-badge crm-badge-${lead.status}`} style={{ marginTop: '4px' }}>
-                    {lead.status?.replace('_', ' ')}
+                    {String(lead.status || '').replace('_', ' ')}
                   </span>
                 </div>
               </div>

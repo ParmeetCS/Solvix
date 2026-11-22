@@ -151,7 +151,7 @@ export default function DispatchesList() {
                           isDelivered ? 'wh-badge-green' :
                           isInTransit ? 'wh-badge-blue' : 'wh-badge-yellow'
                         }`}>
-                          {d.status.replace('_', ' ')}
+                          {String(d.status || '').replace('_', ' ')}
                         </span>
                       </td>
                       <td>

@@ -231,7 +231,7 @@ export default function SalesDashboard() {
                         </div>
                       </div>
                       <div style={{ textAlign: 'right' }}>
-                        <span className={`crm-badge crm-badge-${l.status}`}>{l.status?.replace('_', ' ')}</span>
+                        <span className={`crm-badge crm-badge-${l.status}`}>{String(l.status || '').replace('_', ' ')}</span>
                       </div>
                     </div>
                   ))}

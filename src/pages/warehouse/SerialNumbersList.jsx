@@ -177,7 +177,7 @@ export default function SerialNumbersList() {
                           s.status === 'dispatched' ? 'wh-badge-blue' :
                           s.status === 'delivered' ? 'wh-badge-purple' : 'wh-badge-red'
                         }`}>
-                          {s.status.replace('_', ' ')}
+                          {String(s.status || '').replace('_', ' ')}
                         </span>
                       </td>
                       <td style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>

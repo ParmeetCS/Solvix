@@ -291,7 +291,7 @@ export default function SupportDashboard() {
                         </td>
                         <td>
                           <span className={`badge badge-${t.status}`}>
-                            {t.status.replace('_', ' ')}
+                            {String(t.status || '').replace('_', ' ')}
                           </span>
                         </td>
                         <td style={{ fontSize: '0.8125rem', color: 'var(--text-muted)' }}>

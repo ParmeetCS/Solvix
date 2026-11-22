@@ -161,7 +161,7 @@ export default function WarrantyDetail() {
                   {w.duration_years} Years
                 </div>
                 <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'capitalize' }}>
-                  {w.warranty_type?.replace('_', ' ')}
+                  {String(w.warranty_type || '').replace('_', ' ')}
                 </div>
               </div>
             </div>

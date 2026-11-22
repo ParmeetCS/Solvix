@@ -327,7 +327,7 @@ export default function WarehouseDashboard() {
                           mov.movement_type === 'stock_out' ? 'wh-badge-red' :
                           mov.movement_type === 'reserved' ? 'wh-badge-yellow' : 'wh-badge-blue'
                         }`}>
-                          {mov.movement_type.replace('_', ' ')}
+                          {String(mov.movement_type || '').replace('_', ' ')}
                         </span>
                       </td>
                       <td style={{ fontWeight: 500, color: 'var(--text)' }}>
