@@ -13,6 +13,7 @@ import {
   AlertTriangle,
   RefreshCw,
 } from 'lucide-react';
+import { Sparkles } from 'lucide-react';
 import { calculatePreviewTotals, formatCurrency, formatNumber } from '@/lib/quotation';
 
 function isoDate(offsetDays = 0) {
@@ -60,6 +61,30 @@ export default function QuotationBuilder() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const isEdit = Boolean(id);
+  const [aiBusy, setAiBusy] = useState(false);
+  const [aiMode, setAiMode] = useState(null);
+
+  useEffect(() => {
+    let live = true;
+    quotationsApi.getAiDraftStatus().then((r) => { if (live) setAiMode(r?.data?.mode || null); }).catch(() => {});
+    return () => { live = false; };
+  }, []);
+
+  const handleAiDraft = async () => {
+    if (!form.site_survey_id) return;
+    try {
+      setAiBusy(true);
+      setError(null);
+      const res = await quotationsApi.aiDraftQuotation(form.site_survey_id);
+      const newId = res?.data?.quotation?.id;
+      if (newId) navigate(`/sales/quotations/${newId}`);
+    } catch (err) {
+      setError(err?.message || 'The AI agent could not draft this quotation.');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } finally {
+      setAiBusy(false);
+    }
+  };
 
   const [form, setForm] = useState({
     ...EMPTY_FORM,
@@ -527,6 +552,17 @@ export default function QuotationBuilder() {
                     </select>
                     <span className="q-hint">Only approved surveys can be linked.</span>
                   </div>
+                  {!isEdit && form.site_survey_id && (
+                    <div className="q-field" style={{ gridColumn: '1 / -1' }}>
+                      <button type="button" className="crm-btn crm-btn-secondary" onClick={handleAiDraft} disabled={aiBusy}>
+                        <Sparkles size={15} /> {aiBusy ? 'AI is drafting the quotation…' : 'Draft this quotation with AI'}
+                      </button>
+                      <span className="q-hint">
+                        The agent reads the survey, picks a package, checks stock and saves a draft for you to review.
+                        {aiMode === 'rules' ? ' (Rule-based mode until a Gemini key is added.)' : ''}
+                      </span>
+                    </div>
+                  )}
                 </div>
               </div>
             </section>

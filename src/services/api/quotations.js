@@ -8,6 +8,8 @@ export const quotationsApi = {
   getQuotations: async (params = {}) => unwrap(await apiClient.get('/sales/quotations', { params })),
   getQuotation: async (id) => unwrap(await apiClient.get(`/sales/quotations/${id}`)),
   createQuotation: async (data) => unwrap(await apiClient.post('/sales/quotations', data)),
+  getAiDraftStatus: async () => unwrap(await apiClient.get('/sales/quotations/ai-draft')),
+  aiDraftQuotation: async (surveyId) => unwrap(await apiClient.post('/sales/quotations/ai-draft', { survey_id: surveyId })),
   updateQuotation: async (id, data) => unwrap(await apiClient.patch(`/sales/quotations/${id}`, data)),
   deleteQuotation: async (id) => unwrap(await apiClient.delete(`/sales/quotations/${id}`)),
   submitQuotation: async (id, data = {}) => unwrap(await apiClient.post(`/sales/quotations/${id}/submit`, data)),

@@ -259,6 +259,7 @@ export default function QuotationDetail() {
               <div className="q-panel q-no-print">
                 <div className="q-panel-header">
                   <span className="q-panel-title">Internal notes</span>
+                  {String(quotation.internal_notes).startsWith('[AI draft]') && <span className="q-badge" style={{ marginLeft: 8 }}>AI draft · review before sending</span>}
                 </div>
                 <div className="q-panel-body">
                   <p style={{ color: 'var(--text-soft)', whiteSpace: 'pre-wrap', margin: 0 }}>{quotation.internal_notes}</p>
