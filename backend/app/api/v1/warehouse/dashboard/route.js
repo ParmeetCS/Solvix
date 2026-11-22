@@ -31,6 +31,7 @@ export async function GET(request) {
         ]);
 
         if (prodRes.count !== null && invRes.data) {
+          const { count: packingCount } = await adminClient.from('orders').select('id', { count: 'exact', head: true }).in('status', ['confirmed', 'processing', 'awaiting_dispatch']);
           // A new installation has no warehouse yet; create a default one so stock can be received.
           let warehouseList = whRes?.data || [];
           if (!whRes?.error && warehouseList.length === 0) {
@@ -57,8 +58,8 @@ export async function GET(request) {
               low_stock_products: lowStock,
               outOfStockProducts: outOfStock,
               out_of_stock_products: outOfStock,
-              pendingPacking: 2,
-              pending_packing: 2,
+              pendingPacking: packingCount || 0,
+              pending_packing: packingCount || 0,
               pendingDispatches: (dispRes.data || []).length,
               pending_dispatches: (dispRes.data || []).length,
               totalSerialNumbers: snRes.count || 0,

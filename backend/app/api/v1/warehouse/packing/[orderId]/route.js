@@ -1,15 +1,16 @@
 import { jsonResponse, jsonError, handleOptions } from '@/lib/utils';
 import { requireWarehouseAccess, logWarehouseActivity } from '@/lib/supabase/warehouseAuth';
 import { warehouseStore } from '@/lib/warehouse/warehouseStore';
+import { packingDetail, reserveStock, completePacking } from '@/lib/warehouse/fulfilmentDb';
 
 export async function OPTIONS() {
   return handleOptions();
 }
 
-/**
- * GET /api/v1/warehouse/packing/[orderId]
- * Retrieves order details, Bill of Materials (BOM), available stock, and packing progress.
- */
+const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+const idOrUndefined = (v) => (UUID.test(v || '') ? v : undefined);
+
+/** GET /api/v1/warehouse/packing/[orderId] - the order, its items, reservation and packing progress. */
 export async function GET(request, { params }) {
   try {
     const { orderId } = (await params) || {};
@@ -18,22 +19,22 @@ export async function GET(request, { params }) {
       return jsonError(authResult.error, authResult.status);
     }
 
-    const data = await warehouseStore.getOrderPackingDetail(orderId);
+    const data = authResult.adminClient
+      ? await packingDetail(authResult.adminClient, orderId)
+      : await warehouseStore.getOrderPackingDetail(orderId);
     if (!data) {
       return jsonError('Order not found.', 404);
     }
-
     return jsonResponse(data);
   } catch (error) {
-    return jsonError('Failed to fetch order packing details: ' + error.message, 500);
+    return jsonError('Failed to fetch order packing details: ' + error.message, error.status || 500);
   }
 }
 
 /**
  * POST /api/v1/warehouse/packing/[orderId]
- * Action:
- * - 'reserve': Reserves inventory for this order (prevents double reservation)
- * - 'update_checklist': Marks items packed, records packed quantities
+ *  { action: 'reserve', warehouse_id? }                              reserve stock for the order
+ *  { action: 'complete_packing', packed_items, serial_numbers }       mark items packed, record serials
  */
 export async function POST(request, { params }) {
   try {
@@ -43,36 +44,34 @@ export async function POST(request, { params }) {
       return jsonError(authResult.error, authResult.status);
     }
 
-    const { profile } = authResult;
+    const { profile, adminClient } = authResult;
     const body = await request.json();
-    const { action, warehouse_id, packed_items } = body;
+    const { action, warehouse_id, packed_items, serial_numbers } = body;
 
     if (action === 'reserve') {
-      const res = await warehouseStore.reserveOrderStock(orderId, warehouse_id || 'wh-1', profile);
-      await logWarehouseActivity({
-        actorId: profile.id,
-        action: 'INVENTORY_RESERVED',
-        entityId: orderId,
-        entityType: 'order',
-        metadata: { warehouse_id }
-      });
-      return jsonResponse(res, { message: 'Stock successfully reserved for order preparation.' });
-    } else if (action === 'update_checklist') {
-      const res = await warehouseStore.updatePackingChecklist(orderId, packed_items || [], profile);
-      await logWarehouseActivity({
-        actorId: profile.id,
-        action: 'PACKING_CHECKLIST_UPDATED',
-        entityId: orderId,
-        entityType: 'order',
-        metadata: { allPacked: res.allPacked }
-      });
-      return jsonResponse(res, {
-        message: res.allPacked ? 'All items packed and verified!' : 'Packing progress saved.'
-      });
+      const res = adminClient
+        ? await reserveStock(adminClient, orderId, warehouse_id, profile)
+        : await warehouseStore.reserveOrderStock(orderId, warehouse_id || 'wh-1', profile);
+      await logWarehouseActivity({ actorId: profile.id, action: 'INVENTORY_RESERVED', entityId: idOrUndefined(orderId), entityType: 'order', metadata: { warehouse_id } });
+      return jsonResponse(res, { message: 'Stock reserved for this order.' });
     }
 
-    return jsonError('Invalid packing action. Use "reserve" or "update_checklist".', 400);
+    if (action === 'complete_packing' || action === 'update_checklist') {
+      let res;
+      if (adminClient) {
+        res = await completePacking(adminClient, orderId, packed_items || {}, serial_numbers || {}, profile);
+      } else {
+        const list = Array.isArray(packed_items)
+          ? packed_items
+          : Object.entries(packed_items || {}).filter(([, v]) => v).map(([product_id]) => ({ product_id, quantity_packed: 999999 }));
+        res = await warehouseStore.updatePackingChecklist(orderId, list, profile);
+      }
+      await logWarehouseActivity({ actorId: profile.id, action: 'PACKING_CHECKLIST_UPDATED', entityId: idOrUndefined(orderId), entityType: 'order', metadata: { all_packed: res.all_packed ?? res.allPacked } });
+      return jsonResponse(res, { message: 'Packing saved.' });
+    }
+
+    return jsonError('Invalid packing action. Use "reserve" or "complete_packing".', 400);
   } catch (error) {
-    return jsonError(error.message, 400);
+    return jsonError(error.message, error.status || 400);
   }
 }

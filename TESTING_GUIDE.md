@@ -293,6 +293,17 @@ You will see the **"Accept & pay online"** card with two choices:
 
 ## 11. Step 8 — Warehouse packs and dispatches
 
+**Before packing, the warehouse needs stock for every item in the order.** Raman's quotation uses the catalogue items (panels, inverter, cables, boxes, earthing...). For a quick demo run this once in the Supabase SQL Editor; it gives every active catalogue product 100 units in the Main Warehouse:
+
+```sql
+insert into inventory (product_id, warehouse_id, quantity_on_hand, quantity_reserved, last_restocked_at)
+select p.id, (select id from warehouses where is_active order by created_at limit 1), 100, 0, now()
+from products p where p.is_active
+on conflict (product_id, warehouse_id) do update set quantity_on_hand = greatest(inventory.quantity_on_hand, 100);
+```
+
+Then:
+
 Sign in as **Pooja** → **Order Packing**:
 
 1. Open Raman's order → tick each item as packed.

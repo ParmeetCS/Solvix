@@ -1,6 +1,7 @@
 import { jsonResponse, jsonError, handleOptions } from '@/lib/utils';
 import { requireWarehouseAccess, logWarehouseActivity } from '@/lib/supabase/warehouseAuth';
 import { warehouseStore } from '@/lib/warehouse/warehouseStore';
+import { confirmDelivery } from '@/lib/warehouse/fulfilmentDb';
 
 export async function OPTIONS() {
   return handleOptions();
@@ -8,9 +9,8 @@ export async function OPTIONS() {
 
 /**
  * POST /api/v1/warehouse/dispatches/[id]/deliver
- * Confirms equipment delivery at customer site.
- * CRITICAL BUSINESS RULE:
- * The warranty clock starts strictly from equipment delivery, not installation!
+ * Confirms equipment delivery at the customer's site.
+ * Business rule: the warranty clock starts from delivery, not installation.
  */
 export async function POST(request, { params }) {
   try {
@@ -20,26 +20,28 @@ export async function POST(request, { params }) {
       return jsonError(authResult.error, authResult.status);
     }
 
-    const { profile } = authResult;
+    const { profile, adminClient } = authResult;
     const body = await request.json().catch(() => ({}));
 
-    const result = await warehouseStore.confirmEquipmentDelivery(id, body, profile);
+    const result = adminClient
+      ? await confirmDelivery(adminClient, id, body, profile)
+      : await warehouseStore.confirmEquipmentDelivery(id, body, profile);
 
     await logWarehouseActivity({
       actorId: profile.id,
       action: 'DELIVERY_CONFIRMED_WARRANTY_TRIGGERED',
-      entityId: id,
+      entityId: /^[0-9a-f-]{36}$/i.test(id) ? id : undefined,
       entityType: 'dispatch',
       metadata: {
         actual_delivery_date: result.actual_delivery_date,
-        warranties_activated: result.warranties_activated.length
-      }
+        warranties_activated: result.warranties_activated.length,
+      },
     });
 
     return jsonResponse(result, {
-      message: `Equipment delivery confirmed on ${result.actual_delivery_date}! ${result.warranties_activated.length} warranty record(s) activated.`
+      message: `Equipment delivery confirmed on ${result.actual_delivery_date}. ${result.warranties_activated.length} warranty record(s) activated.`,
     });
   } catch (error) {
-    return jsonError(error.message, 400);
+    return jsonError(error.message, error.status || 400);
   }
 }
