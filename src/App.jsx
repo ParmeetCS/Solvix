@@ -1,5 +1,6 @@
 import { lazy, Suspense } from 'react';
 import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
+import ErrorBoundary from '@/components/ErrorBoundary';
 import './App.css';
 import RoleLogin, { EmployeePortalChooser } from './pages/auth/RoleLogin';
 import { RequireAuth, PublicOnly, PendingOnly } from './components/route-guards';
