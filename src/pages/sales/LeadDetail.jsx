@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import PortalLayout from '@/components/PortalLayout';
-import { salesApi } from '@/services/api';
+import { salesApi, surveyApi } from '@/services/api';
 import {
   ArrowLeft,
   Phone,
@@ -62,6 +62,35 @@ export default function LeadDetail() {
     loadEmployees();
   }, [id]);
 
+  // Surveyor assignment for the survey requests shown on this lead.
+  const [surveyors, setSurveyors] = useState([]);
+  const [pickedSurveyor, setPickedSurveyor] = useState({});
+  const [assigningSurvey, setAssigningSurvey] = useState(null);
+
+  const loadSurveyors = async () => {
+    try {
+      const res = await surveyApi.getSurveyors();
+      setSurveyors(res.data?.surveyors || []);
+    } catch {
+      setSurveyors([]);
+    }
+  };
+
+  const handleAssignSurveyor = async (surveyId) => {
+    const assignedTo = pickedSurveyor[surveyId];
+    if (!assignedTo) return;
+    try {
+      setAssigningSurvey(surveyId);
+      await surveyApi.assignSurvey(surveyId, { assigned_to: assignedTo });
+      setActionSuccess('Survey assigned to the engineer.');
+      await loadLead();
+    } catch (err) {
+      alert(err?.message || 'Could not assign the survey.');
+    } finally {
+      setAssigningSurvey(null);
+    }
+  };
+
   const loadLead = async () => {
     try {
       setLoading(true);
@@ -72,6 +101,7 @@ export default function LeadDetail() {
       setFollowUps(res.data.followUps || []);
       setInteractions(res.data.interactions || []);
       setSurveys(res.data.surveys || []);
+      if (surveyors.length === 0) loadSurveyors();
     } catch (err) {
       setError(err?.message || 'Failed to load lead details.');
     } finally {
@@ -499,6 +529,28 @@ export default function LeadDetail() {
                       </div>
                       <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '2px' }}>
                         Survey Date: {srv.survey_date ? new Date(srv.survey_date).toLocaleDateString() : 'Awaiting scheduling'}
+                      </div>
+                      <div style={{ display: 'flex', gap: 8, alignItems: 'center', marginTop: 10, flexWrap: 'wrap' }}>
+                        <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
+                          {srv.assigned_to ? `Assigned to ${(surveyors.find((s) => s.id === srv.assigned_to) || {}).full_name || 'a survey engineer'}` : 'Not assigned yet'}
+                        </span>
+                        <select
+                          className="crm-select"
+                          style={{ width: 'auto', minWidth: 170, padding: '5px 8px' }}
+                          value={pickedSurveyor[srv.id] || ''}
+                          onChange={(e) => setPickedSurveyor({ ...pickedSurveyor, [srv.id]: e.target.value })}
+                        >
+                          <option value="">{srv.assigned_to ? 'Change engineer…' : 'Assign to…'}</option>
+                          {surveyors.map((s) => <option key={s.id} value={s.id}>{s.full_name || s.email}{s.department ? ` (${s.department})` : ''}</option>)}
+                        </select>
+                        <button
+                          type="button"
+                          className="crm-btn crm-btn-primary crm-btn-sm"
+                          disabled={!pickedSurveyor[srv.id] || assigningSurvey === srv.id}
+                          onClick={() => handleAssignSurveyor(srv.id)}
+                        >
+                          {assigningSurvey === srv.id ? 'Assigning…' : 'Assign'}
+                        </button>
                       </div>
                     </div>
                   ))}
