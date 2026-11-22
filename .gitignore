@@ -42,3 +42,6 @@ backend/build
 
 # OS
 Thumbs.db
+
+# extra dev instances
+backend/.next-*
