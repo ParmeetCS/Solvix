@@ -21,7 +21,7 @@ export async function GET(request) {
     // Fetch active employees
     const { data: employees, error } = await adminClient
       .from('profiles')
-      .select('id, full_name, email, phone, account_type, is_active, role_id, department_id')
+      .select('id, full_name, email, phone, account_type, is_active, role_id, department_id, department:department_id ( name, code )')
       .eq('account_type', 'employee')
       .eq('is_active', true);
 
@@ -42,7 +42,12 @@ export async function GET(request) {
       }
     });
 
-    const employeesWithCounts = (employees || []).map(emp => ({
+    // Leads are worked by the Sales team: offer sales people only, so a lead is not handed to (and lost in)
+    // another department. Fall back to everyone if no sales department has been set up yet.
+    const salesStaff = (employees || []).filter((e) => /sales|crm/i.test(`${e.department?.code || ''} ${e.department?.name || ''}`));
+    const pool = salesStaff.length > 0 ? salesStaff : (employees || []);
+
+    const employeesWithCounts = pool.map(emp => ({
       ...emp,
       activeLeadCount: counts[emp.id] || 0
     }));

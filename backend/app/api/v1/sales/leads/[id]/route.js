@@ -36,7 +36,16 @@ export async function GET(request, { params }) {
 
     // RBAC check: Non-admins can only view their own assigned leads
     if (!isAdmin && lead.assigned_to !== profile.id && lead.created_by !== profile.id) {
-      return jsonError('Access denied to this lead.', 403);
+      // Someone who handled the lead earlier (it was assigned to them, or they reassigned it) keeps access.
+      const { data: handled } = await adminClient
+        .from('lead_assignments')
+        .select('id')
+        .eq('lead_id', id)
+        .or(`assigned_to.eq.${profile.id},assigned_by.eq.${profile.id}`)
+        .limit(1);
+      if (!handled || handled.length === 0) {
+        return jsonError('Access denied to this lead.', 403);
+      }
     }
 
     // Parallel fetch: assignment history, follow-ups, interactions, surveys
