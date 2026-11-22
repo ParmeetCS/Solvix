@@ -31,6 +31,17 @@ export async function GET(request) {
         ]);
 
         if (prodRes.count !== null && invRes.data) {
+          // A new installation has no warehouse yet; create a default one so stock can be received.
+          let warehouseList = whRes?.data || [];
+          if (!whRes?.error && warehouseList.length === 0) {
+            const { data: created } = await adminClient
+              .from('warehouses')
+              .insert({ name: 'Main Warehouse', code: 'WH-MAIN', city: 'Head office', is_active: true })
+              .select('id, name, code, city, is_active')
+              .single();
+            if (created) warehouseList = [created];
+          }
+
           const totalStock = (invRes.data || []).reduce((acc, i) => acc + Number(i.quantity_on_hand), 0);
           const lowStock = (invRes.data || []).filter(i => (Number(i.quantity_on_hand) - Number(i.quantity_reserved)) <= 5).length;
 
@@ -59,7 +70,7 @@ export async function GET(request) {
             low_stock_alerts: [],
             recentMovements: [],
             recent_movements: [],
-            warehouses: whRes?.data || []
+            warehouses: warehouseList
           });
         }
       } catch (e) {

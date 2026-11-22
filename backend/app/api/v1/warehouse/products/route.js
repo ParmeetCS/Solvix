@@ -1,6 +1,7 @@
 import { jsonResponse, jsonError, handleOptions } from '@/lib/utils';
 import { requireWarehouseAccess, logWarehouseActivity } from '@/lib/supabase/warehouseAuth';
 import { warehouseStore } from '@/lib/warehouse/warehouseStore';
+import { PRODUCT_SELECT, toUiProduct, toDbProduct } from '@/lib/warehouse/productMapper';
 
 export async function OPTIONS() {
   return handleOptions();
@@ -8,7 +9,7 @@ export async function OPTIONS() {
 
 /**
  * GET /api/v1/warehouse/products
- * List products with category, stock levels, and search.
+ * Lists the product catalogue (database first, in-memory fallback for local development).
  */
 export async function GET(request) {
   try {
@@ -21,44 +22,25 @@ export async function GET(request) {
     const { searchParams } = new URL(request.url);
     const category = searchParams.get('category') || '';
     const status = searchParams.get('status') || '';
-    const search = searchParams.get('search') || '';
+    const search = (searchParams.get('search') || '').toLowerCase();
 
     if (adminClient) {
       try {
-        let query = adminClient
+        const { data: prods, error } = await adminClient
           .from('products')
-          .select(`
-            *,
-            category:category_id ( id, name, code )
-          `)
+          .select(PRODUCT_SELECT)
           .order('name', { ascending: true });
 
-        if (search) query = query.or(`name.ilike.%${search}%,sku.ilike.%${search}%,manufacturer.ilike.%${search}%`);
-
-        const { data: prods, error } = await query;
         if (!error && prods && prods.length > 0) {
-          // The pages expect flat, memory-store style fields (category as text, status, prices).
-          const SERIAL_CATEGORIES = ['solar_panels', 'solar_inverters', 'batteries'];
           const products = prods
-            .map((r) => ({
-              ...r,
-              category_id: r.category?.id ?? r.category_id ?? null,
-              category_name: r.category?.name || 'General',
-              category: r.category?.code || (typeof r.category === 'string' ? r.category : ''),
-              manufacturer: r.manufacturer || r.brand || '',
-              purchase_price: Number(r.purchase_price ?? r.base_price ?? 0),
-              selling_price: Number(r.selling_price ?? r.base_price ?? 0),
-              status: r.status || (r.is_active === false ? 'inactive' : 'active'),
-              min_stock_threshold: Number(r.min_stock_threshold ?? r.min_stock_level ?? 0),
-              requires_serial_number: r.requires_serial_number ?? SERIAL_CATEGORIES.includes(r.category?.code),
-              warranty_months: r.warranty_months ?? Number(r.warranty_years || 0) * 12,
-            }))
-            .filter((r) => (!category || category === 'all' || r.category === category || r.category_id === category)
-              && (status === '' || status === 'all' || r.status === status));
+            .map(toUiProduct)
+            .filter((r) => !category || category === 'all' || r.category === category || r.category_id === category)
+            .filter((r) => !status || status === 'all' || r.status === status)
+            .filter((r) => !search || `${r.name} ${r.sku} ${r.manufacturer}`.toLowerCase().includes(search));
           return jsonResponse({ products });
         }
       } catch (e) {
-        // Fall back
+        // Fall back to the in-memory store
       }
     }
 
@@ -71,7 +53,7 @@ export async function GET(request) {
 
 /**
  * POST /api/v1/warehouse/products
- * Create a new product in the catalogue.
+ * Creates a product in the catalogue (the same table the quotation catalogue uses).
  */
 export async function POST(request) {
   try {
@@ -90,35 +72,19 @@ export async function POST(request) {
     let product;
 
     if (adminClient) {
-      try {
-        const { data, error } = await adminClient
-          .from('products')
-          .insert({
-            sku: body.sku.toUpperCase(),
-            name: body.name,
-            category_id: body.category_id || null,
-            manufacturer: body.manufacturer || '',
-            description: body.description || '',
-            unit: body.unit || 'piece',
-            purchase_price: body.purchase_price ? parseFloat(body.purchase_price) : 0,
-            selling_price: body.selling_price ? parseFloat(body.selling_price) : 0,
-            base_price: body.selling_price ? parseFloat(body.selling_price) : 0,
-            min_stock_level: body.min_stock_level ? parseFloat(body.min_stock_level) : 5,
-            warranty_years: body.warranty_years ? parseInt(body.warranty_years) : 5,
-            status: body.status || 'active'
-          })
-          .select('*')
-          .single();
+      const row = await toDbProduct(adminClient, body);
+      const { data, error } = await adminClient
+        .from('products')
+        .insert(row)
+        .select(PRODUCT_SELECT)
+        .single();
 
-        if (!error && data) {
-          product = data;
-        }
-      } catch (e) {
-        // Fall back
+      if (error) {
+        const duplicate = /duplicate|unique/i.test(error.message || '');
+        return jsonError(duplicate ? `A product with SKU "${row.sku}" already exists.` : 'Failed to create product: ' + error.message, duplicate ? 409 : 400);
       }
-    }
-
-    if (!product) {
+      product = toUiProduct(data);
+    } else {
       product = await warehouseStore.createProduct(body, profile);
     }
 
@@ -127,7 +93,7 @@ export async function POST(request) {
       action: 'PRODUCT_CREATED',
       entityId: product.id,
       entityType: 'product',
-      metadata: { sku: product.sku, name: product.name }
+      metadata: { sku: product.sku, name: product.name },
     });
 
     return jsonResponse(product, { message: 'Product created successfully.', status: 201 });

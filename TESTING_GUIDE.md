@@ -106,7 +106,7 @@ Sign in at **/login/admin** → **People & Access** → approve each employee. C
 
 ## 5. Step 2 — Warehouse adds stock
 
-Sign in as **Pooja (Warehouse)** at `/login/staff`.
+Adding products and creating purchase orders needs **manager rights**, so do the two "Add product" and "New purchase order" parts below signed in as **Admin** (the admin can open the Warehouse module). Everything else in this step (stock, serial numbers, packing, dispatch) works as **Pooja (Warehouse)** at `/login/staff`. To let Pooja add products herself, give her the Manager role (see Troubleshooting).
 
 **Products & Catalog → Add product** (these are the physical stock items):
 
@@ -366,6 +366,7 @@ Mark it **In transit**, then **Delivered**.
 | Customer can't sign in | Confirm the email first (check spam) |
 | "Account with this email already exists" | That email is registered; sign in or use a new `+tag` address |
 | Employee stuck on "pending approval" | Admin must approve under People & Access |
+| "Access denied. Warehouse Management privileges required" | Only Admin or a warehouse **Manager** can add products and purchase orders. Use the admin account, or run in Supabase: `update profiles set role_id = (select id from roles where code = 'manager') where lower(email) = 'pooja.store@solvix.test';` |
 | Payment window doesn't open | Check `RAZORPAY_KEY_ID` / `RAZORPAY_KEY_SECRET` in `backend/.env.local` and restart the backend |
 | A page shows "This page hit a problem" | Note the message, press Reload, and report it |
 | Charts look empty | They fill in as records are created — complete the steps above first |

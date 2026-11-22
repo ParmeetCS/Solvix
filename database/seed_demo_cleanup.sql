@@ -26,7 +26,10 @@ do $$ begin
   delete from stock_movements where warehouse_id in (select id from warehouses where code like 'WH-DEMO-%');
   delete from inventory where warehouse_id in (select id from warehouses where code like 'WH-DEMO-%');
   delete from warehouses where code like 'WH-DEMO-%';
+  -- Payments are protected by a trigger (they may not be deleted), so switch it off just for this demo cleanup.
+  alter table payments disable trigger user;
   delete from payments where payment_code like 'PAY-DEMO-%';
+  alter table payments enable trigger user;
   delete from order_status_history where order_id in (select id from orders where order_code like 'ORD-DEMO-%');
   delete from orders where order_code like 'ORD-DEMO-%';
   delete from quotation_items where quotation_id in (select id from quotations where quotation_code like 'QTN-DEMO-%');

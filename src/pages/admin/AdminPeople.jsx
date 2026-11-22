@@ -134,7 +134,12 @@ export default function AdminPeople() {
                               {departmentOptions.map((d) => <option key={d.id} value={d.id}>{d.name}</option>)}
                             </select>
                           </td>
-                          <td>{e.role?.name || 'Employee'}</td>
+                          <td>
+                            <select className="crm-input" value={e.role?.code || 'employee'} disabled={busy === e.id || !e.department_id || !e.is_active}
+                              onChange={(ev) => act(e.id, { action: 'approve', department_id: e.department_id, role_code: ev.target.value }, `Role changed to ${ev.target.options[ev.target.selectedIndex].text}.`)}>
+                              {roleOptions.map((r) => <option key={r.id} value={r.code}>{r.name}</option>)}
+                            </select>
+                          </td>
                           <td><span className="q-badge">{e.is_active ? 'Active' : 'Inactive'}</span></td>
                           <td>
                             <button className="crm-btn crm-btn-outline crm-btn-sm" disabled={busy === e.id}
