@@ -1,5 +1,4 @@
 import { z } from 'zod';
-import { LlmAgent, FunctionTool, InMemoryRunner, isFinalResponse, stringifyContent } from '@google/adk';
 import { loadPackageWithItems } from '@/lib/quotation/bom';
 import { getApprovedSurvey } from '@/lib/quotation/data';
 import { POST as createQuotationRoute } from '@/app/api/v1/sales/quotations/route';
@@ -30,7 +29,7 @@ export function aiConfig() {
   return {
     enabled,
     hasKey: Boolean(key),
-    model: process.env.GEMINI_MODEL || 'gemini-2.5-flash',
+    model: process.env.GEMINI_MODEL || 'gemini-3.5-flash-lite',
     mode: enabled && key ? 'agent' : 'rules',
   };
 }
@@ -144,6 +143,9 @@ export async function generateAiQuotationDraft({ adminClient, profile, authHeade
   if (cfg.mode === 'agent') {
     try {
       mode = 'agent';
+      // Loaded only when the agent actually runs, straight from node_modules (not bundled), so the
+      // quotation screens never depend on it.
+      const { LlmAgent, FunctionTool, InMemoryRunner, isFinalResponse, stringifyContent } = await import(/* webpackIgnore: true */ /* turbopackIgnore: true */ '@google/adk');
       const tools = [
         new FunctionTool({
           name: 'get_site_context',
