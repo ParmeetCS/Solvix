@@ -77,22 +77,21 @@ export async function POST(request, { params }) {
           .select('*')
           .single();
 
-        // If approved and has lead_id, update lead status so Sales can proceed with Quotation
+        if (srvErr || !srv) return jsonError('Could not update the survey: ' + (srvErr?.message || 'survey not found'), srvErr ? 400 : 404);
+        if (appErr) console.error('Approval record was not saved:', appErr.message);
+
+        // Approved: the lead is ready for a quotation (it is not "proposal sent" until one is sent).
         if (action === 'approve' && srv.lead_id) {
           await adminClient
             .from('leads')
-            .update({
-              status: 'proposal_sent', // or survey_completed / ready for quote
-              updated_at: new Date().toISOString()
-            })
-            .eq('id', srv.lead_id);
+            .update({ status: 'qualified', updated_at: new Date().toISOString() })
+            .eq('id', srv.lead_id)
+            .in('status', ['new', 'contacted', 'follow_up_required', 'survey_requested']);
         }
 
-        if (!srvErr && srv) {
-          result = { survey: srv, approval: app };
-        }
+        result = { survey: srv, approval: app };
       } catch (e) {
-        // Fall back
+        return jsonError('Could not review the survey: ' + (e?.message || 'unknown error'), 500);
       }
     }
 

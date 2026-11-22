@@ -1,6 +1,7 @@
 import { jsonResponse, jsonError, handleOptions } from '@/lib/utils';
 import { requireSurveyAccess, logSurveyActivity } from '@/lib/supabase/surveyAuth';
 import { surveyStore } from '@/lib/survey/surveyStore';
+import { loadSurveyDetail, photoView } from '@/lib/survey/surveyDb';
 
 export async function OPTIONS() {
   return handleOptions();
@@ -18,7 +19,9 @@ export async function GET(request, { params }) {
       return jsonError(authResult.error, authResult.status);
     }
 
-    const detail = await surveyStore.getSurveyById(id);
+    const detail = authResult.adminClient
+      ? await loadSurveyDetail(authResult.adminClient, id)
+      : await surveyStore.getSurveyById(id);
     if (!detail) {
       return jsonError('Survey request not found.', 404);
     }

@@ -1,6 +1,7 @@
 import { jsonResponse, jsonError, handleOptions } from '@/lib/utils';
 import { requireSurveyAccess, logSurveyActivity } from '@/lib/supabase/surveyAuth';
 import { surveyStore } from '@/lib/survey/surveyStore';
+import { loadSurveyDetail, photoView } from '@/lib/survey/surveyDb';
 
 export async function OPTIONS() {
   return handleOptions();
@@ -29,7 +30,7 @@ export async function GET(request, { params }) {
           .order('uploaded_at', { ascending: false });
 
         if (!error && photos) {
-          return jsonResponse({ photos });
+          return jsonResponse({ photos: photos.map(photoView) });
         }
       } catch (e) {
         // Fall back
@@ -70,6 +71,12 @@ export async function POST(request, { params }) {
       signed_url
     } = body;
 
+    // The picture itself arrives as a (resized) data URL or a link and is kept with the record.
+    const hasPicture = typeof signed_url === 'string' && /^(data:image\/|https?:)/i.test(signed_url);
+    if (hasPicture && signed_url.length > 3 * 1024 * 1024) {
+      return jsonError('That picture is too large. Use a smaller photo.', 400);
+    }
+
     // Validate size (max 10MB = 10 * 1024 * 1024)
     if (file_size_bytes > 10 * 1024 * 1024) {
       return jsonError('File size exceeds the 10 MB limit.', 400);
@@ -85,7 +92,7 @@ export async function POST(request, { params }) {
 
     if (adminClient) {
       try {
-        const finalPath = storage_path || `survey-attachments/${id}/${Date.now()}_${file_name || 'upload.jpg'}`;
+        const finalPath = hasPicture ? signed_url : (storage_path || `survey-attachments/${id}/${Date.now()}_${file_name || 'upload.jpg'}`);
         const { data, error } = await adminClient
           .from('survey_photos')
           .insert({
@@ -98,11 +105,10 @@ export async function POST(request, { params }) {
           .select('*')
           .single();
 
-        if (!error && data) {
-          photo = data;
-        }
+        if (error) return jsonError('Could not save the photograph: ' + error.message, 400);
+        photo = photoView(data);
       } catch (e) {
-        // Fall back
+        return jsonError('Could not save the photograph: ' + (e?.message || 'unknown error'), 500);
       }
     }
 

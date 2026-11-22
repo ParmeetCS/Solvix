@@ -3,6 +3,7 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import PortalLayout from '@/components/PortalLayout';
 import FeasibilityReportModal from './FeasibilityReportModal';
 import { surveyApi } from '@/services/api';
+import { imageToDataUrl } from '@/lib/imageUpload';
 import {
   FileText,
   UserCheck,
@@ -183,6 +184,7 @@ export default function SurveyDetail() {
 
     try {
       setActionLoading(true);
+      const pictureUrl = selectedFile ? await imageToDataUrl(selectedFile) : null;
       await surveyApi.uploadPhoto(id, {
         photo_type: photoType,
         caption: photoCaption || `${photoType.toUpperCase()} Photograph`,
@@ -190,7 +192,7 @@ export default function SurveyDetail() {
         file_name: selectedFile ? selectedFile.name : `${photoType}_survey_img.jpg`,
         file_size_bytes: selectedFile ? selectedFile.size : 2048500,
         file_type: selectedFile ? selectedFile.type : 'image/jpeg',
-        signed_url: sampleUrls[photoType] || sampleUrls.site
+        signed_url: pictureUrl || sampleUrls[photoType] || sampleUrls.site
       });
 
       setShowUploadModal(false);

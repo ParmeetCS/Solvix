@@ -52,7 +52,13 @@ export async function GET(request) {
 
         const { data: surveys, error } = await query;
         if (!error && surveys && surveys.length > 0) {
-          return jsonResponse({ surveys });
+          const filled = surveys.map((s) => ({
+            ...s,
+            customer_name: s.customer_name || s.lead?.customer_name || s.customer?.contact_name || '',
+            contact_phone: s.contact_phone || s.lead?.phone || s.customer?.phone || '',
+            site_address: s.site_address || s.lead?.address || '',
+          }));
+          return jsonResponse({ surveys: filled });
         }
       } catch (e) {
         // Fall back to memory store

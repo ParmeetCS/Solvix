@@ -30,6 +30,8 @@ export async function POST(request, { params }) {
 
     if (adminClient) {
       try {
+        const { data: current } = await adminClient.from('site_surveys').select('status').eq('id', id).maybeSingle();
+        const finished = ['submitted', 'approved', 'rejected'].includes(current?.status);
         const { data, error } = await adminClient
           .from('site_surveys')
           .update({
@@ -37,7 +39,7 @@ export async function POST(request, { params }) {
             survey_date: scheduled_date,
             scheduled_time: scheduled_time || null,
             site_address: site_address || undefined,
-            status: 'scheduled',
+            status: finished ? current.status : 'scheduled',
             updated_at: new Date().toISOString(),
             updated_by: profile.id
           })
@@ -45,7 +47,8 @@ export async function POST(request, { params }) {
           .select('*')
           .single();
 
-        if (!error && data) {
+        if (error) return jsonError('Could not schedule the survey: ' + error.message, 400);
+        if (data) {
           survey = data;
           // Record in assignments log
           await adminClient.from('survey_assignments').insert({
@@ -59,7 +62,7 @@ export async function POST(request, { params }) {
           });
         }
       } catch (e) {
-        // Fall back
+        return jsonError('Could not schedule the survey: ' + (e?.message || 'unknown error'), 500);
       }
     }
 

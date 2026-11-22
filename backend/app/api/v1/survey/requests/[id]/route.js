@@ -1,6 +1,7 @@
 import { jsonResponse, jsonError, handleOptions } from '@/lib/utils';
 import { requireSurveyAccess, logSurveyActivity } from '@/lib/supabase/surveyAuth';
 import { surveyStore } from '@/lib/survey/surveyStore';
+import { loadSurveyDetail, photoView } from '@/lib/survey/surveyDb';
 
 export async function OPTIONS() {
   return handleOptions();
@@ -21,37 +22,8 @@ export async function GET(request, { params }) {
     const { profile, adminClient } = authResult;
 
     if (adminClient) {
-      try {
-        const { data: survey, error } = await adminClient
-          .from('site_surveys')
-          .select(`
-            *,
-            assigned_profile:assigned_to ( id, full_name, email, phone ),
-            lead:lead_id ( id, lead_code, customer_name, phone, email, address, expected_capacity_kw ),
-            customer:customer_id ( id, customer_code, contact_name, phone, email )
-          `)
-          .eq('id', id)
-          .single();
-
-        if (!error && survey) {
-          const [assignmentsRes, photosRes, reportsRes, approvalsRes] = await Promise.all([
-            adminClient.from('survey_assignments').select('*').eq('survey_id', id).order('assigned_at', { ascending: false }),
-            adminClient.from('survey_photos').select('*').eq('survey_id', id).order('uploaded_at', { ascending: false }),
-            adminClient.from('survey_reports').select('*').eq('survey_id', id).order('created_at', { ascending: false }),
-            adminClient.from('survey_approvals').select('*').eq('survey_id', id).order('created_at', { ascending: false })
-          ]);
-
-          return jsonResponse({
-            survey,
-            assignments: assignmentsRes.data || [],
-            photos: photosRes.data || [],
-            report: (reportsRes.data && reportsRes.data[0]) || null,
-            approvals: approvalsRes.data || []
-          });
-        }
-      } catch (e) {
-        // Fall back
-      }
+      const detail = await loadSurveyDetail(adminClient, id);
+      if (detail) return jsonResponse(detail);
     }
 
     const detail = await surveyStore.getSurveyById(id);
@@ -95,11 +67,10 @@ export async function PATCH(request, { params }) {
           .select('*')
           .single();
 
-        if (!error && data) {
-          updatedSurvey = data;
-        }
+        if (error) return jsonError('Could not update the survey: ' + error.message, 400);
+        updatedSurvey = data;
       } catch (e) {
-        // Fall back
+        return jsonError('Could not update the survey: ' + (e?.message || 'unknown error'), 500);
       }
     }
 

@@ -175,27 +175,43 @@ Sign in as **Rohit (Sales)** → **My Leads → New Lead**:
 
 ## 7. Step 4 — Sales manages the lead
 
-1. **Admin → Enquiries & Leads:** assign Raman's and Meera's leads to **Rohit**.
-2. Rohit opens Raman's lead → add a **follow-up** (tomorrow 11:00, "Call to confirm site visit") → change status to **Contacted**, then **Qualified**.
-3. Check **Follow-ups** shows the reminder and the Sales dashboard counts it under "Follow-ups today".
+Who does what here (so nothing is assigned to the wrong person):
+
+| Action | Who | Where |
+|---|---|---|
+| Give a **lead** to a sales person | Admin | Enquiries & Leads → open the lead → **Reassign** (only Sales staff are listed) |
+| Add a follow-up, change the lead status | The sales person who owns the lead | Open the lead |
+
+1. **Admin → Enquiries & Leads:** open Raman's lead → **Reassign** → **Rohit**. Do the same for Meera.
+2. Sign in as **Rohit**. Open Raman's lead and add a **follow-up** (tomorrow 11:00, "Call to confirm site visit"). Change the status to **Contacted**, then **Qualified**.
+3. Check **Follow-ups** shows the reminder.
+
+> Do **not** use *Reassign* to hand work to the surveyor. It moves the whole lead. The survey is assigned in Step 5.
 
 ---
 
 ## 8. Step 5 — Site survey
 
-1. Rohit opens Raman's lead → **Request site survey** (or **Site Surveys → New request**), then assigns it to **Neha (Survey)**.
-2. Sign in as **Neha** at `/login/technician` → **Site Surveys** → open the request → **Start inspection** and fill the form:
+Use this one path. (The app has several screens that can do the same thing, but this is the shortest.)
+
+**5a. Rohit asks for the survey and assigns the engineer**
+1. As **Rohit**, open Raman's lead → **Create Survey Request**. Pick a visit date (optional) and save. The request appears under **Site Survey Requests** on the same lead page.
+2. On that card choose **Neha Verma** in the "Assign to…" box and press **Assign**. The card now says "Assigned to Neha Verma".
+
+**5b. Neha does the inspection**
+1. Sign in as **Neha** at `/login/technician` → **My Assignments**. The survey is listed.
+2. Open it → **Digital Inspection Form** and fill the form:
 
 | Section | Field | Value |
 |---|---|---|
 | Property | Property type | Residential |
-| | Connection | Three phase |
+| | Connection | Three phase LT |
 | | Sanctioned load | 8 kW |
 | | Consumer / Meter no. | 1234567890 / MTR-55821 |
 | Roof | Roof type / area | RCC flat / 60 sq m |
 | | Usable area | 40 sq m |
-| | Direction / tilt | South / 15° |
-| | Shading | None |
+| | Direction / tilt | South / 15 |
+| | Shading | Zero shade |
 | Electrical | Grid | Stable |
 | | Earthing | Adequate |
 | | Cable distance | 25 m |
@@ -203,33 +219,42 @@ Sign in as **Rohit (Sales)** → **My Leads → New Lead**:
 | | System type | On-grid |
 | | Notes | Clear roof, no shade, bring ladder |
 
-3. Optionally upload a roof photo, then **Submit** the survey.
-4. Back as **Admin** (or Sales manager) → **Site Surveys → Approvals** → **Approve**.
+3. On the last tab choose a photo from your computer (it is resized and saved with the survey), type a caption, press **Attach Photo**, then **Submit**.
 
-✅ **Check:** the approved survey shows "Ready for quotation".
+**5c. Approval**
+1. Sign in as **Admin** (or a Survey **Manager**) → **Site Surveys → Approvals** → open Raman's survey → **Approve**.
+2. The lead status becomes **Qualified** and the survey is ready for a quotation.
+
+✅ **Check:** the survey shows **Approved**, the photo is visible, and the **Feasibility Report** button opens.
 
 ---
 
 ## 9. Step 6 — Quotation
 
-Sign in as **Rohit (Sales)** → **Quotations → New quotation**:
+**6a. Convert the lead to a customer (needed once)**
+A quotation is made for a *customer*, so Raman's lead must be converted first.
+As **Rohit**: open Raman's lead → **Convert to Customer** → confirm. The lead now shows the customer.
+
+**6b. Create the quotation**
+As **Rohit** → **Quotations → New quotation**:
 
 | Field | Value |
 |---|---|
 | Customer | Raman Gupta |
-| Lead / Survey | Raman's lead + approved survey |
+| Lead | Raman's lead |
+| Approved site survey | Raman's survey (only approved surveys are listed) |
 | Package | On-Grid Package 5 kW |
-| Extra item | Mounting Structure 5 kW (GI) × 1 |
+| Extra item | Mounting Structure 5 kW (GI) × 1 (add it from the product list) |
 | Discount | 5% |
 | Validity | 15 days from today |
 
-Save → **Submit for approval** → Admin approves (if your setup asks for it) → **Send to customer**.
+Press **Save**. Quotations above ₹1,00,000 (or with a discount over 5%) need approval: press **Submit for approval**, then sign in as **Admin** → **Quotations** → open it → **Approve**. Then, as Rohit, press **Send to customer**.
 
 Download the **PDF** to show the formal quotation.
 
-✅ **Check:** status moves Draft → Approved → **Sent**. Totals include tax.
+✅ **Check:** the status moves Draft → Pending approval → Approved → **Sent**. Totals include tax.
 
-**Option: let the AI agent draft it.** In *New quotation*, pick the customer, lead and the approved survey, then click **Draft this quotation with AI**. The Google ADK agent reads the survey, picks a package, checks roof limit and warehouse stock, and saves a **Draft** quotation (marked "AI draft · review before sending") with its reasoning. You review, edit if needed, and send as usual. Add `GOOGLE_API_KEY` to `backend/.env.local` to use Gemini; without a key it runs in rule-based mode.
+**Faster option: let the AI agent draft it.** In *New quotation*, pick the customer, lead and the approved survey, then click **Draft this quotation with AI**. The Google ADK agent reads the survey, picks a package, checks roof limit and warehouse stock, and saves a **Draft** (marked "AI draft · review before sending"). Review it, submit for approval and send as above. Add `GOOGLE_API_KEY` to `backend/.env.local` to use Gemini; without a key it runs in rule-based mode.
 
 ---
 

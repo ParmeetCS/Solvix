@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import PortalLayout from '@/components/PortalLayout';
 import { surveyApi } from '@/services/api';
+import { imageToDataUrl } from '@/lib/imageUpload';
 import {
   FileText,
   Save,
@@ -222,6 +223,7 @@ export default function SurveyInspectionForm() {
 
     try {
       setUploadingPhoto(true);
+      const pictureUrl = selectedFile ? await imageToDataUrl(selectedFile) : null;
       const res = await surveyApi.uploadPhoto(id, {
         photo_type: photoType,
         caption: photoCaption,
@@ -229,7 +231,7 @@ export default function SurveyInspectionForm() {
         file_name: selectedFile ? selectedFile.name : `${photoType}_field_photo.jpg`,
         file_size_bytes: selectedFile ? selectedFile.size : 2048500,
         file_type: selectedFile ? selectedFile.type : 'image/jpeg',
-        signed_url: sampleUrls[photoType] || sampleUrls.site
+        signed_url: pictureUrl || sampleUrls[photoType] || sampleUrls.site
       });
 
       const newPhoto = res.data;
