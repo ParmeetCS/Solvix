@@ -146,7 +146,20 @@ export async function POST(request) {
     if (leadError) return jsonError('Failed to load lead: ' + leadError.message, 500);
     if (!lead) return jsonError('Lead not found.', 404);
     if (!isAdmin && lead.assigned_to !== profile.id && lead.created_by !== profile.id) {
-      return jsonError('Access denied. You can only quote leads assigned to you.', 403);
+      if (!lead.assigned_to) {
+        // An unassigned enquiry is picked up by the sales person who quotes it.
+        await adminClient.from('leads').update({ assigned_to: profile.id, updated_by: profile.id, updated_at: new Date().toISOString() }).eq('id', leadId);
+      } else {
+        const { data: handled } = await adminClient
+          .from('lead_assignments')
+          .select('id')
+          .eq('lead_id', leadId)
+          .or(`assigned_to.eq.${profile.id},assigned_by.eq.${profile.id}`)
+          .limit(1);
+        if (!handled || handled.length === 0) {
+          return jsonError('This lead is assigned to another sales person. Ask an Admin to reassign it to you, or choose your own lead.', 403);
+        }
+      }
     }
     if (lead.customer_id && lead.customer_id !== customerId) {
       return jsonError('The selected lead belongs to a different customer.', 400);

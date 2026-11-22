@@ -99,8 +99,8 @@ export async function PATCH(request, { params }) {
         .eq('id', nextLeadId)
         .maybeSingle();
       if (!lead) return jsonError('Lead not found.', 404);
-      if (!isAdmin && lead.assigned_to !== profile.id && lead.created_by !== profile.id) {
-        return jsonError('Access denied. You can only quote leads assigned to you.', 403);
+      if (!isAdmin && lead.assigned_to && lead.assigned_to !== profile.id && lead.created_by !== profile.id) {
+        return jsonError('This lead is assigned to another sales person. Ask an Admin to reassign it to you, or choose your own lead.', 403);
       }
       if (lead.customer_id && lead.customer_id !== nextCustomerId) {
         return jsonError('The selected lead belongs to a different customer.', 400);

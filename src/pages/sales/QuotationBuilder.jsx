@@ -176,7 +176,8 @@ export default function QuotationBuilder() {
 
   const leadsForCustomer = useMemo(() => {
     if (!form.customer_id) return leads;
-    return leads.filter((lead) => !lead.customer_id || lead.customer_id === form.customer_id);
+    // only this customer's own leads (a lead with no customer belongs to someone else's enquiry)
+    return leads.filter((lead) => lead.customer_id === form.customer_id);
   }, [leads, form.customer_id]);
 
   const surveysForSelection = useMemo(() => {
@@ -470,7 +471,7 @@ export default function QuotationBuilder() {
                       ))}
                     </select>
                     {leadsForCustomer.length === 0 && (
-                      <span className="q-hint">No leads are available for this customer yet.</span>
+                      <span className="q-hint">No leads are linked to this customer. Pick the lead first and the customer fills in automatically.</span>
                     )}
                   </div>
                 </div>
