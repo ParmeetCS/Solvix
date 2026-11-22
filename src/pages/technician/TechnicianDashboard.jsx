@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { installationApi } from '@/services/api';
 import PortalLayout from '@/components/PortalLayout';
+import { useAuth } from '@/context/auth';
 import {
   Wrench,
   Calendar,
@@ -25,12 +26,17 @@ export default function TechnicianDashboard() {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const { hasModule } = useAuth();
+  // Site-survey engineers do not work on installation jobs; their visits live under Site Surveys.
+  const surveyOnly = !hasModule('installation') && hasModule('survey');
 
   useEffect(() => {
+    if (surveyOnly) { setLoading(false); return; }
     loadMyJobs();
   }, []);
 
   const loadMyJobs = async () => {
+    if (surveyOnly) return;
     try {
       setLoading(true);
       setError(null);
@@ -79,6 +85,16 @@ export default function TechnicianDashboard() {
             {' '}Always wear certified Class 0 rubber insulated gloves and safety helmets. Disconnect DC string before touching inverter terminal lugs.
           </div>
         </div>
+
+        {surveyOnly && (
+          <div className="inst-card" style={{ marginBottom: 16, padding: 16 }}>
+            <strong>Your site-survey visits are under Site Surveys.</strong>
+            <p style={{ margin: '6px 0 12px', color: 'var(--text-muted)', fontSize: '0.88rem' }}>
+              Installation jobs are handled by the Installation team, so this page has nothing to show for your role.
+            </p>
+            <Link to="/survey/requests" className="inst-btn inst-btn-primary inst-btn-sm">Open Site Surveys <ArrowRight size={14} /></Link>
+          </div>
+        )}
 
         {error && (
           <div style={{ background: 'rgba(239, 68, 68, 0.15)', border: '1px solid rgba(239, 68, 68, 0.3)', borderRadius: 8, padding: 12, color: 'var(--c-red)', marginBottom: 16, fontSize: '0.85rem' }}>
