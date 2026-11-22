@@ -1,6 +1,7 @@
 import { jsonResponse, jsonError, handleOptions } from '@/lib/utils';
 import { requireSurveyAccess, logSurveyActivity, createNotification } from '@/lib/supabase/surveyAuth';
 import { surveyStore } from '@/lib/survey/surveyStore';
+import { sanitizeSurveyForm } from '@/lib/survey/surveyFields';
 
 export async function OPTIONS() {
   return handleOptions();
@@ -20,7 +21,7 @@ export async function POST(request, { params }) {
     }
 
     const { profile, adminClient } = authResult;
-    const formData = await request.json();
+    const formData = sanitizeSurveyForm(await request.json());
 
     // Required field validations
     if (!formData.roof_type || !formData.recommended_system_type) {
@@ -96,11 +97,11 @@ export async function POST(request, { params }) {
           .select('*')
           .single();
 
-        if (!srvErr && srv) {
-          result = { survey: srv, report: rep };
-        }
+        if (srvErr) return jsonError('Could not save the survey: ' + srvErr.message, 400);
+        if (repErr) console.error('Survey report was not saved:', repErr.message);
+        result = { survey: srv, report: rep };
       } catch (e) {
-        // Fall back
+        return jsonError('Could not save the survey: ' + (e?.message || 'unknown error'), 500);
       }
     }
 

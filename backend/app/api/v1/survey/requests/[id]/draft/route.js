@@ -1,6 +1,7 @@
 import { jsonResponse, jsonError, handleOptions } from '@/lib/utils';
 import { requireSurveyAccess, logSurveyActivity } from '@/lib/supabase/surveyAuth';
 import { surveyStore } from '@/lib/survey/surveyStore';
+import { sanitizeSurveyForm } from '@/lib/survey/surveyFields';
 
 export async function OPTIONS() {
   return handleOptions();
@@ -19,7 +20,8 @@ export async function POST(request, { params }) {
     }
 
     const { profile, adminClient } = authResult;
-    const formData = await request.json();
+    const rawForm = await request.json();
+    const formData = sanitizeSurveyForm(rawForm);
 
     let survey;
 
@@ -29,7 +31,7 @@ export async function POST(request, { params }) {
           .from('site_surveys')
           .update({
             is_draft: true,
-            draft_data: formData,
+            draft_data: rawForm,
             status: 'in_progress',
             roof_area_sqm: formData.roof_area_sqm ? parseFloat(formData.roof_area_sqm) : undefined,
             roof_direction: formData.roof_direction || undefined,
@@ -44,11 +46,10 @@ export async function POST(request, { params }) {
           .select('*')
           .single();
 
-        if (!error && data) {
-          survey = data;
-        }
+        if (error) return jsonError('Could not save the draft: ' + error.message, 400);
+        survey = data;
       } catch (e) {
-        // Fall back
+        return jsonError('Could not save the draft: ' + (e?.message || 'unknown error'), 500);
       }
     }
 
