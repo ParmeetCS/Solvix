@@ -25,6 +25,18 @@ Open **http://localhost:5173**. The backend runs on port 3001 (started by the sa
 
 ---
 
+## 1b. Quick option: load mock data with SQL
+
+Instead of typing everything by hand, you can fill the dashboards with about 10 records each:
+
+1. (Optional) Create the customer and employee accounts from section 3, so the data is linked to them by email.
+2. Open `database/seed_demo_data.sql`, change the emails at the top if yours differ, paste the whole file into the **Supabase SQL Editor** and run it.
+3. It prints a table of counts at the end. To remove the demo data later, run `database/seed_demo_cleanup.sql`.
+
+Note: the Warehouse list pages (inventory, purchase orders, serial numbers, dispatches, packing) and the Installation jobs list keep their working data in the server's memory, so they are filled by using the app (steps 5, 11 and 12), not by SQL. Their dashboards and every other module read the seeded data.
+
+---
+
 ## 2. Who is who (the cast)
 
 | # | Person (demo name) | Role | Signs in at | Sees |
