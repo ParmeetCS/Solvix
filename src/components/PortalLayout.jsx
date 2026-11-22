@@ -27,6 +27,12 @@ export default function PortalLayout({ children, title, subtitle, actions }) {
     if (title) document.title = `${title} · SOLVIX`;
   }, [title]);
 
+  // The public landing page uses a smooth-scroll library; make sure none of its page-level
+  // scroll locks are left behind on a dashboard (they make the page feel stuck).
+  useEffect(() => {
+    document.documentElement.classList.remove('lenis', 'lenis-smooth', 'lenis-stopped', 'js-anim');
+  }, []);
+
   // Close the mobile menu after navigating.
   useEffect(() => setOpen(false), [location.pathname]);
 
@@ -41,7 +47,7 @@ export default function PortalLayout({ children, title, subtitle, actions }) {
           <button className="crm-menu-close" onClick={() => setOpen(false)} aria-label="Close menu"><X size={18} /></button>
         </div>
 
-        <nav className="crm-nav" aria-label="Main">
+        <nav className="crm-nav" aria-label="Main" data-lenis-prevent>
           {navItems.map((item) => {
             const Icon = item.icon;
             const showGroup = item.group && item.group !== lastGroup;

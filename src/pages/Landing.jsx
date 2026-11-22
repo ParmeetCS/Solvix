@@ -207,6 +207,8 @@ void main(){
       if (gl && sy < pinH) { gl.uniform2f(U.R, cv.width, cv.height); gl.uniform1f(U.T, now / 1000); gl.uniform1f(U.S, s); gl.uniform1f(U.K, k); gl.drawArrays(gl.TRIANGLES, 0, 3); }
     }
     let rafId;
+    let lenisInstance = null;
+    let unmounted = false;
     function loop(t) { frame(t); rafId = requestAnimationFrame(loop); }
     rafId = requestAnimationFrame(loop);
 
@@ -229,11 +231,12 @@ void main(){
       try {
         const lenis = new window.Lenis({ lerp: .1, smoothWheel: true });
         if (hasGsap) {
-          window.gsap.ticker.add(t => lenis.raf(t * 1000));
+          lenis._tick = t => lenis.raf(t * 1000);
+          window.gsap.ticker.add(lenis._tick);
           window.gsap.ticker.lagSmoothing(0);
           lenis.on('scroll', window.ScrollTrigger.update);
         } else {
-          requestAnimationFrame(function r(t) { lenis.raf(t); requestAnimationFrame(r); });
+          requestAnimationFrame(function r(t) { if (lenis._dead) return; lenis.raf(t); requestAnimationFrame(r); });
         }
         return lenis;
       } catch (e) { console.error(e); return null; }
@@ -412,7 +415,7 @@ void main(){
       loadScript('https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js'),
       loadScript('https://cdn.jsdelivr.net/npm/lenis@1/dist/lenis.min.js'),
     ]).then(() => {
-      if (window.location.pathname !== '/') return;
+      if (unmounted || window.location.pathname !== '/') return;
       const gsapLoaded = !!(window.gsap && window.ScrollTrigger);
 
       if (gsapLoaded && !calm) {
@@ -424,6 +427,7 @@ void main(){
       }
 
       const lenis = initLenis(gsapLoaded);
+      lenisInstance = lenis;
 
       document.addEventListener('click', e => {
         const a = e.target.closest('a[href^="#"]'); if (!a) return;
@@ -464,6 +468,17 @@ void main(){
 
     // Cleanup
     return () => {
+      // Stop the smooth-scroll engine when leaving the landing page. Otherwise it keeps
+      // hijacking the mouse wheel on the dashboards (stuck page, sidebar will not scroll).
+      unmounted = true;
+      if (lenisInstance) {
+        lenisInstance._dead = true;
+        try { if (lenisInstance._tick && window.gsap) window.gsap.ticker.remove(lenisInstance._tick); } catch { /* ignore */ }
+        try { lenisInstance.destroy(); } catch { /* ignore */ }
+        lenisInstance = null;
+      }
+      try { if (window.ScrollTrigger) window.ScrollTrigger.getAll().forEach(s => s.kill()); } catch { /* ignore */ }
+      document.documentElement.classList.remove('lenis', 'lenis-smooth', 'lenis-stopped', 'js-anim');
       cancelAnimationFrame(rafId);
       removeEventListener('resize', onResize);
       removeEventListener('load', measure);
