@@ -1,6 +1,7 @@
 import { jsonResponse, jsonError, handleOptions } from '@/lib/utils';
 import { requireWarehouseAccess, logWarehouseActivity } from '@/lib/supabase/warehouseAuth';
 import { warehouseStore } from '@/lib/warehouse/warehouseStore';
+import { listPurchaseOrders, createPurchaseOrder } from '@/lib/warehouse/poDb';
 
 export async function OPTIONS() {
   return handleOptions();
@@ -19,6 +20,15 @@ export async function GET(request) {
 
     const { searchParams } = new URL(request.url);
     const status = searchParams.get('status') || '';
+
+    if (authResult.adminClient) {
+      try {
+        const purchaseOrders = await listPurchaseOrders(authResult.adminClient, { status });
+        return jsonResponse({ purchaseOrders });
+      } catch (e) {
+        // fall back to the in-memory store
+      }
+    }
 
     const purchaseOrders = await warehouseStore.getPurchaseOrders({ status });
     return jsonResponse({ purchaseOrders });
@@ -39,14 +49,16 @@ export async function POST(request) {
       return jsonError(authResult.error, authResult.status);
     }
 
-    const { profile } = authResult;
+    const { profile, adminClient } = authResult;
     const body = await request.json();
 
     if (!body.supplier_name || !body.items || body.items.length === 0) {
       return jsonError('Supplier name and at least one order item are required.', 400);
     }
 
-    const po = await warehouseStore.createPurchaseOrder(body, profile);
+    const po = adminClient
+      ? await createPurchaseOrder(adminClient, body, profile)
+      : await warehouseStore.createPurchaseOrder(body, profile);
 
     await logWarehouseActivity({
       actorId: profile.id,
@@ -58,6 +70,6 @@ export async function POST(request) {
 
     return jsonResponse(po, { message: `Purchase order ${po.po_code} created successfully.`, status: 201 });
   } catch (error) {
-    return jsonError('Failed to create purchase order: ' + error.message, 500);
+    return jsonError('Failed to create purchase order: ' + error.message, 400);
   }
 }
