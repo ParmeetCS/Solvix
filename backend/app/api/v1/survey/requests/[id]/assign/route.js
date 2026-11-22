@@ -13,7 +13,7 @@ export async function OPTIONS() {
 export async function POST(request, { params }) {
   try {
     const { id } = await params;
-    const authResult = await requireSurveyAccess(request, { requireManage: true });
+    const authResult = await requireSurveyAccess(request, { requireManage: true, allowSalesManage: true });
     if (authResult.error) {
       return jsonError(authResult.error, authResult.status);
     }
@@ -68,11 +68,14 @@ export async function POST(request, { params }) {
           .select('*')
           .single();
 
+        if (asgErr) return jsonError('Could not save the assignment: ' + asgErr.message, 400);
         if (!srvErr && srv) {
           result = { survey: srv, assignment: asg };
+        } else if (srvErr && !/0 rows|no rows/i.test(srvErr.message || '')) {
+          return jsonError('Could not update the survey: ' + srvErr.message, 400);
         }
       } catch (e) {
-        // Fall back
+        return jsonError('Assignment failed: ' + (e?.message || 'unknown error'), 500);
       }
     }
 

@@ -21,12 +21,20 @@ export async function GET(request) {
 
     if (adminClient) {
       try {
-        const { data: surveyors } = await adminClient
+        const { data: staff } = await adminClient
           .from('profiles')
-          .select('id, full_name, email, phone')
-          .eq('account_type', 'employee');
+          .select('id, full_name, email, phone, is_active, department:department_id ( name, code )')
+          .eq('account_type', 'employee')
+          .eq('is_active', true)
+          .not('department_id', 'is', null);
 
-        if (surveyors && surveyors.length > 0) {
+        const people = staff || [];
+        const fieldTeam = people.filter((p) => /survey|install|technic/i.test(`${p.department?.code || ''} ${p.department?.name || ''}`));
+        const surveyors = (fieldTeam.length > 0 ? fieldTeam : people).map((p) => ({
+          id: p.id, full_name: p.full_name, email: p.email, phone: p.phone, department: p.department?.name || null,
+        }));
+
+        if (surveyors.length > 0) {
           return jsonResponse({ surveyors });
         }
       } catch (e) {

@@ -15,7 +15,7 @@ import { collectDepartmentText } from './access.js';
  * 
  * Returns { user, profile, isAdmin, isSurveyManager, isSurveyor, isSales, canManage, adminClient, error, status }
  */
-export async function requireSurveyAccess(request, { requireManage = false, targetSurveyId = null } = {}) {
+export async function requireSurveyAccess(request, { requireManage = false, allowSalesManage = false, targetSurveyId = null } = {}) {
   let authResult;
   try {
     authResult = await getUserFromRequest(request);
@@ -90,7 +90,7 @@ export async function requireSurveyAccess(request, { requireManage = false, targ
   }
   const canManage = isAdmin || isSurveyManager;
 
-  if (requireManage && !canManage) {
+  if (requireManage && !canManage && !(allowSalesManage && isSales)) {
     return { error: 'Access denied. Survey Manager or Administrator privileges required.', status: 403 };
   }
 
@@ -125,7 +125,7 @@ export async function requireSurveyAccess(request, { requireManage = false, targ
     isSurveyManager,
     isSurveyor,
     isSales,
-    canManage,
+    canManage: canManage || (allowSalesManage && isSales),
     adminClient,
     error: null
   };

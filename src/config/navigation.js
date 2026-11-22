@@ -44,6 +44,14 @@ const TECHNICIAN = [
   { label: 'Installation Reports', path: '/installation/schedule', icon: ClipboardCheck },
 ];
 
+// Site-survey engineers: their work is the survey module, not installation jobs.
+const TECHNICIAN_SURVEY = [
+  { label: 'Overview', path: '/technician/dashboard', icon: LayoutDashboard },
+  { label: 'My Assignments', path: '/survey/requests', icon: ListTodo },
+  { label: 'Survey Schedule', path: '/survey/schedule', icon: CalendarClock },
+  { label: 'Survey Approvals', path: '/survey/approvals', icon: ClipboardCheck },
+];
+
 const CUSTOMER = [
   { label: 'Overview', path: '/customer/dashboard', icon: LayoutDashboard },
   { label: 'My Orders', path: '/customer/orders', icon: ShoppingCart },
@@ -86,7 +94,7 @@ export function getNavItems(user) {
   switch (user?.portal) {
     case 'admin': return ADMIN;
     case 'sales': return SALES;
-    case 'technician': return TECHNICIAN;
+    case 'technician': return user.modules?.includes('installation') ? TECHNICIAN : TECHNICIAN_SURVEY;
     case 'customer': return CUSTOMER;
     case 'staff':
       return Object.entries(STAFF_BY_MODULE)

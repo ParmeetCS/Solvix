@@ -95,6 +95,43 @@ export async function POST(request) {
 
     if (adminClient) {
       try {
+        // A survey belongs to a lead. A request typed in by hand has none yet, so reuse the lead with
+        // the same phone number or open a new one; that is also what makes it show up on the lead page.
+        let leadId = body.lead_id || null;
+        let customerId = body.customer_id || null;
+        if (!leadId) {
+          const phone = String(body.contact_phone || '').trim();
+          let lead = null;
+          if (phone) {
+            const { data: found } = await adminClient.from('leads').select('id, customer_id').eq('phone', phone).order('created_at', { ascending: false }).limit(1);
+            lead = found?.[0] || null;
+          }
+          if (!lead) {
+            const { data: created, error: leadError } = await adminClient
+              .from('leads')
+              .insert({
+                lead_code: `LEAD-${new Date().getFullYear()}-${Math.floor(10000 + Math.random() * 90000)}`,
+                customer_name: body.customer_name,
+                phone: phone || null,
+                email: body.contact_email || null,
+                address: body.site_address || null,
+                source: 'walkin',
+                status: 'survey_requested',
+                system_type: 'on-grid',
+                priority: body.priority || 'medium',
+                notes: 'Created from a site survey request.',
+                created_by: profile.id,
+                updated_by: profile.id,
+              })
+              .select('id, customer_id')
+              .single();
+            if (leadError) return jsonError('Could not create the lead for this survey: ' + leadError.message, 400);
+            lead = created;
+          }
+          leadId = lead.id;
+          customerId = customerId || lead.customer_id || null;
+        }
+
         const yr = new Date().getFullYear();
         const rand = Math.floor(1000 + Math.random() * 9000);
         const code = `SRV-${yr}-${rand}`;
@@ -103,8 +140,8 @@ export async function POST(request) {
           .from('site_surveys')
           .insert({
             survey_code: code,
-            lead_id: body.lead_id || null,
-            customer_id: body.customer_id || null,
+            lead_id: leadId,
+            customer_id: customerId,
             customer_name: body.customer_name,
             contact_phone: body.contact_phone,
             contact_email: body.contact_email,
@@ -122,11 +159,10 @@ export async function POST(request) {
           .select('*')
           .single();
 
-        if (!error && data) {
-          newSurvey = data;
-        }
+        if (error) return jsonError('Could not create the survey request: ' + error.message, 400);
+        newSurvey = data;
       } catch (e) {
-        // Fall back
+        return jsonError('Could not create the survey request: ' + (e?.message || 'unknown error'), 500);
       }
     }
 
