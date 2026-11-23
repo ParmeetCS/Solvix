@@ -5,14 +5,10 @@ import { surveyApi } from '@/services/api';
 import {
   CalendarCheck2,
   UserCheck,
-  Calendar,
-  Clock,
   Phone,
   Mail,
-  CheckCircle2,
   AlertCircle,
   RefreshCw,
-  ArrowRight
 } from 'lucide-react';
 
 export default function SurveyAssignments() {

@@ -1,6 +1,5 @@
 import { jsonResponse, jsonError, handleOptions } from '@/lib/utils';
 import { requireSurveyAccess, logSurveyActivity, createNotification } from '@/lib/supabase/surveyAuth';
-import { surveyStore } from '@/lib/survey/surveyStore';
 
 export async function OPTIONS() {
   return handleOptions();
@@ -79,14 +78,6 @@ export async function POST(request, { params }) {
       }
     }
 
-    if (!result) {
-      result = await surveyStore.assignSurvey(id, {
-        assigned_to,
-        scheduled_date,
-        scheduled_time,
-        notes
-      }, profile);
-    }
 
     if (!result) {
       return jsonError('Survey not found.', 404);

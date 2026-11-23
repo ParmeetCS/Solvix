@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import PortalLayout from '@/components/PortalLayout';
-import { ChartCard, StripedBars, TickDonut, AreaLine } from '@/components/charts';
+import { ChartCard, StripedBars, TickDonut } from '@/components/charts';
 import { supportApi } from '@/services/api';
 import {
   LifeBuoy,

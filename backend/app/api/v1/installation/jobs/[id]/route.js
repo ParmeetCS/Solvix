@@ -18,7 +18,7 @@ export async function GET(request, { params }) {
       return jsonError(authResult.error, authResult.status);
     }
 
-    const { profile, isAdmin } = authResult;
+    const { profile, canManage: isAdmin } = authResult;
     const job = await installationStore.getJobById(id, profile, isAdmin);
 
     if (!job) {
@@ -43,14 +43,12 @@ export async function PATCH(request, { params }) {
       return jsonError(authResult.error, authResult.status);
     }
 
-    const { profile, isAdmin } = authResult;
-    const job = await installationStore.getJobById(id, profile, isAdmin);
-    if (!job) return jsonError(`Installation job ${id} not found.`, 404);
+    const { profile, canManage: isAdmin } = authResult;
+    const existing = await installationStore.getJobById(id, profile, isAdmin);
+    if (!existing) return jsonError(`Installation job ${id} not found.`, 404);
 
     const body = await request.json();
-    if (body.notes !== undefined) job.notes = body.notes;
-    if (body.site_address !== undefined) job.site_address = body.site_address;
-    job.updated_at = new Date().toISOString();
+    const job = await installationStore.updateJobMeta(existing.id, { notes: body.notes, site_address: body.site_address }, profile);
 
     await logInstallationActivity({
       actorId: profile.id,

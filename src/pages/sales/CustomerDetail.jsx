@@ -4,16 +4,6 @@ import PortalLayout from '@/components/PortalLayout';
 import { salesApi } from '@/services/api';
 import {
   ArrowLeft,
-  User,
-  Phone,
-  Mail,
-  MapPin,
-  Calendar,
-  FileText,
-  DollarSign,
-  Briefcase,
-  History,
-  MessageSquare
 } from 'lucide-react';
 
 export default function CustomerDetail() {

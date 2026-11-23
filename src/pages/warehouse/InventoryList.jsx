@@ -3,17 +3,15 @@ import { Link } from 'react-router-dom';
 import PortalLayout from '@/components/PortalLayout';
 import { warehouseApi } from '@/services/api/warehouse';
 import {
-  Layers,
   ArrowDownLeft,
   ArrowUpRight,
   RefreshCw,
   Sliders,
-  Warehouse,
   Search,
   AlertTriangle,
   CheckCircle,
   Eye,
-  X
+  X,
 } from 'lucide-react';
 
 export default function InventoryList() {

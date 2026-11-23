@@ -6,19 +6,13 @@ import { useAuth } from '@/context/auth';
 import {
   Wrench,
   Calendar,
-  Clock,
   CheckCircle2,
   MapPin,
   Phone,
   Eye,
-  Camera,
-  Barcode,
   ArrowRight,
   ShieldAlert,
-  Home,
-  LogOut,
   RefreshCw,
-  Smartphone
 } from 'lucide-react';
 import '../installation/installation.css';
 

@@ -1,6 +1,5 @@
 import { jsonResponse, jsonError, handleOptions } from '@/lib/utils';
 import { requireWarehouseAccess, logWarehouseActivity } from '@/lib/supabase/warehouseAuth';
-import { warehouseStore } from '@/lib/warehouse/warehouseStore';
 import { receivePurchaseOrder } from '@/lib/warehouse/poDb';
 
 export async function OPTIONS() {
@@ -27,8 +26,7 @@ export async function POST(request, { params }) {
       return jsonError('Received items list is required.', 400);
     }
 
-    let updatedPO = adminClient ? await receivePurchaseOrder(adminClient, id, items, profile) : null;
-    if (!updatedPO) updatedPO = (await warehouseStore.receiveGoods(id, items, profile)).purchase_order || null;
+    const updatedPO = await receivePurchaseOrder(adminClient, id, items, profile);
     if (!updatedPO) return jsonError('Purchase order not found.', 404);
 
     await logWarehouseActivity({

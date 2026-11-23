@@ -3,14 +3,9 @@ import { Link } from 'react-router-dom';
 import PortalLayout from '@/components/PortalLayout';
 import { installationApi } from '@/services/api';
 import {
-  Calendar,
-  Clock,
-  Wrench,
   MapPin,
   RefreshCw,
-  ArrowRight,
   Eye,
-  AlertTriangle
 } from 'lucide-react';
 
 export default function InstallationSchedule() {

@@ -4,21 +4,17 @@ import PortalLayout from '@/components/PortalLayout';
 import { surveyApi } from '@/services/api';
 import { imageToDataUrl } from '@/lib/imageUpload';
 import {
-  FileText,
   Save,
   Send,
   Camera,
   Layers,
   Zap,
   CheckCircle2,
-  AlertTriangle,
   ArrowLeft,
   ArrowRight,
   Upload,
   Info,
-  Clock,
   Home,
-  CheckCheck
 } from 'lucide-react';
 
 export default function SurveyInspectionForm() {

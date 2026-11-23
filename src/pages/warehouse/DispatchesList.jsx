@@ -3,15 +3,10 @@ import { Link } from 'react-router-dom';
 import PortalLayout from '@/components/PortalLayout';
 import { warehouseApi } from '@/services/api/warehouse';
 import {
-  Truck,
   Plus,
   Search,
   Eye,
-  CheckCircle,
-  Clock,
-  AlertTriangle,
   RefreshCw,
-  FileText
 } from 'lucide-react';
 
 export default function DispatchesList() {

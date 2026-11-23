@@ -10,21 +10,12 @@ import {
   Calendar,
   Camera,
   Layers,
-  Zap,
-  CheckCircle2,
-  XCircle,
-  AlertTriangle,
-  RotateCcw,
   Upload,
   ArrowLeft,
   Clock,
-  Printer,
   FileEdit,
   ShieldCheck,
-  MapPin,
-  Phone,
-  Mail,
-  Home
+  Home,
 } from 'lucide-react';
 
 export default function SurveyDetail() {

@@ -1,6 +1,5 @@
 import { jsonResponse, jsonError, handleOptions } from '@/lib/utils';
 import { requireSurveyAccess, logSurveyActivity } from '@/lib/supabase/surveyAuth';
-import { surveyStore } from '@/lib/survey/surveyStore';
 
 export async function OPTIONS() {
   return handleOptions();
@@ -26,7 +25,7 @@ export async function GET(request) {
           .from('site_surveys')
           .select('*');
 
-        if (!srvErr && surveys && surveys.length > 0) {
+        if (!srvErr && surveys) {
           const todayStr = new Date().toISOString().split('T')[0];
           const totalRequests = surveys.length;
           const pending = surveys.filter(s => s.status === 'pending').length;
@@ -90,12 +89,11 @@ export async function GET(request) {
           });
         }
       } catch (dbErr) {
-        // Fall back to memory store
+        return jsonError('Failed to fetch survey dashboard: ' + dbErr.message, 500);
       }
     }
 
-    const data = await surveyStore.getDashboardMetrics();
-    return jsonResponse(data);
+    return jsonError('Failed to fetch survey dashboard.', 500);
   } catch (error) {
     return jsonError('Failed to fetch survey dashboard: ' + error.message, 500);
   }

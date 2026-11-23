@@ -1,6 +1,5 @@
 import { jsonResponse, jsonError, handleOptions } from '@/lib/utils';
 import { requireWarehouseAccess } from '@/lib/supabase/warehouseAuth';
-import { warehouseStore } from '@/lib/warehouse/warehouseStore';
 import { packingQueue } from '@/lib/warehouse/fulfilmentDb';
 
 export async function OPTIONS() {
@@ -18,12 +17,7 @@ export async function GET(request) {
       return jsonError(authResult.error, authResult.status);
     }
 
-    if (authResult.adminClient) {
-      return jsonResponse({ packingQueue: await packingQueue(authResult.adminClient) });
-    }
-
-    const queue = await warehouseStore.getPackingQueue();
-    return jsonResponse({ packingQueue: queue });
+    return jsonResponse({ packingQueue: await packingQueue(authResult.adminClient) });
   } catch (error) {
     return jsonError('Failed to fetch packing queue: ' + error.message, error.status || 500);
   }

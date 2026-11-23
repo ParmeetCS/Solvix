@@ -43,7 +43,7 @@ export async function POST(request, { params }) {
     // Notify assigned technicians
     for (const at of result.assignments) {
       await createInstallationNotification({
-        recipientId: at.technician_id,
+        recipientId: at.profile_id,
         title: `Assigned to Installation Project ${result.job.installation_code}`,
         message: `You have been assigned as ${at.role_on_job.replace('_', ' ')} for ${result.job.customer_name} (${result.job.system_capacity_kw}kW).`,
         installationId: result.job.id

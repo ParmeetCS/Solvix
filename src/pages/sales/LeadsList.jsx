@@ -9,11 +9,8 @@ import {
   Eye,
   Phone,
   Mail,
-  Zap,
-  Calendar,
   ChevronLeft,
   ChevronRight,
-  ShieldAlert
 } from 'lucide-react';
 
 export default function LeadsList() {

@@ -3,18 +3,12 @@ import { Link, useNavigate } from 'react-router-dom';
 import PortalLayout from '@/components/PortalLayout';
 import { surveyApi } from '@/services/api';
 import {
-  ClipboardList,
   Search,
-  Filter,
   UserCheck,
-  Calendar,
   FileEdit,
-  FileCheck,
-  ArrowRight,
   Eye,
-  AlertCircle,
   PlusCircle,
-  RefreshCw
+  RefreshCw,
 } from 'lucide-react';
 
 export default function SurveyRequestsList() {

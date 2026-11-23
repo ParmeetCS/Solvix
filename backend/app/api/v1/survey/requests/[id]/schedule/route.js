@@ -1,6 +1,5 @@
 import { jsonResponse, jsonError, handleOptions } from '@/lib/utils';
 import { requireSurveyAccess, logSurveyActivity } from '@/lib/supabase/surveyAuth';
-import { surveyStore } from '@/lib/survey/surveyStore';
 
 export async function OPTIONS() {
   return handleOptions();
@@ -66,9 +65,6 @@ export async function POST(request, { params }) {
       }
     }
 
-    if (!survey) {
-      survey = await surveyStore.scheduleSurvey(id, { scheduled_date, scheduled_time, site_address }, profile);
-    }
 
     if (!survey) {
       return jsonError('Survey not found.', 404);

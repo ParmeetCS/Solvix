@@ -4,13 +4,11 @@ import PortalLayout from '@/components/PortalLayout';
 import { supportApi } from '@/services/api';
 import { useAuth } from '@/context/auth';
 import {
-  Ticket,
   User,
   Phone,
   Mail,
   ShieldCheck,
   ShieldAlert,
-  Clock,
   Wrench,
   RotateCcw,
   Star,
@@ -21,7 +19,6 @@ import {
   CheckCircle2,
   Loader2,
   ArrowLeft,
-  Calendar
 } from 'lucide-react';
 
 export default function TicketDetail() {

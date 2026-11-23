@@ -3,15 +3,9 @@ import { Link, useNavigate } from 'react-router-dom';
 import PortalLayout from '@/components/PortalLayout';
 import { warehouseApi } from '@/services/api/warehouse';
 import {
-  Package,
   Plus,
   Search,
-  Filter,
-  AlertTriangle,
-  CheckCircle,
-  Eye,
   Edit,
-  Tag
 } from 'lucide-react';
 
 const CATEGORIES = [

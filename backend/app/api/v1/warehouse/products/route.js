@@ -1,6 +1,5 @@
 import { jsonResponse, jsonError, handleOptions } from '@/lib/utils';
 import { requireWarehouseAccess, logWarehouseActivity } from '@/lib/supabase/warehouseAuth';
-import { warehouseStore } from '@/lib/warehouse/warehouseStore';
 import { PRODUCT_SELECT, toUiProduct, toDbProduct } from '@/lib/warehouse/productMapper';
 
 export async function OPTIONS() {
@@ -24,27 +23,17 @@ export async function GET(request) {
     const status = searchParams.get('status') || '';
     const search = (searchParams.get('search') || '').toLowerCase();
 
-    if (adminClient) {
-      try {
-        const { data: prods, error } = await adminClient
-          .from('products')
-          .select(PRODUCT_SELECT)
-          .order('name', { ascending: true });
+    const { data: prods, error } = await adminClient
+      .from('products')
+      .select(PRODUCT_SELECT)
+      .order('name', { ascending: true });
+    if (error) return jsonError('Failed to fetch products: ' + error.message, 500);
 
-        if (!error && prods && prods.length > 0) {
-          const products = prods
-            .map(toUiProduct)
-            .filter((r) => !category || category === 'all' || r.category === category || r.category_id === category)
-            .filter((r) => !status || status === 'all' || r.status === status)
-            .filter((r) => !search || `${r.name} ${r.sku} ${r.manufacturer}`.toLowerCase().includes(search));
-          return jsonResponse({ products });
-        }
-      } catch (e) {
-        // Fall back to the in-memory store
-      }
-    }
-
-    const products = await warehouseStore.getProducts({ category, status, search });
+    const products = (prods || [])
+      .map(toUiProduct)
+      .filter((r) => !category || category === 'all' || r.category === category || r.category_id === category)
+      .filter((r) => !status || status === 'all' || r.status === status)
+      .filter((r) => !search || `${r.name} ${r.sku} ${r.manufacturer}`.toLowerCase().includes(search));
     return jsonResponse({ products });
   } catch (error) {
     return jsonError('Failed to fetch products: ' + error.message, 500);
@@ -69,24 +58,18 @@ export async function POST(request) {
       return jsonError('Product name and SKU are required.', 400);
     }
 
-    let product;
+    const row = await toDbProduct(adminClient, body);
+    const { data, error } = await adminClient
+      .from('products')
+      .insert(row)
+      .select(PRODUCT_SELECT)
+      .single();
 
-    if (adminClient) {
-      const row = await toDbProduct(adminClient, body);
-      const { data, error } = await adminClient
-        .from('products')
-        .insert(row)
-        .select(PRODUCT_SELECT)
-        .single();
-
-      if (error) {
-        const duplicate = /duplicate|unique/i.test(error.message || '');
-        return jsonError(duplicate ? `A product with SKU "${row.sku}" already exists.` : 'Failed to create product: ' + error.message, duplicate ? 409 : 400);
-      }
-      product = toUiProduct(data);
-    } else {
-      product = await warehouseStore.createProduct(body, profile);
+    if (error) {
+      const duplicate = /duplicate|unique/i.test(error.message || '');
+      return jsonError(duplicate ? `A product with SKU "${row.sku}" already exists.` : 'Failed to create product: ' + error.message, duplicate ? 409 : 400);
     }
+    const product = toUiProduct(data);
 
     await logWarehouseActivity({
       actorId: profile.id,

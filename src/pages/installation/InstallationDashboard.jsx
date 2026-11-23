@@ -1,25 +1,21 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import PortalLayout from '@/components/PortalLayout';
-import { ChartCard, StripedBars, TickDonut, AreaLine } from '@/components/charts';
+import { ChartCard, StripedBars, TickDonut } from '@/components/charts';
 import { installationApi } from '@/services/api';
 import {
   Wrench,
   Clock,
-  UserCheck,
   Calendar,
   PlayCircle,
   CheckCircle2,
   AlertTriangle,
-  RotateCcw,
   Plus,
   RefreshCw,
   ArrowRight,
   TrendingUp,
-  MapPin,
-  ExternalLink,
   ShieldAlert,
-  Users
+  Users,
 } from 'lucide-react';
 
 export default function InstallationDashboard() {

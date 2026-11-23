@@ -1,6 +1,5 @@
 import { jsonResponse, jsonError, handleOptions } from '@/lib/utils';
 import { requireSurveyAccess, logSurveyActivity } from '@/lib/supabase/surveyAuth';
-import { surveyStore } from '@/lib/survey/surveyStore';
 import { loadSurveyDetail, photoView } from '@/lib/survey/surveyDb';
 
 export async function OPTIONS() {
@@ -21,12 +20,7 @@ export async function GET(request, { params }) {
 
     const { profile, adminClient } = authResult;
 
-    if (adminClient) {
-      const detail = await loadSurveyDetail(adminClient, id);
-      if (detail) return jsonResponse(detail);
-    }
-
-    const detail = await surveyStore.getSurveyById(id);
+    const detail = await loadSurveyDetail(adminClient, id);
     if (!detail) {
       return jsonError('Survey request not found.', 404);
     }
@@ -74,9 +68,6 @@ export async function PATCH(request, { params }) {
       }
     }
 
-    if (!updatedSurvey) {
-      updatedSurvey = await surveyStore.updateSurvey(id, body, profile);
-    }
 
     if (!updatedSurvey) {
       return jsonError('Survey not found.', 404);

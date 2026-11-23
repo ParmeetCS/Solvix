@@ -3,14 +3,12 @@ import { Link } from 'react-router-dom';
 import PortalLayout from '@/components/PortalLayout';
 import { warehouseApi } from '@/services/api/warehouse';
 import {
-  FileSpreadsheet,
   Plus,
   PackageCheck,
   Search,
   AlertTriangle,
   CheckCircle,
-  Clock,
-  X
+  X,
 } from 'lucide-react';
 
 export default function PurchaseOrdersList() {

@@ -11,7 +11,6 @@ import {
   Send,
   CheckCircle2,
   XCircle,
-  RefreshCw,
   Download,
   Printer,
   ShoppingCart,

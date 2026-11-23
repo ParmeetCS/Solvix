@@ -8,11 +8,9 @@ import {
   Search,
   CheckCircle2,
   AlertCircle,
-  Clock,
   Loader2,
   ChevronLeft,
   ChevronRight,
-  ExternalLink
 } from 'lucide-react';
 
 export default function WarrantiesList() {

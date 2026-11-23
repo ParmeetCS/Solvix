@@ -1,6 +1,5 @@
 import { jsonResponse, jsonError, handleOptions } from '@/lib/utils';
 import { requireSurveyAccess, logSurveyActivity } from '@/lib/supabase/surveyAuth';
-import { surveyStore } from '@/lib/survey/surveyStore';
 
 export async function OPTIONS() {
   return handleOptions();
@@ -51,29 +50,26 @@ export async function GET(request) {
         if (date) query = query.eq('scheduled_date', date);
 
         const { data: surveys, error } = await query;
-        if (!error && surveys && surveys.length > 0) {
+        if (error) return jsonError('Error fetching survey requests: ' + error.message, 500);
+        if (surveys) {
           const filled = surveys.map((s) => ({
             ...s,
             customer_name: s.customer_name || s.lead?.customer_name || s.customer?.contact_name || '',
             contact_phone: s.contact_phone || s.lead?.phone || s.customer?.phone || '',
             site_address: s.site_address || s.lead?.address || '',
           }));
-          return jsonResponse({ surveys: filled });
+          const q = search.toLowerCase();
+          const result = q
+            ? filled.filter((s) => [s.survey_code, s.customer_name, s.site_address, s.city, s.contact_phone].some((v) => String(v || '').toLowerCase().includes(q)))
+            : filled;
+          return jsonResponse({ surveys: result });
         }
       } catch (e) {
-        // Fall back to memory store
+        return jsonError('Error fetching survey requests: ' + e.message, 500);
       }
     }
 
-    let surveys = await surveyStore.getSurveys({
-      search,
-      status,
-      priority,
-      assigned_to: (!isAdmin && !isSurveyManager && isSurveyor) ? profile.id : assignedTo,
-      date
-    });
-
-    return jsonResponse({ surveys });
+    return jsonResponse({ surveys: [] });
   } catch (error) {
     return jsonError('Error fetching survey requests: ' + error.message, 500);
   }
@@ -172,9 +168,6 @@ export async function POST(request) {
       }
     }
 
-    if (!newSurvey) {
-      newSurvey = await surveyStore.createSurvey(body, profile);
-    }
 
     await logSurveyActivity({
       actorId: profile.id,

@@ -3,13 +3,9 @@ import { Link } from 'react-router-dom';
 import PortalLayout from '@/components/PortalLayout';
 import { warehouseApi } from '@/services/api/warehouse';
 import {
-  CheckSquare,
-  Package,
-  Clock,
   ArrowRight,
-  AlertTriangle,
   RefreshCw,
-  Search
+  Search,
 } from 'lucide-react';
 
 export default function PackingQueue() {

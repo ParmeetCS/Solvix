@@ -1,6 +1,5 @@
 import { jsonResponse, jsonError, handleOptions } from '@/lib/utils';
 import { requireWarehouseAccess, logWarehouseActivity } from '@/lib/supabase/warehouseAuth';
-import { warehouseStore } from '@/lib/warehouse/warehouseStore';
 import { listDispatches, createDispatch } from '@/lib/warehouse/fulfilmentDb';
 
 export async function OPTIONS() {
@@ -16,9 +15,7 @@ export async function GET(request) {
     }
 
     const status = new URL(request.url).searchParams.get('status') || '';
-    const dispatches = authResult.adminClient
-      ? await listDispatches(authResult.adminClient, { status })
-      : await warehouseStore.getDispatches({ status });
+    const dispatches = await listDispatches(authResult.adminClient, { status });
     return jsonResponse({ dispatches });
   } catch (error) {
     return jsonError('Failed to fetch dispatches: ' + error.message, error.status || 500);
@@ -43,9 +40,7 @@ export async function POST(request) {
       return jsonError('Choose the order to dispatch.', 400);
     }
 
-    const dispatch = adminClient
-      ? await createDispatch(adminClient, body, profile)
-      : await warehouseStore.createDispatch(body, profile);
+    const dispatch = await createDispatch(adminClient, body, profile);
 
     await logWarehouseActivity({
       actorId: profile.id,

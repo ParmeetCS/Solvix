@@ -6,14 +6,9 @@ import {
   Wrench,
   Phone,
   Mail,
-  ShieldCheck,
-  CheckCircle2,
-  XCircle,
-  FolderGit2,
   Award,
-  Zap,
   RefreshCw,
-  ExternalLink
+  ExternalLink,
 } from 'lucide-react';
 
 export default function TechniciansList() {

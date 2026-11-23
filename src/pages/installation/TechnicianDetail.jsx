@@ -7,11 +7,8 @@ import {
   Phone,
   Mail,
   Award,
-  Calendar,
-  CheckCircle2,
   ArrowLeft,
-  RefreshCw,
-  FolderGit2
+  FolderGit2,
 } from 'lucide-react';
 
 export default function TechnicianDetail() {

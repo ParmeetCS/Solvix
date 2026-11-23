@@ -3,14 +3,9 @@ import { Link } from 'react-router-dom';
 import PortalLayout from '@/components/PortalLayout';
 import { installationApi } from '@/services/api';
 import {
-  Wrench,
   Search,
-  Filter,
-  Calendar,
   Eye,
   Plus,
-  ArrowRight,
-  ShieldAlert
 } from 'lucide-react';
 
 export default function InstallationJobsList() {

@@ -3,16 +3,10 @@ import { Link } from 'react-router-dom';
 import PortalLayout from '@/components/PortalLayout';
 import { surveyApi } from '@/services/api';
 import {
-  Calendar,
   Clock,
   MapPin,
-  UserCheck,
   CalendarDays,
-  ChevronLeft,
-  ChevronRight,
   RefreshCw,
-  Eye,
-  FileEdit
 } from 'lucide-react';
 
 export default function SurveySchedule() {

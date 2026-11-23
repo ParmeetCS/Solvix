@@ -4,15 +4,11 @@ import PortalLayout from '@/components/PortalLayout';
 import { warehouseApi } from '@/services/api/warehouse';
 import {
   CheckSquare,
-  Package,
-  Layers,
   ArrowLeft,
   CheckCircle,
   AlertTriangle,
   QrCode,
-  Save,
   Lock,
-  Plus
 } from 'lucide-react';
 
 export default function OrderPacking() {

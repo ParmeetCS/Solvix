@@ -8,13 +8,9 @@ import {
   CheckCircle2,
   XCircle,
   AlertCircle,
-  Clock,
-  Search,
-  Filter,
   Loader2,
   ChevronLeft,
   ChevronRight,
-  ExternalLink
 } from 'lucide-react';
 
 export default function WarrantyClaimsList() {

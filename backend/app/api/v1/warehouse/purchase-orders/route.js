@@ -1,6 +1,5 @@
 import { jsonResponse, jsonError, handleOptions } from '@/lib/utils';
 import { requireWarehouseAccess, logWarehouseActivity } from '@/lib/supabase/warehouseAuth';
-import { warehouseStore } from '@/lib/warehouse/warehouseStore';
 import { listPurchaseOrders, createPurchaseOrder } from '@/lib/warehouse/poDb';
 
 export async function OPTIONS() {
@@ -21,16 +20,7 @@ export async function GET(request) {
     const { searchParams } = new URL(request.url);
     const status = searchParams.get('status') || '';
 
-    if (authResult.adminClient) {
-      try {
-        const purchaseOrders = await listPurchaseOrders(authResult.adminClient, { status });
-        return jsonResponse({ purchaseOrders });
-      } catch (e) {
-        // fall back to the in-memory store
-      }
-    }
-
-    const purchaseOrders = await warehouseStore.getPurchaseOrders({ status });
+    const purchaseOrders = await listPurchaseOrders(authResult.adminClient, { status });
     return jsonResponse({ purchaseOrders });
   } catch (error) {
     return jsonError('Failed to fetch purchase orders: ' + error.message, 500);
@@ -56,9 +46,7 @@ export async function POST(request) {
       return jsonError('Supplier name and at least one order item are required.', 400);
     }
 
-    const po = adminClient
-      ? await createPurchaseOrder(adminClient, body, profile)
-      : await warehouseStore.createPurchaseOrder(body, profile);
+    const po = await createPurchaseOrder(adminClient, body, profile);
 
     await logWarehouseActivity({
       actorId: profile.id,

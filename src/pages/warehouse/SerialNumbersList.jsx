@@ -8,11 +8,8 @@ import {
   Plus,
   Search,
   Scan,
-  CheckCircle,
   AlertTriangle,
   X,
-  ExternalLink,
-  ShieldCheck
 } from 'lucide-react';
 
 export default function SerialNumbersList() {

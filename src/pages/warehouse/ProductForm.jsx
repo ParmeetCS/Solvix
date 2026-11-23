@@ -9,7 +9,6 @@ import {
   Layers,
   AlertCircle,
   CheckCircle,
-  ShieldAlert
 } from 'lucide-react';
 
 const CATEGORIES = [

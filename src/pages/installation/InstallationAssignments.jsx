@@ -1,16 +1,13 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+
 import PortalLayout from '@/components/PortalLayout';
 import { installationApi } from '@/services/api';
 import {
   Users,
   Calendar,
-  CheckCircle2,
-  AlertTriangle,
   Plus,
   Trash2,
   RefreshCw,
-  FolderGit2
 } from 'lucide-react';
 
 export default function InstallationAssignments() {

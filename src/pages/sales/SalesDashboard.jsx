@@ -1,20 +1,11 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import PortalLayout from '@/components/PortalLayout';
-import { ChartCard, StripedBars, TickDonut, AreaLine } from '@/components/charts';
+import { ChartCard, StripedBars, TickDonut } from '@/components/charts';
 import { salesApi } from '@/services/api';
 import {
-  Users,
   UserPlus,
-  PhoneCall,
-  Calendar,
-  CheckCircle2,
-  FileText,
-  TrendingUp,
-  XCircle,
   ArrowRight,
-  Clock,
-  MessageSquare
 } from 'lucide-react';
 
 export default function SalesDashboard() {

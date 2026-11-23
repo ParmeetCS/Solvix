@@ -37,11 +37,6 @@ export const warehouseApi = {
     return res.data;
   },
 
-  getCategories: async () => {
-    const res = await apiClient.get('/warehouse/categories');
-    return res.data;
-  },
-
   // 3. Inventory & Stock Operations
   getInventory: async (params = {}) => {
     const res = await apiClient.get('/warehouse/inventory', { params });

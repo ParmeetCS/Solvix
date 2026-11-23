@@ -4,16 +4,11 @@ import PortalLayout from '@/components/PortalLayout';
 import { supportApi } from '@/services/api';
 import { useAuth } from '@/context/auth';
 import {
-  ShieldCheck,
-  ShieldAlert,
-  Calendar,
-  CheckCircle2,
   AlertCircle,
   FileCheck2,
   Truck,
-  PlusCircle,
   Loader2,
-  ArrowLeft
+  ArrowLeft,
 } from 'lucide-react';
 
 export default function WarrantyDetail() {

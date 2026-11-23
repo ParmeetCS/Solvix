@@ -4,19 +4,10 @@ import PortalLayout from '@/components/PortalLayout';
 import { salesApi, surveyApi } from '@/services/api';
 import {
   ArrowLeft,
-  Phone,
-  Mail,
-  MapPin,
-  Calendar,
-  Clock,
   UserCheck,
   FileCheck,
-  MessageSquare,
-  History,
-  Send,
-  AlertCircle,
   ExternalLink,
-  Plus
+  Plus,
 } from 'lucide-react';
 
 export default function LeadDetail() {

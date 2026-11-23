@@ -18,7 +18,7 @@ export async function GET(request, { params }) {
       return jsonError(authResult.error, authResult.status);
     }
 
-    const { profile, isAdmin } = authResult;
+    const { profile, canManage: isAdmin } = authResult;
     const job = await installationStore.getJobById(id, profile, isAdmin);
     if (!job) return jsonError(`Installation job ${id} not found.`, 404);
 
@@ -63,7 +63,7 @@ export async function POST(request, { params }) {
     // Notify operations and customer
     for (const at of result.job.assigned_technicians || []) {
       await createInstallationNotification({
-        recipientId: at.technician_id,
+        recipientId: at.profile_id,
         title: `Project ${result.job.installation_code} Completed!`,
         message: `Installation report successfully generated and verified.`,
         installationId: result.job.id

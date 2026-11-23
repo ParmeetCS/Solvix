@@ -5,25 +5,18 @@ import { installationApi } from '@/services/api';
 import {
   Wrench,
   CheckCircle2,
-  AlertTriangle,
-  Clock,
   ShieldCheck,
   ShieldAlert,
   Camera,
   FileText,
   PenTool,
   Upload,
-  Calendar,
   Users,
-  MapPin,
-  Phone,
-  Mail,
   Zap,
   ArrowLeft,
   RefreshCw,
   Barcode,
   Check,
-  X
 } from 'lucide-react';
 
 export default function InstallationJobDetail() {

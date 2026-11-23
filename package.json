@@ -9,7 +9,8 @@
   "scripts": {
     "dev": "concurrently \"vite\" \"npm run dev --workspace=backend\"",
     "build": "vite build && npm run build --workspace=backend",
-    "lint": "npm run lint && npm run lint --workspace=backend",
+    "lint": "eslint src",
+    "test": "npm test --workspace=backend",
     "preview": "vite preview"
   },
   "dependencies": {

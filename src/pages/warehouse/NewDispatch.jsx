@@ -5,12 +5,10 @@ import { warehouseApi } from '@/services/api/warehouse';
 import {
   Truck,
   ArrowLeft,
-  Save,
   AlertTriangle,
   CheckCircle,
   Plus,
   Trash2,
-  QrCode
 } from 'lucide-react';
 
 export default function NewDispatch() {

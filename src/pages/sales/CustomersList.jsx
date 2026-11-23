@@ -3,14 +3,9 @@ import { Link } from 'react-router-dom';
 import PortalLayout from '@/components/PortalLayout';
 import { salesApi } from '@/services/api';
 import {
-  UserCheck,
   Search,
   Eye,
-  Phone,
-  Mail,
-  MapPin,
-  ExternalLink,
-  Plus
+  Plus,
 } from 'lucide-react';
 
 export default function CustomersList() {

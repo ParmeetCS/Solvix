@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { AlertTriangle } from 'lucide-react';
 import PortalLayout from '@/components/PortalLayout';
-import { ChartCard, StripedBars, TickDonut, AreaLine } from '@/components/charts';
+import { ChartCard, StripedBars, TickDonut } from '@/components/charts';
 import { apiClient } from '@/services/api';
 import { formatCurrency, formatDate, titleCase } from '@/lib/quotation';
 

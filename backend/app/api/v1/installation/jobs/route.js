@@ -17,7 +17,7 @@ export async function GET(request) {
       return jsonError(authResult.error, authResult.status);
     }
 
-    const { profile, isAdmin, isTechnician } = authResult;
+    const { profile, canManage: isAdmin, isTechnician } = authResult;
     const { searchParams } = new URL(request.url);
 
     const search = searchParams.get('search') || '';

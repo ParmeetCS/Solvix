@@ -1,6 +1,5 @@
 import { jsonResponse, jsonError, handleOptions } from '@/lib/utils';
 import { requireWarehouseAccess, logWarehouseActivity } from '@/lib/supabase/warehouseAuth';
-import { warehouseStore } from '@/lib/warehouse/warehouseStore';
 
 export async function OPTIONS() {
   return handleOptions();
@@ -15,7 +14,8 @@ async function loadInventoryFromDb(adminClient, { warehouse_id, low_stock_only, 
     adminClient.from('warehouses').select('id, name, code').eq('is_active', true).order('name'),
     adminClient.from('inventory').select('*'),
   ]);
-  if (prodRes.error || whRes.error || invRes.error) return null;
+  const failed = [prodRes, whRes, invRes].find((r) => r.error);
+  if (failed) throw new Error(failed.error.message);
 
   const products = new Map((prodRes.data || []).map((p) => [p.id, p]));
   const warehouses = new Map((whRes.data || []).map((w) => [w.id, w]));
@@ -86,16 +86,7 @@ export async function GET(request) {
     const low_stock_only = searchParams.get('low_stock_only') === 'true';
     const search = searchParams.get('search') || '';
 
-    if (authResult.adminClient) {
-      try {
-        const inventory = await loadInventoryFromDb(authResult.adminClient, { warehouse_id, low_stock_only, search });
-        if (inventory && inventory.length > 0) return jsonResponse({ inventory });
-      } catch (e) {
-        // fall back to the in-memory store
-      }
-    }
-
-    const inventory = await warehouseStore.getInventory({ warehouse_id, low_stock_only, search });
+    const inventory = await loadInventoryFromDb(authResult.adminClient, { warehouse_id, low_stock_only, search });
     return jsonResponse({ inventory });
   } catch (error) {
     return jsonError('Failed to fetch inventory: ' + error.message, 500);
@@ -192,12 +183,7 @@ export async function POST(request) {
     }
     const { profile, adminClient } = authResult;
 
-    let result;
-    if (adminClient && UUID.test(body.productId || '')) {
-      result = await runDbOperation(adminClient, profile, body);
-    } else {
-      result = await warehouseStore.performStockOperation(body, profile);
-    }
+    const result = await runDbOperation(adminClient, profile, body);
 
     await logWarehouseActivity({
       actorId: profile.id,

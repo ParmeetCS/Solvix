@@ -3,15 +3,10 @@ import { Link } from 'react-router-dom';
 import PortalLayout from '@/components/PortalLayout';
 import { salesApi } from '@/services/api';
 import {
-  CalendarClock,
-  PhoneCall,
-  Calendar,
   CheckCircle,
   Clock,
-  AlertTriangle,
   RotateCw,
   Plus,
-  Filter
 } from 'lucide-react';
 
 export default function FollowUpsList() {

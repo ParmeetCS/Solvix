@@ -1,6 +1,5 @@
 import { jsonResponse, jsonError, handleOptions } from '@/lib/utils';
 import { requireWarehouseAccess } from '@/lib/supabase/warehouseAuth';
-import { warehouseStore } from '@/lib/warehouse/warehouseStore';
 import { getDispatch } from '@/lib/warehouse/fulfilmentDb';
 
 export async function OPTIONS() {
@@ -16,9 +15,7 @@ export async function GET(request, { params }) {
       return jsonError(authResult.error, authResult.status);
     }
 
-    const dispatch = authResult.adminClient
-      ? await getDispatch(authResult.adminClient, id)
-      : await warehouseStore.getDispatchById(id);
+    const dispatch = await getDispatch(authResult.adminClient, id);
     if (!dispatch) {
       return jsonError('Dispatch not found.', 404);
     }

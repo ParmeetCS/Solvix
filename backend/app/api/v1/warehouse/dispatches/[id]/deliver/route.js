@@ -1,6 +1,5 @@
 import { jsonResponse, jsonError, handleOptions } from '@/lib/utils';
 import { requireWarehouseAccess, logWarehouseActivity } from '@/lib/supabase/warehouseAuth';
-import { warehouseStore } from '@/lib/warehouse/warehouseStore';
 import { confirmDelivery } from '@/lib/warehouse/fulfilmentDb';
 
 export async function OPTIONS() {
@@ -23,9 +22,7 @@ export async function POST(request, { params }) {
     const { profile, adminClient } = authResult;
     const body = await request.json().catch(() => ({}));
 
-    const result = adminClient
-      ? await confirmDelivery(adminClient, id, body, profile)
-      : await warehouseStore.confirmEquipmentDelivery(id, body, profile);
+    const result = await confirmDelivery(adminClient, id, body, profile);
 
     await logWarehouseActivity({
       actorId: profile.id,

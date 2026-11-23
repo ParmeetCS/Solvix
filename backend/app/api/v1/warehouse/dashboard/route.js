@@ -1,14 +1,15 @@
 import { jsonResponse, jsonError, handleOptions } from '@/lib/utils';
-import { requireWarehouseAccess, logWarehouseActivity } from '@/lib/supabase/warehouseAuth';
-import { warehouseStore } from '@/lib/warehouse/warehouseStore';
+import { requireWarehouseAccess } from '@/lib/supabase/warehouseAuth';
 
 export async function OPTIONS() {
   return handleOptions();
 }
 
+const DEFAULT_THRESHOLD = 5;
+
 /**
  * GET /api/v1/warehouse/dashboard
- * Aggregates warehouse metrics, low stock alerts, and movements.
+ * Warehouse figures, low-stock alerts, recent stock movements and the warehouse list, all from the database.
  */
 export async function GET(request) {
   try {
@@ -16,71 +17,94 @@ export async function GET(request) {
     if (authResult.error) {
       return jsonError(authResult.error, authResult.status);
     }
+    const db = authResult.adminClient;
 
-    const { profile, adminClient } = authResult;
+    const [prodRes, invRes, poRes, dispRes, snRes, whRes, packRes, movRes] = await Promise.all([
+      db.from('products').select('id, name, sku, min_stock_level').eq('is_active', true),
+      db.from('inventory').select('product_id, warehouse_id, quantity_on_hand, quantity_reserved'),
+      db.from('purchase_orders').select('id', { count: 'exact', head: true }).in('status', ['approved', 'partially_received']),
+      db.from('dispatches').select('id', { count: 'exact', head: true }).in('status', ['prepared', 'in_transit']),
+      db.from('equipment_serial_numbers').select('id', { count: 'exact', head: true }),
+      db.from('warehouses').select('id, name, code, city, is_active').eq('is_active', true).order('name', { ascending: true }),
+      db.from('orders').select('id', { count: 'exact', head: true }).in('status', ['confirmed', 'processing', 'awaiting_dispatch']),
+      db.from('stock_movements')
+        .select('id, product_id, warehouse_id, movement_type, quantity, reference_type, reference_id, notes, created_at, product:product_id ( name, sku ), warehouse:warehouse_id ( name )')
+        .order('created_at', { ascending: false })
+        .limit(8),
+    ]);
+    const failed = [prodRes, invRes, whRes, movRes].find((r) => r.error);
+    if (failed) return jsonError('Failed to fetch warehouse dashboard: ' + failed.error.message, 500);
 
-    if (adminClient) {
-      try {
-        const [prodRes, invRes, poRes, dispRes, snRes, whRes] = await Promise.all([
-          adminClient.from('products').select('id', { count: 'exact' }).eq('is_active', true),
-          adminClient.from('inventory').select('*'),
-          adminClient.from('purchase_orders').select('*').in('status', ['approved', 'partially_received']),
-          adminClient.from('dispatches').select('*').in('status', ['prepared', 'in_transit']),
-          adminClient.from('equipment_serial_numbers').select('id', { count: 'exact' }),
-          adminClient.from('warehouses').select('id, name, code, city, is_active').eq('is_active', true).order('name', { ascending: true })
-        ]);
-
-        if (prodRes.count !== null && invRes.data) {
-          const { count: packingCount } = await adminClient.from('orders').select('id', { count: 'exact', head: true }).in('status', ['confirmed', 'processing', 'awaiting_dispatch']);
-          // A new installation has no warehouse yet; create a default one so stock can be received.
-          let warehouseList = whRes?.data || [];
-          if (!whRes?.error && warehouseList.length === 0) {
-            const { data: created } = await adminClient
-              .from('warehouses')
-              .insert({ name: 'Main Warehouse', code: 'WH-MAIN', city: 'Head office', is_active: true })
-              .select('id, name, code, city, is_active')
-              .single();
-            if (created) warehouseList = [created];
-          }
-
-          const totalStock = (invRes.data || []).reduce((acc, i) => acc + Number(i.quantity_on_hand), 0);
-          const lowStock = (invRes.data || []).filter(i => (Number(i.quantity_on_hand) - Number(i.quantity_reserved)) <= 5).length;
-
-          const outOfStock = (invRes.data || []).filter(i => Number(i.quantity_on_hand) === 0).length;
-
-          return jsonResponse({
-            kpis: {
-              totalProducts: prodRes.count || 0,
-              total_products: prodRes.count || 0,
-              totalStockQuantity: totalStock,
-              total_stock_quantity: totalStock,
-              lowStockProducts: lowStock,
-              low_stock_products: lowStock,
-              outOfStockProducts: outOfStock,
-              out_of_stock_products: outOfStock,
-              pendingPacking: packingCount || 0,
-              pending_packing: packingCount || 0,
-              pendingDispatches: (dispRes.data || []).length,
-              pending_dispatches: (dispRes.data || []).length,
-              totalSerialNumbers: snRes.count || 0,
-              registered_serials: snRes.count || 0,
-              recentMovementsCount: 15,
-              recent_movements_count: 15
-            },
-            lowStockAlerts: [],
-            low_stock_alerts: [],
-            recentMovements: [],
-            recent_movements: [],
-            warehouses: warehouseList
-          });
-        }
-      } catch (e) {
-        // Fall back to memory store
-      }
+    // A new installation has no warehouse yet: create a default one so stock can be received.
+    let warehouses = whRes.data || [];
+    if (warehouses.length === 0) {
+      const { data: created } = await db
+        .from('warehouses')
+        .insert({ name: 'Main Warehouse', code: 'WH-MAIN', city: 'Head office', is_active: true })
+        .select('id, name, code, city, is_active')
+        .single();
+      if (created) warehouses = [created];
     }
 
-    const metrics = await warehouseStore.getDashboardMetrics();
-    return jsonResponse(metrics);
+    // Stock per product across all warehouses
+    const products = prodRes.data || [];
+    const perProduct = new Map(products.map((p) => [p.id, { onHand: 0, reserved: 0 }]));
+    for (const row of invRes.data || []) {
+      const t = perProduct.get(row.product_id);
+      if (!t) continue;
+      t.onHand += Number(row.quantity_on_hand) || 0;
+      t.reserved += Number(row.quantity_reserved) || 0;
+    }
+    const totalStock = [...perProduct.values()].reduce((sum, t) => sum + t.onHand, 0);
+    const alerts = [];
+    let outOfStock = 0;
+    for (const p of products) {
+      const t = perProduct.get(p.id);
+      const available = t.onHand - t.reserved;
+      const threshold = Number(p.min_stock_level) || DEFAULT_THRESHOLD;
+      if (t.onHand <= 0) outOfStock += 1;
+      if (available <= threshold) {
+        alerts.push({ product_id: p.id, product_name: p.name, sku: p.sku, quantity_available: available, min_threshold: threshold });
+      }
+    }
+    alerts.sort((a, b) => a.quantity_available - b.quantity_available);
+
+    const movements = (movRes.data || []).map((m) => ({
+      ...m,
+      product_name: m.product?.name || null,
+      product_sku: m.product?.sku || null,
+      warehouse_name: m.warehouse?.name || null,
+    }));
+    const pendingPacking = packRes.count || 0;
+    const pendingDispatches = dispRes.count || 0;
+    const serials = snRes.count || 0;
+
+    return jsonResponse({
+      kpis: {
+        totalProducts: products.length,
+        total_products: products.length,
+        totalStockQuantity: totalStock,
+        total_stock_quantity: totalStock,
+        lowStockProducts: alerts.length,
+        low_stock_products: alerts.length,
+        outOfStockProducts: outOfStock,
+        out_of_stock_products: outOfStock,
+        pendingPacking,
+        pending_packing: pendingPacking,
+        pendingDispatches,
+        pending_dispatches: pendingDispatches,
+        pendingPurchaseOrders: poRes.count || 0,
+        totalSerialNumbers: serials,
+        registered_serials: serials,
+        recentMovementsCount: movements.length,
+        recent_movements_count: movements.length,
+      },
+      lowStockAlerts: alerts.slice(0, 10),
+      low_stock_alerts: alerts.slice(0, 10),
+      recentMovements: movements,
+      recent_movements: movements,
+      warehouses,
+    });
   } catch (error) {
     return jsonError('Failed to fetch warehouse dashboard: ' + error.message, 500);
   }

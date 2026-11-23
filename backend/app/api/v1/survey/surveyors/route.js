@@ -1,6 +1,5 @@
 import { jsonResponse, jsonError, handleOptions } from '@/lib/utils';
 import { requireSurveyAccess } from '@/lib/supabase/surveyAuth';
-import { surveyStore } from '@/lib/survey/surveyStore';
 
 export async function OPTIONS() {
   return handleOptions();
@@ -30,20 +29,17 @@ export async function GET(request) {
 
         const people = staff || [];
         const fieldTeam = people.filter((p) => /survey|install|technic/i.test(`${p.department?.code || ''} ${p.department?.name || ''}`));
-        const surveyors = (fieldTeam.length > 0 ? fieldTeam : people).map((p) => ({
+        const surveyors = fieldTeam.map((p) => ({
           id: p.id, full_name: p.full_name, email: p.email, phone: p.phone, department: p.department?.name || null,
         }));
 
-        if (surveyors.length > 0) {
-          return jsonResponse({ surveyors });
-        }
+        return jsonResponse({ surveyors });
       } catch (e) {
-        // Fall back
+        return jsonError('Failed to fetch surveyors: ' + e.message, 500);
       }
     }
 
-    const surveyors = await surveyStore.getSurveyors();
-    return jsonResponse({ surveyors });
+    return jsonResponse({ surveyors: [] });
   } catch (error) {
     return jsonError('Failed to fetch surveyors: ' + error.message, 500);
   }

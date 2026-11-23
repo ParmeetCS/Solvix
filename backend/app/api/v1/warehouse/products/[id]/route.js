@@ -1,6 +1,5 @@
 import { jsonResponse, jsonError, handleOptions } from '@/lib/utils';
 import { requireWarehouseAccess, logWarehouseActivity } from '@/lib/supabase/warehouseAuth';
-import { warehouseStore } from '@/lib/warehouse/warehouseStore';
 import { PRODUCT_SELECT, toUiProduct, toDbProduct } from '@/lib/warehouse/productMapper';
 
 export async function OPTIONS() {
@@ -22,7 +21,7 @@ export async function GET(request, { params }) {
     }
 
     const { adminClient } = authResult;
-    if (adminClient && UUID.test(id || '')) {
+    if (UUID.test(id || '')) {
       const { data: row } = await adminClient.from('products').select(PRODUCT_SELECT).eq('id', id).maybeSingle();
       if (row) {
         const product = toUiProduct(row);
@@ -35,6 +34,12 @@ export async function GET(request, { params }) {
           .select('id, serial_number, status, current_location')
           .eq('product_id', id)
           .limit(50);
+        const { data: movements } = await adminClient
+          .from('stock_movements')
+          .select('*')
+          .eq('product_id', id)
+          .order('created_at', { ascending: false })
+          .limit(30);
         return jsonResponse({
           ...product,
           product,
@@ -44,17 +49,12 @@ export async function GET(request, { params }) {
             available_stock: Number(i.quantity_on_hand) - Number(i.quantity_reserved),
           })),
           serials: serials || [],
-          movements: [],
+          movements: movements || [],
         });
       }
     }
 
-    const data = await warehouseStore.getProductById(id);
-    if (!data) {
-      return jsonError('Product not found.', 404);
-    }
-
-    return jsonResponse(data);
+    return jsonError('Product not found.', 404);
   } catch (error) {
     return jsonError('Failed to fetch product details: ' + error.message, 500);
   }
@@ -77,7 +77,7 @@ export async function PATCH(request, { params }) {
 
     let updated = null;
 
-    if (adminClient && UUID.test(id || '')) {
+    if (UUID.test(id || '')) {
       const { data: existing } = await adminClient.from('products').select('id, specifications').eq('id', id).maybeSingle();
       if (existing) {
         const row = await toDbProduct(adminClient, body);
@@ -97,10 +97,7 @@ export async function PATCH(request, { params }) {
       }
     }
 
-    if (!updated) {
-      updated = await warehouseStore.updateProduct(id, body, profile);
-    }
-    if (!updated) {
+if (!updated) {
       return jsonError('Product not found.', 404);
     }
 

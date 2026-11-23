@@ -45,7 +45,7 @@ export async function POST(request, { params }) {
     // Notify assigned team
     for (const at of updatedJob.assigned_technicians || []) {
       await createInstallationNotification({
-        recipientId: at.technician_id,
+        recipientId: at.profile_id,
         title: `Schedule Updated: ${updatedJob.installation_code}`,
         message: `Project has been scheduled for ${updatedJob.planned_installation_date}.`,
         installationId: updatedJob.id

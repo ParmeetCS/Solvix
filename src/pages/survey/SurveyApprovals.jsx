@@ -4,18 +4,11 @@ import PortalLayout from '@/components/PortalLayout';
 import FeasibilityReportModal from './FeasibilityReportModal';
 import { surveyApi } from '@/services/api';
 import {
-  CheckCheck,
   CheckCircle2,
-  XCircle,
-  RotateCcw,
   FileText,
   Eye,
-  AlertCircle,
-  Clock,
   RefreshCw,
   ShieldCheck,
-  MessageSquare,
-  ArrowRight
 } from 'lucide-react';
 
 export default function SurveyApprovals() {

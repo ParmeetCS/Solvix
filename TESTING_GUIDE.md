@@ -33,7 +33,7 @@ Instead of typing everything by hand, you can fill the dashboards with about 10 
 2. Open `database/seed_demo_data.sql`, change the emails at the top if yours differ, paste the whole file into the **Supabase SQL Editor** and run it.
 3. It prints a table of counts at the end. To remove the demo data later, run `database/seed_demo_cleanup.sql`.
 
-Note: the Warehouse list pages (inventory, purchase orders, serial numbers, dispatches, packing) and the Installation jobs list keep their working data in the server's memory, so they are filled by using the app (steps 5, 11 and 12), not by SQL. Their dashboards and every other module read the seeded data.
+Note: every list page reads the database. If you set the database up before the installation module was moved onto it, run `database/patches/002_installation_verified_serials.sql` once in the Supabase SQL editor.
 
 ---
 
@@ -308,7 +308,7 @@ Sign in as **Pooja** → **Order Packing**:
 
 1. Open Raman's order → tick each item as packed.
 2. Scan/enter the serial numbers for each item: panels `SN-WAA-550-0001` … `0004`, inverter `SN-GRW-5K-0001`.
-3. Mark the order **Packed**.
+3. Mark the order **Packed**. Panels, inverters and batteries need one serial number per unit; packing is refused until every serial number is entered.
 
 **Dispatches & Delivery → New dispatch:**
 
@@ -327,7 +327,7 @@ Mark it **In transit**, then **Delivered**.
 
 ## 12. Step 9 — Installation
 
-1. Sign in as **Amit (Installation)** or use **Admin → Installations** → **New job from order** → pick Raman's order.
+1. Sign in as **Amit (Installation)** or use **Installation → Dashboard → New job from order** → pick Raman's order (it appears once the equipment is delivered and the order is *Ready for install*).
 2. Fill the job:
 
 | Field | Value |

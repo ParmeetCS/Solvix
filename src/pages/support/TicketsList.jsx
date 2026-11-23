@@ -6,11 +6,10 @@ import {
   Ticket,
   Search,
   PlusCircle,
-  Filter,
   Loader2,
   ChevronLeft,
   ChevronRight,
-  AlertCircle
+  AlertCircle,
 } from 'lucide-react';
 
 export default function TicketsList() {

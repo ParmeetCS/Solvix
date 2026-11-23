@@ -6,13 +6,6 @@ import {
   UserPlus,
   ArrowLeft,
   AlertTriangle,
-  CheckCircle2,
-  Phone,
-  Mail,
-  Zap,
-  MapPin,
-  Calendar,
-  FileText
 } from 'lucide-react';
 
 export default function NewLead() {

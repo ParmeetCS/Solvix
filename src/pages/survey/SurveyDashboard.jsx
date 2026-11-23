@@ -1,24 +1,15 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import PortalLayout from '@/components/PortalLayout';
-import { ChartCard, StripedBars, TickDonut, AreaLine } from '@/components/charts';
+import { ChartCard, StripedBars, TickDonut } from '@/components/charts';
 import { surveyApi } from '@/services/api';
 import {
   ClipboardList,
-  Clock,
   UserCheck,
   Calendar,
-  PlayCircle,
-  FileCheck2,
-  CheckCircle2,
-  XCircle,
-  RotateCcw,
-  Plus,
   RefreshCw,
-  ArrowRight,
   TrendingUp,
   MapPin,
-  ExternalLink
 } from 'lucide-react';
 
 export default function SurveyDashboard() {

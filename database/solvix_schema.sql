@@ -1263,6 +1263,8 @@ ALTER TABLE installations ADD COLUMN IF NOT EXISTS exception_recorded boolean DE
 ALTER TABLE installations ADD COLUMN IF NOT EXISTS exception_notes text;
 ALTER TABLE installations ADD COLUMN IF NOT EXISTS commissioning_data jsonb DEFAULT '{}'::jsonb;
 ALTER TABLE installations ADD COLUMN IF NOT EXISTS notes text;
+-- Serial numbers the technician has confirmed on site (read by the installation module)
+ALTER TABLE installations ADD COLUMN IF NOT EXISTS verified_serials text[] NOT NULL DEFAULT '{}';
 
 -- 3. ENHANCE TECHNICIANS TABLE COLUMNS
 ALTER TABLE technicians ADD COLUMN IF NOT EXISTS email text;

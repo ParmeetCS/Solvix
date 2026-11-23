@@ -1,17 +1,10 @@
 import {
-  FileText,
   Printer,
   X,
   CheckCircle2,
-  AlertTriangle,
   Sun,
   Zap,
-  Compass,
-  MapPin,
-  Calendar,
   Layers,
-  Leaf,
-  ShieldCheck
 } from 'lucide-react';
 
 export default function FeasibilityReportModal({ reportData, onClose }) {

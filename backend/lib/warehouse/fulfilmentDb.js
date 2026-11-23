@@ -9,7 +9,8 @@
 //   shipped   -> dispatches row; stock is deducted once, when the dispatch is created
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-const PACKABLE = ['confirmed', 'processing', 'awaiting_dispatch', 'ready_for_install', 'in_production'];
+// Orders still waiting for the warehouse. Once delivered ('ready_for_install') an order leaves the queue.
+const PACKABLE = ['confirmed', 'processing', 'awaiting_dispatch', 'in_production'];
 const SERIAL_CATEGORIES = ['solar_panels', 'solar_inverters', 'batteries'];
 
 const fail = (message, status = 400) => Object.assign(new Error(message), { status });
@@ -25,10 +26,10 @@ async function orderRow(db, idOrCode) {
   return data;
 }
 
-async function bomFor(db, order) {
+export async function bomFor(db, order) {
   const { data: items, error } = await db
     .from('quotation_items')
-    .select('id, product_id, line_item, quantity, unit, item_type, product:product_id ( id, sku, name, unit, specifications, category:category_id ( code ) )')
+    .select('id, product_id, line_item, quantity, unit, item_type, product:product_id ( id, sku, name, unit, specifications, warranty_years, category:category_id ( code ) )')
     .eq('quotation_id', order.quotation_id)
     .order('sort_order', { ascending: true });
   if (error) throw fail(error.message, 500);
@@ -50,6 +51,7 @@ async function bomFor(db, order) {
       sku: i.product?.sku || '',
       quantity: Number(i.quantity) || 0,
       unit: i.unit || i.product?.unit || 'piece',
+      warranty_years: i.product?.warranty_years ?? null,
       requires_serial_number: i.product?.specifications?.requires_serial_number ?? SERIAL_CATEGORIES.includes(code),
       is_reserved: res.length > 0,
       is_packed: res.length > 0 && res.every((r) => r.status === 'fulfilled'),
@@ -172,6 +174,16 @@ export async function completePacking(db, idOrCode, packedMap = {}, serialMap = 
   const toPack = bom.filter((b) => packedMap[b.product_id]);
   const now = new Date().toISOString();
 
+  // Panels, inverters and batteries must carry a serial number each: the warranty is tracked per serial number.
+  const missing = [];
+  for (const item of toPack) {
+    if (!item.requires_serial_number) continue;
+    const typed = (serialMap[item.product_id] || []).map((s) => String(s).trim().toUpperCase()).filter(Boolean);
+    const have = new Set([...(item.assigned_serials || []), ...typed]);
+    if (have.size < item.quantity) missing.push(`${item.product_name} (${have.size} of ${item.quantity} serial numbers)`);
+  }
+  if (missing.length) throw fail(`Enter or scan every serial number before completing packing: ${missing.join('; ')}.`, 400);
+
   for (const item of toPack) {
     // serial numbers typed or scanned in the checklist are recorded against this order
     const typed = [...new Set((serialMap[item.product_id] || []).map((s) => String(s).trim().toUpperCase()).filter(Boolean))];
@@ -270,7 +282,7 @@ export async function createDispatch(db, body, profile) {
   if (existing && existing.length) throw fail('This order already has a dispatch.', 409);
 
   const now = new Date().toISOString();
-  const code = (body.dispatch_number && String(body.dispatch_number).trim()) || `DSP-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`;
+  const code = (body.dispatch_number && String(body.dispatch_number).trim()) || `DSP-${new Date().getFullYear()}-${Date.now().toString().slice(-6)}${Math.floor(10 + Math.random() * 90)}`;
 
   // the warehouse the stock was reserved from
   const { data: resv } = await db.from('inventory_reservations').select('warehouse_id').eq('order_id', o.id).limit(1);
@@ -338,7 +350,9 @@ export async function confirmDelivery(db, id, body, profile) {
     .eq('order_id', d.order_id);
 
   const activated = [];
+  let seq = 0;
   for (const s of serials || []) {
+    seq += 1;
     const years = Number(s.product?.warranty_years) || 1;
     const end = new Date(now);
     end.setFullYear(end.getFullYear() + years);
@@ -348,7 +362,7 @@ export async function confirmDelivery(db, id, body, profile) {
     }).eq('id', s.id);
 
     const { data: w, error } = await db.from('warranties').insert({
-      warranty_code: `WAR-${now.getFullYear()}-${Math.floor(10000 + Math.random() * 90000)}`,
+      warranty_code: `WAR-${now.getFullYear()}-${Date.now().toString().slice(-6)}${String(seq).padStart(2, '0')}${Math.floor(10 + Math.random() * 90)}`,
       equipment_serial_id: s.id, customer_id: d.customer_id, order_id: d.order_id, product_id: s.product_id,
       warranty_type: 'manufacturer', duration_years: years, start_date: today, expiry_date: end.toISOString().slice(0, 10),
       status: 'active', activated_at: now.toISOString(), terms: 'Manufacturer warranty. Starts from the delivery date.',

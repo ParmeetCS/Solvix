@@ -1,6 +1,5 @@
 import { jsonResponse, jsonError, handleOptions } from '@/lib/utils';
 import { requireSurveyAccess, logSurveyActivity } from '@/lib/supabase/surveyAuth';
-import { surveyStore } from '@/lib/survey/surveyStore';
 import { loadSurveyDetail, photoView } from '@/lib/survey/surveyDb';
 
 export async function OPTIONS() {
@@ -29,16 +28,14 @@ export async function GET(request, { params }) {
           .eq('survey_id', id)
           .order('uploaded_at', { ascending: false });
 
-        if (!error && photos) {
-          return jsonResponse({ photos: photos.map(photoView) });
-        }
+        if (error) return jsonError('Failed to fetch survey photos: ' + error.message, 500);
+        return jsonResponse({ photos: (photos || []).map(photoView) });
       } catch (e) {
-        // Fall back
+        return jsonError('Failed to fetch survey photos: ' + e.message, 500);
       }
     }
 
-    const surveyData = await surveyStore.getSurveyById(id);
-    return jsonResponse({ photos: surveyData?.photos || [] });
+    return jsonResponse({ photos: [] });
   } catch (error) {
     return jsonError('Failed to fetch survey photos: ' + error.message, 500);
   }
@@ -112,18 +109,6 @@ export async function POST(request, { params }) {
       }
     }
 
-    if (!photo) {
-      photo = await surveyStore.addPhoto(id, {
-        file_name,
-        file_size_bytes,
-        file_type,
-        photo_type,
-        caption,
-        description,
-        storage_path,
-        signed_url
-      }, profile);
-    }
 
     await logSurveyActivity({
       actorId: profile.id,

@@ -25,6 +25,7 @@ export async function POST(request, { params }) {
       return jsonError('Target status is required.', 400);
     }
 
+    const before = await installationStore.getJobById(id, profile, true);
     const updatedJob = await installationStore.updateJobStatus(id, body.status, body.notes, profile);
 
     await logInstallationActivity({
@@ -33,7 +34,7 @@ export async function POST(request, { params }) {
       installationId: updatedJob.id,
       metadata: {
         installation_code: updatedJob.installation_code,
-        previous_status: updatedJob.status,
+        previous_status: before?.status,
         new_status: body.status,
         notes: body.notes
       }
@@ -42,7 +43,7 @@ export async function POST(request, { params }) {
     // Notify assigned technicians and customer
     for (const at of updatedJob.assigned_technicians || []) {
       await createInstallationNotification({
-        recipientId: at.technician_id,
+        recipientId: at.profile_id,
         title: `Installation ${updatedJob.installation_code} Status Updated`,
         message: `Project status has been updated to "${body.status.replace('_', ' ')}". ${body.notes || ''}`,
         installationId: updatedJob.id

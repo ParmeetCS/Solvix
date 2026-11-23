@@ -10,8 +10,7 @@ import {
   FileText,
   AlertTriangle,
   CheckCircle,
-  Plus,
-  ScanLine
+  ScanLine,
 } from 'lucide-react';
 
 export default function SerialRegistration() {

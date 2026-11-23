@@ -402,9 +402,8 @@ Two Vercel projects from the same repository.
 
 ## 14. Known limitations
 
-- The **Serial & QR registry list** and the **installation jobs list** still use temporary in-memory storage in the
-  backend. They reset when the server restarts and appear empty on serverless hosting. Orders, packing, dispatch,
-  purchase orders, products, stock, surveys, quotations, payments and warranties are on the database.
+- Every module (including serial numbers and installation jobs) is stored in the database. If you created your database
+  before the installation module was moved onto it, run `database/patches/002_installation_verified_serials.sql` once.
 - Razorpay runs in **test mode**; payments are confirmed when the customer returns to the page (no webhook yet).
 - The AI agent only drafts; it does not send or accept anything by itself.
 - Survey photos are resized and stored with the survey record, which suits demos but not very large volumes.

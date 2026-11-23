@@ -9,7 +9,6 @@ import {
   Clock,
   Warehouse,
   AlertTriangle,
-  FileText
 } from 'lucide-react';
 
 export default function InventoryDetail() {
@@ -162,7 +161,7 @@ export default function InventoryDetail() {
                         <span className={`wh-badge ${
                           mov.movement_type === 'stock_in' ? 'wh-badge-green' :
                           mov.movement_type === 'stock_out' ? 'wh-badge-red' :
-                          mov.movement_type === 'reserved' ? 'wh-badge-yellow' : 'wh-badge-blue'
+                          mov.movement_type === 'reservation' ? 'wh-badge-yellow' : 'wh-badge-blue'
                         }`}>
                           {String(mov.movement_type || '').replace('_', ' ')}
                         </span>

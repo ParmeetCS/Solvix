@@ -26,6 +26,7 @@ const ORDER_STATUS_OPTIONS = [
   'processing',
   'awaiting_dispatch',
   'dispatched',
+  'ready_for_install',
   'installation_in_progress',
   'completed',
   'cancelled',

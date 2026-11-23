@@ -3,15 +3,11 @@ import { Link } from 'react-router-dom';
 import PortalLayout from '@/components/PortalLayout';
 import { salesApi } from '@/services/api';
 import {
-  MessageSquare,
   Plus,
   Send,
-  ExternalLink,
   UserCheck,
-  CheckCircle2,
-  Clock,
   Search,
-  Info
+  Info,
 } from 'lucide-react';
 
 export default function WhatsAppEnquiries() {

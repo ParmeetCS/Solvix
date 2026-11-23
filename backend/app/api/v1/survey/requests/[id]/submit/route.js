@@ -1,6 +1,5 @@
 import { jsonResponse, jsonError, handleOptions } from '@/lib/utils';
 import { requireSurveyAccess, logSurveyActivity, createNotification } from '@/lib/supabase/surveyAuth';
-import { surveyStore } from '@/lib/survey/surveyStore';
 import { sanitizeSurveyForm } from '@/lib/survey/surveyFields';
 
 export async function OPTIONS() {
@@ -105,9 +104,6 @@ export async function POST(request, { params }) {
       }
     }
 
-    if (!result) {
-      result = await surveyStore.submitInspection(id, formData, profile);
-    }
 
     if (!result) {
       return jsonError('Survey not found.', 404);

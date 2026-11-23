@@ -1,4 +1,4 @@
-// Survey details read from the database, shaped like the in-memory store's result,
+// Survey details read from the database, shaped for the survey screens,
 // so every survey screen (detail, report, photos) works on the real records.
 
 /** Photos are stored as a data URL or link in storage_path; the screens read signed_url. */

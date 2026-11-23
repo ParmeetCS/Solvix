@@ -18,7 +18,7 @@ export async function GET(request, { params }) {
       return jsonError(authResult.error, authResult.status);
     }
 
-    const { profile, isAdmin } = authResult;
+    const { profile, canManage: isAdmin } = authResult;
     const job = await installationStore.getJobById(id, profile, isAdmin);
     if (!job) return jsonError(`Installation job ${id} not found.`, 404);
 

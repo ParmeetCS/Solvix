@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import PortalLayout from '@/components/PortalLayout';
-import { ChartCard, StripedBars, TickDonut, AreaLine } from '@/components/charts';
+import { ChartCard, StripedBars, TickDonut } from '@/components/charts';
 import { warehouseApi } from '@/services/api/warehouse';
 import {
   Package,
@@ -11,13 +11,8 @@ import {
   Clock,
   Truck,
   QrCode,
-  ArrowUpRight,
-  ArrowDownLeft,
   RefreshCw,
-  Plus,
   Warehouse,
-  ExternalLink,
-  ShieldCheck
 } from 'lucide-react';
 
 export default function WarehouseDashboard() {
@@ -60,7 +55,6 @@ export default function WarehouseDashboard() {
     registered_serials: pick('registered_serials', 'totalSerialNumbers'),
     recent_movements_count: pick('recent_movements_count', 'recentMovementsCount'),
   };
-
 
   return (
     <PortalLayout
@@ -325,7 +319,7 @@ export default function WarehouseDashboard() {
                         <span className={`wh-badge ${
                           mov.movement_type === 'stock_in' ? 'wh-badge-green' :
                           mov.movement_type === 'stock_out' ? 'wh-badge-red' :
-                          mov.movement_type === 'reserved' ? 'wh-badge-yellow' : 'wh-badge-blue'
+                          mov.movement_type === 'reservation' ? 'wh-badge-yellow' : 'wh-badge-blue'
                         }`}>
                           {String(mov.movement_type || '').replace('_', ' ')}
                         </span>

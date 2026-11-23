@@ -5,6 +5,8 @@ import { customerApi } from '@/services/api';
 import { formatDate, formatDateTime, titleCase } from '@/lib/quotation';
 
 const STEPS = ['scheduled', 'in_progress', 'completed'];
+// Where each installation status sits on the three-step bar (-1: not scheduled yet).
+const STEP_OF = { pending: -1, assigned: -1, scheduled: 0, in_progress: 1, on_hold: 1, inspection_required: 1, completed: 2 };
 
 export default function CustomerInstallation() {
   const [items, setItems] = useState([]);
@@ -27,11 +29,11 @@ export default function CustomerInstallation() {
       ) : items.length === 0 ? (
         <div className="crm-card q-empty">
           <MapPin size={28} style={{ opacity: 0.4, marginBottom: 8 }} />
-          <div>No installation has been scheduled yet. Once your order is dispatched, the installation team will schedule a date and it will appear here.</div>
+          <div>No installation has been scheduled yet. Once your equipment is delivered, the installation team will schedule a date and it will appear here.</div>
         </div>
       ) : (
         items.map((i) => {
-          const idx = STEPS.indexOf(i.status === 'on_hold' ? 'in_progress' : i.status);
+          const idx = STEP_OF[i.status] ?? -1;
           const stopped = ['failed', 'cancelled'].includes(i.status);
           return (
             <div key={i.id} className="crm-card" style={{ marginBottom: 16 }}>
