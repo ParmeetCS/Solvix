@@ -7,7 +7,7 @@ import { NextResponse } from 'next/server';
 function allowedOrigins() {
   const configured = (process.env.FRONTEND_ORIGIN || '')
     .split(',')
-    .map((o) => o.trim())
+    .map((o) => o.trim().replace(/\/+$/, '')) // a trailing "/" never matches the browser's Origin header
     .filter(Boolean);
   return configured.length
     ? configured

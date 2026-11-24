@@ -6,7 +6,7 @@ export async function OPTIONS() {
 }
 
 function allowedOrigins() {
-  const configured = (process.env.FRONTEND_ORIGIN || '').split(',').map((o) => o.trim()).filter(Boolean);
+  const configured = (process.env.FRONTEND_ORIGIN || '').split(',').map((o) => o.trim().replace(/\/+$/, '')).filter(Boolean);
   return configured.length ? configured : ['http://localhost:5173', 'http://127.0.0.1:5173'];
 }
 
